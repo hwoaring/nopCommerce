@@ -1,0 +1,87 @@
+﻿@inject IThemeContext themeContext
+
+@{
+    //themes path
+    var themeName = themeContext.WorkingThemeName;
+    var themesPath = $"/Themes/{themeName}/Content";
+}
+<!--header-->
+<div id="header-nav">
+    <div class="header-nav-title">
+        <div class="header-nav-left">
+            <a href="javascript:history.back(-1);"></a>
+        </div>
+        <div class="header-nav-right">
+            <!--<a href="#" data-ajax="false">我的</a>-->
+            <a class="nav-js-block" id="nav-js-block" href="javascript:void(0)">导航</a>
+        </div>
+        <h5>泸州赖族酒业有限公司</h5>
+    </div>
+
+    <div class="header-nav-con">
+        <ul class="clearfix">
+            <li>
+                <a href="http://wx.lzlzjy.cn/" data-ajax="false" title="泸州赖族酒业有限公司">
+                    <div class="header-nav-con-img"><span class="color-ff5757"><i class="fa fa-home" aria-hidden="true"></i></span></div>
+                    <p class="header-nav-con-p">首 页</p>
+                </a>
+            </li>
+            <li>
+                <a href="http://wx.lzlzjy.cn/" data-ajax="false" title="泸州赖族酒业有限公司介绍">
+                    <div class="header-nav-con-img"><span class="color-1dd2c7"><i class="fa fa-building" aria-hidden="true"></i></span></div>
+                    <p class="header-nav-con-p">企业介绍</p>
+                </a>
+            </li>
+            <li>
+                <a href="http://wx.lzlzjy.cn/" data-ajax="false" title="赖高淮介绍">
+                    <div class="header-nav-con-img"><span class="color-fcb203"><i class="fa fa-user-circle-o" aria-hidden="true"></i></span></div>
+                    <p class="header-nav-con-p">赖老人生</p>
+                </a>
+            </li>
+            <li>
+                <a href="http://wx.lzlzjy.cn/" data-ajax="false" title="赖高淮白酒行业贡献">
+                    <div class="header-nav-con-img"><span class="color-60bdeb"><i class="fa fa-trophy" aria-hidden="true"></i></span></div>
+                    <p class="header-nav-con-p">行业贡献</p>
+                </a>
+            </li>
+            <li>
+                <a href="http://wx.lzlzjy.cn/" data-ajax="false" title="赖高淮历史回顾">
+                    <div class="header-nav-con-img"><span class="color-06d276"><i class="fa fa-history" aria-hidden="true"></i></span></div>
+                    <p class="header-nav-con-p">历史回顾</p>
+                </a>
+            </li>
+            <li>
+                <a href="http://m.lzlzjy.cn/product/" data-ajax="false" title="赖高淮作品">
+                    <div class="header-nav-con-img"><span class="color-ff9731"><i class="fa fa-glass" aria-hidden="true"></i></span></div>
+                    <p class="header-nav-con-p">作品品鉴</p>
+                </a>
+            </li>
+            <li>
+                <a href="http://wx.lzlzjy.cn/" data-ajax="false" title="白酒团购">
+                    <div class="header-nav-con-img"><span class="color-ca9915"><i class="fa fa-shopping-bag" aria-hidden="true"></i></span></div>
+                    <p class="header-nav-con-p">大宗团购</p>
+                </a>
+            </li>
+            <li>
+                <a href="http://wx.lzlzjy.cn/" data-ajax="false" title="泸州赖族酒业有限公司招商合作">
+                    <div class="header-nav-con-img"><span class="color-89d300"><i class="fa fa-handshake-o" aria-hidden="true"></i></span></div>
+                    <p class="header-nav-con-p">招商合作</p>
+                </a>
+            </li>
+            <li>
+                <a href="http://wx.lzlzjy.cn/" data-ajax="false" title="新闻动态">
+                    <div class="header-nav-con-img"><span class="color-c1c25e"><i class="fa fa-file-image-o" aria-hidden="true"></i></span></div>
+                    <p class="header-nav-con-p">新闻动态</p>
+                </a>
+            </li>
+            <li>
+                <a href="http://wx.lzlzjy.cn/" data-ajax="false" title="泸州赖族酒业有限公司联系方式电话">
+                    <div class="header-nav-con-img"><span class="color-879eff"><i class="fa fa-phone" aria-hidden="true"></i></span></div>
+                    <p class="header-nav-con-p">联系我们</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="nav-shadow"></div>
+<!--/header-->

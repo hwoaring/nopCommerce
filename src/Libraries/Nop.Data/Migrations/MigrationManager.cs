@@ -53,7 +53,6 @@ namespace Nop.Data.Migrations
                 [typeof(string)] = c => c.AsString(int.MaxValue).Nullable(),
                 [typeof(bool)] = c => c.AsBoolean(),
                 [typeof(short)] = c => c.AsInt16(),  //New
-                [typeof(long)] = c => c.AsInt64(),   //bigint
                 [typeof(decimal)] = c => c.AsDecimal(18, 4),
                 [typeof(DateTime)] = c => c.AsDateTime2(),
                 [typeof(byte[])] = c => c.AsBinary(int.MaxValue),

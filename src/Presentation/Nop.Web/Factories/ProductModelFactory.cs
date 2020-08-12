@@ -755,6 +755,11 @@ namespace Nop.Web.Factories
                         {
                             Id = attributeValue.Id,
                             Name = _localizationService.GetLocalized(attributeValue, x => x.Name),
+                            ShortName = attributeValue.ShortName,
+                            Discription = attributeValue.Discription,
+                            Content = attributeValue.Content,
+                            OldPrice = attributeValue.OldPrice,
+                            PriceAdjustmentUseFixedValue = attributeValue.PriceAdjustmentUseFixedValue,
                             ColorSquaresRgb = attributeValue.ColorSquaresRgb, //used with "Color squares" attribute type
                             IsPreSelected = attributeValue.IsPreSelected,
                             CustomerEntersQty = attributeValue.CustomerEntersQty,

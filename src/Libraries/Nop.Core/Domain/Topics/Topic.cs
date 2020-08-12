@@ -1,3 +1,4 @@
+﻿using System;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Seo;
@@ -66,9 +67,26 @@ namespace Nop.Core.Domain.Topics
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets or sets the subtitle
+        /// </summary>
+        public string SubTitle { get; set; }
+
+        /// <summary>
+        /// 封面图
+        /// </summary>
+        public string ImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the short text
+        /// </summary>
+        public string Short { get; set; }
+
+        /// <summary>
         /// Gets or sets the body
         /// </summary>
         public string Body { get; set; }
+
+        public bool LazyLoadImages { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the entity is published
@@ -79,6 +97,11 @@ namespace Nop.Core.Domain.Topics
         /// Gets or sets a value of used topic template identifier
         /// </summary>
         public int TopicTemplateId { get; set; }
+
+        /// <summary>
+        /// 浏览次数
+        /// </summary>
+        public int ViewCount { get; set; }
 
         /// <summary>
         /// Gets or sets the meta keywords
@@ -96,6 +119,21 @@ namespace Nop.Core.Domain.Topics
         public string MetaTitle { get; set; }
 
         /// <summary>
+        /// Gets or sets the meta image，SEO image or weixin share image
+        /// </summary>
+        public string MetaImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta Link
+        /// </summary>
+        public string MetaLinkUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the share big size image
+        /// </summary>
+        public string ShareImageUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the entity is subject to ACL
         /// </summary>
         public bool SubjectToAcl { get; set; }
@@ -104,5 +142,10 @@ namespace Nop.Core.Domain.Topics
         /// Gets or sets a value indicating whether the entity is limited/restricted to certain stores
         /// </summary>
         public bool LimitedToStores { get; set; }
+
+        /// <summary>
+        /// Gets or sets the date and time of entity creation
+        /// </summary>
+        public DateTime CreatedOnUtc { get; set; }
     }
 }

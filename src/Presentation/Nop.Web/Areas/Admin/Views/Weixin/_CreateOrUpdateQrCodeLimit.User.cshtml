@@ -47,12 +47,14 @@
             <script>
                 function renderColumnQrCodeLimitUserName(data, type, row, meta) {
                     var textRenderer = $.fn.dataTable.render.text().display;
-                    return '<a href="@Url.Content("~/Admin/Weixin/QrCodeLimitUserEditPopup/")' + row.Id + '">' + textRenderer(row.UserName) + '</a>';
+                    var url = '@Url.Action("QrCodeLimitUserEditPopup", "Weixin", new {btnId = "btnRefreshQrCodeLimitUsers", formId = "qrcodelimit-form" })' + '&Id=' + row.Id;
+
+                    return '<a href="javascript:;" onclick="javascript:OpenWindow(\'' + url + '\', 800, 800, true); return false;">' + textRenderer(row.UserName) + '</a>';
                 }
             </script>
         </div>
         <div class="panel-footer">
-            <button type="submit" id="btnAddNewQrCodeLimitUser" onclick="javascript:OpenWindow('@(Url.Action("QrCodeLimitUserAddPopup", "Weixin", new {qrCodeLimitId = Model.QrCodeId, btnId = "btnRefreshQrCodeLimitUsers", formId = "qrcodelimituser-form"}))', 800, 800, true); return false;" class="btn btn-primary">
+            <button type="submit" id="btnAddNewQrCodeLimitUser" onclick="javascript:OpenWindow('@(Url.Action("QrCodeLimitUserAddPopup", "Weixin", new {qrCodeLimitId = Model.QrCodeId, btnId = "btnRefreshQrCodeLimitUsers", formId = "qrcodelimit-form"}))', 800, 800, true); return false;" class="btn btn-primary">
                 @T("Admin.Weixin.QrCodeLimits.Users.AddNew")
             </button>
             <input type="submit" id="btnRefreshQrCodeLimitUsers" style="display: none" />

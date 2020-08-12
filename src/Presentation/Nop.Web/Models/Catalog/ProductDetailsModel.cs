@@ -292,7 +292,17 @@ namespace Nop.Web.Models.Catalog
 
             public string Name { get; set; }
 
+            public string ShortName { get; set; }
+
             public string ColorSquaresRgb { get; set; }
+
+            public string Discription { get; set; }
+
+            public string Content { get; set; }
+
+            public decimal OldPrice { get; set; }
+
+            public bool PriceAdjustmentUseFixedValue { get; set; }
 
             //picture model is used with "image square" attribute type
             public PictureModel ImageSquaresPictureModel { get; set; }

@@ -48,7 +48,6 @@ var AjaxCart = {
             return;
         }
         this.setLoadWaiting(true);
-
         $.ajax({
             cache: false,
             url: urladd,
@@ -77,7 +76,7 @@ var AjaxCart = {
         });
     },
 
-    success_process: function (response) {
+  success_process: function (response) {
         if (response.updatetopcartsectionhtml) {
             $(AjaxCart.topcartselector).html(response.updatetopcartsectionhtml);
         }

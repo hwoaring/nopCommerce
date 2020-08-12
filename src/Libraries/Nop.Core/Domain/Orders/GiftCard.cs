@@ -64,6 +64,16 @@ namespace Nop.Core.Domain.Orders
         public bool IsRecipientNotified { get; set; }
 
         /// <summary>
+        /// 有效期开始日期
+        /// </summary>
+        public DateTime? GiftCardStartUseDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 最大有效期结束日期
+        /// </summary>
+        public DateTime? GiftCardEndUseDateTimeUtc { get; set; }
+
+        /// <summary>
         /// Gets or sets the date and time of instance creation
         /// </summary>
         public DateTime CreatedOnUtc { get; set; }

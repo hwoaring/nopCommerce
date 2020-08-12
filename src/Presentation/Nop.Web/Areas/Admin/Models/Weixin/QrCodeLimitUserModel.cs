@@ -27,6 +27,7 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
         /// </summary>
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimitUsers.Fields.UserName")]
         public string UserName { get; set; }
+        public string UserNameTemp { get; set; }
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimitUsers.Fields.Description")]
         public string Description { get; set; }
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimitUsers.Fields.TelNumber")]

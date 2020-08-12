@@ -1,0 +1,147 @@
+﻿@model CategoryModel
+@using Nop.Core.Domain.Common
+@using Nop.Core.Domain.Seo
+@inject Nop.Core.IWebHelper webHelper
+@inject SeoSettings seoSettings
+@inject CommonSettings commonSettings
+@inject IThemeContext themeContext
+@{
+    Layout = "_ColumnsOne";
+
+    //themes path
+    var themeName = themeContext.WorkingThemeName;
+    var themesPath = $"/Themes/{themeName}/Content";
+
+    //title
+    Html.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    //meta
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+    //page class
+    Html.AppendPageCssClassParts("html-category-page");
+
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var categoryUrl = Url.RouteUrl("Category", new { SeName = Model.SeName }, webHelper.CurrentRequestProtocol).ToLowerInvariant();
+        Html.AddCanonicalUrlParts(categoryUrl, seoSettings.QueryStringInCanonicalUrlsEnabled);
+    }
+
+    var breadcrumbDelimiter = commonSettings.BreadcrumbDelimiter;
+}
+
+<script type="text/javascript" asp-location="Footer">
+    var SiteUrl = "/";
+    //Banner
+    var bannerSwiper = new Swiper('.swiper-banner-container', {
+        autoplay: 3000,
+        autoplayDisableOnInteraction: false,
+        pagination: '.swiper-banner-container .swiper-pagination',
+        observer: true,
+        observeParents: true
+    });
+    //Menu
+    var MenuSwiper = new Swiper('.swiper-menu-container', {
+        pagination: '.swiper-menu-container .swiper-pagination',
+        observer: true,
+        observeParents: true
+    });
+
+    //返回顶部
+    window.onscroll = function () {
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        if (scrollTop > 300) {
+            backTop.style.display = 'block';
+        }
+        else {
+            backTop.style.display = 'none';
+        }
+    };
+    var backTop = document.getElementById("backTop");
+    backTop.onclick = function () {
+        document.documentElement.scrollTop = document.body.scrollTop = 0
+    };
+</script>
+
+<script type="text/javascript" asp-location="Head">
+    $(function () {
+        //头部导航
+        $(".call-top-nav").click(function () { $(".nav-js-block").click(); });
+        $(".nav-js-block").click(function () {
+            if ($(".header-nav-con").is(":hidden")) {
+                $(".header-nav-con").show();
+                $(".nav-shadow").show();
+                $(".header-nav-title").addClass("header-nav-border");
+                $(this).addClass("nav-js-img");
+            } else {
+                $(".header-nav-con").hide();
+                $(".nav-shadow").hide();
+                $(".header-nav-title").removeClass("header-nav-border");
+                $(this).removeClass("nav-js-img");
+            }
+        });
+
+        $(".nav-shadow").click(function () {
+            $(".header-nav-con").hide();
+            $(".nav-shadow").hide();
+            $(".header-nav-title").removeClass("header-nav-border");
+            $(".nav-js-block").removeClass("nav-js-img");
+        });
+
+    });
+</script>
+
+<!--banner-->
+<div class="swiper-container swiper-banner-container">
+    <ul class="swiper-wrapper">
+        <li class="swiper-slide">
+            <a class="item" href="javascript:;"><img src="@themesPath/images/laigaohuai/laigaohuai-banner.jpg" alt="" /></a>
+        </li>
+    </ul>
+    <div class="swiper-pagination"></div>
+</div>
+<!--/banner-->
+<div class="module-container icons-module-container">
+    <ul class="clearfix">
+        <li>
+            <div class="pic"><span><img class="transform" src="@themesPath/images/feiyi.png" alt="国家级非物质文化遗产泸州老窖酿酒技艺传承人"></span></div>
+            <div class="name">国家非遗传承人</div>
+        </li>
+        <li>
+            <div class="pic"><span><img class="transform" src="@themesPath/images/guoji.png" alt="国际酿酒大师"></span></div>
+            <div class="name">国际酿酒大师</div>
+        </li>
+        <li>
+            <div class="pic"><span><img class="transform" src="@themesPath/images/jujiang.png" alt="大国工匠·世界巨匠"></span></div>
+            <div class="name">世界巨匠</div>
+        </li>
+
+        <li>
+            <div class="pic"><span><img class="transform" src="@themesPath/images/fayuandi.png" alt="浓香鼻祖·酒界泰斗"></span></div>
+            <div class="name">浓香鼻祖</div>
+        </li>
+    </ul>
+</div>
+<!--laigaohuai-->
+<div class="module-container product-page-module">
+    <div class="module-title-bar">
+        <h3 class="title-text">作品品鉴</h3>
+        <p>纯粮固态发酵 —— 赖高淮匠心作品</p>
+    </div>
+    <div class="module-wrap product-page-list">
+        <ul>
+            @if (Model.Products.Count > 0)
+            {
+                @foreach (var product in Model.Products)
+                {
+                    @await Html.PartialAsync("_ProductBox", product)
+                }
+            }
+            else
+            {
+                <li><span>暂无相关产品</span></li>
+            }
+
+        </ul>
+    </div>
+</div>
+<!--/laigaohuai-->

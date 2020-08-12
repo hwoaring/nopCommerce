@@ -1,0 +1,59 @@
+﻿@inject IThemeContext themeContext
+
+@{
+    //themes path
+    var themeName = themeContext.WorkingThemeName;
+    var themesPath = $"/Themes/{themeName}/Content";
+}
+<div class="footer">
+    <div class="footer-icons-box">
+        <div class="pic">
+            <img class="transform" src="@themesPath/images/logo-icons.png" />
+        </div>
+        <div class="name"><span>泸州赖族酒业有限公司</span></div>
+    </div>
+    <ul class="footer-menu">
+        <li>
+            <a class="item" href="tel:13228182338">
+                <i class="icon m-contact"></i>
+                <span class="name">大宗/团购</span>
+            </a>
+        </li>
+        <li>
+            <a class="item" href="http://m.lzlzjy.cn/zhaoshang/" title="泸州赖族酒业有限公司招商合作">
+                <i class="icon m-order"></i>
+                <span class="name">招商/合作</span>
+            </a>
+        </li>
+        <li>
+            <a class="item" href="http://m.lzlzjy.cn/help/">
+                <i class="icon m-help"></i>
+                <span class="name">帮助中心</span>
+            </a>
+        </li>
+        <li>
+            <a class="item" href="http://m.lzlzjy.cn/about/" title="泸州赖族酒业有限公司企业信息">
+                <i class="icon m-about"></i>
+                <span class="name">关于我们</span>
+            </a>
+        </li>
+    </ul>
+    <div class="footer-qrcode-box">
+        <div class="pic">
+            <img class="transform" src="@themesPath/images/qrcode-common.jpg" />
+        </div>
+        <div class="text">
+            <div class="qrcode-name">官方公众号</div>
+            <p>
+                公众号包含了更多赖老历史，行业贡献，作品信息，售后服务,以及赖老对行业相关专业问题的解答，欢迎关注查阅。
+            </p>
+        </div>
+    </div>
+    <div class="footer-copyright-box">
+        版权所有&copy;泸州赖族酒业有限公司<br />
+        <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备18016493号</a>
+    </div>
+</div>
+<!--公用-->
+<a href="javascript:;" class="call-top-nav" id="callTopNav" style="display: block;"></a>
+<a href="javascript:;" class="back-top" id="backTop" style="display: block;"></a>

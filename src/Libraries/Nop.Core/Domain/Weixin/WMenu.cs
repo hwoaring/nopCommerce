@@ -70,6 +70,10 @@
         /// </summary>
         public int UnPublishTime { get; set; }
         /// <summary>
+        /// 默认无个性化菜单
+        /// </summary>
+        public bool DefaultMenu { get; set; }
+        /// <summary>
         /// 菜单是否有效（系统返回的值）
         /// </summary>
         public bool IsMenuOpen { get; set; }

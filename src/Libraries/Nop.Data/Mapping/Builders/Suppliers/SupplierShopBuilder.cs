@@ -37,6 +37,12 @@ namespace Nop.Data.Mapping.Builders.Suppliers
                 .WithColumn(nameof(SupplierShop.Precision)).AsDecimal(9, 6)
                 .WithColumn(nameof(SupplierShop.OpenTime)).AsString(128).Nullable()
                 .WithColumn(nameof(SupplierShop.Notices)).AsString(1024).Nullable()
+                .WithColumn(nameof(SupplierShop.MetaTitle)).AsString(512).Nullable()
+                .WithColumn(nameof(SupplierShop.MetaDescription)).AsString(1024).Nullable()
+                .WithColumn(nameof(SupplierShop.MetaKeywords)).AsString(512).Nullable()
+                .WithColumn(nameof(SupplierShop.MetaImageUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(SupplierShop.MetaLinkUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(SupplierShop.ShareImageUrl)).AsAnsiString(1024).Nullable()
                 ;
         }
 

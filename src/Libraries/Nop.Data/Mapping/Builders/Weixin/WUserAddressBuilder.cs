@@ -25,6 +25,7 @@ namespace Nop.Data.Mapping.Builders.Weixin
                 .WithColumn(nameof(WUserAddress.CityName)).AsString(15).Nullable()
                 .WithColumn(nameof(WUserAddress.CountryName)).AsString(15).Nullable()
                 .WithColumn(nameof(WUserAddress.DetailInfo)).AsString(255).Nullable()
+                .WithColumn(nameof(WUserAddress.AddressLable)).AsString(64).Nullable()
                 .WithColumn(nameof(WUserAddress.NationalCode)).AsAnsiString(15).Nullable()
                 ;
         }

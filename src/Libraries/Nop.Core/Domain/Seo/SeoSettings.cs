@@ -29,6 +29,11 @@ namespace Nop.Core.Domain.Seo
         public string DefaultMetaKeywords { get; set; }
 
         /// <summary>
+        /// Default Meta image，SEO image or weixin share image
+        /// </summary>
+        public string DefaultMetaImageUrl { get; set; }
+
+        /// <summary>
         /// Default META description
         /// </summary>
         public string DefaultMetaDescription { get; set; }

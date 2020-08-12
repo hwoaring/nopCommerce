@@ -4,7 +4,7 @@ using Humanizer;
 namespace Nop.Core.Domain.Suppliers
 {
     /// <summary>
-    /// 商品营销标签分类
+    /// 供应商
     /// </summary>
     public partial class Supplier : BaseEntity
     {
@@ -97,6 +97,37 @@ namespace Nop.Core.Domain.Suppliers
         /// 每个店铺产品最大数量
         /// </summary>
         public int MaxProductCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta title
+        /// </summary>
+        public string MetaTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta Keywords
+        /// </summary>
+        public string MetaKeywords { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta Description
+        /// </summary>
+        public string MetaDescription { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta image，SEO image or weixin share image
+        /// </summary>
+        public string MetaImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta Link
+        /// </summary>
+        public string MetaLinkUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the share big size image
+        /// </summary>
+        public string ShareImageUrl { get; set; }
+
         /// <summary>
         /// 状态（保留字段，审核状态，过期状态等）
         /// </summary>

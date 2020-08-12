@@ -57,6 +57,7 @@ using Nop.Web.Areas.Admin.Models.Settings;
 using Nop.Web.Areas.Admin.Models.Shipping;
 using Nop.Web.Areas.Admin.Models.ShoppingCart;
 using Nop.Web.Areas.Admin.Models.Stores;
+using Nop.Web.Areas.Admin.Models.Suppliers;
 using Nop.Web.Areas.Admin.Models.Tasks;
 using Nop.Web.Areas.Admin.Models.Tax;
 using Nop.Web.Areas.Admin.Models.Templates;
@@ -90,10 +91,10 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
             CreateGdprMaps();
             CreateLocalizationMaps();
             CreateLoggingMaps();
+            CreateMarketingMaps();
             CreateMediaMaps();
             CreateMessagesMaps();
             CreateNewsMaps();
-            CreateWeixinMaps();
             CreateOrdersMaps();
             CreatePaymentsMaps();
             CreatePluginsMaps();
@@ -102,11 +103,13 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
             CreateSeoMaps();
             CreateShippingMaps();
             CreateStoresMaps();
+            CreateSuppliersMaps();
             CreateTasksMaps();
             CreateTaxMaps();
             CreateTopicsMaps();
             CreateVendorsMaps();
             CreateWarehouseMaps();
+            CreateWeixinMaps();
 
             //add some generic mapping rules
             ForAllMaps((mapConfiguration, map) =>
@@ -948,6 +951,43 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
         }
 
         /// <summary>
+        /// Create Marketing maps 
+        /// </summary>
+        protected virtual void CreateMarketingMaps()
+        {
+
+        }
+
+        /// <summary>
+        /// Create Suppliers maps 
+        /// </summary>
+        protected virtual void CreateSuppliersMaps()
+        {
+            CreateMap<SupplierVoucherCoupon, SupplierVoucherCouponModel>()
+                .ForMember(model => model.QrCodeSupplierVoucherCouponSearchModel, options => options.Ignore())
+                .ForMember(model => model.ProductSupplierVoucherCouponSearchModel, options => options.Ignore());
+            CreateMap<SupplierVoucherCouponModel, SupplierVoucherCoupon>();
+
+            CreateMap<SupplierVoucherCoupon, AddSupplierVoucherCouponRelatedCouponModel>()
+                .ForMember(model => model.SupplierNameString, options => options.Ignore())
+                .ForMember(model => model.SupplierShopNameString, options => options.Ignore())
+                .ForMember(model => model.AssetTypeNameString, options => options.Ignore());
+            CreateMap<AddSupplierVoucherCouponRelatedCouponModel, SupplierVoucherCoupon>();
+
+            CreateMap<QrCodeSupplierVoucherCouponMapping, QrCodeSupplierVoucherCouponModel>()
+                .ForMember(model => model.SupplierVoucherCouponSysName, options => options.Ignore())
+                .ForMember(model => model.QrCodeSysName, options => options.Ignore());
+            CreateMap<QrCodeSupplierVoucherCouponModel, QrCodeSupplierVoucherCouponMapping>();
+
+            CreateMap<Supplier, SupplierModel>();
+            CreateMap<SupplierModel, Supplier>();
+
+            CreateMap<SupplierShop, SupplierShopModel>();
+            CreateMap<SupplierShopModel, SupplierShop>();
+
+        }
+
+        /// <summary>
         /// Create weixin maps 
         /// </summary>
         protected virtual void CreateWeixinMaps()
@@ -978,10 +1018,12 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
                 .ForMember(entity => entity.CreatTime, options => options.Ignore());
 
             CreateMap<WQrCodeLimit, QrCodeLimitModel>()
-                .ForMember(model => model.BindingSource, options => options.Ignore());
+                .ForMember(model => model.BindingSource, options => options.Ignore())
+                .ForMember(model => model.QrCodeImageUrl, options => options.Ignore());
             CreateMap<QrCodeLimitModel, WQrCodeLimit>();
 
-            CreateMap<WQrCodeLimitUserMapping, QrCodeLimitUserModel>();
+            CreateMap<WQrCodeLimitUserMapping, QrCodeLimitUserModel>()
+                .ForMember(model => model.UserNameTemp, options => options.Ignore());
             CreateMap<QrCodeLimitUserModel, WQrCodeLimitUserMapping>();
 
             CreateMap<WUser, AddUserRelatedUserModel>();
@@ -989,6 +1031,13 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
 
             CreateMap<QrCodeLimitBindingSource, QrCodeLimitBindingSourceModel>();
             CreateMap<QrCodeLimitBindingSourceModel, QrCodeLimitBindingSource>();
+
+            CreateMap<WMenu, MenuModel>();
+            CreateMap<MenuModel, WMenu>();
+
+            CreateMap<WMenuButton, MenuButtonModel>()
+                .ForMember(model => model.MenuButtonTypeNameString, options => options.Ignore());
+            CreateMap<MenuButtonModel, WMenuButton>();
 
         }
 

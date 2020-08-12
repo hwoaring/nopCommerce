@@ -25,13 +25,16 @@ namespace Senparc.Weixin.MP.CommonService.Infrastructure
             builder.RegisterType<WLocationService>().As<IWLocationService>().InstancePerLifetimeScope();
             builder.RegisterType<WMessageBindService>().As<IWMessageBindService>().InstancePerLifetimeScope();
             builder.RegisterType<WMessageService>().As<IWMessageService>().InstancePerLifetimeScope();
+            builder.RegisterType<WQrCodeCategoryService>().As<IWQrCodeCategoryService>().InstancePerLifetimeScope();
+            builder.RegisterType<WQrCodeChannelService>().As<IWQrCodeChannelService>().InstancePerLifetimeScope();
             builder.RegisterType<WQrCodeLimitService>().As<IWQrCodeLimitService>().InstancePerLifetimeScope();
             builder.RegisterType<WQrCodeLimitUserService>().As<IWQrCodeLimitUserService>().InstancePerLifetimeScope();
             builder.RegisterType<WUserService>().As<IWUserService>().InstancePerLifetimeScope();
             builder.RegisterType<WUserTagService>().As<IWUserTagService>().InstancePerLifetimeScope();
             builder.RegisterType<QrCodeLimitBindingSourceService>().As<IQrCodeLimitBindingSourceService>().InstancePerLifetimeScope();
 
-            //builder.RegisterType<WMenuButtonService>().As<IWMenuButtonService>().InstancePerLifetimeScope();
+            builder.RegisterType<WMenuService>().As<IWMenuService>().InstancePerLifetimeScope();
+            builder.RegisterType<WMenuButtonService>().As<IWMenuButtonService>().InstancePerLifetimeScope();
             //builder.RegisterType<WAutoreplyNewsInfoService>().As<IWAutoreplyNewsInfoService>().InstancePerLifetimeScope();
             //builder.RegisterType<WMessageAutoReplyService>().As<IWMessageAutoReplyService>().InstancePerLifetimeScope();
             //builder.RegisterType<WKeywordAutoreplyService>().As<IWKeywordAutoreplyService>().InstancePerLifetimeScope();

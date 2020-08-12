@@ -1,0 +1,27 @@
+﻿<script type="text/javascript">
+        $(function () {
+            //头部导航
+            $(".call-top-nav").click(function () { $(".nav-js-block").click(); });
+            $(".nav-js-block").click(function () {
+                if ($(".header-nav-con").is(":hidden")) {
+                    $(".header-nav-con").show();
+                    $(".nav-shadow").show();
+                    $(".header-nav-title").addClass("header-nav-border");
+                    $(this).addClass("nav-js-img");
+                } else {
+                    $(".header-nav-con").hide();
+                    $(".nav-shadow").hide();
+                    $(".header-nav-title").removeClass("header-nav-border");
+                    $(this).removeClass("nav-js-img");
+                }
+            });
+
+            $(".nav-shadow").click(function () {
+                $(".header-nav-con").hide();
+                $(".nav-shadow").hide();
+                $(".header-nav-title").removeClass("header-nav-border");
+                $(".nav-js-block").removeClass("nav-js-img");
+            });
+
+        });
+</script>

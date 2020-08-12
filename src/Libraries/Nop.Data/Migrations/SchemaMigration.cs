@@ -149,6 +149,7 @@ namespace Nop.Data.Migrations
             _migrationManager.BuildTable<ShipmentItem>(Create);
             _migrationManager.BuildTable<ShippingMethod>(Create);
             _migrationManager.BuildTable<ShippingMethodCountryMapping>(Create);
+            _migrationManager.BuildTable<ExpressCompany>(Create);
 
             _migrationManager.BuildTable<ProductWarehouseInventory>(Create);
             _migrationManager.BuildTable<StockQuantityHistory>(Create);

@@ -1,0 +1,303 @@
+﻿@inject IThemeContext themeContext
+
+@{
+    Layout = "_ColumnsOne";
+
+    //page class
+    Html.AppendPageCssClassParts("html-home-page");
+    //themes path
+    var themeName = themeContext.WorkingThemeName;
+    var themesPath = $"/Themes/{themeName}/Content/";
+}
+
+<script type="text/javascript" asp-location="Footer">
+    var SiteUrl = "/";
+    //Banner
+    var bannerSwiper = new Swiper('.swiper-banner-container', {
+        autoplay: 3000,
+        autoplayDisableOnInteraction: false,
+        pagination: '.swiper-banner-container .swiper-pagination',
+        observer: true,
+        observeParents: true
+    });
+    //Menu
+    var MenuSwiper = new Swiper('.swiper-menu-container', {
+        pagination: '.swiper-menu-container .swiper-pagination',
+        observer: true,
+        observeParents: true
+    });
+
+    //返回顶部
+    window.onscroll = function () {
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        if (scrollTop > 300) {
+            backTop.style.display = 'block';
+        }
+        else {
+            backTop.style.display = 'none';
+        }
+    };
+    var backTop = document.getElementById("backTop");
+    backTop.onclick = function () {
+        document.documentElement.scrollTop = document.body.scrollTop = 0
+    };
+</script>
+
+<script type="text/javascript" asp-location="Head">
+    $(function () {
+        //头部导航
+        $(".call-top-nav").click(function () { $(".nav-js-block").click(); });
+        $(".nav-js-block").click(function () {
+            if ($(".header-nav-con").is(":hidden")) {
+                $(".header-nav-con").show();
+                $(".nav-shadow").show();
+                $(".header-nav-title").addClass("header-nav-border");
+                $(this).addClass("nav-js-img");
+            } else {
+                $(".header-nav-con").hide();
+                $(".nav-shadow").hide();
+                $(".header-nav-title").removeClass("header-nav-border");
+                $(this).removeClass("nav-js-img");
+            }
+        });
+
+        $(".nav-shadow").click(function () {
+            $(".header-nav-con").hide();
+            $(".nav-shadow").hide();
+            $(".header-nav-title").removeClass("header-nav-border");
+            $(".nav-js-block").removeClass("nav-js-img");
+        });
+
+    });
+</script>
+
+<!--banner-->
+<div class="swiper-container swiper-banner-container">
+    <ul class="swiper-wrapper">
+        <li class="swiper-slide">
+            <a class="item" href="javascript:;"><img src="@themesPath/images/banner-01.jpg" alt="" /></a>
+        </li>
+        <li class="swiper-slide">
+            <a class="item" href="javascript:;"><img src="@themesPath/images/banner-02.jpg" alt="" /></a>
+        </li>
+    </ul>
+    <div class="swiper-pagination"></div>
+</div>
+<!--/banner-->
+<!--index menu-->
+<div class="swiper-container swiper-menu-container">
+    <ul class="swiper-wrapper">
+        <li class="swiper-slide">
+            <a class="item" href="#">
+                <img src="@themesPath/images/menu_ico01.png" style="max-width:45px;max-height:45px;" alt="" />
+                <span class="menu-name">企业介绍</span>
+            </a>
+            <a class="item" href="#">
+                <img src="@themesPath/images/menu_ico10.png" style="max-width:45px;max-height:45px;" alt="" />
+                <span class="menu-name">赖老介绍</span>
+            </a>
+            <a class="item" href="#">
+                <img src="@themesPath/images/menu_ico06.png" style="max-width:45px;max-height:45px;" alt="" />
+                <span class="menu-name">作品品鉴</span>
+            </a>
+            <a class="item" href="#">
+                <img src="@themesPath/images/menu_ico13.png" style="max-width:45px;max-height:45px;" alt="" />
+                <span class="menu-name">新闻动态</span>
+            </a>
+            <a class="item" href="#">
+                <img src="@themesPath/images/menu_ico12.png" style="max-width:45px;max-height:45px;" alt="" />
+                <span class="menu-name">联系我们</span>
+            </a>
+        </li>
+    </ul>
+    <div class="swiper-pagination"></div>
+</div>
+<!--/index menu-->
+<!--adv-->
+<div class="module-container hot-module">
+    <div class="hot-module-con clearfix">
+        <div class="hot-module-b-ad">
+            <a class="ad-item" href=""><img class="transform" src="@themesPath/images/adv-banner-zhaoshang.jpg" alt=""></a>
+
+        </div>
+        <div class="hot-module-s-ad">
+            <a class="ad-item" href=""><img class="transform" src="@themesPath/images/adv-banner-tuangou.jpg" alt=""></a>
+            <a class="ad-item" href=""><img class="transform" src="@themesPath/images/adv-banner-dingzhi.jpg" alt=""></a>
+
+        </div>
+    </div>
+</div>
+<!--/adv-->
+<!--pruduct-->
+<div class="module-container product-module">
+    <div class="module-title-bar">
+        <h3 class="title-text">作品品鉴</h3>
+        <p>国家级非遗白酒酿造技艺</p>
+    </div>
+    <div class="module-wrap product-group-list">
+        <ul class=" clearfix">
+            <li>
+                <a href="#" class="pic">
+                    <img src="@themesPath/images/640-640-index-jf.jpg" alt="窖父系列" style="display: block;">
+                    <!--<span class="tips">
+                        <em class="tips-pos">窖父系列</em>
+                        <i class="tips-num">赖高淮作品</i>
+                    </span>-->
+                </a>
+            </li>
+            <li>
+                <a href="#" class="pic">
+                    <img src="@themesPath/images/640-640-index-js.jpg" alt="酒圣系列" style="display: block;">
+                    <!--<span class="tips">
+                        <em class="tips-pos">窖父系列</em>
+                        <i class="tips-num">赖高淮作品</i>
+                    </span>-->
+                </a>
+            </li>
+            <li>
+                <a href="#" class="pic">
+                    <img src="@themesPath/images/640-640-index-dz.jpg" alt="定制系列" style="display: block;">
+                    <!--<span class="tips">
+                        <em class="tips-pos">窖父系列</em>
+                        <i class="tips-num">赖高淮作品</i>
+                    </span>-->
+                </a>
+            </li>
+            <li>
+                <a href="#" class="pic">
+                    <img src="@themesPath/images/640-640-index-sc.jpg" alt="收藏系列" style="display: block;">
+                    <!--<span class="tips">
+                        <em class="tips-pos">窖父系列</em>
+                        <i class="tips-num">赖高淮作品</i>
+                    </span>-->
+                </a>
+            </li>
+        </ul>
+        <div class="module-more-bar">
+            <a class="module-more-link" href="#">更多作品</a>
+        </div>
+    </div>
+</div>
+<!--/product-->
+<!--about-module-->
+<div class="module-container about-module">
+    <h3 class="title-bar-style1">
+        <i class="line-icon"></i>
+        <span class="title-txt">公司介绍</span>
+    </h3>
+    <div class="module-wrap about-module-wrap">
+        <div class="module-wrap-banner">
+            <a class="banner-item" href="about.html">
+                <img class="transform" src="@themesPath/images/about-gongsi.jpg" alt="泸州赖族酒业有限公司">
+                <div class="item-name">泸州赖族酒业有限公司</div>
+            </a>
+        </div>
+
+        <ul class="module-wrap-ul-box clearfix">
+            <li>
+                <a class="a-item" href="#">
+                    <div class="pic"><img class="transform" src="@themesPath/images/about-5.jpg" alt="泸州赖族酒业发酵车间"></div>
+                    <div class="item-name">泸州赖族酒业发酵车间</div>
+                </a>
+            </li>
+            <li>
+                <a class="a-item" href="#">
+                    <div class="pic"><img class="transform" src="@themesPath/images/about-11.jpg" alt="赖高淮对生产流程指导"></div>
+                    <div class="item-name">赖高淮对生产流程指导</div>
+                </a>
+            </li>
+        </ul>
+        <div class="module-text-box">
+            <p>
+                泸州赖族酒业有限公司，前身为赖高淮先祖创办之“同发生”酒坊，由赖氏第十五代嫡系传承人赖高淮在1994年从泸州老窖集团公司退休后回家传承的祖业；1984年至1994年赖高淮任泸州老窖集团公司总工程师、厂长、董事顾问；是“泸州老窖七代代表性传承人”，“国家级非物质文化遗产项目泸州老窖酒酿制技艺的代表性传承人” ，“酒界泰斗”，“浓香鼻祖”；退休后的赖高淮，又再次用毕生的酿酒技艺深造中国的传承酒文化，潜心研发了传统纯粮固态发酵技艺酿造的国标优级“窖父”文化酒，为社会文化，经济发展打造了一款健康的黄金话液体。
+            </p>
+        </div>
+    </div>
+    <div class="module-more-bar">
+        <a class="module-more-link" href="#">更多介绍</a>
+    </div>
+</div>
+<!--/about-module-->
+<!--pruduct-->
+<div class="module-container laigaohuai-module">
+    <div class="module-title-bar">
+        <h3 class="title-text">赖高淮</h3>
+        <p>浓香鼻祖 · 酒界泰斗</p>
+    </div>
+    <div class="module-wrap laigaohuai-module-wrap">
+        <div class="module-wrap-banner">
+            <a class="banner-item" href="#">
+                <img class="transform" src="@themesPath/images/index-laigaohuai.jpg" alt="浓香鼻祖酒界泰斗-赖高淮">
+                <div class="item-name">国家级非物质文化遗产项目酿制技艺代表性传承人</div>
+            </a>
+        </div>
+        <ul class="laigaohuai-module-list-box clearfix">
+            <li>
+                <a class="item" href="#">
+                    <div class="pic"><span><img src="@themesPath/images/feiyi.png" alt="国家级非遗传承人"></span></div>
+                    <div class="info">
+                        <h5 class="title">国家级非遗传承人</h5>
+                        <div class="desc">2007年经国务院批准，文化部命名赖高淮为国家级非物质文化遗产项目泸州老窖酒酿制技艺代表性传承人。</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="item" href="#">
+                    <div class="pic"><span><img src="@themesPath/images/guoji.png" alt="国际酿酒大师"></span></div>
+                    <div class="info">
+                        <h5 class="title">国际酿酒大师</h5>
+                        <div class="desc">1986年开始，活跃在世界酿酒舞台的赖高淮赢得美国酒界的尊重和赞赏；1992年，美国酒业董事会授予赖高淮为“国际酿酒大师”的称号和证书。迄今仍是中国唯一的一位国际级酿酒大师。</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="item" href="#">
+                    <div class="pic"><span><img src="@themesPath/images/jujiang.png" alt="大国工匠·世界巨匠"></span></div>
+                    <div class="info">
+                        <h5 class="title">大国工匠·世界巨匠</h5>
+                        <div class="desc">2017年联合国经济部颁发世界巨匠证：赖高淮为世界酒行业做出巨大贡献，让世界酒业经济发展推进到高峰。</div>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a class="item" href="#">
+                    <div class="pic"><span><img src="@themesPath/images/fayuandi.png" alt="浓香鼻祖·酒界泰斗"></span></div>
+                    <div class="info">
+                        <h5 class="title">浓香鼻祖·酒界泰斗</h5>
+                        <div class="desc">1966年赖高淮的酿酒笔记，成为中国千年酿酒史上奠基专著，迄今仍为酒行业内酿酒操作标准典范。他的5000多弟子遍布中国各大名酒企业，桃李满天下，掌握企业命脉，传承与发展白酒行业，是中国白酒尤其是浓香型白酒开拓者。</div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+
+
+    </div>
+    <div class="module-more-bar">
+        <a class="module-more-link" href="/destination/">更多介绍</a>
+    </div>
+</div>
+<!--/product-->
+<!--cctv-module-->
+<div class="module-container cctv-module">
+    <h3 class="title-bar-style1">
+        <i class="line-icon"></i>
+        <span class="title-txt">CCTV-10人物专栏《酒界泰斗 — 赖高淮》</span>
+    </h3>
+    <div class="module-wrap video-module-wrap">
+        <div class="module-wrap-video">
+            <video autoplay="autoplay" loop="loop" type="video/mp4" class="e-video" webkit-playsinline="true" x-webkit-airplay="true" playsinline="true" x5-video-player-type="h5" x5-video-orientation="h5" x5-video-player-fullscreen="true" controls="">
+                <source src="video/cctv10.mp4" />
+            </video>
+            <div class="video-name"><a class="a-item" href="#">《酒界泰斗 — 赖高淮》，全长25分钟 <span>看完整版</span></a></div>
+        </div>
+        <div class="module-text-box">
+            <p>
+                2008年6月18日，中央电视台10频道“人物”专栏播出了标题为《酒界泰斗——赖高淮》的专题节目，长达30分钟的专题内容，是四川酒界乃至全国酒界人物首开登陆央视专栏的先例，其内容精彩，情节生动感人，深受酒界人士的关注。
+            </p>
+        </div>
+    </div>
+    <div class="module-more-bar">
+        <a class="module-more-link" href="/destination/">更多介绍</a>
+    </div>
+</div>
+<!--/cctv-module-->

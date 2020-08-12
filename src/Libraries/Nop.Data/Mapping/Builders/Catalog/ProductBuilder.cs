@@ -18,9 +18,13 @@ namespace Nop.Data.Mapping.Builders.Catalog
         {
             table
                 .WithColumn(nameof(Product.Name)).AsString(400).NotNullable()
+                .WithColumn(nameof(Product.PromotionName)).AsString(512).Nullable()
                 .WithColumn(nameof(Product.SubTitle)).AsString(512).Nullable()
                 .WithColumn(nameof(Product.MetaKeywords)).AsString(400).Nullable()
                 .WithColumn(nameof(Product.MetaTitle)).AsString(400).Nullable()
+                .WithColumn(nameof(Product.MetaImageUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Product.MetaLinkUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Product.ShareImageUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Product.Sku)).AsString(400).Nullable()
                 .WithColumn(nameof(Product.ManufacturerPartNumber)).AsString(400).Nullable()
                 .WithColumn(nameof(Product.Gtin)).AsString(400).Nullable()

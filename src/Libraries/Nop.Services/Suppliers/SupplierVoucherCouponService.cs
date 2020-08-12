@@ -177,7 +177,7 @@ namespace Nop.Services.Suppliers
             var query = _supplierVoucherCouponRepository.Table;
 
             if (!string.IsNullOrEmpty(name))
-                query = query.Where(q => q.Name.Contains(name));
+                query = query.Where(q => q.Name.Contains(name) || q.SystemName.Contains(name));
 
             if (supplierId > 0)
                 query = query.Where(q => q.SupplierId == supplierId);

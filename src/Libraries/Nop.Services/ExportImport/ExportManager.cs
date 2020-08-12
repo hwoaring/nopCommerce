@@ -534,6 +534,7 @@ namespace Nop.Services.ExportImport
                                 ImageSquaresPictureId = pav.ImageSquaresPictureId,
                                 PriceAdjustment = pav.PriceAdjustment,
                                 PriceAdjustmentUsePercentage = pav.PriceAdjustmentUsePercentage,
+                                UseQtyMultiple = pav.UseQtyMultiple,
                                 WeightAdjustment = pav.WeightAdjustment,
                                 Cost = pav.Cost,
                                 CustomerEntersQty = pav.CustomerEntersQty,
@@ -1069,6 +1070,7 @@ namespace Nop.Services.ExportImport
                             xmlWriter.WriteString("ColorSquaresRgb", productAttributeValue.ColorSquaresRgb);
                             xmlWriter.WriteString("ImageSquaresPictureId", productAttributeValue.ImageSquaresPictureId);
                             xmlWriter.WriteString("PriceAdjustment", productAttributeValue.PriceAdjustment);
+                            xmlWriter.WriteString("UseQtyMultiple", productAttributeValue.UseQtyMultiple);
                             xmlWriter.WriteString("PriceAdjustmentUsePercentage", productAttributeValue.PriceAdjustmentUsePercentage);
                             xmlWriter.WriteString("WeightAdjustment", productAttributeValue.WeightAdjustment);
                             xmlWriter.WriteString("Cost", productAttributeValue.Cost);

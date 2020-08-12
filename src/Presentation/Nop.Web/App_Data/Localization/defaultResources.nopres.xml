@@ -3372,6 +3372,12 @@
   <LocaleResource Name="Admin.Catalog.Products.Pictures.Fields.DisplayOrder.Hint">
     <Value>Display order of the picture. 1 represents the top of the list.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.Pictures.Fields.IsCoverImage">
+    <Value>Cover Image</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.Pictures.Fields.IscoverImage.Hint">
+    <Value>The picture is cover Image.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Pictures.Fields.OverrideAltAttribute">
     <Value>Alt</Value>
   </LocaleResource>
@@ -3389,6 +3395,12 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Pictures.Fields.Picture.Hint">
     <Value>Choose a picture to upload. If the picture size exceeds your stores max image size setting, it will be automatically resized.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.Pictures.Fields.Published">
+    <Value>Published</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.Pictures.Fields.Published.Hint">
+    <Value>The picture is Published.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Pictures.SaveBeforeEdit">
     <Value>You need to save the product before you can upload pictures for this product page.</Value>
@@ -7472,6 +7484,12 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Order.IsReOrderAllowed.Hint">
     <Value>Check if you want to allow customers to make re-orders.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.MaxUnpaidOrderNumber">
+    <Value>Max Unpaid Order Number</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.MaxUnpaidOrderNumber.Hint">
+    <Value>Enter Max Unpaid Order Number.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Order.MinOrderSubtotalAmount">
     <Value>Min order sub-total amount</Value>
@@ -14585,6 +14603,33 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.VendorNotes.Fields.Note.Validation">
     <Value>Vendor note can not be empty.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin">
+    <Value>Weixin</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus">
+    <Value>Menus</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Users">
+    <Value>Users</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.UserTags">
+    <Value>User Tags</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.UserSysTags">
+    <Value>User Sys Tags</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.QrCodeLimits">
+    <Value>QrCodeLimits</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Locations">
+    <Value>Locations</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Messages">
+    <Value>Messages</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.MessageAutoReply">
+    <Value>Message Auto Reply</Value>
   </LocaleResource>
   <LocaleResource Name="AjaxCart.Failure">
     <Value>Failed to add the product. Please refresh the page and try one more time.</Value>

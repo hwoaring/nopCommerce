@@ -27,6 +27,7 @@ using Nop.Services.Shipping;
 using Nop.Services.Stores;
 using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
 using Nop.Web.Areas.Admin.Models.Weixin;
+using Nop.Web.Areas.Admin.Models.Suppliers;
 using Nop.Web.Areas.Admin.Models.Orders;
 using Nop.Web.Framework.Extensions;
 using Nop.Web.Framework.Factories;
@@ -78,6 +79,8 @@ namespace Nop.Web.Areas.Admin.Factories
         private readonly IWQrCodeLimitService _wQrCodeLimitService;
         private readonly IWQrCodeLimitUserService _wQrCodeLimitUserService;
         private readonly IQrCodeLimitBindingSourceService _qrCodeLimitBindingSourceService;
+        private readonly IWMenuService _wMenuService;
+        private readonly IWMenuButtonService _wMenuButtonService;
         private readonly IWorkContext _workContext;
         private readonly MeasureSettings _measureSettings;
         private readonly TaxSettings _taxSettings;
@@ -123,6 +126,8 @@ namespace Nop.Web.Areas.Admin.Factories
             IWQrCodeLimitService wQrCodeLimitService,
             IWQrCodeLimitUserService wQrCodeLimitUserService,
             IQrCodeLimitBindingSourceService qrCodeLimitBindingSourceService,
+            IWMenuService wMenuService,
+            IWMenuButtonService wMenuButtonService,
             IWorkContext workContext,
             MeasureSettings measureSettings,
             TaxSettings taxSettings,
@@ -164,6 +169,8 @@ namespace Nop.Web.Areas.Admin.Factories
             _wQrCodeLimitService = wQrCodeLimitService;
             _wQrCodeLimitUserService = wQrCodeLimitUserService;
             _qrCodeLimitBindingSourceService = qrCodeLimitBindingSourceService;
+            _wMenuService = wMenuService;
+            _wMenuButtonService = wMenuButtonService;
             _workContext = workContext;
             _taxSettings = taxSettings;
             _vendorSettings = vendorSettings;
@@ -361,6 +368,10 @@ namespace Nop.Web.Areas.Admin.Factories
                     model.TagIdList = qrCodeLimit.TagIdList;
                     model.FixedUse = qrCodeLimit.FixedUse;
 
+                    //二维码图片链接
+                    if (!string.IsNullOrEmpty(model.Ticket))
+                        model.QrCodeImageUrl = Senparc.Weixin.MP.AdvancedAPIs.QrCodeApi.GetShowQrCodeUrl(model.Ticket);
+
                     var qrCodeLimitBindingSource = _qrCodeLimitBindingSourceService.GetEntityByQrcodeLimitId(qrCodeLimit.Id);
                     if (qrCodeLimitBindingSource != null)
                     {
@@ -368,11 +379,18 @@ namespace Nop.Web.Areas.Admin.Factories
                         model.BindingSource = qrCodeLimitBindingSourceModel;
                     }
                 }
+
+                //prepare nested search model
+                PrepareQrCodeLimitUserSearchModel(model.QrCodeLimitUserSearchModel, qrCodeLimit);
+                PrepareQrCodeSupplierVoucherCouponSearchModel(model.QrCodeSupplierVoucherCouponSearchModel, qrCodeLimit);
             }
             else
             {
 
             }
+
+            _baseAdminModelFactory.PrepareQrCodeCategorys(model.AvailableWQrCodeCategorys, false);
+            _baseAdminModelFactory.PrepareQrCodeChannels(model.AvailableWQrCodeChannels, false);
 
             //set default values for the new model
             if (qrCodeLimit == null)
@@ -393,6 +411,42 @@ namespace Nop.Web.Areas.Admin.Factories
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
 
+            _baseAdminModelFactory.PrepareQrCodeCategorys(searchModel.AvailableCategories);
+
+            _baseAdminModelFactory.PrepareQrCodeChannels(searchModel.AvailableChannels);
+
+            searchModel.AvailableFixedUseOptions.Add(new SelectListItem
+            {
+                Value = "0",
+                Text = "All"
+            });
+            searchModel.AvailableFixedUseOptions.Add(new SelectListItem
+            {
+                Value = "1",
+                Text = "Fixed Use"
+            });
+            searchModel.AvailableFixedUseOptions.Add(new SelectListItem
+            {
+                Value = "2",
+                Text = "UnFixed Use"
+            });
+
+            searchModel.AvailableHasCreatedOptions.Add(new SelectListItem
+            {
+                Value = "0",
+                Text = "All"
+            });
+            searchModel.AvailableHasCreatedOptions.Add(new SelectListItem
+            {
+                Value = "1",
+                Text = "Created"
+            });
+            searchModel.AvailableHasCreatedOptions.Add(new SelectListItem
+            {
+                Value = "2",
+                Text = "UnCreated"
+            });
+
             //prepare page parameters
             searchModel.SetGridPageSize();
 
@@ -409,13 +463,16 @@ namespace Nop.Web.Areas.Admin.Factories
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
 
+            var overrideFixedUse = searchModel.SearchFixedUse == 0 ? null : (bool?)(searchModel.SearchFixedUse == 1);
+            var overrideCreated = searchModel.SearchHasCreated == 0 ? null : (bool?)(searchModel.SearchHasCreated == 1);
+
             //get users
             var qrCodeLimits =  _wQrCodeLimitService.GetWQrCodeLimits(
                 wConfigId: searchModel.WConfigId,
                 wQrCodeCategoryId:searchModel.WQrCodeCategoryId,
                 wQrCodeChannelId:searchModel.WQrCodeChannelId,
-                fixedUse:searchModel.SearchFixedUse,
-                hasCreated:searchModel.SearchHasCreated,
+                fixedUse: overrideFixedUse,
+                hasCreated: overrideCreated,
                 pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
             //prepare list model
@@ -425,6 +482,9 @@ namespace Nop.Web.Areas.Admin.Factories
                 {
                     //fill in model values from the entity
                     var qrCodeLimitModel = qrCodeLimit.ToModel<QrCodeLimitModel>();
+
+                    if (!string.IsNullOrEmpty(qrCodeLimitModel.Ticket))
+                        qrCodeLimitModel.QrCodeImageUrl = Senparc.Weixin.MP.AdvancedAPIs.QrCodeApi.GetShowQrCodeUrl(qrCodeLimitModel.Ticket);
 
                     return qrCodeLimitModel;
                 });
@@ -513,10 +573,246 @@ namespace Nop.Web.Areas.Admin.Factories
             return model;
         }
 
+        protected virtual QrCodeLimitUserSearchModel PrepareQrCodeLimitUserSearchModel(QrCodeLimitUserSearchModel searchModel, WQrCodeLimit qrCodeLimit)
+        {
+            if (searchModel == null)
+                throw new ArgumentNullException(nameof(searchModel));
+
+            if (qrCodeLimit == null)
+                throw new ArgumentNullException(nameof(qrCodeLimit));
+
+            searchModel.QrCodeLimitId = qrCodeLimit.Id;
+
+            //prepare page parameters
+            searchModel.SetGridPageSize();
+
+            return searchModel;
+        }
+
+        protected virtual QrCodeSupplierVoucherCouponSearchModel PrepareQrCodeSupplierVoucherCouponSearchModel(QrCodeSupplierVoucherCouponSearchModel searchModel, WQrCodeLimit qrCodeLimit)
+        {
+            if (searchModel == null)
+                throw new ArgumentNullException(nameof(searchModel));
+
+            if (qrCodeLimit == null)
+                throw new ArgumentNullException(nameof(qrCodeLimit));
+
+            searchModel.QrCodeId = qrCodeLimit.Id;
+            searchModel.QrcodeLimit = true;
+
+            //prepare page parameters
+            searchModel.SetGridPageSize();
+
+            return searchModel;
+        }
+
+        public virtual QrCodeLimitUserModel PrepareQrCodeLimitUserModel(QrCodeLimitUserModel model, WQrCodeLimitUserMapping qrCodeLimitUser, bool excludeProperties = false)
+        {
+            if (qrCodeLimitUser != null)
+            {
+                //fill in model values from the entity
+                model ??= new QrCodeLimitUserModel();
+
+                model.Id = qrCodeLimitUser.Id;
+
+                //whether to fill in some of properties
+                if (!excludeProperties)
+                {
+                    model.UserId = qrCodeLimitUser.UserId;
+                    model.QrCodeLimitId = qrCodeLimitUser.QrCodeLimitId;
+                    model.UserName = qrCodeLimitUser.UserName;
+                    model.Description = qrCodeLimitUser.Description;
+                    model.TelNumber = qrCodeLimitUser.TelNumber;
+                    model.AddressInfo = qrCodeLimitUser.AddressInfo;
+                    model.ExpireTime = qrCodeLimitUser.ExpireTime;
+                    model.Published = qrCodeLimitUser.Published;
+
+                    var user = _wUserService.GetWUserById(model.UserId);
+                    if (user != null)
+                    {
+                        if (string.IsNullOrEmpty(model.UserName))
+                            model.UserNameTemp = user.NickName + (string.IsNullOrEmpty(user.Remark) ? "" : "(" + user.Remark + ")");
+                    }
+  
+
+                }
+
+            }
+            else
+            {
+
+            }
+
+            //set default values for the new model
+            if (qrCodeLimitUser == null)
+            {
+
+            }
+
+            return model;
+        }
+
+
+
 
 
         #endregion
 
+
+        #region Menu Model
+
+        public virtual MenuSearchModel PrepareMenuSearchModel(MenuSearchModel searchModel)
+        {
+            if (searchModel == null)
+                throw new ArgumentNullException(nameof(searchModel));
+
+            searchModel.AvailablePersonals.Add(new SelectListItem
+            {
+                Value = "0",
+                Text = "All"
+            });
+            searchModel.AvailablePersonals.Add(new SelectListItem
+            {
+                Value = "1",
+                Text = "Personal Menu"
+            });
+            searchModel.AvailablePersonals.Add(new SelectListItem
+            {
+                Value = "2",
+                Text = "Common Menu"
+            });
+
+            //prepare page parameters
+            searchModel.SetGridPageSize();
+
+            return searchModel;
+        }
+
+        public virtual MenuListModel PrepareMenuListModel(MenuSearchModel searchModel)
+        {
+            if (searchModel == null)
+                throw new ArgumentNullException(nameof(searchModel));
+
+            var overridePersonal = searchModel.SeletedPersonalId == 0 ? null : (bool?)(searchModel.SeletedPersonalId == 1);
+            //get users
+            var menus = _wMenuService.GetAllMenus(
+                systemName: searchModel.SearchSystemName,
+                personal: overridePersonal,
+                pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
+
+            //prepare list model
+            var model = new MenuListModel().PrepareToGrid(searchModel, menus, () =>
+            {
+                return menus.Select(menu =>
+                {
+                    //fill in model values from the entity
+                    var menuModel = menu.ToModel<MenuModel>();
+
+                    return menuModel;
+                });
+            });
+
+            return model;
+        }
+
+        public virtual MenuModel PrepareMenuModel(MenuModel model, WMenu menu, bool excludeProperties = false)
+        {
+            if (menu != null)
+            {
+                //fill in model values from the entity
+                model ??= new MenuModel();
+
+                model.Id = menu.Id;
+
+                //whether to fill in some of properties
+                if (!excludeProperties)
+                {
+                    model.MenuId = menu.MenuId;
+                    model.SystemName = menu.SystemName;
+                    model.Description = menu.Description;
+                    model.MenuJsonCode = menu.MenuJsonCode;
+                    model.TagId = menu.TagId;
+                    model.Sex = menu.Sex;
+                    model.ClientPlatformType = menu.ClientPlatformType;
+                    model.Country = menu.Country;
+                    model.Province = menu.Province;
+                    model.City = menu.City;
+                    model.LanguageTypeId = menu.LanguageTypeId;
+                    model.Status = menu.Status;
+                    model.PublishTime = menu.PublishTime;
+                    model.UnPublishTime = menu.UnPublishTime;
+                    model.DefaultMenu = menu.DefaultMenu;
+                    model.IsMenuOpen = menu.IsMenuOpen;
+                    model.Published = menu.Published;
+                    model.Personal = menu.Personal;
+                    model.Deleted = menu.Deleted;
+                }
+
+                //prepare nested search model
+                PrepareMenuButtonSearchModel(model.MenuButtonSearchModel, menu);
+
+            }
+            else
+            {
+
+            }
+
+            //set default values for the new model
+            if (menu == null)
+            {
+
+            }
+
+            return model;
+        }
+
+        protected virtual MenuButtonSearchModel PrepareMenuButtonSearchModel(MenuButtonSearchModel searchModel, WMenu menu)
+        {
+            if (searchModel == null)
+                throw new ArgumentNullException(nameof(searchModel));
+
+            if (menu == null)
+                throw new ArgumentNullException(nameof(menu));
+
+            searchModel.MenuId = menu.Id;
+
+            //prepare page parameters
+            searchModel.SetGridPageSize();
+
+            return searchModel;
+        }
+
+        public virtual MenuButtonListModel PrepareMenuButtonListModel(MenuButtonSearchModel searchModel, WMenu menu)
+        {
+            if (searchModel == null)
+                throw new ArgumentNullException(nameof(searchModel));
+
+            if (menu == null)
+                throw new ArgumentNullException(nameof(menu));
+
+            var menuButtons = _wMenuButtonService.GetMenuButtonsByMenuId(menu.Id).ToPagedList(searchModel);
+
+            //prepare grid model
+            var model = new MenuButtonListModel().PrepareToGrid(searchModel, menuButtons, () =>
+            {
+                return menuButtons.Select(menuButton =>
+                {
+                    //fill in model values from the entity
+                    var menuButtonModel = menuButton.ToModel<MenuButtonModel>();
+                    menuButtonModel.MenuButtonTypeNameString = (Enum.TryParse(typeof(WMenuButtonType), menuButtonModel.MenuButtonTypeId.ToString(), out var parseResult) ? (WMenuButtonType)parseResult : WMenuButtonType.Click).ToString();
+
+                    return menuButtonModel;
+                });
+            });
+
+            return model;
+        }
+
+
+
+
+
+        #endregion
 
         #endregion
     }

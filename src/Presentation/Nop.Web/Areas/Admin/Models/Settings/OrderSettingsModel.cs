@@ -39,6 +39,10 @@ namespace Nop.Web.Areas.Admin.Models.Settings
         public decimal MinOrderTotalAmount { get; set; }
         public bool MinOrderTotalAmount_OverrideForStore { get; set; }
 
+        [NopResourceDisplayName("Admin.Configuration.Settings.Order.MaxUnpaidOrderNumber")]
+        public int MaxUnpaidOrderNumber { get; set; }
+        public bool MaxUnpaidOrderNumber_OverrideForStore { get; set; }
+
         [NopResourceDisplayName("Admin.Configuration.Settings.Order.AutoUpdateOrderTotalsOnEditingOrder")]
         public bool AutoUpdateOrderTotalsOnEditingOrder { get; set; }
         public bool AutoUpdateOrderTotalsOnEditingOrder_OverrideForStore { get; set; }

@@ -331,7 +331,9 @@ namespace Nop.Services.ExportImport
                             //maybe because entity size is too large
                             PictureId = newPicture.Id,
                             DisplayOrder = 1,
-                            ProductId = product.ProductItem.Id
+                            ProductId = product.ProductItem.Id,
+                            IsCoverImage = false,
+                            Published = true
                         });
                         _productService.UpdateProduct(product.ProductItem);
                     }
@@ -397,7 +399,9 @@ namespace Nop.Services.ExportImport
                             //maybe because entity size is too large
                             PictureId = newPicture.Id,
                             DisplayOrder = 1,
-                            ProductId = product.ProductItem.Id
+                            ProductId = product.ProductItem.Id,
+                            IsCoverImage = false,
+                            Published = true
                         });
 
                         _productService.UpdateProduct(product.ProductItem);
@@ -609,6 +613,7 @@ namespace Nop.Services.ExportImport
             var imageSquaresPictureId = productAttributeManager.GetProperty("ImageSquaresPictureId").IntValue;
             var priceAdjustment = productAttributeManager.GetProperty("PriceAdjustment").DecimalValue;
             var priceAdjustmentUsePercentage = productAttributeManager.GetProperty("PriceAdjustmentUsePercentage").BooleanValue;
+            var useQtyMultiple = productAttributeManager.GetProperty("useQtyMultiple").BooleanValue;
             var weightAdjustment = productAttributeManager.GetProperty("WeightAdjustment").DecimalValue;
             var cost = productAttributeManager.GetProperty("Cost").DecimalValue;
             var customerEntersQty = productAttributeManager.GetProperty("CustomerEntersQty").BooleanValue;
@@ -669,6 +674,7 @@ namespace Nop.Services.ExportImport
                     Name = valueName,
                     PriceAdjustment = priceAdjustment,
                     PriceAdjustmentUsePercentage = priceAdjustmentUsePercentage,
+                    UseQtyMultiple = useQtyMultiple,
                     WeightAdjustment = weightAdjustment,
                     Cost = cost,
                     IsPreSelected = isPreSelected,
@@ -691,6 +697,7 @@ namespace Nop.Services.ExportImport
                 pav.ImageSquaresPictureId = imageSquaresPictureId;
                 pav.PriceAdjustment = priceAdjustment;
                 pav.PriceAdjustmentUsePercentage = priceAdjustmentUsePercentage;
+                pav.UseQtyMultiple = useQtyMultiple;
                 pav.WeightAdjustment = weightAdjustment;
                 pav.Cost = cost;
                 pav.CustomerEntersQty = customerEntersQty;

@@ -28,6 +28,11 @@ namespace Nop.Core.Domain.Catalog
         public bool PriceAdjustmentUsePercentage { get; set; }
 
         /// <summary>
+        /// 多数量
+        /// </summary>
+        public bool UseQtyMultiple { get; set; }
+
+        /// <summary>
         /// Gets or sets the weight adjustment
         /// </summary>
         public decimal WeightAdjustment { get; set; }

@@ -325,7 +325,7 @@ namespace Nop.Services.Weixin
                 query = query.Where(v => v.Remark.Contains(remark));
 
             if (!showDeleted)
-                query = query.Where(v => v.Deleted);
+                query = query.Where(v => !v.Deleted);
 
             query = query.OrderBy(v => v.CreatTime).ThenBy(v => v.Id);
 

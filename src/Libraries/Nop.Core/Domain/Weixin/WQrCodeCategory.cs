@@ -24,6 +24,10 @@
         /// <returns></returns>
         public byte Status { get; set; }
         /// <summary>
+        /// 排序
+        /// </summary>
+        public int DisplayOrder { get; set; }
+        /// <summary>
         /// 删除标志，不允许直接删除
         /// </summary>
         /// <returns></returns>

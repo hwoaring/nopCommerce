@@ -72,7 +72,7 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
             #region Utilities
 
             /// <summary>
-            /// Set the wuser openid of current customer
+            /// Set the wuser referee openid of current customer
             /// </summary>
             /// <param name="affiliate">Affiliate</param>
             protected void SetCustomerOpenId(string refereeOpenId, long refereeOpenIdHash)

@@ -284,7 +284,7 @@ namespace Nop.Services.Installation
         /// <param name="fileName"></param>
         /// <param name="displayOrder"></param>
         /// <returns>Identifier of inserted picture</returns>
-        protected virtual int InsertProductPicture(Product product, string fileName, int displayOrder = 1)
+        protected virtual int InsertProductPicture(Product product, string fileName, int displayOrder = 1, bool isCoverImage = false, bool published = true)
         {
             var pictureService = EngineContext.Current.Resolve<IPictureService>();
             var sampleImagesPath = GetSamplesPath();
@@ -296,7 +296,9 @@ namespace Nop.Services.Installation
                 {
                     ProductId = product.Id,
                     PictureId = pic.Id,
-                    DisplayOrder = displayOrder
+                    DisplayOrder = displayOrder,
+                    IsCoverImage = isCoverImage,
+                    Published = published
                 });
 
             return pic.Id;
@@ -4493,13 +4495,21 @@ namespace Nop.Services.Installation
                 IsSystemRole = true,
                 SystemName = NopCustomerDefaults.VendorsRoleName
             };
+            var crSuppliers = new CustomerRole
+            {
+                Name = "Suppliers",
+                Active = true,
+                IsSystemRole = true,
+                SystemName = NopCustomerDefaults.VendorsRoleName
+            };
             var customerRoles = new List<CustomerRole>
             {
                 crAdministrators,
                 crForumModerators,
                 crRegistered,
                 crGuests,
-                crVendors
+                crVendors,
+                crSuppliers
             };
             _customerRoleRepository.Insert(customerRoles);
 
@@ -5919,6 +5929,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 20,
                     Published = true,
                     Title = "About us",
+                    CreatedOnUtc = DateTime.UtcNow,
                     Body =
                         "<p>Put your &quot;About Us&quot; information here. You can edit this in the admin site.</p>",
                     TopicTemplateId = defaultTopicTemplate.Id
@@ -5931,6 +5942,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 1,
                     Published = true,
                     Title = string.Empty,
+                    CreatedOnUtc = DateTime.UtcNow,
                     Body =
                         "<p><strong>Register and save time!</strong><br />Register with us for future convenience:</p><ul><li>Fast and easy check out</li><li>Easy access to your order history and status</li></ul>",
                     TopicTemplateId = defaultTopicTemplate.Id
@@ -5944,6 +5956,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 15,
                     Published = true,
                     Title = "Conditions of Use",
+                    CreatedOnUtc = DateTime.UtcNow,
                     Body = "<p>Put your conditions of use information here. You can edit this in the admin site.</p>",
                     TopicTemplateId = defaultTopicTemplate.Id
                 },
@@ -5955,6 +5968,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 1,
                     Published = true,
                     Title = string.Empty,
+                    CreatedOnUtc = DateTime.UtcNow,
                     Body = "<p>Put your contact information here. You can edit this in the admin site.</p>",
                     TopicTemplateId = defaultTopicTemplate.Id
                 },
@@ -5966,6 +5980,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 1,
                     Published = true,
                     Title = "Forums",
+                    CreatedOnUtc = DateTime.UtcNow,
                     Body = "<p>Put your welcome message here. You can edit this in the admin site.</p>",
                     TopicTemplateId = defaultTopicTemplate.Id
                 },
@@ -5977,6 +5992,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 1,
                     Published = true,
                     Title = "Welcome to our store",
+                    CreatedOnUtc = DateTime.UtcNow,
                     Body =
                         "<p>Online shopping is the process consumers go through to purchase products or services over the Internet. You can edit this in the admin site.</p><p>If you have questions, see the <a href=\"http://docs.yourdomain.com/\">Documentation</a>, or post in the <a href=\"https://www.yourdomain.com/boards/\">Forums</a> at <a href=\"https://www.yourdomain.com\">yourdomain.com</a></p>",
                     TopicTemplateId = defaultTopicTemplate.Id
@@ -5989,6 +6005,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 1,
                     Published = true,
                     Title = "About login / registration",
+                    CreatedOnUtc = DateTime.UtcNow,
                     Body =
                         "<p>Put your login / registration information here. You can edit this in the admin site.</p>",
                     TopicTemplateId = defaultTopicTemplate.Id
@@ -6002,6 +6019,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 10,
                     Published = true,
                     Title = "Privacy notice",
+                    CreatedOnUtc = DateTime.UtcNow,
                     Body = "<p>Put your privacy policy information here. You can edit this in the admin site.</p>",
                     TopicTemplateId = defaultTopicTemplate.Id
                 },
@@ -6013,6 +6031,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 1,
                     Published = true,
                     Title = string.Empty,
+                    CreatedOnUtc = DateTime.UtcNow,
                     Body =
                         "<p><strong>The page you requested was not found, and we have a fine guess why.</strong></p><ul><li>If you typed the URL directly, please make sure the spelling is correct.</li><li>The page no longer exists. In this case, we profusely apologize for the inconvenience and for any damage this may cause.</li></ul>",
                     TopicTemplateId = defaultTopicTemplate.Id
@@ -6026,6 +6045,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 5,
                     Published = true,
                     Title = "Shipping & returns",
+                    CreatedOnUtc = DateTime.UtcNow,
                     Body =
                         "<p>Put your shipping &amp; returns information here. You can edit this in the admin site.</p>",
                     TopicTemplateId = defaultTopicTemplate.Id
@@ -6038,6 +6058,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 1,
                     Published = true,
                     Title = string.Empty,
+                    CreatedOnUtc = DateTime.UtcNow,
                     Body = "<p>Put your apply vendor instructions here. You can edit this in the admin site.</p>",
                     TopicTemplateId = defaultTopicTemplate.Id
                 },
@@ -6050,6 +6071,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 1,
                     Published = true,
                     Title = "Terms of services for vendors",
+                    CreatedOnUtc = DateTime.UtcNow,
                     Body = "<p>Put your terms of service information here. You can edit this in the admin site.</p>",
                     TopicTemplateId = defaultTopicTemplate.Id
                 }
@@ -6138,6 +6160,7 @@ namespace Nop.Services.Installation
                 PageTitleSeoAdjustment = PageTitleSeoAdjustment.PagenameAfterStorename,
                 DefaultTitle = "Your store",
                 DefaultMetaKeywords = string.Empty,
+                DefaultMetaImageUrl = string.Empty,
                 DefaultMetaDescription = string.Empty,
                 GenerateProductMetaDescription = true,
                 ConvertNonWesternChars = false,
@@ -6560,6 +6583,7 @@ namespace Nop.Services.Installation
                 DeactivateGiftCardsAfterCancellingOrder = false,
                 DeactivateGiftCardsAfterDeletingOrder = false,
                 CompleteOrderWhenDelivered = true,
+                MaxUnpaidOrderNumber = 0,
                 CustomOrderNumberMask = "{ID}",
                 ExportWithProducts = true,
                 AllowAdminsToBuyCallForPriceProducts = true
@@ -7504,13 +7528,17 @@ namespace Nop.Services.Installation
                 {
                     ProductId = productBuildComputer.Id,
                     PictureId = pic_product_Desktops_1.Id,
-                    DisplayOrder = 1
+                    DisplayOrder = 1,
+                    IsCoverImage = false,
+                    Published = true
                 },
                 new ProductPicture
                 {
                     ProductId = productBuildComputer.Id,
                     PictureId = pic_product_Desktops_2.Id,
-                    DisplayOrder = 2
+                    DisplayOrder = 2,
+                    IsCoverImage = false,
+                    Published = true
                 });
 
             var pamProcessor = InsertInstallationData(new ProductAttributeMapping
@@ -7711,7 +7739,9 @@ namespace Nop.Services.Installation
             {
                 ProductId = productDigitalStorm.Id,
                 PictureId = pic_product_DigitalStorm.Id,
-                DisplayOrder = 1
+                DisplayOrder = 1,
+                IsCoverImage = false,
+                Published = true
             });
 
             AddProductTag(productDigitalStorm, "cool");
@@ -7765,7 +7795,9 @@ namespace Nop.Services.Installation
             {
                 ProductId = productLenovoIdeaCentre.Id,
                 PictureId = pic_product_LenovoIdeaCentre.Id,
-                DisplayOrder = 1
+                DisplayOrder = 1,
+                IsCoverImage = false,
+                Published = true
             });
 
             AddProductTag(productLenovoIdeaCentre, "awesome");
@@ -7829,12 +7861,16 @@ namespace Nop.Services.Installation
             {
                 ProductId = productAppleMacBookPro.Id,
                 PictureId = pic_product_macbook_1.Id,
-                DisplayOrder = 1
+                DisplayOrder = 1,
+                IsCoverImage = false,
+                Published = true
             }, new ProductPicture
             {
                 ProductId = productAppleMacBookPro.Id,
                 PictureId = pic_product_macbook_2.Id,
-                DisplayOrder = 2
+                DisplayOrder = 2,
+                IsCoverImage = false,
+                Published = true
             });
 
             InsertInstallationData(
@@ -7916,7 +7952,9 @@ namespace Nop.Services.Installation
             {
                 ProductId = productAsusN551JK.Id,
                 PictureId = pic_product_asuspc_N551JK.Id,
-                DisplayOrder = 1
+                DisplayOrder = 1,
+                IsCoverImage = false,
+                Published = true
             });
 
             InsertInstallationData(
@@ -8006,7 +8044,9 @@ namespace Nop.Services.Installation
             {
                 ProductId = productSamsungSeries.Id,
                 PictureId = pic_product_SamsungNP900X4C.Id,
-                DisplayOrder = 1
+                DisplayOrder = 1,
+                IsCoverImage = false,
+                Published = true
             });
 
             InsertInstallationData(
@@ -8103,13 +8143,17 @@ namespace Nop.Services.Installation
             {
                 ProductId = productHpSpectre.Id,
                 PictureId = pic_product_HPSpectreXT_1.Id,
-                DisplayOrder = 1
+                DisplayOrder = 1,
+                IsCoverImage = false,
+                Published = true
             },
             new ProductPicture
             {
                 ProductId = productHpSpectre.Id,
                 PictureId = pic_product_HPSpectreXT_2.Id,
-                DisplayOrder = 2
+                DisplayOrder = 2,
+                IsCoverImage = false,
+                Published = true
             });
 
             InsertInstallationData(
@@ -8204,7 +8248,9 @@ namespace Nop.Services.Installation
             {
                 ProductId = productHpEnvy.Id,
                 PictureId = pic_product_HpEnvy6.Id,
-                DisplayOrder = 1
+                DisplayOrder = 1,
+                IsCoverImage = false,
+                Published = true
             });
 
             InsertInstallationData(
@@ -8293,7 +8339,9 @@ namespace Nop.Services.Installation
             {
                 ProductId = productLenovoThinkpad.Id,
                 PictureId = pic_product_LenovoThinkpad.Id,
-                DisplayOrder = 1
+                DisplayOrder = 1,
+                IsCoverImage = false,
+                Published = true
             });
 
             InsertInstallationData(

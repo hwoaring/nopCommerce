@@ -68,7 +68,17 @@ namespace Nop.Core.Domain.Blogs
         /// Gets or sets the meta title
         /// </summary>
         public string MetaTitle { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the meta image，SEO image or weixin share image
+        /// </summary>
+        public string MetaImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta Link
+        /// </summary>
+        public string MetaLinkUrl { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether the entity is limited/restricted to certain stores
         /// </summary>

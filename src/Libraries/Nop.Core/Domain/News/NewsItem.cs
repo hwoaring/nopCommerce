@@ -34,6 +34,12 @@ namespace Nop.Core.Domain.News
         /// 视频地址
         /// </summary>
         public string VideoUrl { get; set; }
+
+        /// <summary>
+        /// 摘要内容
+        /// </summary>
+        public string AbstractContent { get; set; }
+
         /// <summary>
         /// Gets or sets the short text
         /// </summary>
@@ -63,6 +69,11 @@ namespace Nop.Core.Domain.News
         /// 模板名称
         /// </summary>
         public string ViewName { get; set; }
+
+        /// <summary>
+        /// 事件发生日期
+        /// </summary>
+        public DateTime? EventTimeUtc { get; set; }
 
         /// <summary>
         /// Gets or sets the news item start date and time
@@ -104,6 +115,8 @@ namespace Nop.Core.Domain.News
         /// </summary>
         public bool AllowComments { get; set; }
 
+        public bool LazyLoadImages { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether the entity is limited/restricted to certain stores
         /// </summary>
@@ -123,6 +136,22 @@ namespace Nop.Core.Domain.News
         /// Gets or sets the meta title
         /// </summary>
         public string MetaTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta image，SEO image or weixin share image
+        /// </summary>
+        public string MetaImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta Link
+        /// </summary>
+        public string MetaLinkUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the share big size image
+        /// </summary>
+        public string ShareImageUrl { get; set; }
+
         /// <summary>
         /// 浏览次数
         /// </summary>

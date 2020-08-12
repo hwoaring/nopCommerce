@@ -63,6 +63,26 @@ namespace Nop.Core.Domain.Orders
         public int PaymentStatusId { get; set; }
 
         /// <summary>
+        /// 交易调用接口提交的交易类型
+        /// </summary>
+        public string TradeType { get; set; }
+
+        /// <summary>
+        /// 交易单号
+        /// </summary>
+        public string TradeNo { get; set; }
+
+        /// <summary>
+        /// 快递单号
+        /// </summary>
+        public string ExpressNumber { get; set; }
+
+        /// <summary>
+        /// 快递公司名称Id
+        /// </summary>
+        public int ExpressCompanyId { get; set; }
+
+        /// <summary>
         /// Gets or sets the payment method system name
         /// </summary>
         public string PaymentMethodSystemName { get; set; }

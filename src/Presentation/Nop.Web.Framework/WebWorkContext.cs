@@ -270,6 +270,29 @@ namespace Nop.Web.Framework
                 {
                     //create guest if not exists
                     customer = _customerService.InsertGuestCustomer();
+
+                    //weixin oauth2 session user ，set to Registered
+                    var customerSession = _httpContextAccessor.HttpContext.Session.Get<OauthSession>(NopWeixinDefaults.WeixinOauthSession);
+                    if (customerSession != null && !string.IsNullOrEmpty(customerSession.OpenId))
+                    {
+                        customer.OpenId = customerSession.OpenId;
+                        customer.AdminComment = "Weixin Auto Registered.";
+                        customer.RegisteredInStoreId = _storeContext.CurrentStore.Id;
+
+                        //update customer
+                        _customerService.UpdateCustomer(customer);
+
+                        //set registered Role.
+                        var registeredRole = _customerService.GetCustomerRoleBySystemName(NopCustomerDefaults.RegisteredRoleName);
+                        if (registeredRole != null)
+                        {
+                            var guestRole = _customerService.GetCustomerRoleBySystemName(NopCustomerDefaults.GuestsRoleName);
+                            if (guestRole != null)
+                                _customerService.RemoveCustomerRoleMapping(customer, guestRole);
+
+                           _customerService.AddCustomerRoleMapping(new CustomerCustomerRoleMapping { CustomerRoleId = registeredRole.Id, CustomerId = customer.Id });
+                        }
+                    }
                 }
 
                 if (!customer.Deleted && customer.Active && !customer.RequireReLogin)

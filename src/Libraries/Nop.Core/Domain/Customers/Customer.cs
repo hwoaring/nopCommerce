@@ -67,6 +67,11 @@ namespace Nop.Core.Domain.Customers
         public int VendorId { get; set; }
 
         /// <summary>
+        /// 供应商
+        /// </summary>
+        public int SupplierId { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating number of failed login attempts (wrong password)
         /// </summary>
         public int FailedLoginAttempts { get; set; }

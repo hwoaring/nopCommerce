@@ -31,9 +31,13 @@ namespace Nop.Data.Mapping.Builders.News
                 .WithColumn(nameof(NewsItem.Full)).AsString(int.MaxValue).NotNullable()
                 .WithColumn(nameof(NewsItem.MetaKeywords)).AsString(512).Nullable()
                 .WithColumn(nameof(NewsItem.MetaTitle)).AsString(512).Nullable()
+                .WithColumn(nameof(NewsItem.MetaImageUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(NewsItem.MetaLinkUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(NewsItem.ShareImageUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(NewsItem.VideoUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(NewsItem.LanguageId)).AsInt32().ForeignKey<Language>()
                 .WithColumn(nameof(NewsItem.UpdateOnUtc)).AsDateTime2().Nullable()
+                .WithColumn(nameof(NewsItem.EventTimeUtc)).AsDateTime2().Nullable()
                 ;
         }
 

@@ -13,6 +13,11 @@ namespace Nop.Core.Domain.Catalog
         public string Name { get; set; }
 
         /// <summary>
+        ///短名称
+        /// </summary>
+        public string ShortName { get; set; }
+
+        /// <summary>
         /// Gets or sets the color RGB value (used with "Color squares" attribute type)
         /// </summary>
         public string ColorSquaresRgb { get; set; }
@@ -81,6 +86,11 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the attribute value cost (used only with AttributeValueType.Simple)
         /// </summary>
         public decimal Cost { get; set; }
+
+        /// <summary>
+        /// 使用数量倍数（基数价格的x倍，Quantity值为倍数值）
+        /// </summary>
+        public bool UseQtyMultiple { get; set; }
 
         /// <summary>
         /// 是否使用固定价格值
