@@ -89,6 +89,24 @@ namespace Nop.Core.Domain.Orders
         public int OrderExpireTime { get; set; }
 
         /// <summary>
+        /// 不同商品分开邮寄时候的状态
+        /// </summary>
+        public int ShippingStatusId { get; set; }
+        /// <summary>
+        /// 订单单品留言消息
+        /// </summary>
+        public string OrderMessage { get; set; }
+        /// <summary>
+        /// 单独邮寄的快递单号
+        /// </summary>
+        public string ExpressNumber { get; set; }
+
+        /// <summary>
+        /// 快递公司名称Id
+        /// </summary>
+        public int ExpressCompanyId { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether download is activated
         /// </summary>
         public bool IsDownloadActivated { get; set; }

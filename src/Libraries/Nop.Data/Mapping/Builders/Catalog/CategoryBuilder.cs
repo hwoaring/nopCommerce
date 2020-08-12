@@ -27,6 +27,9 @@ namespace Nop.Data.Mapping.Builders.Catalog
                 .WithColumn(nameof(Category.ItemTemplateName)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(Category.MetaKeywords)).AsString(400).Nullable()
                 .WithColumn(nameof(Category.MetaTitle)).AsString(400).Nullable()
+                .WithColumn(nameof(Category.MetaImageUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Category.MetaLinkUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Category.ShareImageUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Category.PriceRanges)).AsString(400).Nullable()
                 .WithColumn(nameof(Category.PageSizeOptions)).AsString(200).Nullable();
         }

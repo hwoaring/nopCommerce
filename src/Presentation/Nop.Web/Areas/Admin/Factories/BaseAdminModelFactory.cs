@@ -20,13 +20,16 @@ using Nop.Services.Helpers;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Messages;
+using Nop.Services.Marketing;
 using Nop.Services.Plugins;
 using Nop.Services.Shipping;
 using Nop.Services.Shipping.Date;
 using Nop.Services.Stores;
+using Nop.Services.Suppliers;
 using Nop.Services.Tax;
 using Nop.Services.Topics;
 using Nop.Services.Vendors;
+using Nop.Services.Weixin;
 using Nop.Web.Areas.Admin.Infrastructure.Cache;
 
 namespace Nop.Web.Areas.Admin.Factories
@@ -61,6 +64,8 @@ namespace Nop.Web.Areas.Admin.Factories
         private readonly ITaxCategoryService _taxCategoryService;
         private readonly ITopicTemplateService _topicTemplateService;
         private readonly IVendorService _vendorService;
+        private readonly IWQrCodeCategoryService _wQrCodeCategoryService;
+        private readonly IWQrCodeChannelService _wQrCodeChannelService;
 
         #endregion
 
@@ -88,7 +93,9 @@ namespace Nop.Web.Areas.Admin.Factories
             IStoreService storeService,
             ITaxCategoryService taxCategoryService,
             ITopicTemplateService topicTemplateService,
-            IVendorService vendorService)
+            IVendorService vendorService,
+            IWQrCodeCategoryService wQrCodeCategoryService,
+            IWQrCodeChannelService wQrCodeChannelService)
         {
             _cacheKeyService = cacheKeyService;
             _categoryService = categoryService;
@@ -113,6 +120,8 @@ namespace Nop.Web.Areas.Admin.Factories
             _taxCategoryService = taxCategoryService;
             _topicTemplateService = topicTemplateService;
             _vendorService = vendorService;
+            _wQrCodeCategoryService = wQrCodeCategoryService;
+            _wQrCodeChannelService = wQrCodeChannelService;
         }
 
         #endregion
@@ -851,6 +860,39 @@ namespace Nop.Web.Areas.Admin.Factories
             //insert special item for the default value
             PrepareDefaultItem(items, withSpecialDefaultItem, defaultItemText);
         }
+
+        public virtual void PrepareQrCodeCategorys(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null)
+        {
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
+
+            //prepare available items
+            var availableItems = _wQrCodeCategoryService.GetAllEntities();
+            foreach (var item in availableItems)
+            {
+                items.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.Title });
+            }
+
+            //insert special item for the default value
+            PrepareDefaultItem(items, withSpecialDefaultItem, defaultItemText);
+        }
+
+        public virtual void PrepareQrCodeChannels(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null)
+        {
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
+
+            //prepare available items
+            var availableItems = _wQrCodeChannelService.GetAllEntities();
+            foreach (var item in availableItems)
+            {
+                items.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.Title });
+            }
+
+            //insert special item for the default value
+            PrepareDefaultItem(items, withSpecialDefaultItem, defaultItemText);
+        }
+
 
         /// <summary>
         /// Prepare available topic templates

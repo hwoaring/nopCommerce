@@ -62,6 +62,21 @@ namespace Nop.Core.Domain.Catalog
         public string MetaTitle { get; set; }
 
         /// <summary>
+        /// Gets or sets the meta image，SEO image or weixin share image
+        /// </summary>
+        public string MetaImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta Link
+        /// </summary>
+        public string MetaLinkUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the share big size image
+        /// </summary>
+        public string ShareImageUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the parent category identifier
         /// </summary>
         public int ParentCategoryId { get; set; }

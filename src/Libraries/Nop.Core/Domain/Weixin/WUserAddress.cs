@@ -42,6 +42,14 @@
         /// </summary>
         public string DetailInfo { get; set; }
         /// <summary>
+        /// 标签
+        /// </summary>
+        public string AddressLable { get; set; }
+        /// <summary>
+        /// 是否默认地址
+        /// </summary>
+        public bool IsDefault { get; set; }
+        /// <summary>
         /// 删除
         /// </summary>
         public bool Deleted { get; set; }

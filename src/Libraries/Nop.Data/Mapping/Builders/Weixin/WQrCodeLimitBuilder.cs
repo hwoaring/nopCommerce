@@ -19,9 +19,9 @@ namespace Nop.Data.Mapping.Builders.Weixin
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(WQrCodeLimit.WConfigId)).AsInt32().Nullable().ForeignKey<WConfig>().OnDelete(Rule.SetNull)
-                .WithColumn(nameof(WQrCodeLimit.WQrCodeCategoryId)).AsInt32().Nullable().ForeignKey<WQrCodeCategory>().OnDelete(Rule.SetNull)
-                .WithColumn(nameof(WQrCodeLimit.WQrCodeChannelId)).AsInt32().Nullable().ForeignKey<WQrCodeChannel>().OnDelete(Rule.SetNull)
+                .WithColumn(nameof(WQrCodeLimit.WConfigId)).AsInt32().Nullable()
+                .WithColumn(nameof(WQrCodeLimit.WQrCodeCategoryId)).AsInt32().Nullable().ForeignKey<WQrCodeCategory>().OnDelete(Rule.None)
+                .WithColumn(nameof(WQrCodeLimit.WQrCodeChannelId)).AsInt32().Nullable().ForeignKey<WQrCodeChannel>().OnDelete(Rule.None)
                 .WithColumn(nameof(WQrCodeLimit.SysName)).AsString(64).NotNullable()
                 .WithColumn(nameof(WQrCodeLimit.Description)).AsString(255).Nullable()
                 .WithColumn(nameof(WQrCodeLimit.Ticket)).AsAnsiString(255).Nullable()

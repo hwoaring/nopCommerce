@@ -33,6 +33,12 @@ namespace Nop.Data.Mapping.Builders.Suppliers
                 .WithColumn(nameof(Supplier.TaxLicenseCode)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(Supplier.StartDateTimeUtc)).AsDateTime2().Nullable()
                 .WithColumn(nameof(Supplier.EndDateTimeUtc)).AsDateTime2().Nullable()
+                .WithColumn(nameof(Supplier.MetaTitle)).AsString(512).Nullable()
+                .WithColumn(nameof(Supplier.MetaDescription)).AsString(1024).Nullable()
+                .WithColumn(nameof(Supplier.MetaKeywords)).AsString(512).Nullable()
+                .WithColumn(nameof(Supplier.MetaImageUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Supplier.MetaLinkUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Supplier.ShareImageUrl)).AsAnsiString(1024).Nullable()
                 ;
         }
 

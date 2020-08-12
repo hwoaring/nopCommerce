@@ -1,0 +1,20 @@
+﻿@{
+    Layout = "_Root.Head";
+}
+@await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.BodyStartHtmlTagAfter })
+@await Html.PartialAsync("_Notifications")
+@await Html.PartialAsync("_JavaScriptDisabledWarning")
+@await Html.PartialAsync("_OldInternetExplorerWarning")
+
+@await Html.PartialAsync("_Header")
+@RenderBody()
+@await Html.PartialAsync("_Footer")
+
+    <script asp-location="Footer">
+        var localized_data = {
+            AjaxCartFailure: "@T("AjaxCart.Failure")"
+        };
+        AjaxCart.init(false, '#bottom_btn_row .cart-qty', '.header-links .wishlist-qty', '#flyout-cart', localized_data);
+    </script>
+
+

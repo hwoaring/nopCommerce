@@ -1,0 +1,82 @@
+﻿@model ShoppingCartModel
+@{
+    Layout = "_ColumnsOne";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.ShoppingCart").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-shopping-cart-page");
+}
+@if (!Model.OnePageCheckoutEnabled)
+{
+    @await Component.InvokeAsync("CheckoutProgress", new { step = CheckoutProgressStep.Cart })
+}
+<div class="page shopping-cart-page">
+    <div class="page-title">
+        <h1>购物车</h1>
+    </div>
+    <div class="page-body">
+        @await Component.InvokeAsync("OrderSummary", new { overriddenModel = Model })
+    </div>
+</div>
+
+<script type="text/javascript" asp-location="Footer">
+    var SiteUrl = "/";
+    //Banner
+    var bannerSwiper = new Swiper('.swiper-banner-container', {
+        autoplay: 3000,
+        autoplayDisableOnInteraction: false,
+        pagination: '.swiper-banner-container .swiper-pagination',
+        observer: true,
+        observeParents: true
+    });
+    //Menu
+    var MenuSwiper = new Swiper('.swiper-menu-container', {
+        pagination: '.swiper-menu-container .swiper-pagination',
+        observer: true,
+        observeParents: true
+    });
+
+    //返回顶部
+    window.onscroll = function () {
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        if (scrollTop > 300) {
+            backTop.style.display = 'block';
+        }
+        else {
+            backTop.style.display = 'none';
+        }
+    };
+    var backTop = document.getElementById("backTop");
+    backTop.onclick = function () {
+        document.documentElement.scrollTop = document.body.scrollTop = 0
+    };
+</script>
+
+<script type="text/javascript" asp-location="Head">
+    $(function () {
+        //头部导航
+        $(".call-top-nav").click(function () { $(".nav-js-block").click(); });
+        $(".nav-js-block").click(function () {
+            if ($(".header-nav-con").is(":hidden")) {
+                $(".header-nav-con").show();
+                $(".nav-shadow").show();
+                $(".header-nav-title").addClass("header-nav-border");
+                $(this).addClass("nav-js-img");
+            } else {
+                $(".header-nav-con").hide();
+                $(".nav-shadow").hide();
+                $(".header-nav-title").removeClass("header-nav-border");
+                $(this).removeClass("nav-js-img");
+            }
+        });
+
+        $(".nav-shadow").click(function () {
+            $(".header-nav-con").hide();
+            $(".nav-shadow").hide();
+            $(".header-nav-title").removeClass("header-nav-border");
+            $(".nav-js-block").removeClass("nav-js-img");
+        });
+
+    });
+</script>

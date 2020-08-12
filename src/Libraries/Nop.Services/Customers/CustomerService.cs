@@ -1301,6 +1301,11 @@ namespace Nop.Services.Customers
             return IsInCustomerRole(customer, NopCustomerDefaults.VendorsRoleName, onlyActiveCustomerRoles);
         }
 
+        public virtual bool IsSupplier(Customer customer, bool onlyActiveCustomerRoles = true)
+        {
+            return IsInCustomerRole(customer, NopCustomerDefaults.SuppliersRoleName, onlyActiveCustomerRoles);
+        }
+
         /// <summary>
         /// Updates the customer role
         /// </summary>

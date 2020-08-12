@@ -21,7 +21,7 @@ namespace Nop.Services.Weixin
 
         List<WQrCodeLimit> GetWUsersByIds(int[] wQrCodeLimitIds);
 
-        IPagedList<WQrCodeLimit> GetWQrCodeLimits(int? wConfigId = null, int? wQrCodeCategoryId = null, int? wQrCodeChannelId = null, bool? fixedUse = null, bool? hasCreated = null, int pageIndex = 0, int pageSize = int.MaxValue);
+        IPagedList<WQrCodeLimit> GetWQrCodeLimits(string sysName="", int? wConfigId = null, int? wQrCodeCategoryId = null, int? wQrCodeChannelId = null, bool? fixedUse = null, bool? hasCreated = null, int pageIndex = 0, int pageSize = int.MaxValue);
 
     }
 }

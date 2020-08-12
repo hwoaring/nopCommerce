@@ -1,0 +1,314 @@
+﻿@model ProductDetailsModel
+@using Nop.Core.Domain.Seo;
+@inject Nop.Core.IWebHelper webHelper
+@inject SeoSettings seoSettings
+@{
+    Layout = "_ColumnsOne";
+
+    //title
+    Html.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    //meta
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+    //page class
+    Html.AppendPageCssClassParts("html-product-details-page");
+
+    //canonical URL
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var productUrl = Url.RouteUrl("Product", new { SeName = Model.SeName }, webHelper.CurrentRequestProtocol).ToLowerInvariant();
+        Html.AddCanonicalUrlParts(productUrl, seoSettings.QueryStringInCanonicalUrlsEnabled);
+    }
+
+    //open graph META tags
+    if (seoSettings.OpenGraphMetaTags)
+    {
+        Html.AddHeadCustomParts("<meta property=\"og:type\" content=\"product\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:title\" content=\"" + Html.Encode(Model.Name) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:description\" content=\"" + Html.Encode(Nop.Core.Html.HtmlHelper.StripTags(Model.MetaDescription)) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:image\" content=\"" + Model.DefaultPictureModel.ImageUrl + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:image:url\" content=\"" + Model.DefaultPictureModel.ImageUrl + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:url\" content=\"" + webHelper.GetThisPageUrl(false) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:site_name\" content=\"" + Html.Encode(Model.CurrentStoreName) + "\" />");
+    }
+
+}
+
+<script type="text/javascript" asp-location="Footer">
+    var SiteUrl = "/";
+    //Banner
+    var bannerSwiper = new Swiper('.swiper-banner-container', {
+        autoplay: 3000,
+        autoplayDisableOnInteraction: false,
+        pagination: '.swiper-banner-container .swiper-pagination',
+        observer: true,
+        observeParents: true
+    });
+    //Menu
+    var MenuSwiper = new Swiper('.swiper-menu-container', {
+        pagination: '.swiper-menu-container .swiper-pagination',
+        observer: true,
+        observeParents: true
+    });
+
+    //返回顶部
+    window.onscroll = function () {
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        if (scrollTop > 300) {
+            backTop.style.display = 'block';
+        }
+        else {
+            backTop.style.display = 'none';
+        }
+    };
+    var backTop = document.getElementById("backTop");
+    backTop.onclick = function () {
+        document.documentElement.scrollTop = document.body.scrollTop = 0
+    };
+</script>
+
+<script type="text/javascript" asp-location="Head">
+    $(function () {
+        //头部导航
+        $(".call-top-nav").click(function () { $(".nav-js-block").click(); });
+        $(".nav-js-block").click(function () {
+            if ($(".header-nav-con").is(":hidden")) {
+                $(".header-nav-con").show();
+                $(".nav-shadow").show();
+                $(".header-nav-title").addClass("header-nav-border");
+                $(this).addClass("nav-js-img");
+            } else {
+                $(".header-nav-con").hide();
+                $(".nav-shadow").hide();
+                $(".header-nav-title").removeClass("header-nav-border");
+                $(this).removeClass("nav-js-img");
+            }
+        });
+
+        $(".nav-shadow").click(function () {
+            $(".header-nav-con").hide();
+            $(".nav-shadow").hide();
+            $(".header-nav-title").removeClass("header-nav-border");
+            $(".nav-js-block").removeClass("nav-js-img");
+        });
+
+    });
+</script>
+
+<form asp-route="Product" asp-route-sename="@Model.SeName" method="post" id="product-details-form">
+    <!--banner-->
+    <div class="swiper-container swiper-banner-container">
+        <ul class="swiper-wrapper">
+            <!--product pictures-->
+            @await Html.PartialAsync("_ProductDetailsPictures", Model)
+        </ul>
+        <div class="swiper-pagination"></div>
+    </div>
+    <!--/banner-->
+    <div class="banner-adv product-show-banner-adv">
+        <div class="adv-text"><span class="js">纯粮固态发酵</span> | <span class="name">浓香鼻祖 - 赖高淮 匠心作品</span></div>
+    </div>
+    <div class="product-show-base">
+        <div class="pro-price">
+            <div class="price-show">
+                <span id="price-value-@(Model.ProductPrice.ProductId)" class="price-current price-value-@(Model.ProductPrice.ProductId)">@Html.Raw(Model.ProductPrice.Price)</span>
+                @if (!string.IsNullOrWhiteSpace(Model.ProductPrice.OldPrice))
+                {
+                    @*old price*@
+                    <span class="price-scan old-product-price"><del>@Model.ProductPrice.OldPrice</del></span>
+                }
+            </div>
+            <div class="price-promote" style="display:none;">
+                会员价：<span class="price-member">@Html.Raw(Model.ProductPrice.Price)</span>
+            </div>
+        </div>
+        <h1>@Model.Name</h1>
+        @if (!string.IsNullOrEmpty(Model.ShortDescription))
+        {
+            <div class="desc">
+                <p><span>@Html.Raw(Model.ShortDescription)</span></p>
+            </div>
+        }
+    </div>
+    <div class="product-show-base">
+
+    </div>
+    <div class="module-container product-item-module">
+        <h3 class="title-bar-style1">
+            <i class="line-icon"></i>
+            <span class="title-txt">基本信息</span>
+        </h3>
+        <div class="module-wrap product-item-module-wrap">
+            <ul>
+                <li><span>香型：</span>浓香型</li>
+                <li><span>酒精度：</span>52%vol</li>
+                <li><span>净含量：</span>500ml</li>
+                <li><span>原料：</span>水，糯高粱，小麦，大米，糯米</li>
+                <li><span>酒体设计：</span>赖高淮</li>
+                <li><span>酒体评语：</span>陈香突出，窖香浓郁，醇绵净爽、回味悠长</li>
+                <li><span>工艺：</span>纯粮固态发酵</li>
+                <li><span>产品标准：</span>GB/T10781.1-2006(优级)</li>
+            </ul>
+        </div>
+    </div>
+    <!--product show-->
+    <div class="module-container product-content-module">
+        <h3 class="title-bar-style1">
+            <i class="line-icon"></i>
+            <span class="title-txt">推荐理由</span>
+        </h3>
+        <div class="module-wrap product-recommend-module-wrap">
+            <p>该酒为纪念赖公高淮在1961年挽救了1573国宝窖池群，揭开千年酿造之谜；存储于土陶罐中自然存酿，自然老熟，上万种有益菌、微生物随着春夏秋冬的温差变化而变化醇香。</p>
+        </div>
+    </div>
+    <div class="module-container product-content-module">
+        <h3 class="title-bar-style1">
+            <i class="line-icon"></i>
+            <span class="title-txt">产品详情</span>
+        </h3>
+        <div class="module-wrap product-content-module-wrap">
+            @if (!string.IsNullOrEmpty(Model.FullDescription))
+            {
+                @Html.Raw(Model.FullDescription)
+            }
+        </div>
+    </div>
+
+    <div class="module-container product-module">
+        <div class="module-more-bar">
+            <a class="module-more-link" href="http://m.lzlzjy.cn/product/" title="赖高淮酒">返回产品列表</a>
+        </div>
+    </div>
+    <!--/product show-->
+    <!--buy-->
+    @await Component.InvokeAsync("FooterLinks")
+
+    <div class="detail_sku_v1_main" style="display: none;" id="popupBuyArea" type="2">
+        <div class="main" id="popupMain">
+            <div class="header">
+                <img alt="商品图" src="images/product/product-5.jpg" class="avt" id="popupImg">
+                <div>
+                    <p class="price price-value-@Model.Id" id="priceSale2">@Model.ProductPrice</p>
+                    <p class="prop" id="popupSkuChoose"><span>已选</span> 窖父1961整箱装，整箱装，1个</p>
+                </div>
+
+                <i class="close fa fa-window-close-o" id="popupClose" aria-hidden="true"></i>
+            </div>
+            <div class="body">
+                <a href="javascript:void(0)" class="size_recommend" id="popupSizeSug" style="display:none;"></a>
+                <div id="carBind" style="display: none;"></div>
+                <!--price & add to cart & estimate shipping-->
+                @{
+                    //var dataDictPrice = new ViewDataDictionary(ViewData);
+                    //dataDictPrice.TemplateInfo.HtmlFieldPrefix = $"price_{Model.Id}";
+                    //@await Html.PartialAsync("_ProductPrice", Model.ProductPrice, dataDictPrice)
+
+                    //@await Html.PartialAsync("_ProductTierPrices", Model.TierPrices)
+
+                    var dataDictAttributes = new ViewDataDictionary(ViewData);
+                    dataDictAttributes.TemplateInfo.HtmlFieldPrefix = $"attributes_{Model.Id}";
+                    @await Html.PartialAsync("_ProductAttributes", Model.ProductAttributes, dataDictAttributes)
+
+                    var dataDictAddToCart = new ViewDataDictionary(ViewData);
+                    dataDictAddToCart.TemplateInfo.HtmlFieldPrefix = $"addtocart_{Model.Id}";
+                    @await Html.PartialAsync("_AddToCart", Model.AddToCart, dataDictAddToCart)
+
+                    @await Html.PartialAsync("_ProductEstimateShipping", Model.ProductEstimateShipping)
+                }
+                <div class="time_left_tips">
+                    <p>
+                        * 未满18岁不得购买<br />
+                        * 优惠卡券在订单确认页面使用
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="time_left_tips" id="popupNotice" style="display:none;">选择规格</div>
+            <div class="buy_btns show" style="">
+                <div class="btn red" id="popupConfirm">
+                    立即购买
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $(".radio_lable").click(function () {
+                $(this).parent().parent().find(".radio_lable").removeClass("checked");
+                $(this).addClass("checked");
+            });
+
+            $("#popupConfirm").click(function () {
+                $(".add-to-cart-button").click();
+                setTimeout(function () {
+                    window.location.href = "/cart";
+                }, 300);
+            });
+            $(".add-to-cart-button").click(function () {
+                $("#popupClose").click();
+            });
+
+            $(".add-to-cart-panel .qty-input").blur(function () {
+                QtyChange(0);
+            });
+            $("#product_enteredQuantity_plus").click(function () {
+                QtyChange(-1);
+            });
+            $("#product_enteredQuantity_add").click(function () {
+                QtyChange(1);
+            });
+
+            function QtyChange(number) {
+                var inputBox = $(".add-to-cart-panel .qty-input");
+                var qtyValue = $(inputBox).val();
+                //alert(parseInt(number));
+                qtyValue = (qtyValue * 1 | 0 || 0) + parseInt(number);
+                if (qtyValue < 1)
+                    qtyValue = 1;
+                if (qtyValue > 99)
+                    qtyValue = 99;
+                $(inputBox).val(qtyValue)
+                if (qtyValue <= 1)
+                    $("#product_enteredQuantity_plus").addClass("disable");
+                else
+                    $("#product_enteredQuantity_plus").removeClass("disable");
+            }
+
+            //购买
+            $("#addCart2").click(function () {
+                if ($("#popupBuyArea").is(":hidden")) {
+                    $("#popupBuyArea").show();
+                    $(".detail_sku_v1_main").addClass("show");
+                    $("#bottom_btn_row").hide();
+                } else {
+                    $("#popupBuyArea").hide();
+                    $(".detail_sku_v1_main").removeClass("show");
+                    $("#bottom_btn_row").show();
+                }
+            });
+            $("#buyBtn2").click(function () {
+                if ($("#popupBuyArea").is(":hidden")) {
+                    $("#popupBuyArea").show();
+                    $(".detail_sku_v1_main").addClass("show");
+                    $("#bottom_btn_row").hide();
+                } else {
+                    $("#popupBuyArea").hide();
+                    $(".detail_sku_v1_main").removeClass("show");
+                    $("#bottom_btn_row").show();
+                }
+            });
+
+            $("#popupClose").click(function () {
+                $(".detail_sku_v1_main").removeClass("show");
+                $("#popupBuyArea").hide();
+                $("#bottom_btn_row").show();
+            });
+
+        });
+    </script>
+
+
+</form>
+
+

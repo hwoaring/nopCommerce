@@ -33,6 +33,16 @@
         public static string VendorsRoleName => "Vendors";
 
         /// <summary>
+        /// Gets a system name of 'suppliers' customer role
+        /// </summary>
+        public static string SuppliersRoleName => "Suppliers";
+
+        /// <summary>
+        /// Gets a system name of 'salers' customer role,销售员，分销商
+        /// </summary>
+        public static string SalersRoleName => "Salers";
+
+        /// <summary>
         /// Gets a system name 编辑员
         /// </summary>
         public static string EditorsRoleName => "Editors";

@@ -107,7 +107,9 @@ namespace Nop.Services.Weixin
             return query.ToList();
         }
 
-        public virtual IPagedList<WQrCodeLimit> GetWQrCodeLimits(int? wConfigId = null, 
+        public virtual IPagedList<WQrCodeLimit> GetWQrCodeLimits(
+            string sysName="",
+            int? wConfigId = null, 
             int? wQrCodeCategoryId = null, 
             int? wQrCodeChannelId = null, 
             bool? fixedUse = null, 
@@ -116,13 +118,16 @@ namespace Nop.Services.Weixin
         {
             var query = _wQrCodeLimitRepository.Table;
 
-            if (wConfigId.HasValue)
+            if (!string.IsNullOrEmpty(sysName))
+                query = query.Where(v => v.SysName.Contains(sysName));
+
+            if (wConfigId.HasValue && wConfigId > 0)
                 query = query.Where(v => v.WConfigId == wConfigId);
 
-            if (wQrCodeCategoryId.HasValue)
+            if (wQrCodeCategoryId.HasValue && wQrCodeCategoryId > 0)
                 query = query.Where(v => v.WQrCodeCategoryId == wQrCodeCategoryId);
 
-            if (wQrCodeChannelId.HasValue)
+            if (wQrCodeChannelId.HasValue && wQrCodeChannelId > 0)
                 query = query.Where(v => v.WQrCodeChannelId == wQrCodeChannelId);
 
             if (hasCreated.HasValue)

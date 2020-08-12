@@ -149,6 +149,11 @@ namespace Nop.Core.Domain.Orders
         public bool CompleteOrderWhenDelivered { get; set; }
 
         /// <summary>
+        /// 最大未支付的有效订单数（防止过多下单）
+        /// </summary>
+        public int MaxUnpaidOrderNumber { get; set; }
+
+        /// <summary>
         /// Gets or sets a custom order number mask
         /// </summary>
         public string CustomOrderNumberMask { get; set; }

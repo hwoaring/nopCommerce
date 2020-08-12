@@ -14,6 +14,10 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
 
         public QrCodeLimitSearchModel()
         {
+            AvailableCategories = new List<SelectListItem>();
+            AvailableChannels = new List<SelectListItem>();
+            AvailableFixedUseOptions = new List<SelectListItem>();
+            AvailableHasCreatedOptions = new List<SelectListItem>();
         }
 
         #endregion
@@ -25,18 +29,22 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
 
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.List.WQrCodeCategoryId")]
         public int WQrCodeCategoryId { get; set; }
+        public IList<SelectListItem> AvailableCategories { get; set; }
 
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.List.WQrCodeChannelId")]
         public int WQrCodeChannelId { get; set; }
+        public IList<SelectListItem> AvailableChannels { get; set; }
 
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.List.SearchSysName")]
         public string SearchSysName { get; set; }
 
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.List.SearchFixedUse")]
-        public bool? SearchFixedUse { get; set; }
+        public int SearchFixedUse { get; set; }
+        public IList<SelectListItem> AvailableFixedUseOptions { get; set; }
 
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.List.SearchHasCreated")]
-        public bool? SearchHasCreated { get; set; }
+        public int SearchHasCreated { get; set; }
+        public IList<SelectListItem> AvailableHasCreatedOptions { get; set; }
 
         #endregion
     }

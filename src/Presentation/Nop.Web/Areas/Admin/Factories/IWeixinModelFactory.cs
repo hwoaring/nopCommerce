@@ -1,4 +1,6 @@
-﻿using Nop.Core.Domain.Weixin;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Nop.Core.Domain.Weixin;
 using Nop.Web.Areas.Admin.Models.Weixin;
 
 namespace Nop.Web.Areas.Admin.Factories
@@ -59,5 +61,20 @@ namespace Nop.Web.Areas.Admin.Factories
         AddUserRelatedSearchModel PrepareAddUserRelatedSearchModel(AddUserRelatedSearchModel searchModel);
 
         AddUserRelatedUserListModel PrepareAddUserRelatedUserListModel(AddUserRelatedSearchModel searchModel);
+
+        QrCodeLimitUserModel PrepareQrCodeLimitUserModel(QrCodeLimitUserModel model, WQrCodeLimitUserMapping qrCodeLimitUser, bool excludeProperties = false);
+
+
+        #region Menu Model
+
+        MenuSearchModel PrepareMenuSearchModel(MenuSearchModel searchModel);
+        MenuListModel PrepareMenuListModel(MenuSearchModel searchModel);
+        MenuModel PrepareMenuModel(MenuModel model, WMenu menu, bool excludeProperties = false);
+        MenuButtonListModel PrepareMenuButtonListModel(MenuButtonSearchModel searchModel, WMenu menu);
+
+
+        #endregion
+
+
     }
 }

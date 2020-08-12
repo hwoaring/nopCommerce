@@ -1,0 +1,148 @@
+﻿@model AddSupplierVoucherCouponRelatedSearchModel
+
+@{
+    Layout = "_AdminPopupLayout";
+
+    //page title
+    ViewBag.PageTitle = T("Admin.Weixin.SupplierVoucherCoupons.AddNew").Text;
+}
+
+@if (ViewBag.RefreshPage == true)
+{
+    <script>
+        try {window.opener.document.forms['@(Context.Request.Query["formId"])'].@(Context.Request.Query["btnId"]).click();}
+        catch (e){}
+        window.close();
+    </script>
+}
+else
+{
+    <form asp-controller="Weixin" asp-action="QrCodeSupplierVoucherCouponAddPopup"
+          asp-route-qrCodeLimitId="@Context.Request.Query["qrCodeLimitId"]"
+          asp-route-relatedId="@Context.Request.Query["qrCodeLimitId"]"
+          asp-route-btnId="@Context.Request.Query["btnId"]"
+          asp-route-formId="@Context.Request.Query["formId"]">
+        <div class="content-header clearfix">
+            <h1 class="pull-left">
+                @T("Admin.Weixin.SupplierVoucherCoupons.AddNew")
+            </h1>
+            <div class="pull-right">
+                &nbsp;
+            </div>
+        </div>
+        <div class="content">
+            <div class="form-horizontal">
+                <div class="panel-group">
+                    <div class="panel panel-default panel-search panel-popup">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="col-sm-5">
+                                            <nop-label asp-for="SearchSystemName" />
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <nop-editor asp-for="SearchSystemName" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-5">
+                                            <nop-label asp-for="SupplierId" />
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <nop-select asp-for="SupplierId" asp-items="Model.AvailableSuppliers" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-5">
+                                            <nop-label asp-for="SupplierShopId " />
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <nop-select asp-for="SupplierShopId " asp-items="Model.AvailableSupplierShops" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-5">
+                                            <nop-label asp-for="AssetTypeId " />
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <nop-select asp-for="AssetTypeId " asp-items="Model.AvailableAssetTypes" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="button" id="search-coupons" class="btn btn-primary btn-search">
+                                        <i class="fa fa-search"></i>
+                                        @T("Admin.Common.Search")
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            @await Html.PartialAsync("Table", new DataTablesModel
+                            {
+                                Name = "coupons-grid",
+                                UrlRead = new DataUrl("QrCodeSupplierVoucherCouponAddPopupList", "Supplier", null),
+                                SearchButtonId = "search-coupons",
+                                Length = Model.PageSize,
+                                LengthMenu = Model.AvailablePageSizes,
+                                Filters = new List<FilterParameter>
+                                {
+                                    new FilterParameter(nameof(Model.SearchSystemName)),
+                                    new FilterParameter(nameof(Model.SupplierId)),
+                                    new FilterParameter(nameof(Model.SupplierShopId)),
+                                    new FilterParameter(nameof(Model.AssetTypeId)),
+                                },
+                                ColumnCollection = new List<ColumnProperty>
+                                {
+                                    new ColumnProperty(nameof(SupplierVoucherCouponModel.Id))
+                                    {
+                                        IsMasterCheckBox = true,
+                                        Render = new RenderCheckBox(nameof(AddSupplierVoucherCouponRelatedModel.SelectedSupplierVoucherCouponIds)),
+                                        ClassName =  NopColumnClassDefaults.CenterAll,
+                                        Width = "50"
+                                    },
+                                    new ColumnProperty(nameof(SupplierVoucherCouponModel.SystemName))
+                                    {
+                                        Title = T("卡片名称").Text
+                                    },
+                                    new ColumnProperty(nameof(SupplierVoucherCouponModel.SupplierId))
+                                    {
+                                        Title = T("供应商").Text
+                                    },
+                                    new ColumnProperty(nameof(SupplierVoucherCouponModel.SupplierShopId))
+                                    {
+                                        Title = T("供应店铺").Text
+                                    },
+                                    new ColumnProperty(nameof(SupplierVoucherCouponModel.AssetTypeId))
+                                    {
+                                        Title = T("卡片类型").Text
+                                    },
+                                    new ColumnProperty(nameof(SupplierVoucherCouponModel.Published))
+                                    {
+                                        Title = T("发布状态").Text,
+                                        Width = "100",
+                                        ClassName = NopColumnClassDefaults.CenterAll,
+                                        Render = new RenderBoolean()
+                                    }
+                                }
+                            })
+                        </div>
+                        <div class="panel-footer">
+                            <button type="submit" name="save" class="btn bg-blue">
+                                <i class="fa fa-floppy-o"></i>
+                                @T("Admin.Common.Save")
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+}

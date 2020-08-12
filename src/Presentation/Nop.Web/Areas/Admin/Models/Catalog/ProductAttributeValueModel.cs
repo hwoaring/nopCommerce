@@ -39,6 +39,24 @@ namespace Nop.Web.Areas.Admin.Models.Catalog
         [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.Name")]
         public string Name { get; set; }
 
+        [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.ShortName")]
+        public string ShortName { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.Discription")]
+        public string Discription { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.Content")]
+        public string Content { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.OldPrice")]
+        public decimal OldPrice { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.PriceAdjustmentUseFixedValue")]
+        public bool PriceAdjustmentUseFixedValue { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.UseQtyMultiple")]
+        public bool UseQtyMultiple { get; set; }
+
         [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.ColorSquaresRgb")]
         public string ColorSquaresRgb { get; set; }
 

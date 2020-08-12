@@ -60,7 +60,8 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
 
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimitBindingSources.Fields.UseBindingMessage")]
         public bool UseBindingMessage { get; set; }
-
+        [NopResourceDisplayName("Admin.Weixin.QrCodeLimitBindingSources.Fields.Published")]
+        public bool Published { get; set; }
         #endregion
     }
 }

@@ -203,9 +203,15 @@ namespace Nop.Services.Catalog
                         AttributeValueTypeId = productAttributeValue.AttributeValueTypeId,
                         AssociatedProductId = productAttributeValue.AssociatedProductId,
                         Name = productAttributeValue.Name,
+                        ShortName = productAttributeValue.ShortName,
+                        Discription = productAttributeValue.Discription,
+                        Content = productAttributeValue.Content,
+                        OldPrice = productAttributeValue.OldPrice,
+                        PriceAdjustmentUseFixedValue = productAttributeValue.PriceAdjustmentUseFixedValue,
                         ColorSquaresRgb = productAttributeValue.ColorSquaresRgb,
                         PriceAdjustment = productAttributeValue.PriceAdjustment,
                         PriceAdjustmentUsePercentage = productAttributeValue.PriceAdjustmentUsePercentage,
+                        UseQtyMultiple = productAttributeValue.UseQtyMultiple,
                         WeightAdjustment = productAttributeValue.WeightAdjustment,
                         Cost = productAttributeValue.Cost,
                         CustomerEntersQty = productAttributeValue.CustomerEntersQty,
@@ -506,7 +512,9 @@ namespace Nop.Services.Catalog
                 {
                     ProductId = productCopy.Id,
                     PictureId = pictureCopy.Id,
-                    DisplayOrder = productPicture.DisplayOrder
+                    DisplayOrder = productPicture.DisplayOrder,
+                    IsCoverImage = productPicture.IsCoverImage,
+                    Published = productPicture.Published
                 });
                 originalNewPictureIdentifiers.Add(picture.Id, pictureCopy.Id);
             }

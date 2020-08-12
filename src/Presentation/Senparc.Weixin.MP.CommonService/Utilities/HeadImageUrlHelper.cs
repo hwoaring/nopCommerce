@@ -18,6 +18,9 @@ namespace Senparc.Weixin.MP.CommonService.Utilities
         /// <returns></returns>
         public static string GetHeadImageUrl(string urlKey, int size = 0)
         {
+            if (string.IsNullOrEmpty(urlKey))
+                return string.Empty;
+
             return string.Format(NopWeixinDefaults.HeadImageUrl, urlKey, size.ToString());
         }
 

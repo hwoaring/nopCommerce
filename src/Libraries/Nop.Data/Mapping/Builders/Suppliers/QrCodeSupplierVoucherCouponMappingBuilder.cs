@@ -3,6 +3,7 @@ using FluentMigrator.Builders.Create.Table;
 using Nop.Data.Extensions;
 
 using Nop.Core.Domain.Suppliers;
+using Nop.Core.Domain.Weixin;
 
 namespace Nop.Data.Mapping.Builders.Suppliers
 {
@@ -20,6 +21,7 @@ namespace Nop.Data.Mapping.Builders.Suppliers
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
+                .WithColumn(nameof(QrCodeSupplierVoucherCouponMapping.QrCodeId)).AsInt32().ForeignKey<WQrCodeLimit>()
                 .WithColumn(nameof(QrCodeSupplierVoucherCouponMapping.SupplierVoucherCouponId)).AsInt32().ForeignKey<SupplierVoucherCoupon>()
                 .WithColumn(nameof(QrCodeSupplierVoucherCouponMapping.StartDateTime)).AsDateTime2().Nullable()
                 .WithColumn(nameof(QrCodeSupplierVoucherCouponMapping.EndDateTime)).AsDateTime2().Nullable()

@@ -44,7 +44,9 @@ namespace Nop.Services.Orders
                     .Replace("{YYYY}", returnRequest.CreatedOnUtc.ToString("yyyy"))
                     .Replace("{YY}", returnRequest.CreatedOnUtc.ToString("yy"))
                     .Replace("{MM}", returnRequest.CreatedOnUtc.ToString("MM"))
-                    .Replace("{DD}", returnRequest.CreatedOnUtc.ToString("dd"));
+                    .Replace("{DD}", returnRequest.CreatedOnUtc.ToString("dd"))
+                    .Replace("{UNIXTIME}", Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(returnRequest.CreatedOnUtc).ToString())
+                    .Trim();
 
                 ////if you need to use the format for the ID with leading zeros, use the following code instead of the previous one.
                 ////mask for Id example {#:00000000}
@@ -80,7 +82,9 @@ namespace Nop.Services.Orders
                 .Replace("{YYYY}", order.CreatedOnUtc.ToString("yyyy"))
                 .Replace("{YY}", order.CreatedOnUtc.ToString("yy"))
                 .Replace("{MM}", order.CreatedOnUtc.ToString("MM"))
-                .Replace("{DD}", order.CreatedOnUtc.ToString("dd")).Trim();
+                .Replace("{DD}", order.CreatedOnUtc.ToString("dd"))
+                .Replace("{UNIXTIME}", Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(order.CreatedOnUtc).ToString())
+                .Trim();
 
             ////if you need to use the format for the ID with leading zeros, use the following code instead of the previous one.
             ////mask for Id example {#:00000000}

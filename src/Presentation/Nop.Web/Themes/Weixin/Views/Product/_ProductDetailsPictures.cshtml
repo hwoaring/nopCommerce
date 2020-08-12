@@ -1,0 +1,18 @@
+﻿@model ProductDetailsModel
+
+@if (Model.PictureModels.Count > 1)
+{
+    foreach (var picture in Model.PictureModels)
+    {
+    <li class="swiper-slide">
+        <a class="item" href="javascript:;">
+            <img src="@picture.ThumbImageUrl" alt="@picture.AlternateText" title="@picture.Title" data-defaultsize="@picture.ImageUrl" data-fullsize="@picture.FullSizeImageUrl" />
+        </a>
+    </li>
+    }
+
+}
+else
+{
+
+}

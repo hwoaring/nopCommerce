@@ -8,6 +8,10 @@ namespace Nop.Core.Domain.Common
     public partial class Address : BaseEntity
     {
         /// <summary>
+        /// 地址短标签（用户识别地址用）
+        /// </summary>
+        public string AddressLable { get; set; }
+        /// <summary>
         /// Gets or sets the first name
         /// </summary>
         public string FirstName { get; set; }
@@ -36,6 +40,11 @@ namespace Nop.Core.Domain.Common
         /// Gets or sets the state/province identifier
         /// </summary>
         public int? StateProvinceId { get; set; }
+
+        /// <summary>
+        /// 区划表AreaCode
+        /// </summary>
+        public string DivisionsCode { get; set; }
 
         /// <summary>
         /// Gets or sets the county
@@ -71,6 +80,16 @@ namespace Nop.Core.Domain.Common
         /// Gets or sets the fax number
         /// </summary>
         public string FaxNumber { get; set; }
+
+        /// <summary>
+        /// 电话号码是否短信认证
+        /// </summary>
+        public bool PhoneNumberVerified { get; set; }
+
+        /// <summary>
+        /// 是否默认（一个用户下只有1个默认）
+        /// </summary>
+        public bool IsDefault { get; set; }
 
         /// <summary>
         /// Gets or sets the custom attributes (see "AddressAttribute" entity for more info)

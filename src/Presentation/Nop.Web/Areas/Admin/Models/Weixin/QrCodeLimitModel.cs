@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
 using Nop.Web.Framework.Mvc.ModelBinding;
 using Nop.Core.Domain.Weixin;
+using Nop.Web.Areas.Admin.Models.Suppliers;
 
 namespace Nop.Web.Areas.Admin.Models.Weixin
 {
@@ -16,6 +19,9 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
             QrCodeLimitUserSearchModel = new QrCodeLimitUserSearchModel();
             QrCodeSupplierVoucherCouponSearchModel = new QrCodeSupplierVoucherCouponSearchModel();
             BindingSource = new QrCodeLimitBindingSourceModel();
+
+            AvailableWQrCodeCategorys = new List<SelectListItem>();
+            AvailableWQrCodeChannels = new List<SelectListItem>();
         }
 
         #region Properties
@@ -28,9 +34,11 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
 
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.Fields.WQrCodeCategoryId")]
         public int WQrCodeCategoryId { get; set; }
+        public IList<SelectListItem> AvailableWQrCodeCategorys { get; set; }
 
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.Fields.WQrCodeChannelId")]
         public int WQrCodeChannelId { get; set; }
+        public IList<SelectListItem> AvailableWQrCodeChannels { get; set; }
 
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.Fields.QrCodeActionTypeId")]
         public byte QrCodeActionTypeId { get; set; }
@@ -42,6 +50,7 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
 
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.Fields.Ticket")]
         public string Ticket { get; set; }
+        public string QrCodeImageUrl { get; set; }
 
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.Fields.Url")]
         public string Url { get; set; }

@@ -377,6 +377,49 @@ namespace Nop.Web.Factories
             return model;
         }
 
+        public virtual FooterLinksModel PrepareFooterLinksModel()
+        {
+            var customer = _workContext.CurrentCustomer;
+
+            var unreadMessageCount = GetUnreadPrivateMessages();
+            var unreadMessage = string.Empty;
+            var alertMessage = string.Empty;
+            if (unreadMessageCount > 0)
+            {
+                unreadMessage = string.Format(_localizationService.GetResource("PrivateMessages.TotalUnread"), unreadMessageCount);
+
+                //notifications here
+                if (_forumSettings.ShowAlertForPM &&
+                    !_genericAttributeService.GetAttribute<bool>(customer, NopCustomerDefaults.NotifiedAboutNewPrivateMessagesAttribute, _storeContext.CurrentStore.Id))
+                {
+                    _genericAttributeService.SaveAttribute(customer, NopCustomerDefaults.NotifiedAboutNewPrivateMessagesAttribute, true, _storeContext.CurrentStore.Id);
+                    alertMessage = string.Format(_localizationService.GetResource("PrivateMessages.YouHaveUnreadPM"), unreadMessageCount);
+                }
+            }
+
+            var model = new FooterLinksModel
+            {
+                IsAuthenticated = _customerService.IsRegistered(customer),
+                CustomerName = _customerService.IsRegistered(customer) ? _customerService.FormatUsername(customer) : string.Empty,
+                ShoppingCartEnabled = _permissionService.Authorize(StandardPermissionProvider.EnableShoppingCart),
+                WishlistEnabled = _permissionService.Authorize(StandardPermissionProvider.EnableWishlist),
+                AllowPrivateMessages = _customerService.IsRegistered(customer) && _forumSettings.AllowPrivateMessages,
+                UnreadPrivateMessages = unreadMessage,
+                AlertMessage = alertMessage,
+            };
+            //performance optimization (use "HasShoppingCartItems" property)
+            if (customer.HasShoppingCartItems)
+            {
+                model.ShoppingCartItems = _shoppingCartService.GetShoppingCart(customer, ShoppingCartType.ShoppingCart, _storeContext.CurrentStore.Id)
+                    .Sum(item => item.Quantity);
+
+                model.WishlistItems = _shoppingCartService.GetShoppingCart(customer, ShoppingCartType.Wishlist, _storeContext.CurrentStore.Id)
+                    .Sum(item => item.Quantity);
+            }
+
+            return model;
+        }
+
         /// <summary>
         /// Prepare the admin header links model
         /// </summary>

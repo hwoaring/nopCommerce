@@ -84,6 +84,37 @@ namespace Nop.Core.Domain.Suppliers
         /// 主要用于店铺临时对访客的消息提醒，如放假通知等。
         /// </summary>
         public string Notices { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta title
+        /// </summary>
+        public string MetaTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta Keywords
+        /// </summary>
+        public string MetaKeywords { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta Description
+        /// </summary>
+        public string MetaDescription { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta image，SEO image or weixin share image
+        /// </summary>
+        public string MetaImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta Link
+        /// </summary>
+        public string MetaLinkUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the share big size image
+        /// </summary>
+        public string ShareImageUrl { get; set; }
+
         /// <summary>
         /// 状态（保留字段，是否营业，是否审核等）
         /// </summary>

@@ -113,8 +113,7 @@ namespace Nop.Services.Weixin
                 return null;
 
             var query = from t in _qrCodeLimitBindingSourceRepository.Table
-                        where t.QrCodeLimitId == qrCodeLimitId &&
-                        t.Published
+                        where t.QrCodeLimitId == qrCodeLimitId
                         select t;
 
             return query.FirstOrDefault();

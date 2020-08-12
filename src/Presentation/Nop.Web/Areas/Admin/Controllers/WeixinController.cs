@@ -46,6 +46,7 @@ using Senparc.Weixin.Entities;
 using Senparc.Weixin.MP;
 using Senparc.Weixin.MP.AdvancedAPIs;
 using Senparc.Weixin.MP.CommonAPIs;
+using Senparc.Weixin.MP.Entities;
 
 
 namespace Nop.Web.Areas.Admin.Controllers
@@ -67,6 +68,8 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly IWQrCodeLimitUserService _wQrCodeLimitUserService;
         private readonly IQrCodeLimitBindingSourceService _qrCodeLimitBindingSourceService;
         private readonly IQrCodeSupplierVoucherCouponMappingService _qrCodeSupplierVoucherCouponMappingService;
+        private readonly IWMenuService _wMenuService;
+        private readonly IWMenuButtonService _wMenuButtonService;
         private readonly IPictureService _pictureService;
         private readonly ISettingService _settingService;
         private readonly IStoreContext _storeContext;
@@ -94,6 +97,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             IWQrCodeLimitUserService wQrCodeLimitUserService,
             IQrCodeLimitBindingSourceService qrCodeLimitBindingSourceService,
             IQrCodeSupplierVoucherCouponMappingService qrCodeSupplierVoucherCouponMappingService,
+            IWMenuService wMenuService,
+            IWMenuButtonService wMenuButtonService,
             IPictureService pictureService,
             ISettingService settingService,
             IStoreContext storeContext,
@@ -116,6 +121,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _wQrCodeLimitUserService = wQrCodeLimitUserService;
             _qrCodeLimitBindingSourceService = qrCodeLimitBindingSourceService;
             _qrCodeSupplierVoucherCouponMappingService = qrCodeSupplierVoucherCouponMappingService;
+            _wMenuService = wMenuService;
+            _wMenuButtonService = wMenuButtonService;
             _pictureService = pictureService;
             _settingService = settingService;
             _storeContext = storeContext;
@@ -176,6 +183,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (user == null || user.Deleted)
                 return RedirectToAction("UserList");
 
+            //判断是否关注，是否需要同步用户数据到本地
+
             //prepare model
             var model = _weixinModelFactory.PrepareUserModel(null, user);
 
@@ -198,9 +207,9 @@ namespace Nop.Web.Areas.Admin.Controllers
             {
                 try
                 {
-                    user.Remark = model.Remark;
+                    user.Remark = model.Remark; //更改到微信后台同步
                     user.SysRemark = model.SysRemark;
-                    user.TagIdList = model.TagIdList;
+                    user.TagIdList = model.TagIdList;//更改到微信后台同步
                     user.CheckInTypeId = model.CheckInTypeId;
                     user.SubscribeSceneTypeId = model.SubscribeSceneTypeId;
                     user.RoleTypeId = model.RoleTypeId;
@@ -374,6 +383,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             {
                 try
                 {
+                    qrcodeLimit.WQrCodeCategoryId = model.WQrCodeCategoryId;
+                    qrcodeLimit.WQrCodeChannelId = model.WQrCodeChannelId;
                     qrcodeLimit.SysName = model.SysName;
                     qrcodeLimit.Description = model.Description;
                     qrcodeLimit.TagIdList = model.TagIdList;
@@ -428,6 +439,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                         qrCodeLimitBindingSource.MessageTypeId = model.BindingSource.MessageTypeId;
                         qrCodeLimitBindingSource.Content = model.BindingSource.Content;
                         qrCodeLimitBindingSource.UseBindingMessage = model.BindingSource.UseBindingMessage;
+                        qrCodeLimitBindingSource.Published = model.BindingSource.Published;
 
                         _qrCodeLimitBindingSourceService.UpdateEntity(qrCodeLimitBindingSource);
                     }
@@ -531,7 +543,6 @@ namespace Nop.Web.Areas.Admin.Controllers
                     {
                         UserId = user.Id,
                         QrCodeLimitId = model.RelatedId,
-                        UserName = user.NickName + (string.IsNullOrWhiteSpace(user.Remark) ? "" : "(" + user.Remark + ")"),
                         ExpireTime = DateTime.Now.AddDays(30),
                         Published = true
                     });
@@ -543,9 +554,400 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(new AddUserRelatedSearchModel());
         }
 
+        public virtual IActionResult QrCodeLimitUserEditPopup(int id)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+                return AccessDeniedView();
+
+            //try to get entity with the specified id
+            var qrcodeLimitUser = _wQrCodeLimitUserService.GetEntityById(id) ?? 
+                throw new ArgumentException("No QrCodeLimitUser found with the specified id");
+
+            //prepare model
+            var model = _weixinModelFactory.PrepareQrCodeLimitUserModel(null, qrcodeLimitUser);
+
+            return View(model);
+        }
+
+        [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        [FormValueRequired("save", "save-continue")]
+        public virtual IActionResult QrCodeLimitUserEditPopup(QrCodeLimitUserModel model, bool continueEditing, IFormCollection form)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+                return AccessDeniedView();
+
+            //try to get a entity with the specified id
+            var qrcodeLimitUser = _wQrCodeLimitUserService.GetEntityById(model.Id) ??
+                throw new ArgumentException("No QrCodeLimitUser found with the specified id");
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    qrcodeLimitUser.UserName = model.UserName;
+                    qrcodeLimitUser.Description = model.Description;
+                    qrcodeLimitUser.TelNumber = model.TelNumber;
+                    qrcodeLimitUser.AddressInfo = model.AddressInfo;
+                    qrcodeLimitUser.ExpireTime = model.ExpireTime;
+                    qrcodeLimitUser.Published = model.Published;
+
+                    _wQrCodeLimitUserService.UpdateEntity(qrcodeLimitUser);
+
+                    //activity log
+                    _customerActivityService.InsertActivity("EditQrCodeLimitUser",
+                        string.Format(_localizationService.GetResource("ActivityLog.EditQrCodeLimitUser"), qrcodeLimitUser.Id), qrcodeLimitUser);
+
+                    _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Weixin.QrCodeLimitUsers.Updated"));
+
+                    if (!continueEditing)
+                        ViewBag.RefreshPage = true;
+
+                    return View(model);
+                }
+                catch (Exception exc)
+                {
+                    _notificationService.ErrorNotification(exc.Message);
+                }
+            }
+
+            //prepare model
+            model = _weixinModelFactory.PrepareQrCodeLimitUserModel(model, qrcodeLimitUser, true);
+
+            //if we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+
         #endregion
 
-        #region Menu list
+        #region Menu list/Creat/Edit
+
+        public virtual IActionResult MenuList()
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+                return AccessDeniedView();
+
+            //prepare model
+            var model = _weixinModelFactory.PrepareMenuSearchModel(new MenuSearchModel());
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public virtual IActionResult MenuList(MenuSearchModel searchModel)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+                return AccessDeniedDataTablesJson();
+
+            //prepare model
+            var model = _weixinModelFactory.PrepareMenuListModel(searchModel);
+
+            return Json(model);
+        }
+
+        public virtual IActionResult MenuCreate()
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+                return AccessDeniedView();
+
+            //prepare model
+            var model = _weixinModelFactory.PrepareMenuModel(new MenuModel(), null);
+
+            return View(model);
+        }
+
+        [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        [FormValueRequired("save", "save-continue")]
+        public virtual IActionResult MenuCreate(MenuModel model, bool continueEditing, IFormCollection form)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+                return AccessDeniedView();
+
+            if (string.IsNullOrWhiteSpace(model.SystemName))
+                model.SystemName = "Name Not Set";
+
+            if (ModelState.IsValid)
+            {
+                //fill entity from model
+                var menu = model.ToEntity<WMenu>();
+
+                _wMenuService.InsertMenu(menu);
+
+                //activity log
+                _customerActivityService.InsertActivity("AddNewMenu",
+                    string.Format(_localizationService.GetResource("ActivityLog.AddNewMenu"), menu.Id), menu);
+                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Weixin.Menus.Added"));
+
+                if (!continueEditing)
+                    return RedirectToAction("MenuList");
+
+                return RedirectToAction("MenuEdit", new { id = menu.Id });
+            }
+
+            //prepare model
+            model = _weixinModelFactory.PrepareMenuModel(model, null, true);
+
+            //if we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+
+        public virtual IActionResult MenuEdit(int id)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+                return AccessDeniedView();
+
+            //try to get a entity with the specified id
+            var menu = _wMenuService.GetMenuById(id);
+            if (menu == null)
+                return RedirectToAction("MenuList");
+
+            //prepare model
+            var model = _weixinModelFactory.PrepareMenuModel(null, menu);
+
+            return View(model);
+        }
+
+        [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        [FormValueRequired("save", "save-continue")]
+        public virtual IActionResult MenuEdit(MenuModel model, bool continueEditing, IFormCollection form)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+                return AccessDeniedView();
+
+            //try to get a entity with the specified id
+            var menu = _wMenuService.GetMenuById(model.Id);
+            if (menu == null)
+                return RedirectToAction("MenuList");
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    menu.SystemName = model.SystemName;
+                    menu.Description = model.Description;
+                    menu.TagId = model.TagId;
+                    menu.Sex = model.Sex;
+                    menu.ClientPlatformType = model.ClientPlatformType;
+                    menu.Country = model.Country;
+                    menu.Province = model.Province;
+                    menu.City = model.City;
+                    menu.LanguageTypeId = Convert.ToByte(model.LanguageTypeId);
+                    menu.Status = Convert.ToByte(model.Status);
+                    menu.DefaultMenu = model.DefaultMenu;
+                    menu.Published = model.Published;
+                    menu.Personal = model.Personal;
+
+                    _wMenuService.UpdateMenu(menu);
+
+                    //activity log
+                    _customerActivityService.InsertActivity("EditMenu",
+                        string.Format(_localizationService.GetResource("ActivityLog.EditMenu"), menu.Id), menu);
+
+                    _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Weixin.Menus.Updated"));
+
+                    if (!continueEditing)
+                        return RedirectToAction("MenuList");
+
+                    return RedirectToAction("MenuEdit", new { id = menu.Id });
+                }
+                catch (Exception exc)
+                {
+                    _notificationService.ErrorNotification(exc.Message);
+                }
+            }
+
+            //prepare model
+            model = _weixinModelFactory.PrepareMenuModel(model, menu, true);
+
+            //if we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        public virtual IActionResult MenuPublish(int id)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+                return AccessDeniedView();
+
+            //try to get a entity with the specified id
+            var menu = _wMenuService.GetMenuById(id);
+            if (menu == null)
+                return RedirectToAction("MenuList");
+
+            var menuButtons = _wMenuButtonService.GetMenuButtonsByMenuId(menu.Id);
+            var baseButtons = menuButtons.Where(t => t.RootButton).OrderBy(t => t.DisplayOrder).ToList();
+
+            if (baseButtons == null || baseButtons.Count == 0)
+                return RedirectToAction("MenuList");
+
+            var baseButtonMaxCount = 3;
+            //var result = new GetMenuResult(new Senparc.Weixin.MP.Entities.Menu.ButtonGroup());
+            //var resultFull = new GetMenuResultFull {
+            //    menu = new MenuFull_ButtonGroup {
+            //        button = new List<MenuFull_RootButton>()
+            //    }
+            //};
+            var baseButtonList = new List<MenuFull_RootButton>();
+
+            foreach (var baseButton in baseButtons)
+            {
+                if (baseButtonMaxCount < 1)
+                    break;
+
+                var subButtonList= new List<MenuFull_RootButton>();
+                var subButtonMaxCount = 5;
+                var subButtons = menuButtons.Where(t => t.ParentId == baseButton.Id).OrderBy(t => t.DisplayOrder).ToList();
+                if (subButtons != null && subButtons.Count > 0)
+                {
+                    foreach (var subButton in subButtons)
+                    {
+                        if (subButtonMaxCount < 1)
+                            break;
+
+                        subButtonList.Add(new MenuFull_RootButton() {
+                            appid = subButton.AppId,
+                            key = subButton.Key,
+                            media_id = subButton.MediaId,
+                            name = subButton.Name,
+                            pagepath = subButton.PagePath,
+                            type = subButton.MenuButtonType.ToString().ToLower(),
+                            url = subButton.Url
+                        });
+
+                        subButtonMaxCount--;
+                    }
+                }
+
+                baseButtonList.Add(new MenuFull_RootButton {
+                    appid = baseButton.AppId,
+                    key = baseButton.Key,
+                    media_id = baseButton.MediaId,
+                    name = baseButton.Name,
+                    pagepath = baseButton.PagePath,
+                    type = baseButton.MenuButtonType.ToString().ToLower(),
+                    url = baseButton.Url,
+                    sub_button = subButtonList
+                });
+
+                baseButtonMaxCount--;
+
+            }
+
+            //Creat api post string 
+            Senparc.Weixin.MP.Entities.Menu.MenuMatchRule menuMatchRule = new Senparc.Weixin.MP.Entities.Menu.MenuMatchRule()
+            {
+                city = menu.City,
+                client_platform_type = menu.ClientPlatformType,
+                country = menu.Country,
+                //language = menu.LanguageType.ToString() == "0" ? "" : menu.LanguageType.ToString(),
+                province = menu.Province,
+                sex = menu.Sex,
+                tag_id = menu.TagId
+            };
+            var useAddCondidionalApi = menu.Personal && menuMatchRule != null && !menuMatchRule.CheckAllNull();
+
+            var menuResultFull = new GetMenuResultFull()
+            {
+                menu = new MenuFull_ButtonGroup() { button = baseButtonList }
+            };
+
+            try
+            {
+                //删除已经发布的个性化菜单
+                if (menu.MenuId > 0)
+                {
+                    var resp = Senparc.Weixin.MP.CommonAPIs.CommonApi.DeleteMenuConditional(_senparcWeixinSetting.WeixinAppId, menu.MenuId.ToString());
+                    if (resp.errcode == ReturnCode.请求成功)
+                    {
+                        menu.MenuId = 0;
+                        menu.Published = false;
+                        menu.UnPublishTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now);
+                        menu.MenuJsonCode = "";
+
+                        _wMenuService.UpdateMenu(menu);
+                    }
+                }
+
+                //重新整理按钮信息
+                WxJsonResult result = null;
+                Senparc.Weixin.MP.Entities.Menu.IButtonGroupBase buttonGroup = null;
+                if (useAddCondidionalApi)
+                {
+                    //个性化接口
+                    buttonGroup = CommonApi.GetMenuFromJsonResult(menuResultFull, new Senparc.Weixin.MP.Entities.Menu.ConditionalButtonGroup()).menu;
+
+                    var addConditionalButtonGroup = buttonGroup as Senparc.Weixin.MP.Entities.Menu.ConditionalButtonGroup;
+                    addConditionalButtonGroup.matchrule = menuMatchRule;
+                    result = CommonApi.CreateMenuConditional(_senparcWeixinSetting.WeixinAppId, addConditionalButtonGroup);
+                    if (result.errcode == ReturnCode.请求成功)
+                    {
+                        var result2 = result as CreateMenuConditionalResult;
+
+                        menu.MenuId = result2.menuid;
+                        menu.Published = true;
+                        menu.PublishTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now);
+                        menu.MenuJsonCode = Json(addConditionalButtonGroup).ToString();
+
+                        _wMenuService.UpdateMenu(menu);
+                    }
+                    else
+                    {
+                        _notificationService.ErrorNotification(result.errcode.ToString() + " : " + result.errmsg);
+                        return RedirectToAction("MenuList");
+                    }
+                }
+                else
+                {
+                    //普通接口
+                    buttonGroup = CommonApi.GetMenuFromJsonResult(menuResultFull, new Senparc.Weixin.MP.Entities.Menu.ButtonGroup()).menu;
+                    result = CommonApi.CreateMenu(_senparcWeixinSetting.WeixinAppId, buttonGroup);
+                    if (result.errcode == ReturnCode.请求成功)
+                    {
+                        menu.Published = true;
+                        menu.PublishTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now);
+                        menu.MenuJsonCode = Json(buttonGroup).ToString();
+
+                        _wMenuService.UpdateMenu(menu);
+                    }
+                    else
+                    {
+                        _notificationService.ErrorNotification(result.errcode.ToString() + " : " + result.errmsg);
+                        return RedirectToAction("MenuList");
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _notificationService.ErrorNotification(ex);
+                return RedirectToAction("MenuList");
+            }
+
+            //activity log
+                _customerActivityService.InsertActivity("PublishNewMenu",
+                    string.Format(_localizationService.GetResource("ActivityLog.PublishNewMenu"), menu.Id), menu);
+                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Weixin.Menus.Published"));
+
+
+            return RedirectToAction("MenuList");
+        }
+
+        [HttpPost]
+        public virtual IActionResult MenuButtonList(MenuButtonSearchModel searchModel)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+                return AccessDeniedDataTablesJson();
+
+            //try to get a product with the specified id
+            var menu = _wMenuService.GetMenuById(searchModel.MenuId)
+                ?? throw new ArgumentException("No QrCodeLimit found with the specified id");
+
+            //prepare model
+            var model = _weixinModelFactory.PrepareMenuButtonListModel(searchModel, menu);
+
+            return Json(model);
+        }
+
 
         #endregion
 

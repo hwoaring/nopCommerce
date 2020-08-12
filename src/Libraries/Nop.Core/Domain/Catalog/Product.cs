@@ -26,6 +26,11 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the name
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// 推广名称，用于长标题加推广信息一起展示在前台
+        /// </summary>
+        public string PromotionName { get; set; }
         /// <summary>
         /// 副标题
         /// </summary>
@@ -125,6 +130,21 @@ namespace Nop.Core.Domain.Catalog
         public string MetaTitle { get; set; }
 
         /// <summary>
+        /// Gets or sets the meta image，SEO image or weixin share image
+        /// </summary>
+        public string MetaImageUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meta Link
+        /// </summary>
+        public string MetaLinkUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the share big size image
+        /// </summary>
+        public string ShareImageUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets a value of used product template identifier
         /// </summary>
         public int ProductTemplateId { get; set; }
@@ -133,6 +153,8 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets a vendor identifier
         /// </summary>
         public int VendorId { get; set; }
+
+        public int SupplierId { get; set; }
 
         /// <summary>
         /// Gets or sets the values indicating whether this product is visible in catalog or search results.
@@ -201,6 +223,21 @@ namespace Nop.Core.Domain.Catalog
         public bool IsVoucherCoupon { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the product is Voucher card/代金券卡
+        /// </summary>
+        public bool IsVoucherCard { get; set; }
+
+        /// <summary>
+        /// Gets or sets the VoucherCard type identifier
+        /// </summary>
+        public int VoucherCardTypeId { get; set; }
+
+        /// <summary>
+        /// Gets or sets gift card amount that can be used after purchase. If not specified, then product price will be used.
+        /// </summary>
+        public decimal? OverriddenVoucherCardAmount { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the product is gift card
         /// </summary>
         public bool IsGiftCard { get; set; }
@@ -209,6 +246,21 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the gift card type identifier
         /// </summary>
         public int GiftCardTypeId { get; set; }
+
+        /// <summary>
+        /// 卡片从购买开始有效期天数，设置0表示以GiftCardEndUseDateTimeUtc值为准
+        /// </summary>
+        public int GiftCardValidDays { get; set; }
+
+        /// <summary>
+        /// 有效期开始日期
+        /// </summary>
+        public DateTime? GiftCardStartUseDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 最大有效期结束日期
+        /// </summary>
+        public DateTime? GiftCardEndUseDateTimeUtc { get; set; }
 
         /// <summary>
         /// Gets or sets gift card amount that can be used after purchase. If not specified, then product price will be used.
@@ -449,6 +501,16 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the order maximum quantity
         /// </summary>
         public int OrderMaximumQuantity { get; set; }
+
+        /// <summary>
+        /// 【价格保护】使用免费的折扣券最大折扣比例（超出比例不显示可用折扣卡或取最小折扣比例）
+        /// </summary>
+        public decimal? MaxDiscountPercentage { get; set; }
+
+        /// <summary>
+        /// 【价格保护】使用免费的现金抵用券最大金额（超出金额的券不显示或取最小限定值）
+        /// </summary>
+        public decimal? MaxDiscountAmount { get; set; }
 
         /// <summary>
         /// Gets or sets the comma separated list of allowed quantities. null or empty if any quantity is allowed
