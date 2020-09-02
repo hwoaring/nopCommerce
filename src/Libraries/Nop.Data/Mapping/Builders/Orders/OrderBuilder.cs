@@ -29,6 +29,8 @@ namespace Nop.Data.Mapping.Builders.Orders
                 .WithColumn(nameof(Order.ExpressNumber)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(Order.TradeType)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(Order.TradeNo)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(Order.ContactInfo)).AsString(1024).Nullable()
+                .WithColumn(nameof(Order.ExpectDeliverTime)).AsDateTime2().Nullable()
                 ;
 
         }

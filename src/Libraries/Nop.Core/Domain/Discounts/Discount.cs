@@ -38,7 +38,7 @@ namespace Nop.Core.Domain.Discounts
         public decimal DiscountAmount { get; set; }
 
         /// <summary>
-        /// 最低可用折扣券的订单金额
+        /// 订单总额最低多少金额可以使用折扣券
         /// </summary>
         public decimal? MinOrderTotalAmount { get; set; }
 

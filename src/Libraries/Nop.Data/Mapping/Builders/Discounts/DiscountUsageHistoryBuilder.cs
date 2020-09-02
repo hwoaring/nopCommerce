@@ -20,7 +20,9 @@ namespace Nop.Data.Mapping.Builders.Discounts
         {
             table
                 .WithColumn(nameof(DiscountUsageHistory.DiscountId)).AsInt32().ForeignKey<Discount>()
-                .WithColumn(nameof(DiscountUsageHistory.OrderId)).AsInt32().ForeignKey<Order>();
+                .WithColumn(nameof(DiscountUsageHistory.OrderId)).AsInt32().ForeignKey<Order>()
+                .WithColumn(nameof(DiscountUsageHistory.DiscountCustomerMappingId)).AsInt32().Nullable()
+                ;
         }
 
         #endregion

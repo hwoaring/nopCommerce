@@ -78,6 +78,26 @@ namespace Nop.Core.Domain.Catalog
         public decimal OldPrice { get; set; }
 
         /// <summary>
+        /// 最小购买数量
+        /// </summary>
+        public int OrderMinimumQuantity { get; set; }
+
+        /// <summary>
+        /// 最大购买数量
+        /// </summary>
+        public int OrderMaximumQuantity { get; set; }
+
+        /// <summary>
+        /// 【价格保护】使用免费的折扣券最大折扣比例（超出比例不显示可用折扣卡或取最小折扣比例）
+        /// </summary>
+        public decimal? MaxDiscountPercentage { get; set; }
+
+        /// <summary>
+        /// 【价格保护】使用免费的现金抵用券最大金额（超出金额的券不显示或取最小限定值）
+        /// </summary>
+        public decimal? MaxDiscountAmount { get; set; }
+
+        /// <summary>
         /// Gets or sets the weight adjustment (used only with AttributeValueType.Simple)
         /// </summary>
         public decimal WeightAdjustment { get; set; }
@@ -86,6 +106,30 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the attribute value cost (used only with AttributeValueType.Simple)
         /// </summary>
         public decimal Cost { get; set; }
+
+        /// <summary>
+        /// 是否推荐
+        /// </summary>
+        public bool IsRecommend { get; set; }
+
+        /// <summary>
+        /// 是否热门
+        /// </summary>
+        public bool IsHot { get; set; }
+
+        /// <summary>
+        /// 是否特价商品
+        /// </summary>
+        public bool SpecialPrice { get; set; }
+        /// <summary>
+        /// 是否折扣商品
+        /// </summary>
+        public bool DiscountPrice { get; set; }
+
+        /// <summary>
+        /// 仅新用户可购买
+        /// </summary>
+        public bool OnlyForNewUser { get; set; }
 
         /// <summary>
         /// 使用数量倍数（基数价格的x倍，Quantity值为倍数值）

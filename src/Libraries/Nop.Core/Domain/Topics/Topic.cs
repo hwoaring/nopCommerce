@@ -119,7 +119,7 @@ namespace Nop.Core.Domain.Topics
         public string MetaTitle { get; set; }
 
         /// <summary>
-        /// Gets or sets the meta image，SEO image or weixin share image
+        /// 可设置分享小图，SEO 图片 或微信分享小图
         /// </summary>
         public string MetaImageUrl { get; set; }
 
@@ -129,9 +129,39 @@ namespace Nop.Core.Domain.Topics
         public string MetaLinkUrl { get; set; }
 
         /// <summary>
-        /// Gets or sets the share big size image
+        /// 分享大图
         /// </summary>
         public string ShareImageUrl { get; set; }
+
+        /// <summary>
+        /// 二维码参考坐标类型：1左上，2中上，3右上……
+        /// </summary>
+        public int QrcodePositionType { get; set; }
+
+        /// <summary>
+        /// 备用，分享二维码x坐标偏移
+        /// </summary>
+        public int QrcodeXPosition { get; set; }
+
+        /// <summary>
+        /// 备用，分享二维码y坐标偏移
+        /// </summary>
+        public int QrcodeYPosition { get; set; }
+
+        /// <summary>
+        /// 备用，分享二维码尺寸
+        /// </summary>
+        public int QrcodeSize { get; set; }
+
+        /// <summary>
+        /// 开启二维码分享
+        /// </summary>
+        public bool ShareQrcodeEnable { get; set; }
+
+        /// <summary>
+        /// 生成关注公众号类型的二维码，否则使用MetaLinkUrl值+个人区分码，或使用当前页面链接+个人区分码
+        /// </summary>
+        public bool CreatSubscribeQrcode { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the entity is subject to ACL

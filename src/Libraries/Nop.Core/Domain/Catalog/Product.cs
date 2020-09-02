@@ -154,7 +154,25 @@ namespace Nop.Core.Domain.Catalog
         /// </summary>
         public int VendorId { get; set; }
 
+        /// <summary>
+        /// 供应商ID
+        /// </summary>
         public int SupplierId { get; set; }
+
+        /// <summary>
+        /// 是否需要联系人信息（不用邮寄的虚拟物品或卡券等，订单保存是否需要联系人信息：姓名，电话）
+        /// </summary>
+        public bool ContactInfoRequired { get; set; }
+
+        /// <summary>
+        /// 是否需要实名制购买（获取身份证号信息）
+        /// </summary>
+        public bool RealNameRequired { get; set; }
+
+        /// <summary>
+        /// 是否每个商品都需要不同的实名信息（否则只需1个订单一条实名信息即可）
+        /// </summary>
+        public bool RealNamePerItem { get; set; }
 
         /// <summary>
         /// Gets or sets the values indicating whether this product is visible in catalog or search results.
@@ -217,20 +235,15 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the Global Trade Item Number (GTIN). These identifiers include UPC (in North America), EAN (in Europe), JAN (in Japan), and ISBN (for books).
         /// </summary>
         public string Gtin { get; set; }
-        /// <summary>
-        /// 是否供应商提供的兑换券
-        /// </summary>
-        public bool IsVoucherCoupon { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the product is Voucher card/代金券卡
+        /// 是否供应商提供的兑换券/代金券卡
         /// </summary>
         public bool IsVoucherCard { get; set; }
-
         /// <summary>
-        /// Gets or sets the VoucherCard type identifier
+        /// 供应商提供的兑换券Id
         /// </summary>
-        public int VoucherCardTypeId { get; set; }
+        public int VoucherCardId { get; set; }
 
         /// <summary>
         /// Gets or sets gift card amount that can be used after purchase. If not specified, then product price will be used.
@@ -607,6 +620,11 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets a reference unit for PAngV (MeasureWeight entity)
         /// </summary>
         public int BasepriceBaseUnitId { get; set; }
+
+        /// <summary>
+        /// 仅新用户可购买
+        /// </summary>
+        public bool OnlyForNewUser { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this product is marked as new

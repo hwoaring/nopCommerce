@@ -83,6 +83,11 @@ namespace Nop.Core.Domain.Orders
         public int ExpressCompanyId { get; set; }
 
         /// <summary>
+        /// 期望送货时间
+        /// </summary>
+        public DateTime? ExpectDeliverTime { get; set; }
+
+        /// <summary>
         /// Gets or sets the payment method system name
         /// </summary>
         public string PaymentMethodSystemName { get; set; }
@@ -186,6 +191,11 @@ namespace Nop.Core.Domain.Orders
         /// Gets or sets the checkout attributes in XML format
         /// </summary>
         public string CheckoutAttributesXml { get; set; }
+
+        /// <summary>
+        /// 订单联系人信息（用xml或json格式保存联系人姓名，电话或地址信息等），如果商品设置为需要联系人信息，则保存在这里（备用）
+        /// </summary>
+        public string ContactInfo { get; set; }
 
         /// <summary>
         /// Gets or sets the customer language identifier

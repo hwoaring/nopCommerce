@@ -9,6 +9,7 @@
 ----------------------------------------------------------------*/
 
 //DPBMARK_FILE MP
+using Senparc.CO2NET;
 using Senparc.CO2NET.Extensions;
 using Senparc.CO2NET.Utilities;
 using Senparc.NeuChar.Agents;
@@ -22,6 +23,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Nop.Core.Infrastructure;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Domain.Suppliers;
@@ -187,7 +189,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                     {
                         //获取返回的XML
                         var dt1 = SystemTime.Now;
-                        reponseMessage = MessageAgent.RequestResponseMessage(this, _senparcWeixinSetting.AgentUrl, _senparcWeixinSetting.AgentToken, RequestDocument.ToString());
+                        reponseMessage = MessageAgent.RequestResponseMessage(this, SenparcDI.GetServiceProvider(), _senparcWeixinSetting.AgentUrl, _senparcWeixinSetting.AgentToken, RequestDocument.ToString());
                         //上面的方法也可以使用扩展方法：this.RequestResponseMessage(this,agentUrl, agentToken, RequestDocument.ToString());
 
                         var dt2 = SystemTime.Now;
@@ -203,7 +205,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                 case "Member"://托管代理会员信息
                     {
                         //原始方法为：MessageAgent.RequestXml(this,agentUrl, agentToken, RequestDocument.ToString());//获取返回的XML
-                        reponseMessage = this.RequestResponseMessage(_senparcWeixinSetting.AgentUrl, _senparcWeixinSetting.AgentToken, RequestDocument.ToString());
+                        reponseMessage = this.RequestResponseMessage(SenparcDI.GetServiceProvider(), _senparcWeixinSetting.AgentUrl, _senparcWeixinSetting.AgentToken, RequestDocument.ToString());
                     }
                     break;
                 case "OAuth"://OAuth授权测试
