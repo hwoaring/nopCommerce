@@ -164,6 +164,7 @@ namespace Nop.Data.Migrations
 
             _migrationManager.BuildTable<Discount>(Create);
 
+            _migrationManager.BuildTable<DiscountCustomerMapping>(Create);
             _migrationManager.BuildTable<DiscountCategoryMapping>(Create);
             _migrationManager.BuildTable<DiscountProductMapping>(Create);
             _migrationManager.BuildTable<DiscountRequirement>(Create);

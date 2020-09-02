@@ -89,13 +89,17 @@ namespace Nop.Core.Domain.Orders
         public int OrderExpireTime { get; set; }
 
         /// <summary>
-        /// 不同商品分开邮寄时候的状态
+        /// 不同商品分开邮寄时候的邮寄状态
         /// </summary>
         public int ShippingStatusId { get; set; }
         /// <summary>
         /// 订单单品留言消息
         /// </summary>
         public string OrderMessage { get; set; }
+        /// <summary>
+        /// 实名制信息详情（json或xml存储）
+        /// </summary>
+        public string RealNameInfo { get; set; }
         /// <summary>
         /// 单独邮寄的快递单号
         /// </summary>

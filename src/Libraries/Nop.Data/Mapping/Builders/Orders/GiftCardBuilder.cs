@@ -18,7 +18,19 @@ namespace Nop.Data.Mapping.Builders.Orders
         /// <param name="table">Create table expression builder</param>
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
-            table.WithColumn(nameof(GiftCard.PurchasedWithOrderItemId)).AsInt32().Nullable().ForeignKey<OrderItem>(onDelete: Rule.None);
+            table
+                .WithColumn(nameof(GiftCard.PurchasedWithOrderItemId)).AsInt32().Nullable().ForeignKey<OrderItem>(onDelete: Rule.None)
+                .WithColumn(nameof(GiftCard.RecipientPhone)).AsAnsiString(32).Nullable()
+                .WithColumn(nameof(GiftCard.SenderPhone)).AsAnsiString(32).Nullable()
+                .WithColumn(nameof(GiftCard.GiftCardCouponCode)).AsAnsiString(128).Nullable()
+                .WithColumn(nameof(GiftCard.GiftCardPassword)).AsAnsiString(32).Nullable()
+                .WithColumn(nameof(GiftCard.RecipientName)).AsString(128).Nullable()
+                .WithColumn(nameof(GiftCard.SenderName)).AsString(128).Nullable()
+                .WithColumn(nameof(GiftCard.RecipientEmail)).AsString(128).Nullable()
+                .WithColumn(nameof(GiftCard.SenderEmail)).AsString(128).Nullable()
+                .WithColumn(nameof(GiftCard.GiftCardStartUseDateTimeUtc)).AsDateTime2().Nullable()
+                .WithColumn(nameof(GiftCard.GiftCardEndUseDateTimeUtc)).AsDateTime2().Nullable()
+                ;
         }
 
         #endregion

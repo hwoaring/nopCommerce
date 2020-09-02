@@ -75,6 +75,11 @@ namespace Nop.Web.Areas.Admin.Models.Settings
         public bool DisableBillingAddressCheckoutStep { get; set; }
         public bool DisableBillingAddressCheckoutStep_OverrideForStore { get; set; }
 
+        [NopResourceDisplayName("Admin.Configuration.Settings.Order.ContactInfoRequired")]
+        public bool ContactInfoRequired { get; set; }
+        public bool ContactInfoRequired_OverrideForStore { get; set; }
+        
+
         [NopResourceDisplayName("Admin.Configuration.Settings.Order.DisableOrderCompletedPage")]
         public bool DisableOrderCompletedPage { get; set; }
         public bool DisableOrderCompletedPage_OverrideForStore { get; set; }

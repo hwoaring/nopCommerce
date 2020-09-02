@@ -34,9 +34,19 @@ namespace Nop.Core.Domain.Orders
         public string GiftCardCouponCode { get; set; }
 
         /// <summary>
+        /// 卡券密码（可以通过设置密码，保持couponcode不变情况下禁止他人消费）
+        /// </summary>
+        public string GiftCardPassword { get; set; }
+
+        /// <summary>
         /// Gets or sets a recipient name
         /// </summary>
         public string RecipientName { get; set; }
+
+        /// <summary>
+        /// 接收人电话
+        /// </summary>
+        public string RecipientPhone { get; set; }
 
         /// <summary>
         /// Gets or sets a recipient email
@@ -47,6 +57,11 @@ namespace Nop.Core.Domain.Orders
         /// Gets or sets a sender name
         /// </summary>
         public string SenderName { get; set; }
+
+        /// <summary>
+        /// 发送人电话
+        /// </summary>
+        public string SenderPhone { get; set; }
 
         /// <summary>
         /// Gets or sets a sender email

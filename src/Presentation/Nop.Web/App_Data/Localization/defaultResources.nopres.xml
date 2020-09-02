@@ -7461,6 +7461,12 @@
   <LocaleResource Name="Admin.Configuration.Settings.Order.DisableBillingAddressCheckoutStep.Hint">
     <Value>Check to disable "Billing address" step during checkout. Billing address will be pre-filled and saved using the default registration data (this option cannot be used with guest checkout enabled). Also ensure that appropriate address fields that cannot be pre-filled are not required (or disabled). If a customer doesn't have a billing address, then the billing address step will be displayed.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.ContactInfoRequired">
+    <Value>Contact Info Required</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.ContactInfoRequired.Hint">
+    <Value>Check to Contact Infomation Required.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Order.DisableOrderCompletedPage">
     <Value>Disable "Order completed" page</Value>
   </LocaleResource>
@@ -14784,6 +14790,9 @@
   <LocaleResource Name="Checkout.Addresses.Invalid">
     <Value>You have {0} invalid address(es)</Value>
   </LocaleResource>
+  <LocaleResource Name="Checkout.AnonymousCheckoutIsNotAllowed">
+    <Value>Anonymous checkout is not allowed</Value>
+  </LocaleResource>
   <LocaleResource Name="Checkout.BillingAddress">
     <Value>Billing address</Value>
   </LocaleResource>
@@ -14829,6 +14838,9 @@
   <LocaleResource Name="Checkout.NoPaymentMethods">
     <Value>No payment methods available</Value>
   </LocaleResource>
+  <LocaleResource Name="Checkout.OnePageCheckoutIsDisabled">
+    <Value>One page checkout is disabled</Value>
+  </LocaleResource>
   <LocaleResource Name="Checkout.OrderNumber">
     <Value>Order number</Value>
   </LocaleResource>
@@ -14846,6 +14858,15 @@
   </LocaleResource>
   <LocaleResource Name="Checkout.PaymentMethod">
     <Value>Payment method</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.PaymentMethodIsNotSelected">
+    <Value>Payment method is not selected</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.PaymentInformationIsNotEntered">
+    <Value>Payment information is not entered</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.PickupPointIsNotAllowed">
+    <Value>Pickup point is not allowed</Value>
   </LocaleResource>
   <LocaleResource Name="Checkout.PickupPoints">
     <Value>Pickup</Value>
@@ -14892,6 +14913,15 @@
   <LocaleResource Name="Checkout.SelectBillingAddressOrEnterNewOne">
     <Value>Select a billing address from your address book or enter a new address.</Value>
   </LocaleResource>
+  <LocaleResource Name="Checkout.SelectedPaymentMethodCantBeParsed">
+    <Value>Selected payment method can't be parsed</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.SelectedShippingMethodCantBeParsed">
+    <Value>Selected shipping method can't be parsed</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.SelectedShippingMethodCantBeLoaded">
+    <Value>Selected shipping method can't be loaded</Value>
+  </LocaleResource>
   <LocaleResource Name="Checkout.SelectPaymentMethod">
     <Value>Select payment method</Value>
   </LocaleResource>
@@ -14915,6 +14945,9 @@
   </LocaleResource>
   <LocaleResource Name="Checkout.ShippingIsNotAllowed">
     <Value>Shipping is not allowed</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.ShippingIsNotRequired">
+    <Value>Shipping is not required</Value>
   </LocaleResource>
   <LocaleResource Name="Checkout.ShippingMethod">
     <Value>Shipping method</Value>
@@ -14954,6 +14987,9 @@
   </LocaleResource>
   <LocaleResource Name="Checkout.UseRewardPoints">
     <Value>Use my reward points, {0} reward points ({1}) available for this order</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.YourCartIsEmpty">
+    <Value>Your cart is empty</Value>
   </LocaleResource>
   <LocaleResource Name="Checkout.YourOrderHasBeenSuccessfullyProcessed">
     <Value>Your order has been successfully processed!</Value>

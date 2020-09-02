@@ -9,6 +9,7 @@
         /// 全网
         /// </summary>
         All = 0,
+
         /// <summary>
         /// 跨站点=全网
         /// </summary>

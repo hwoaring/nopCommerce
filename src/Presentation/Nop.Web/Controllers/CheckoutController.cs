@@ -161,7 +161,8 @@ namespace Nop.Web.Controllers
                 _workContext.CurrentCustomer, pickupPoint[1], _storeContext.CurrentStore.Id).PickupPoints.ToList();
             var selectedPoint = pickupPoints.FirstOrDefault(x => x.Id.Equals(pickupPoint[0]));
             if (selectedPoint == null)
-                throw new Exception("Pickup point is not allowed");
+                throw new Exception(_localizationService.GetResource("Checkout.PickupPointIsNotAllowed"));
+            //throw new Exception("Pickup point is not allowed");
 
             return selectedPoint;
         }
@@ -1082,7 +1083,8 @@ namespace Nop.Web.Controllers
                     var paymentMethodInst = _paymentPluginManager
                         .LoadPluginBySystemName(selectedPaymentMethodSystemName, _workContext.CurrentCustomer, _storeContext.CurrentStore.Id);
                     if (!_paymentPluginManager.IsPluginActive(paymentMethodInst))
-                        throw new Exception("Selected payment method can't be parsed");
+                        throw new Exception(_localizationService.GetResource("Checkout.SelectedPaymentMethodCantBeParsed"));
+                    //throw new Exception("Selected payment method can't be parsed");
 
                     return OpcLoadStepAfterPaymentMethod(paymentMethodInst, cart);
                 }
@@ -1184,13 +1186,16 @@ namespace Nop.Web.Controllers
                 var cart = _shoppingCartService.GetShoppingCart(_workContext.CurrentCustomer, ShoppingCartType.ShoppingCart, _storeContext.CurrentStore.Id);
 
                 if (!cart.Any())
-                    throw new Exception("Your cart is empty");
+                    throw new Exception(_localizationService.GetResource("Checkout.YourCartIsEmpty"));
+                //throw new Exception("Your cart is empty");
 
                 if (!_orderSettings.OnePageCheckoutEnabled)
-                    throw new Exception("One page checkout is disabled");
+                    throw new Exception(_localizationService.GetResource("Checkout.OnePageCheckoutIsDisabled"));
+                //throw new Exception("One page checkout is disabled");
 
                 if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
-                    throw new Exception("Anonymous checkout is not allowed");
+                    throw new Exception(_localizationService.GetResource("Checkout.AnonymousCheckoutIsNotAllowed"));
+                //throw new Exception("Anonymous checkout is not allowed");
 
                 int.TryParse(form["billing_address_id"], out var billingAddressId);
 
@@ -1325,16 +1330,20 @@ namespace Nop.Web.Controllers
                 var cart = _shoppingCartService.GetShoppingCart(_workContext.CurrentCustomer, ShoppingCartType.ShoppingCart, _storeContext.CurrentStore.Id);
 
                 if (!cart.Any())
-                    throw new Exception("Your cart is empty");
+                    throw new Exception(_localizationService.GetResource("Checkout.YourCartIsEmpty"));
+                //throw new Exception("Your cart is empty");
 
                 if (!_orderSettings.OnePageCheckoutEnabled)
-                    throw new Exception("One page checkout is disabled");
+                    throw new Exception(_localizationService.GetResource("Checkout.OnePageCheckoutIsDisabled"));
+                //throw new Exception("One page checkout is disabled");
 
                 if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
-                    throw new Exception("Anonymous checkout is not allowed");
+                    throw new Exception(_localizationService.GetResource("Checkout.AnonymousCheckoutIsNotAllowed"));
+                //throw new Exception("Anonymous checkout is not allowed");
 
                 if (!_shoppingCartService.ShoppingCartRequiresShipping(cart))
-                    throw new Exception("Shipping is not required");
+                    throw new Exception(_localizationService.GetResource("Checkout.ShippingIsNotRequired"));
+                //throw new Exception("Shipping is not required");
 
                 //pickup point
                 if (_shippingSettings.AllowPickupInStore && !_orderSettings.DisplayPickupInStoreOnShippingMethodPage)
@@ -1439,16 +1448,20 @@ namespace Nop.Web.Controllers
                 var cart = _shoppingCartService.GetShoppingCart(_workContext.CurrentCustomer, ShoppingCartType.ShoppingCart, _storeContext.CurrentStore.Id);
 
                 if (!cart.Any())
-                    throw new Exception("Your cart is empty");
+                    throw new Exception(_localizationService.GetResource("Checkout.YourCartIsEmpty"));
+                //throw new Exception("Your cart is empty");
 
                 if (!_orderSettings.OnePageCheckoutEnabled)
-                    throw new Exception("One page checkout is disabled");
+                        throw new Exception(_localizationService.GetResource("Checkout.OnePageCheckoutIsDisabled"));
+                //throw new Exception("One page checkout is disabled");
 
                 if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
-                    throw new Exception("Anonymous checkout is not allowed");
+                            throw new Exception(_localizationService.GetResource("Checkout.AnonymousCheckoutIsNotAllowed"));
+                //throw new Exception("Anonymous checkout is not allowed");
 
                 if (!_shoppingCartService.ShoppingCartRequiresShipping(cart))
-                    throw new Exception("Shipping is not required");
+                    throw new Exception(_localizationService.GetResource("Checkout.ShippingIsNotRequired"));
+                //throw new Exception("Shipping is not required");
 
                 //pickup point
                 if (_shippingSettings.AllowPickupInStore && _orderSettings.DisplayPickupInStoreOnShippingMethodPage)
@@ -1468,10 +1481,12 @@ namespace Nop.Web.Controllers
 
                 //parse selected method 
                 if (string.IsNullOrEmpty(shippingoption))
-                    throw new Exception("Selected shipping method can't be parsed");
+                    throw new Exception(_localizationService.GetResource("Checkout.SelectedShippingMethodCantBeParsed"));
+                //throw new Exception("Selected shipping method can't be parsed");
                 var splittedOption = shippingoption.Split(new[] { "___" }, StringSplitOptions.RemoveEmptyEntries);
                 if (splittedOption.Length != 2)
-                    throw new Exception("Selected shipping method can't be parsed");
+                    throw new Exception(_localizationService.GetResource("Checkout.SelectedShippingMethodCantBeParsed"));
+                //throw new Exception("Selected shipping method can't be parsed");
                 var selectedName = splittedOption[0];
                 var shippingRateComputationMethodSystemName = splittedOption[1];
 
@@ -1495,7 +1510,8 @@ namespace Nop.Web.Controllers
                 var shippingOption = shippingOptions
                     .Find(so => !string.IsNullOrEmpty(so.Name) && so.Name.Equals(selectedName, StringComparison.InvariantCultureIgnoreCase));
                 if (shippingOption == null)
-                    throw new Exception("Selected shipping method can't be loaded");
+                    throw new Exception(_localizationService.GetResource("Checkout.SelectedShippingMethodCantBeLoaded"));
+                //throw new Exception("Selected shipping method can't be loaded");
 
                 //save
                 _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer, NopCustomerDefaults.SelectedShippingOptionAttribute, shippingOption, _storeContext.CurrentStore.Id);
@@ -1522,17 +1538,21 @@ namespace Nop.Web.Controllers
                 var cart = _shoppingCartService.GetShoppingCart(_workContext.CurrentCustomer, ShoppingCartType.ShoppingCart, _storeContext.CurrentStore.Id);
 
                 if (!cart.Any())
-                    throw new Exception("Your cart is empty");
+                    throw new Exception(_localizationService.GetResource("Checkout.YourCartIsEmpty"));
+                //throw new Exception("Your cart is empty");
 
                 if (!_orderSettings.OnePageCheckoutEnabled)
-                    throw new Exception("One page checkout is disabled");
+                    throw new Exception(_localizationService.GetResource("Checkout.OnePageCheckoutIsDisabled"));
+                //throw new Exception("One page checkout is disabled");
 
                 if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
-                    throw new Exception("Anonymous checkout is not allowed");
+                    throw new Exception(_localizationService.GetResource("Checkout.AnonymousCheckoutIsNotAllowed"));
+                //throw new Exception("Anonymous checkout is not allowed");
 
                 //payment method 
                 if (string.IsNullOrEmpty(paymentmethod))
-                    throw new Exception("Selected payment method can't be parsed");
+                    throw new Exception(_localizationService.GetResource("Checkout.SelectedPaymentMethodCantBeParsed"));
+                //throw new Exception("Selected payment method can't be parsed");
 
                 //reward points
                 if (_rewardPointsSettings.Enabled)
@@ -1565,7 +1585,8 @@ namespace Nop.Web.Controllers
                 var paymentMethodInst = _paymentPluginManager
                     .LoadPluginBySystemName(paymentmethod, _workContext.CurrentCustomer, _storeContext.CurrentStore.Id);
                 if (!_paymentPluginManager.IsPluginActive(paymentMethodInst))
-                    throw new Exception("Selected payment method can't be parsed");
+                    throw new Exception(_localizationService.GetResource("Checkout.SelectedPaymentMethodCantBeParsed"));
+                //throw new Exception("Selected payment method can't be parsed");
 
                 //save
                 _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer,
@@ -1592,19 +1613,22 @@ namespace Nop.Web.Controllers
                 var cart = _shoppingCartService.GetShoppingCart(_workContext.CurrentCustomer, ShoppingCartType.ShoppingCart, _storeContext.CurrentStore.Id);
 
                 if (!cart.Any())
-                    throw new Exception("Your cart is empty");
+                    throw new Exception(_localizationService.GetResource("Checkout.YourCartIsEmpty"));
+                //throw new Exception("Your cart is empty");
 
                 if (!_orderSettings.OnePageCheckoutEnabled)
-                    throw new Exception("One page checkout is disabled");
+                    throw new Exception(_localizationService.GetResource("Checkout.OnePageCheckoutIsDisabled"));
+                //throw new Exception("One page checkout is disabled");
 
                 if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
-                    throw new Exception("Anonymous checkout is not allowed");
+                    throw new Exception(_localizationService.GetResource("Checkout.AnonymousCheckoutIsNotAllowed"));
+                //throw new Exception("Anonymous checkout is not allowed");
 
                 var paymentMethodSystemName = _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer,
                     NopCustomerDefaults.SelectedPaymentMethodAttribute, _storeContext.CurrentStore.Id);
                 var paymentMethod = _paymentPluginManager
                     .LoadPluginBySystemName(paymentMethodSystemName, _workContext.CurrentCustomer, _storeContext.CurrentStore.Id)
-                    ?? throw new Exception("Payment method is not selected");
+                    ?? throw new Exception(_localizationService.GetResource("Checkout.PaymentMethodIsNotSelected")); //throw new Exception("Payment method is not selected");
 
                 var warnings = paymentMethod.ValidatePaymentForm(form);
                 foreach (var warning in warnings)
@@ -1661,13 +1685,16 @@ namespace Nop.Web.Controllers
                 var cart = _shoppingCartService.GetShoppingCart(_workContext.CurrentCustomer, ShoppingCartType.ShoppingCart, _storeContext.CurrentStore.Id);
 
                 if (!cart.Any())
-                    throw new Exception("Your cart is empty");
+                    throw new Exception(_localizationService.GetResource("Checkout.YourCartIsEmpty"));
+                //throw new Exception("Your cart is empty");
 
                 if (!_orderSettings.OnePageCheckoutEnabled)
-                    throw new Exception("One page checkout is disabled");
+                    throw new Exception(_localizationService.GetResource("Checkout.OnePageCheckoutIsDisabled"));
+                //throw new Exception("One page checkout is disabled");
 
                 if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
-                    throw new Exception("Anonymous checkout is not allowed");
+                    throw new Exception(_localizationService.GetResource("Checkout.AnonymousCheckoutIsNotAllowed"));
+                //throw new Exception("Anonymous checkout is not allowed");
 
                 //prevent 2 orders being placed within an X seconds time frame
                 if (!IsMinimumOrderPlacementIntervalValid(_workContext.CurrentCustomer))
@@ -1680,7 +1707,8 @@ namespace Nop.Web.Controllers
                     //Check whether payment workflow is required
                     if (_orderProcessingService.IsPaymentWorkflowRequired(cart))
                     {
-                        throw new Exception("Payment information is not entered");
+                        throw new Exception(_localizationService.GetResource("Checkout.PaymentInformationIsNotEntered"));
+                        //throw new Exception("Payment information is not entered");
                     }
 
                     processPaymentRequest = new ProcessPaymentRequest();
