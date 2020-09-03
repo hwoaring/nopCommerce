@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Payment methods",
+  "FriendlyName": "Offline",
+  "SystemName": "Payments.Offline",
+  "Version": "1.00",
+  "SupportedVersions": [ "4.40" ],
+  "Author": "Terry Hu",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Payments.Offline.dll",
+  "Description": "This plugin enables offline payments"
+}

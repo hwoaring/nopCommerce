@@ -19,5 +19,15 @@
         /// Gets or sets the display order
         /// </summary>
         public int DisplayOrder { get; set; }
+
+        /// <summary>
+        /// 前台展现
+        /// </summary>
+        public bool Published { get; set; }
+
+        /// <summary>
+        /// 是否封面图片
+        /// </summary>
+        public bool IsCoverImage { get; set; }
     }
 }

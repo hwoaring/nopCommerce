@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Topics;
 using Nop.Services.Customers;
@@ -212,6 +213,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                     model.Password = null;
 
                 var topic = model.ToEntity<Topic>();
+                topic.CreatedOnUtc = DateTime.UtcNow;
                 _topicService.InsertTopic(topic);
 
                 //search engine name

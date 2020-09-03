@@ -1,4 +1,5 @@
-﻿using Nop.Core;
+﻿using System.Text.RegularExpressions;
+using Nop.Core;
 using Nop.Core.Infrastructure;
 using Nop.Services.Localization;
 using Nop.Services.Themes;

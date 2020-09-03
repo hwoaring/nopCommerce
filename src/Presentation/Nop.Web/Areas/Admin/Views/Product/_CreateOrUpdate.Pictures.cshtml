@@ -28,6 +28,24 @@
                         Editable = true,
                         EditType = EditType.Number
                     },
+                    new ColumnProperty(nameof(ProductPictureModel.IsCoverImage))
+                    {
+                        Title = T("Admin.Catalog.Products.Pictures.Fields.IsCoverImage").Text,
+                        Width = "100",
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        Editable = true,
+                        Render=new RenderBoolean(),
+                        EditType = EditType.Checkbox
+                    },
+                    new ColumnProperty(nameof(ProductPictureModel.Published))
+                    {
+                        Title = T("Admin.Catalog.Products.Pictures.Fields.Published").Text,
+                        Width = "100",
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        Editable = true,
+                        Render=new RenderBoolean(),
+                        EditType = EditType.Checkbox
+                    },
                     new ColumnProperty(nameof(ProductPictureModel.OverrideAltAttribute))
                     {
                         Title = T("Admin.Catalog.Products.Pictures.Fields.OverrideAltAttribute").Text,
@@ -78,6 +96,8 @@
                             var overrideAltAttribute = $("#@Html.IdFor(model => model.AddPictureModel.OverrideAltAttribute)").val();
                             var overrideTitleAttribute = $("#@Html.IdFor(model => model.AddPictureModel.OverrideTitleAttribute)").val();
                             var displayOrder = $("#@Html.IdFor(model => model.AddPictureModel.DisplayOrder)").val();
+                            var isCoverImage = $("#@Html.IdFor(model => model.AddPictureModel.IsCoverImage)").val();
+                            var published = $("#@Html.IdFor(model => model.AddPictureModel.Published)").val();
 
                             if (pictureId == 0) {
                                 $("#addProductPictureAlert").click();
@@ -91,7 +111,9 @@
                                 displayOrder: displayOrder,
                                 overrideAltAttribute: overrideAltAttribute,
                                 overrideTitleAttribute: overrideTitleAttribute,
-                                productId: '@Model.Id'
+                                productId: '@Model.Id',
+                                isCoverImage: isCoverImage,
+                                published: published
                             };
                             addAntiForgeryToken(postData);
 
@@ -103,7 +125,7 @@
                                 success: function (data, textStatus, jqXHR) {
                                     if (!data.Result) {
                                         return;
-                                    }                                        
+                                    }
                                     updateTable('#productpictures-grid');
                                 },
                                 error: function (jqXHR, textStatus, errorThrown) {
@@ -150,6 +172,22 @@
                     <div class="col-md-9">
                         <nop-editor asp-for="AddPictureModel.DisplayOrder" />
                         <span asp-validation-for="AddPictureModel.DisplayOrder"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="AddPictureModel.IsCoverImage" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="AddPictureModel.IsCoverImage" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="AddPictureModel.Published" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="AddPictureModel.Published" />
                     </div>
                 </div>
                 <div class="form-group">

@@ -1,0 +1,84 @@
+﻿@model QrCodeLimitModel
+<div class="panel-body">
+    <p>
+        @T("Admin.Weixin.QrCodeLimits.Coupon.Hint")
+    </p>
+    @if (Model.Id > 0)
+    {
+    <div class="panel panel-default">
+
+        <div class="panel-body">
+            @await Html.PartialAsync("Table", new DataTablesModel
+       {
+           Name = "qrcodelimitcoupons-grid",
+           UrlRead = new DataUrl("QrCodeSupplierVoucherCouponList", "Supplier", new RouteValueDictionary { [nameof(Model.QrCodeSupplierVoucherCouponSearchModel.QrCodeId)] = Model.QrCodeSupplierVoucherCouponSearchModel.QrCodeId, [nameof(Model.QrCodeSupplierVoucherCouponSearchModel.QrcodeLimit)] = true }),
+           UrlDelete = new DataUrl("QrCodeSupplierVoucherCouponDelete", "Supplier", null),
+           UrlUpdate = new DataUrl("QrCodeSupplierVoucherCouponUpdate", "Supplier", null),
+           Length = Model.QrCodeSupplierVoucherCouponSearchModel.PageSize,
+           LengthMenu = Model.QrCodeSupplierVoucherCouponSearchModel.AvailablePageSizes,
+           ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(QrCodeSupplierVoucherCouponModel.SupplierVoucherCouponSysName))
+                    {
+                        Title = T("Admin.Suppliers.SupplierVoucherCoupons.Fields.SupplierVoucherCouponSysName").Text,
+                    },
+                    new ColumnProperty(nameof(QrCodeSupplierVoucherCouponModel.StartDateTime))
+                    {
+                        Title = T("Admin.Suppliers.SupplierVoucherCoupons.Fields.StartDateTime").Text,
+                        Editable = true,
+                        EditType = EditType.String
+                    },
+                    new ColumnProperty(nameof(QrCodeSupplierVoucherCouponModel.EndDateTime))
+                    {
+                        Title = T("Admin.Suppliers.SupplierVoucherCoupons.Fields.EndDateTime").Text,
+                        Editable = true,
+                        EditType = EditType.String
+                    },
+                    new ColumnProperty(nameof(QrCodeSupplierVoucherCouponModel.Published))
+                    {
+                        Title = T("Admin.Suppliers.SupplierVoucherCoupons.Fields.Published").Text,
+                        Width = "70",
+                        ClassName = NopColumnClassDefaults.CenterAll,
+                        Render = new RenderBoolean(),
+                        Editable = true,
+                        EditType = EditType.Checkbox
+                    },
+                    new ColumnProperty(nameof(QrCodeSupplierVoucherCouponModel.Id))
+                    {
+                        Title = T("Admin.Common.Delete").Text,
+                        Width = "100",
+                        Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                        ClassName = NopColumnClassDefaults.Button
+                    }
+                }
+       })
+
+        </div>
+        <div class="panel-footer">
+            <button type="submit" id="btnAddNewQrCodeLimitUser" onclick="javascript:OpenWindow('@(Url.Action("QrCodeSupplierVoucherCouponAddPopup", "Supplier", new {qrCodeLimitId = Model.QrCodeId, btnId = "btnRefreshQrCodeSupplierVoucherCoupons", formId = "qrcodelimit-form"}))', 800, 800, true); return false;" class="btn btn-primary">
+                @T("Admin.Weixin.QrCodeLimits.SupplierVoucherCoupons.AddNew")
+            </button>
+            <input type="submit" id="btnRefreshQrCodeSupplierVoucherCoupons" style="display: none" />
+            <script>
+                $(document).ready(function () {
+                    $('#btnRefreshQrCodeSupplierVoucherCoupons').click(function () {
+                        //refresh grid
+                        updateTable('#qrcodelimitcoupons-grid');
+
+                        //return false to don't reload a page
+                        return false;
+                    });
+                });
+            </script>
+        </div>
+    </div>
+    }
+    else
+    {
+        <div class="panel panel-default">
+            <div class="panel-body">
+                @T("Admin.Weixin.QrCodeLimits.SupplierVoucherCoupons.SaveBeforeEdit")
+            </div>
+        </div>
+    }
+</div>

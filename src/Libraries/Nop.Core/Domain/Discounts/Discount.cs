@@ -38,6 +38,11 @@ namespace Nop.Core.Domain.Discounts
         public decimal DiscountAmount { get; set; }
 
         /// <summary>
+        /// 订单总额最低多少金额可以使用折扣券
+        /// </summary>
+        public decimal? MinOrderTotalAmount { get; set; }
+
+        /// <summary>
         /// Gets or sets the maximum discount amount (used with "UsePercentage")
         /// </summary>
         public decimal? MaximumDiscountAmount { get; set; }

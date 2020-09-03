@@ -38,6 +38,8 @@ namespace Nop.Web.Factories
         /// <returns>Header links model</returns>
         HeaderLinksModel PrepareHeaderLinksModel();
 
+        FooterLinksModel PrepareFooterLinksModel();
+
         /// <summary>
         /// Prepare the admin header links model
         /// </summary>

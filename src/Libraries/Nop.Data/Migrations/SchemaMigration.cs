@@ -11,6 +11,7 @@ using Nop.Core.Domain.Forums;
 using Nop.Core.Domain.Gdpr;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Logging;
+using Nop.Core.Domain.Marketing;
 using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.News;
@@ -19,11 +20,13 @@ using Nop.Core.Domain.Polls;
 using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Seo;
 using Nop.Core.Domain.Shipping;
+using Nop.Core.Domain.Suppliers;
 using Nop.Core.Domain.Stores;
 using Nop.Core.Domain.Tasks;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Topics;
 using Nop.Core.Domain.Vendors;
+using Nop.Core.Domain.Weixin;
 
 namespace Nop.Data.Migrations
 {
@@ -84,6 +87,7 @@ namespace Nop.Data.Migrations
 
             _migrationManager.BuildTable<Product>(Create);
             _migrationManager.BuildTable<ProductTemplate>(Create);
+            _migrationManager.BuildTable<ProductComment>(Create);
             _migrationManager.BuildTable<BackInStockSubscription>(Create);
             _migrationManager.BuildTable<RelatedProduct>(Create);
             _migrationManager.BuildTable<ReviewType>(Create);
@@ -136,6 +140,7 @@ namespace Nop.Data.Migrations
             _migrationManager.BuildTable<ProductSpecificationAttribute>(Create);
 
             _migrationManager.BuildTable<TierPrice>(Create);
+            _migrationManager.BuildTable<TierDeductPrice>(Create);
 
             _migrationManager.BuildTable<Warehouse>(Create);
             _migrationManager.BuildTable<DeliveryDate>(Create);
@@ -144,6 +149,7 @@ namespace Nop.Data.Migrations
             _migrationManager.BuildTable<ShipmentItem>(Create);
             _migrationManager.BuildTable<ShippingMethod>(Create);
             _migrationManager.BuildTable<ShippingMethodCountryMapping>(Create);
+            _migrationManager.BuildTable<ExpressCompany>(Create);
 
             _migrationManager.BuildTable<ProductWarehouseInventory>(Create);
             _migrationManager.BuildTable<StockQuantityHistory>(Create);
@@ -158,6 +164,7 @@ namespace Nop.Data.Migrations
 
             _migrationManager.BuildTable<Discount>(Create);
 
+            _migrationManager.BuildTable<DiscountCustomerMapping>(Create);
             _migrationManager.BuildTable<DiscountCategoryMapping>(Create);
             _migrationManager.BuildTable<DiscountProductMapping>(Create);
             _migrationManager.BuildTable<DiscountRequirement>(Create);
@@ -185,8 +192,12 @@ namespace Nop.Data.Migrations
             _migrationManager.BuildTable<NewsLetterSubscription>(Create);
             _migrationManager.BuildTable<QueuedEmail>(Create);
 
+            _migrationManager.BuildTable<NewsCategory>(Create);
             _migrationManager.BuildTable<NewsItem>(Create);
             _migrationManager.BuildTable<NewsComment>(Create);
+            _migrationManager.BuildTable<NewsAlbums>(Create);
+            _migrationManager.BuildTable<NewsTags>(Create);
+            _migrationManager.BuildTable<NewsNewsTagMapping>(Create);
 
             _migrationManager.BuildTable<Poll>(Create);
             _migrationManager.BuildTable<PollAnswer>(Create);
@@ -209,6 +220,88 @@ namespace Nop.Data.Migrations
             _migrationManager.BuildTable<VendorAttribute>(Create);
             _migrationManager.BuildTable<VendorAttributeValue>(Create);
             _migrationManager.BuildTable<VendorNote>(Create);
+
+            //Weixin
+            _migrationManager.BuildTable<WConfig>(Create);
+
+            _migrationManager.BuildTable<WUser>(Create);
+            _migrationManager.BuildTable<WUserAddress>(Create);
+            _migrationManager.BuildTable<WUserRefereeMapping>(Create);
+            _migrationManager.BuildTable<WUserTag>(Create);
+            _migrationManager.BuildTable<WUserSysTag>(Create);
+            _migrationManager.BuildTable<WUserUserSysTagMapping>(Create);
+
+            _migrationManager.BuildTable<WLocation>(Create);
+            _migrationManager.BuildTable<WMenu>(Create);
+            _migrationManager.BuildTable<WMenuButton>(Create);
+            _migrationManager.BuildTable<WMessage>(Create);
+            _migrationManager.BuildTable<WOauth>(Create);
+            _migrationManager.BuildTable<WMessageBindMapping>(Create);
+
+            _migrationManager.BuildTable<WAutoreplyNewsInfo>(Create);
+
+            _migrationManager.BuildTable<WMessageAutoReply>(Create);
+            _migrationManager.BuildTable<WKeywordAutoreply>(Create);
+            _migrationManager.BuildTable<WKeywordAutoreplyKeyword>(Create);
+            _migrationManager.BuildTable<WKeywordAutoreplyReply>(Create);
+            
+
+            _migrationManager.BuildTable<WShareLink>(Create);
+            _migrationManager.BuildTable<WJSDKShare>(Create);
+            _migrationManager.BuildTable<WShareCount>(Create);
+            
+            _migrationManager.BuildTable<WQrCodeCategory>(Create);
+            _migrationManager.BuildTable<WQrCodeChannel>(Create);
+            _migrationManager.BuildTable<WQrCodeLimit>(Create);
+            
+            _migrationManager.BuildTable<WQrCodeLimitUserMapping>(Create);
+            _migrationManager.BuildTable<QrCodeLimitBindingSource>(Create);
+
+            _migrationManager.BuildTable<WQrCodeTemp>(Create);
+
+            _migrationManager.BuildTable<Supplier>(Create);
+            _migrationManager.BuildTable<SupplierShop>(Create);
+            _migrationManager.BuildTable<SupplierShopTag>(Create);
+            _migrationManager.BuildTable<SupplierSelfGroup>(Create);
+            _migrationManager.BuildTable<SupplierImage>(Create);
+            _migrationManager.BuildTable<SupplierProductMapping>(Create);
+            _migrationManager.BuildTable<SupplierUserAuthorityMapping>(Create);
+            _migrationManager.BuildTable<SupplierShopTagMapping>(Create);
+            _migrationManager.BuildTable<SupplierShopUserFollowMapping>(Create);
+
+            _migrationManager.BuildTable<SupplierVoucherCoupon>(Create);
+            _migrationManager.BuildTable<SupplierVoucherCouponAppliedValue>(Create);
+            _migrationManager.BuildTable<ProductSupplierVoucherCouponMapping>(Create);
+            _migrationManager.BuildTable<QrCodeSupplierVoucherCouponMapping>(Create);
+            _migrationManager.BuildTable<UserSupplierVoucherCoupon>(Create);
+
+            _migrationManager.BuildTable<ProductAdvertImage>(Create);
+            _migrationManager.BuildTable<MarketingAdvertWay>(Create);
+            _migrationManager.BuildTable<MarketingAdvertAddress>(Create);
+            _migrationManager.BuildTable<UserAdvertChannelAnalysis>(Create);
+
+
+            _migrationManager.BuildTable<DivisionsCodeChina>(Create);
+            _migrationManager.BuildTable<ProductExtendLabel>(Create);
+            _migrationManager.BuildTable<ProductMarketLabel>(Create);
+            _migrationManager.BuildTable<PromotionCommission>(Create);
+            _migrationManager.BuildTable<ActivitiesTheme>(Create);
+            _migrationManager.BuildTable<CustomTeam>(Create);
+            _migrationManager.BuildTable<CustomTeamOrder>(Create);
+            _migrationManager.BuildTable<OfficialCustomer>(Create);
+            _migrationManager.BuildTable<PartnerApplicationForm>(Create);
+            _migrationManager.BuildTable<PartnerServiceInfo>(Create);
+            _migrationManager.BuildTable<ProductActivitiesThemeMapping>(Create);
+            _migrationManager.BuildTable<ProductGiftProductMapping>(Create);
+            _migrationManager.BuildTable<ProductProductExtendLabelMapping>(Create);
+            _migrationManager.BuildTable<ProductProductMarketLabelMapping>(Create);
+            _migrationManager.BuildTable<ProductUserFollowMapping>(Create);
+            _migrationManager.BuildTable<ProductVisitorMapping>(Create);
+            
+            _migrationManager.BuildTable<UserAsset>(Create);
+            _migrationManager.BuildTable<UserAssetIncomeHistory>(Create);
+            _migrationManager.BuildTable<UserAssetConsumeHistory>(Create);
+
         }
     }
 }

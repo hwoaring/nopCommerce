@@ -20,7 +20,11 @@ namespace Nop.Data.Mapping.Builders.Orders
         {
             table
                 .WithColumn(nameof(OrderItem.OrderId)).AsInt32().ForeignKey<Order>()
-                .WithColumn(nameof(OrderItem.ProductId)).AsInt32().ForeignKey<Product>();
+                .WithColumn(nameof(OrderItem.ProductId)).AsInt32().ForeignKey<Product>()
+                .WithColumn(nameof(OrderItem.OrderMessage)).AsString(128).Nullable()
+                .WithColumn(nameof(OrderItem.RealNameInfo)).AsString(4000).Nullable()
+                .WithColumn(nameof(OrderItem.ExpressNumber)).AsAnsiString(64).Nullable()
+                ;
         }
 
         #endregion

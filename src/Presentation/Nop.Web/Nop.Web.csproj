@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\Libraries\Nop.Data\Nop.Data.csproj" />
     <ProjectReference Include="..\..\Libraries\Nop.Services\Nop.Services.csproj" />
     <ProjectReference Include="..\Nop.Web.Framework\Nop.Web.Framework.csproj" />
+    <ProjectReference Include="..\Senparc.Weixin.MP.CommonService\Senparc.Weixin.MP.CommonService.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,14 +37,196 @@
     <EmbeddedResource Remove="Plugins\**;Themes\**" />
     <None Remove="Plugins\**;Themes\**" />
 
-    <Content Include="Plugins\bin\placeholder.txt" CopyToPublishDirectory="PreserveNewest"/>
-    <None Include="Plugins\**"  CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="Plugins\bin\placeholder.txt" CopyToPublishDirectory="PreserveNewest" />
+
+    <Content Include="Themes\Weixin\Views\Catalog\CategoryTemplate.ProductsInGridOrLines.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Checkout\BillingAddress.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Checkout\Completed.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Checkout\Confirm.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Checkout\OnePageCheckout.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Checkout\OpcBillingAddress.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Checkout\OpcConfirmOrder.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Checkout\OpcPaymentInfo.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Checkout\OpcPaymentMethods.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Checkout\OpcShippingAddress.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Checkout\OpcShippingMethods.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Checkout\PaymentInfo.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Checkout\PaymentMethod.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Checkout\ShippingAddress.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Checkout\ShippingMethod.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Checkout\_PickupPoints.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Home\Index.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Product\ProductTemplate.Simple.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Product\_AddToCart.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Product\_ProductAttributes.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Product\_ProductDetailsPictures.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Product\_ProductEstimateShipping.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Product\_ProductPrice.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Product\_ProductTierPrices.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Shared\Components\CheckoutProgress\Default.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Shared\Components\FooterLinks\Default.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Shared\Components\OrderSummary\Default.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Shared\Components\OrderTotals\Default.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Shared\_CheckoutAttributes.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Shared\_ColumnsOne.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Shared\_DiscountBox.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Shared\_Header.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Shared\_JavaScriptDisabledWarning.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Shared\_Notifications.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Shared\_OldInternetExplorerWarning.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Shared\_ProductBox.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Shared\_Root.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Shared\_Root.Head.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\ShoppingCart\Cart.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\ShoppingCart\EmailWishlist.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\ShoppingCart\Wishlist.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\ShoppingCart\_GiftCardBox.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Topic\TopicDetails.cshtml" />
+    <None Include="Plugins\**" CopyToPublishDirectory="PreserveNewest" />
 
     <Content Include="Themes\**" CopyToPublishDirectory="PreserveNewest" Exclude="Themes\**\*.config;Themes\**\*.cshtml;Themes\**\*.json" />
-    <None Include="Themes\**"  CopyToPublishDirectory="PreserveNewest" />
+    <None Include="Themes\**" CopyToPublishDirectory="PreserveNewest" />
 
     <!-- We copy the \Logs directory -->
     <Content Include="Logs\**" CopyToPublishDirectory="PreserveNewest" />
+    <None Remove="Themes\Weixin\Content\css\print.css" />
+    <None Remove="Themes\Weixin\Content\css\styles.css" />
+    <None Remove="Themes\Weixin\Content\css\styles.rtl.css" />
+    <None Remove="Themes\Weixin\Content\images\ajax-loader-small.gif" />
+    <None Remove="Themes\Weixin\Content\images\back-button.png" />
+    <None Remove="Themes\Weixin\Content\images\calendar-next.png" />
+    <None Remove="Themes\Weixin\Content\images\calendar-prev.png" />
+    <None Remove="Themes\Weixin\Content\images\close.png" />
+    <None Remove="Themes\Weixin\Content\images\compare-button.png" />
+    <None Remove="Themes\Weixin\Content\images\details.png" />
+    <None Remove="Themes\Weixin\Content\images\discontinued-product-icon.png" />
+    <None Remove="Themes\Weixin\Content\images\download-button.png" />
+    <None Remove="Themes\Weixin\Content\images\edit.png" />
+    <None Remove="Themes\Weixin\Content\images\edit_.png" />
+    <None Remove="Themes\Weixin\Content\images\email-button.png" />
+    <None Remove="Themes\Weixin\Content\images\first.png" />
+    <None Remove="Themes\Weixin\Content\images\ie_warning.jpg" />
+    <None Remove="Themes\Weixin\Content\images\last.png" />
+    <None Remove="Themes\Weixin\Content\images\loading.gif" />
+    <None Remove="Themes\Weixin\Content\images\logo.png" />
+    <None Remove="Themes\Weixin\Content\images\menu-icon.png" />
+    <None Remove="Themes\Weixin\Content\images\move.png" />
+    <None Remove="Themes\Weixin\Content\images\new.png" />
+    <None Remove="Themes\Weixin\Content\images\next.png" />
+    <None Remove="Themes\Weixin\Content\images\pointer.png" />
+    <None Remove="Themes\Weixin\Content\images\prev.png" />
+    <None Remove="Themes\Weixin\Content\images\rating1.png" />
+    <None Remove="Themes\Weixin\Content\images\rating2.png" />
+    <None Remove="Themes\Weixin\Content\images\remove.png" />
+    <None Remove="Themes\Weixin\Content\images\remove_.png" />
+    <None Remove="Themes\Weixin\Content\images\reply.png" />
+    <None Remove="Themes\Weixin\Content\images\retry.png" />
+    <None Remove="Themes\Weixin\Content\images\return.png" />
+    <None Remove="Themes\Weixin\Content\images\rss.png" />
+    <None Remove="Themes\Weixin\Content\images\shipping.png" />
+    <None Remove="Themes\Weixin\Content\images\shopping-bag.png" />
+    <None Remove="Themes\Weixin\Content\images\social-sprite.png" />
+    <None Remove="Themes\Weixin\Content\images\subscribe-button.png" />
+    <None Remove="Themes\Weixin\Content\images\toggle-black.png" />
+    <None Remove="Themes\Weixin\Content\images\toggle-gray.png" />
+    <None Remove="Themes\Weixin\Content\images\toggle-white.png" />
+    <None Remove="Themes\Weixin\Content\images\topic-type1.png" />
+    <None Remove="Themes\Weixin\Content\images\topic-type2.png" />
+    <None Remove="Themes\Weixin\Content\images\topic-type3.png" />
+    <None Remove="Themes\Weixin\Content\images\view-grid.png" />
+    <None Remove="Themes\Weixin\Content\images\view-list.png" />
+    <None Remove="Themes\Weixin\Content\images\vote-down-selected.png" />
+    <None Remove="Themes\Weixin\Content\images\vote-down.png" />
+    <None Remove="Themes\Weixin\Content\images\vote-up-selected.png" />
+    <None Remove="Themes\Weixin\Content\images\vote-up.png" />
+    <None Remove="Themes\Weixin\Content\images\watch.png" />
+    <None Remove="Themes\Weixin\Content\images\wishlist-button.png" />
+    <None Remove="Themes\Weixin\preview.jpg" />
+    <None Remove="Themes\Weixin\Views\Catalog\CategoryTemplate.ProductsInGridOrLines.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\BillingAddress.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\Completed.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\Confirm.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\OnePageCheckout.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\OpcBillingAddress.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\OpcConfirmOrder.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\OpcPaymentInfo.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\OpcPaymentMethods.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\OpcShippingAddress.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\OpcShippingMethods.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\PaymentInfo.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\PaymentMethod.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\ShippingAddress.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\ShippingMethod.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\_PickupPoints.cshtml" />
+    <None Remove="Themes\Weixin\Views\Home\Index.cshtml" />
+    <None Remove="Themes\Weixin\Views\Product\ProductTemplate.Simple.cshtml" />
+    <None Remove="Themes\Weixin\Views\Product\_AddToCart.cshtml" />
+    <None Remove="Themes\Weixin\Views\Product\_ProductAttributes.cshtml" />
+    <None Remove="Themes\Weixin\Views\Product\_ProductDetailsPictures.cshtml" />
+    <None Remove="Themes\Weixin\Views\Product\_ProductEstimateShipping.cshtml" />
+    <None Remove="Themes\Weixin\Views\Product\_ProductPrice.cshtml" />
+    <None Remove="Themes\Weixin\Views\Product\_ProductTierPrices.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\Components\CheckoutProgress\Default.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\Components\FooterLinks\Default.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\Components\OrderSummary\Default.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\Components\OrderTotals\Default.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\_CheckoutAttributes.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\_ColumnsOne.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\_DiscountBox.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\_Header.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\_JavaScriptDisabledWarning.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\_Notifications.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\_OldInternetExplorerWarning.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\_ProductBox.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\_Root.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\_Root.Head.cshtml" />
+    <None Remove="Themes\Weixin\Views\ShoppingCart\Cart.cshtml" />
+    <None Remove="Themes\Weixin\Views\ShoppingCart\EmailWishlist.cshtml" />
+    <None Remove="Themes\Weixin\Views\ShoppingCart\Wishlist.cshtml" />
+    <None Remove="Themes\Weixin\Views\ShoppingCart\_GiftCardBox.cshtml" />
+    <None Remove="Themes\Weixin\Views\Topic\TopicDetails.cshtml" />
 
     <None Update="Areas\Admin\sitemap.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -61,6 +244,181 @@
 
   <ItemGroup>
     <Folder Include="Plugins\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Themes\Weixin\Views\Catalog\CategoryTemplate.ProductsInGridOrLines.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\BillingAddress.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\Completed.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\Confirm.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\OnePageCheckout.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\OpcBillingAddress.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\OpcConfirmOrder.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\OpcPaymentInfo.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\OpcPaymentMethods.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\OpcShippingAddress.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\OpcShippingMethods.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\PaymentInfo.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\PaymentMethod.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\ShippingAddress.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\ShippingMethod.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\_PickupPoints.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Home\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Product\ProductTemplate.Simple.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Product\_AddToCart.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Product\_ProductAttributes.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Product\_ProductDetailsPictures.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Product\_ProductEstimateShipping.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Product\_ProductPrice.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Product\_ProductTierPrices.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Shared\Components\CheckoutProgress\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Shared\Components\FooterLinks\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Shared\Components\OrderSummary\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Shared\Components\OrderTotals\Default.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Shared\_CheckoutAttributes.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Shared\_ColumnsOne.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Shared\_DiscountBox.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Shared\_Header.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Shared\_JavaScriptDisabledWarning.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Shared\_Notifications.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Shared\_OldInternetExplorerWarning.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Shared\_ProductBox.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Shared\_Root.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Shared\_Root.Head.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\ShoppingCart\Cart.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\ShoppingCart\EmailWishlist.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\ShoppingCart\Wishlist.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\ShoppingCart\_GiftCardBox.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Topic\TopicDetails.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <!-- This target execute after "Build" target.
@@ -118,5 +476,7 @@
       More details here: https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals#concurrent-garbage-collection-->
     <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
   </PropertyGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

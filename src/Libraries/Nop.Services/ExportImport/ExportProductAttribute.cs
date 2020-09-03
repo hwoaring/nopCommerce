@@ -111,5 +111,10 @@
         /// Gets or sets a value indicating whether "price adjustment" is specified as percentage
         /// </summary>
         public bool PriceAdjustmentUsePercentage { get; set; }
+
+        /// <summary>
+        /// 多数量
+        /// </summary>
+        public bool UseQtyMultiple { get; set; }
     }
 }

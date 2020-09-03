@@ -410,6 +410,25 @@ namespace Nop.Services.Customers
         }
 
         /// <summary>
+        /// Gets a customer by openId
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        public virtual Customer GetCustomerByOpenId(string openId)
+        {
+            if (string.IsNullOrEmpty(openId))
+                return null;
+
+            var query = from c in _customerRepository.Table
+                        where c.OpenId == openId
+                        orderby c.Id
+                        select c;
+            var customer = query.FirstOrDefault();
+
+            return customer;
+        }
+
+        /// <summary>
         /// Get customer by email
         /// </summary>
         /// <param name="email">Email</param>
@@ -1224,6 +1243,11 @@ namespace Nop.Services.Customers
         public virtual bool IsVendor(Customer customer, bool onlyActiveCustomerRoles = true)
         {
             return IsInCustomerRole(customer, NopCustomerDefaults.VendorsRoleName, onlyActiveCustomerRoles);
+        }
+
+        public virtual bool IsSupplier(Customer customer, bool onlyActiveCustomerRoles = true)
+        {
+            return IsInCustomerRole(customer, NopCustomerDefaults.SuppliersRoleName, onlyActiveCustomerRoles);
         }
 
         /// <summary>

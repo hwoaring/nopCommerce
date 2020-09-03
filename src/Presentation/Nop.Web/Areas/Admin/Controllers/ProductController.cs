@@ -1595,7 +1595,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Product pictures
 
         public virtual IActionResult ProductPictureAdd(int pictureId, int displayOrder,
-            string overrideAltAttribute, string overrideTitleAttribute, int productId)
+            string overrideAltAttribute, string overrideTitleAttribute, int productId,bool isCoverImage,bool published)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1631,7 +1631,9 @@ namespace Nop.Web.Areas.Admin.Controllers
             {
                 PictureId = pictureId,
                 ProductId = productId,
-                DisplayOrder = displayOrder
+                DisplayOrder = displayOrder,
+                IsCoverImage = isCoverImage,
+                Published = published
             });
 
             return Json(new { Result = true });
@@ -1687,6 +1689,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 model.OverrideTitleAttribute);
 
             productPicture.DisplayOrder = model.DisplayOrder;
+            productPicture.IsCoverImage = model.IsCoverImage;
+            productPicture.Published = model.Published;
             _productService.UpdateProductPicture(productPicture);
 
             return new NullJsonResult();
@@ -2605,6 +2609,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                     Name = predefinedValue.Name,
                     PriceAdjustment = predefinedValue.PriceAdjustment,
                     PriceAdjustmentUsePercentage = predefinedValue.PriceAdjustmentUsePercentage,
+                    UseQtyMultiple = predefinedValue.UseQtyMultiple,
                     WeightAdjustment = predefinedValue.WeightAdjustment,
                     Cost = predefinedValue.Cost,
                     IsPreSelected = predefinedValue.IsPreSelected,

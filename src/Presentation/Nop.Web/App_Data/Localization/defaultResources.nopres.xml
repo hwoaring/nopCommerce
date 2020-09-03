@@ -3372,6 +3372,12 @@
   <LocaleResource Name="Admin.Catalog.Products.Pictures.Fields.DisplayOrder.Hint">
     <Value>Display order of the picture. 1 represents the top of the list.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.Pictures.Fields.IsCoverImage">
+    <Value>Cover Image</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.Pictures.Fields.IscoverImage.Hint">
+    <Value>The picture is cover Image.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Pictures.Fields.OverrideAltAttribute">
     <Value>Alt</Value>
   </LocaleResource>
@@ -3389,6 +3395,12 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Pictures.Fields.Picture.Hint">
     <Value>Choose a picture to upload. If the picture size exceeds your stores max image size setting, it will be automatically resized.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.Pictures.Fields.Published">
+    <Value>Published</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.Pictures.Fields.Published.Hint">
+    <Value>The picture is Published.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Pictures.SaveBeforeEdit">
     <Value>You need to save the product before you can upload pictures for this product page.</Value>
@@ -4783,7 +4795,7 @@
     <Value>Configure</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Payment.Methods.DownloadMorePlugins">
-    <Value><![CDATA[You can download more plugins in our <a href="https://www.nopcommerce.com/extensions?category=payment-modules&utm_source=admin-panel&utm_medium=payment-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
+    <Value><![CDATA[You can download more plugins in our <a href="https://www.yourdomain.com/extensions?category=payment-modules&utm_source=admin-panel&utm_medium=payment-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Payment.Methods.Fields.DisplayOrder">
     <Value>Display order</Value>
@@ -4837,7 +4849,7 @@
     <Value>Manual plugin installation</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Plugins.Description.DownloadMorePlugins">
-    <Value><![CDATA[You can download more nopCommerce plugins in our <a href="https://www.nopcommerce.com/marketplace?utm_source=admin-panel&utm_medium=plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
+    <Value><![CDATA[You can download more nopCommerce plugins in our <a href="https://www.yourdomain.com/marketplace?utm_source=admin-panel&utm_medium=plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Plugins.Description.Step1">
     <Value>Upload the plugin to the /plugins folder in your nopCommerce directory.</Value>
@@ -4981,7 +4993,7 @@
     <Value>Download</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Plugins.OfficialFeed.Instructions">
-    <Value><![CDATA[Here you can find third-party extensions and themes which are developed by our community and partners. They are also available in our <a href="https://www.nopcommerce.com/marketplace?utm_source=admin-panel&utm_medium=official-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
+    <Value><![CDATA[Here you can find third-party extensions and themes which are developed by our community and partners. They are also available in our <a href="https://www.yourdomain.com/marketplace?utm_source=admin-panel&utm_medium=official-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Plugins.OfficialFeed.Name">
     <Value>Name</Value>
@@ -6447,6 +6459,33 @@
   <LocaleResource Name="Admin.Configuration.Settings.Gdpr.LogUserProfileChanges.Hint">
     <Value>Check to log user profile changes (if this feature is enabled in your store).</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Weixin">
+    <Value>Weixin settings</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Weixin.ForcedAccessWeChatBrowser">
+    <Value>Forced Access WeChat Browser</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Weixin.CheckWebBrowser">
+    <Value>Check WebBrowser</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Weixin.UseSnsapiBase">
+    <Value>Use SnsapiBase</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Weixin.Debug">
+    <Value>Weixin Debug</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Weixin.TraceLog">
+    <Value>TraceLog</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Weixin.JSSDKDebug">
+    <Value>JSSDKDebug</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Weixin.JsApiList">
+    <Value>JsApiList</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Weixin.BlockTitle.Common">
+    <Value>Common</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon">
     <Value>General settings</Value>
   </LocaleResource>
@@ -6634,10 +6673,10 @@
     <Value>Default store theme</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.DefaultStoreTheme.GetMore">
-    <Value><![CDATA[You can get more themes in our <a href="https://www.nopcommerce.com/themes?utm_source=admin-panel&utm_medium=theme-settings&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
+    <Value><![CDATA[You can get more themes in our <a href="https://www.yourdomain.com/themes?utm_source=admin-panel&utm_medium=theme-settings&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.DefaultStoreTheme.Hint">
-    <Value>The public store theme. You can download themes from the extensions page at www.nopcommerce.com.</Value>
+    <Value>The public store theme. You can download themes from the extensions page at www.yourdomain.com.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.DefaultTitle">
     <Value>Default page title</Value>
@@ -7422,6 +7461,12 @@
   <LocaleResource Name="Admin.Configuration.Settings.Order.DisableBillingAddressCheckoutStep.Hint">
     <Value>Check to disable "Billing address" step during checkout. Billing address will be pre-filled and saved using the default registration data (this option cannot be used with guest checkout enabled). Also ensure that appropriate address fields that cannot be pre-filled are not required (or disabled). If a customer doesn't have a billing address, then the billing address step will be displayed.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.ContactInfoRequired">
+    <Value>Contact Info Required</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.ContactInfoRequired.Hint">
+    <Value>Check to Contact Infomation Required.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Order.DisableOrderCompletedPage">
     <Value>Disable "Order completed" page</Value>
   </LocaleResource>
@@ -7445,6 +7490,12 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Order.IsReOrderAllowed.Hint">
     <Value>Check if you want to allow customers to make re-orders.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.MaxUnpaidOrderNumber">
+    <Value>Max Unpaid Order Number</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.MaxUnpaidOrderNumber.Hint">
+    <Value>Enter Max Unpaid Order Number.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Order.MinOrderSubtotalAmount">
     <Value>Min order sub-total amount</Value>
@@ -8695,7 +8746,7 @@
     <Value>Configure</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Shipping.Providers.DownloadMorePlugins">
-    <Value><![CDATA[You can download more plugins in our <a href="https://www.nopcommerce.com/extensions?category=shipping-delivery&utm_source=admin-panel&utm_medium=shipping-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
+    <Value><![CDATA[You can download more plugins in our <a href="https://www.yourdomain.com/extensions?category=shipping-delivery&utm_source=admin-panel&utm_medium=shipping-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Shipping.Providers.Fields.DisplayOrder">
     <Value>Display order</Value>
@@ -8884,7 +8935,7 @@
     <Value>Configure</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Tax.Providers.DownloadMorePlugins">
-    <Value><![CDATA[You can download more plugins in our <a href="https://www.nopcommerce.com/extensions?category=taxes&utm_source=admin-panel&utm_medium=tax-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
+    <Value><![CDATA[You can download more plugins in our <a href="https://www.yourdomain.com/extensions?category=taxes&utm_source=admin-panel&utm_medium=tax-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Tax.Providers.Fields.FriendlyName">
     <Value>Friendly name</Value>
@@ -14562,6 +14613,33 @@
   <LocaleResource Name="Admin.Vendors.VendorNotes.Fields.Note.Validation">
     <Value>Vendor note can not be empty.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Weixin">
+    <Value>Weixin</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus">
+    <Value>Menus</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Users">
+    <Value>Users</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.UserTags">
+    <Value>User Tags</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.UserSysTags">
+    <Value>User Sys Tags</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.QrCodeLimits">
+    <Value>QrCodeLimits</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Locations">
+    <Value>Locations</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Messages">
+    <Value>Messages</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.MessageAutoReply">
+    <Value>Message Auto Reply</Value>
+  </LocaleResource>
   <LocaleResource Name="AjaxCart.Failure">
     <Value>Failed to add the product. Please refresh the page and try one more time.</Value>
   </LocaleResource>
@@ -14712,6 +14790,9 @@
   <LocaleResource Name="Checkout.Addresses.Invalid">
     <Value>You have {0} invalid address(es)</Value>
   </LocaleResource>
+  <LocaleResource Name="Checkout.AnonymousCheckoutIsNotAllowed">
+    <Value>Anonymous checkout is not allowed</Value>
+  </LocaleResource>
   <LocaleResource Name="Checkout.BillingAddress">
     <Value>Billing address</Value>
   </LocaleResource>
@@ -14757,6 +14838,9 @@
   <LocaleResource Name="Checkout.NoPaymentMethods">
     <Value>No payment methods available</Value>
   </LocaleResource>
+  <LocaleResource Name="Checkout.OnePageCheckoutIsDisabled">
+    <Value>One page checkout is disabled</Value>
+  </LocaleResource>
   <LocaleResource Name="Checkout.OrderNumber">
     <Value>Order number</Value>
   </LocaleResource>
@@ -14774,6 +14858,15 @@
   </LocaleResource>
   <LocaleResource Name="Checkout.PaymentMethod">
     <Value>Payment method</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.PaymentMethodIsNotSelected">
+    <Value>Payment method is not selected</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.PaymentInformationIsNotEntered">
+    <Value>Payment information is not entered</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.PickupPointIsNotAllowed">
+    <Value>Pickup point is not allowed</Value>
   </LocaleResource>
   <LocaleResource Name="Checkout.PickupPoints">
     <Value>Pickup</Value>
@@ -14820,6 +14913,15 @@
   <LocaleResource Name="Checkout.SelectBillingAddressOrEnterNewOne">
     <Value>Select a billing address from your address book or enter a new address.</Value>
   </LocaleResource>
+  <LocaleResource Name="Checkout.SelectedPaymentMethodCantBeParsed">
+    <Value>Selected payment method can't be parsed</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.SelectedShippingMethodCantBeParsed">
+    <Value>Selected shipping method can't be parsed</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.SelectedShippingMethodCantBeLoaded">
+    <Value>Selected shipping method can't be loaded</Value>
+  </LocaleResource>
   <LocaleResource Name="Checkout.SelectPaymentMethod">
     <Value>Select payment method</Value>
   </LocaleResource>
@@ -14843,6 +14945,9 @@
   </LocaleResource>
   <LocaleResource Name="Checkout.ShippingIsNotAllowed">
     <Value>Shipping is not allowed</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.ShippingIsNotRequired">
+    <Value>Shipping is not required</Value>
   </LocaleResource>
   <LocaleResource Name="Checkout.ShippingMethod">
     <Value>Shipping method</Value>
@@ -14882,6 +14987,9 @@
   </LocaleResource>
   <LocaleResource Name="Checkout.UseRewardPoints">
     <Value>Use my reward points, {0} reward points ({1}) available for this order</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.YourCartIsEmpty">
+    <Value>Your cart is empty</Value>
   </LocaleResource>
   <LocaleResource Name="Checkout.YourOrderHasBeenSuccessfullyProcessed">
     <Value>Your order has been successfully processed!</Value>

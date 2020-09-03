@@ -18,6 +18,7 @@ using Nop.Web.Factories;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework.Themes;
 using Nop.Web.Models.Common;
+using Senparc.Weixin.MP.CommonService.Mvc.Filters;
 
 namespace Nop.Web.Controllers
 {
@@ -281,6 +282,8 @@ namespace Nop.Web.Controllers
         //SEO sitemap page
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
+        //available even when weixin oauth2
+        [CheckWeixinOAuth(true)]
         public virtual IActionResult SitemapXml(int? id)
         {
             var siteMap = _sitemapXmlSettings.SitemapXmlEnabled
@@ -306,6 +309,8 @@ namespace Nop.Web.Controllers
 
         [HttpPost]
         [IgnoreAntiforgeryToken]
+        //available even when weixin oauth2
+        [CheckWeixinOAuth(true)]
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
         //available even when navigation is not allowed
@@ -322,6 +327,8 @@ namespace Nop.Web.Controllers
         }
 
         //robots.txt file
+        //available even when weixin oauth2
+        [CheckWeixinOAuth(true)]
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
         //available even when navigation is not allowed

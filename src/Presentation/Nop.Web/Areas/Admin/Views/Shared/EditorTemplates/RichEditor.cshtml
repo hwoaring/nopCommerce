@@ -29,8 +29,11 @@
 
     var extended_valid_elements = new List<string>();
     var valid_children = new List<string>();
-    
-    if(allowJavaScript)
+
+    extended_valid_elements.Add("i[class|style|aria-hidden]");
+    extended_valid_elements.Add("span[class|style|onclick]");
+
+    if (allowJavaScript)
     {
         extended_valid_elements.Add("script[charset|defer|language|src|type]");
         valid_children.Add("+body[script]");

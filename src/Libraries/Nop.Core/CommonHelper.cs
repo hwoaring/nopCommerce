@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Security.Cryptography;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using Nop.Core.Infrastructure;
 
@@ -34,6 +36,21 @@ namespace Nop.Core
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// 字符串转LONG数字
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static long StringToLong(string str)
+        {
+            if (string.IsNullOrEmpty(str))
+                return 0L;
+
+            var md5Bytes = new MD5CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(str));
+
+            return Math.Abs(BitConverter.ToInt64(md5Bytes));
+        }
 
         /// <summary>
         /// Ensures the subscriber email or throw.

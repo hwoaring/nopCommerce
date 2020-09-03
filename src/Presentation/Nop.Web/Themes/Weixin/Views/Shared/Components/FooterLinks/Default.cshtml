@@ -1,0 +1,29 @@
+﻿@model FooterLinksModel
+@inject Nop.Core.IWebHelper webHelper
+
+    <div class="de_row de_btn_bar" id="bottom_btn_row">
+        <div class="icon_btn icon_dong" id="shopIM">
+            <i class="icon fa fa-share" aria-hidden="true"></i>
+            <span class="txt">分享</span>
+        </div>
+        @if (Model.ShoppingCartEnabled)
+        {
+            <div class="icon_btn icon_cart" id="gotoCart">
+                <a href="/cart">
+                    <span class="add_num" id="popone">+1</span>
+                    <i class="icon fa fa-shopping-cart" aria-hidden="true"><span class="num cart-qty" id="cartNum">@T("ShoppingCart.HeaderQuantity", Model.ShoppingCartItems)</span></i>
+                    <span class="txt">购物车</span>
+                </a>
+            </div>
+        }
+        <div class="de_span btn_group">
+            <div class="de_row">
+                <div class="btn btn_m_red" id="addCart2">
+                    <span class="txt">加入购物车</span>
+                </div>
+                <div class="btn btn_orange" id="buyBtn2">
+                    <span class="txt">立即购买</span>
+                </div>
+            </div>
+        </div>
+    </div>

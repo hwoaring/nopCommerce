@@ -11,6 +11,7 @@ using Nop.Core.Domain.Forums;
 using Nop.Core.Domain.Gdpr;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Logging;
+using Nop.Core.Domain.Marketing;
 using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.News;
@@ -20,10 +21,12 @@ using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Seo;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Stores;
+using Nop.Core.Domain.Suppliers;
 using Nop.Core.Domain.Tasks;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Topics;
 using Nop.Core.Domain.Vendors;
+using Nop.Core.Domain.Weixin;
 using Nop.Core.Infrastructure.Mapper;
 using Nop.Services.Authentication.External;
 using Nop.Services.Cms;
@@ -54,11 +57,13 @@ using Nop.Web.Areas.Admin.Models.Settings;
 using Nop.Web.Areas.Admin.Models.Shipping;
 using Nop.Web.Areas.Admin.Models.ShoppingCart;
 using Nop.Web.Areas.Admin.Models.Stores;
+using Nop.Web.Areas.Admin.Models.Suppliers;
 using Nop.Web.Areas.Admin.Models.Tasks;
 using Nop.Web.Areas.Admin.Models.Tax;
 using Nop.Web.Areas.Admin.Models.Templates;
 using Nop.Web.Areas.Admin.Models.Topics;
 using Nop.Web.Areas.Admin.Models.Vendors;
+using Nop.Web.Areas.Admin.Models.Weixin;
 using Nop.Web.Framework.Models;
 
 namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
@@ -86,6 +91,7 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
             CreateGdprMaps();
             CreateLocalizationMaps();
             CreateLoggingMaps();
+            CreateMarketingMaps();
             CreateMediaMaps();
             CreateMessagesMaps();
             CreateNewsMaps();
@@ -97,11 +103,13 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
             CreateSeoMaps();
             CreateShippingMaps();
             CreateStoresMaps();
+            CreateSuppliersMaps();
             CreateTasksMaps();
             CreateTaxMaps();
             CreateTopicsMaps();
             CreateVendorsMaps();
             CreateWarehouseMaps();
+            CreateWeixinMaps();
 
             //add some generic mapping rules
             ForAllMaps((mapConfiguration, map) =>
@@ -940,6 +948,97 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
                 .ForMember(settings => settings.PrivateMessagesPageSize, options => options.Ignore())
                 .ForMember(settings => settings.StrippedTopicMaxLength, options => options.Ignore())
                 .ForMember(settings => settings.TopicSubjectMaxLength, options => options.Ignore());
+        }
+
+        /// <summary>
+        /// Create Marketing maps 
+        /// </summary>
+        protected virtual void CreateMarketingMaps()
+        {
+
+        }
+
+        /// <summary>
+        /// Create Suppliers maps 
+        /// </summary>
+        protected virtual void CreateSuppliersMaps()
+        {
+            CreateMap<SupplierVoucherCoupon, SupplierVoucherCouponModel>()
+                .ForMember(model => model.QrCodeSupplierVoucherCouponSearchModel, options => options.Ignore())
+                .ForMember(model => model.ProductSupplierVoucherCouponSearchModel, options => options.Ignore());
+            CreateMap<SupplierVoucherCouponModel, SupplierVoucherCoupon>();
+
+            CreateMap<SupplierVoucherCoupon, AddSupplierVoucherCouponRelatedCouponModel>()
+                .ForMember(model => model.SupplierNameString, options => options.Ignore())
+                .ForMember(model => model.SupplierShopNameString, options => options.Ignore())
+                .ForMember(model => model.AssetTypeNameString, options => options.Ignore());
+            CreateMap<AddSupplierVoucherCouponRelatedCouponModel, SupplierVoucherCoupon>();
+
+            CreateMap<QrCodeSupplierVoucherCouponMapping, QrCodeSupplierVoucherCouponModel>()
+                .ForMember(model => model.SupplierVoucherCouponSysName, options => options.Ignore())
+                .ForMember(model => model.QrCodeSysName, options => options.Ignore());
+            CreateMap<QrCodeSupplierVoucherCouponModel, QrCodeSupplierVoucherCouponMapping>();
+
+            CreateMap<Supplier, SupplierModel>();
+            CreateMap<SupplierModel, Supplier>();
+
+            CreateMap<SupplierShop, SupplierShopModel>();
+            CreateMap<SupplierShopModel, SupplierShop>();
+
+        }
+
+        /// <summary>
+        /// Create weixin maps 
+        /// </summary>
+        protected virtual void CreateWeixinMaps()
+        {
+
+            CreateMap<WeixinSettings, WeixinSettingsModel>()
+                .ForMember(model => model.ForcedAccessWeChatBrowser_OverrideForStore, options => options.Ignore())
+                .ForMember(model => model.CheckWebBrowser_OverrideForStore, options => options.Ignore())
+                .ForMember(model => model.UseSnsapiBase_OverrideForStore, options => options.Ignore())
+                .ForMember(model => model.Debug_OverrideForStore, options => options.Ignore())
+                .ForMember(model => model.TraceLog_OverrideForStore, options => options.Ignore())
+                .ForMember(model => model.JSSDKDebug_OverrideForStore, options => options.Ignore())
+                .ForMember(model => model.JsApiList_OverrideForStore, options => options.Ignore());
+            CreateMap<WeixinSettingsModel, WeixinSettings>();
+
+            CreateMap<WUser, UserModel>()
+                .ForMember(model => model.HeadImgUrl, options => options.Ignore())
+                .ForMember(model => model.SubscribeTime, options => options.Ignore())
+                .ForMember(model => model.UnSubscribeTime, options => options.Ignore())
+                .ForMember(model => model.UpdateTime, options => options.Ignore())
+                .ForMember(model => model.CreatTime, options => options.Ignore());
+
+            CreateMap<UserModel, WUser>()
+                .ForMember(entity => entity.HeadImgUrl, options => options.Ignore())
+                .ForMember(entity => entity.SubscribeTime, options => options.Ignore())
+                .ForMember(entity => entity.UnSubscribeTime, options => options.Ignore())
+                .ForMember(entity => entity.UpdateTime, options => options.Ignore())
+                .ForMember(entity => entity.CreatTime, options => options.Ignore());
+
+            CreateMap<WQrCodeLimit, QrCodeLimitModel>()
+                .ForMember(model => model.BindingSource, options => options.Ignore())
+                .ForMember(model => model.QrCodeImageUrl, options => options.Ignore());
+            CreateMap<QrCodeLimitModel, WQrCodeLimit>();
+
+            CreateMap<WQrCodeLimitUserMapping, QrCodeLimitUserModel>()
+                .ForMember(model => model.UserNameTemp, options => options.Ignore());
+            CreateMap<QrCodeLimitUserModel, WQrCodeLimitUserMapping>();
+
+            CreateMap<WUser, AddUserRelatedUserModel>();
+            CreateMap<AddUserRelatedUserModel, WUser>();
+
+            CreateMap<QrCodeLimitBindingSource, QrCodeLimitBindingSourceModel>();
+            CreateMap<QrCodeLimitBindingSourceModel, QrCodeLimitBindingSource>();
+
+            CreateMap<WMenu, MenuModel>();
+            CreateMap<MenuModel, WMenu>();
+
+            CreateMap<WMenuButton, MenuButtonModel>()
+                .ForMember(model => model.MenuButtonTypeNameString, options => options.Ignore());
+            CreateMap<MenuButtonModel, WMenuButton>();
+
         }
 
         /// <summary>

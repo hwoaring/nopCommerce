@@ -1,0 +1,30 @@
+﻿@model ProductOverviewModel
+@using Nop.Core
+@using Nop.Core.Domain.Catalog
+@using Nop.Core.Domain.Orders
+@using Nop.Core.Domain.Tax
+@inject CatalogSettings catalogSettings
+@inject IWorkContext workContext
+@{
+
+}
+
+<li class="product-item" data-productid="@Model.Id">
+    <a class="item" href="@Url.RouteUrl("Product", new { SeName = Model.SeName })" title="@Model.DefaultPictureModel.Title">
+        <div class="pro-pic"><span><img alt="@Model.DefaultPictureModel.AlternateText" src="@Model.DefaultPictureModel.ImageUrl" title="@Model.DefaultPictureModel.Title" /></span></div>
+        <div class="pro-info">
+            <h3 class="tit">@Model.Name</h3>
+            <div class="pingyu"></div>
+            <div class="attr">
+                <span class="sx">国标优级</span>
+                <span class="sx">浓香型</span>
+                <span class="sx">52%vol</span>
+                <span class="sx">5000ml</span>
+            </div>
+        </div>
+        <div class="pro-buy">
+            <span class="price">@Model.ProductPrice.Price</span>
+            <span class="shopping"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+        </div>
+    </a>
+</li>

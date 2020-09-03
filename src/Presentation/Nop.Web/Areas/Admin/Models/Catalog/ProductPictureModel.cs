@@ -29,6 +29,11 @@ namespace Nop.Web.Areas.Admin.Models.Catalog
         [NopResourceDisplayName("Admin.Catalog.Products.Pictures.Fields.OverrideTitleAttribute")]
         public string OverrideTitleAttribute { get; set; }
 
+        [NopResourceDisplayName("Admin.Catalog.Products.Pictures.Fields.IsCoverImage")]
+        public bool IsCoverImage { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.Pictures.Fields.Published")]
+        public bool Published { get; set; }
         #endregion
     }
 }

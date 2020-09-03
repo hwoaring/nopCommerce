@@ -21,6 +21,9 @@ namespace Nop.Data.Mapping.Builders.Vendors
                 .WithColumn(nameof(Vendor.Email)).AsString(400).Nullable()
                 .WithColumn(nameof(Vendor.MetaKeywords)).AsString(400).Nullable()
                 .WithColumn(nameof(Vendor.MetaTitle)).AsString(400).Nullable()
+                .WithColumn(nameof(Vendor.MetaImageUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Vendor.MetaLinkUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Vendor.ShareImageUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Vendor.PageSizeOptions)).AsString(200).Nullable();
         }
 
