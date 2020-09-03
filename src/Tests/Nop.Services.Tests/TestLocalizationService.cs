@@ -1,31 +1,29 @@
 ﻿using Moq;
 using Nop.Core;
 using Nop.Core.Caching;
-using Nop.Core.Data;
-using Nop.Core.Domain.Localization;
 using Nop.Data;
+using Nop.Core.Domain.Localization;
 using Nop.Services.Configuration;
-using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
+using Nop.Tests;
 
 namespace Nop.Services.Tests
 {
     public class TestLocalizationService : LocalizationService
     {
-        public TestLocalizationService(IDataProvider dataProvider, IDbContext dbContext, IEventPublisher eventPublisher, ILanguageService languageService, ILocalizedEntityService localizedEntityService, ILogger logger, IRepository<LocaleStringResource> lsrRepository, ISettingService settingService, IStaticCacheManager cacheManager, IWorkContext workContext, LocalizationSettings localizationSettings) : base(dataProvider, dbContext, eventPublisher, languageService, localizedEntityService, logger, lsrRepository, settingService, cacheManager, workContext, localizationSettings)
+        public TestLocalizationService(ILanguageService languageService, ILocalizedEntityService localizedEntityService, ILogger logger, IRepository<LocaleStringResource> lsrRepository, ISettingService settingService, IStaticCacheManager staticCacheManager, IWorkContext workContext, LocalizationSettings localizationSettings) 
+            : base(languageService, localizedEntityService, logger, lsrRepository, settingService, staticCacheManager, workContext, localizationSettings)
         {
         }
 
         public static TestLocalizationService Init()
         {
-            return new TestLocalizationService(new  Mock<IDataProvider>().Object,
-                new  Mock<IDbContext>().Object,
-                new  Mock<IEventPublisher>().Object,
+            return new TestLocalizationService(
                 new  Mock<ILanguageService>().Object,
                 new  Mock<ILocalizedEntityService>().Object,
                 new  Mock<ILogger>().Object,
-                new  Mock<IRepository<LocaleStringResource>>().Object,
+                new  FakeRepository<LocaleStringResource>(),
                 new  Mock<ISettingService>().Object,
                 new  Mock<IStaticCacheManager>().Object,
                 new  Mock<IWorkContext>().Object,

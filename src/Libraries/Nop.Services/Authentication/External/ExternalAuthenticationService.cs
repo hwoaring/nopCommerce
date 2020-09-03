@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
-using Nop.Core.Data;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Localization;
+using Nop.Core.Events;
+using Nop.Data;
 using Nop.Services.Common;
 using Nop.Services.Customers;
-using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Messages;
@@ -98,8 +98,7 @@ namespace Nop.Services.Authentication.External
 
             //account is already assigned to another user
             if (currentLoggedInUser.Id != associatedUser.Id)
-                //TODO create locale for error
-                return ErrorAuthentication(new[] { "Account is already assigned" }, returnUrl);
+                return ErrorAuthentication(new[] { _localizationService.GetResource("Account.AssociatedExternalAuth.AccountAlreadyAssigned") }, returnUrl);
 
             //or the user try to log in as himself. bit weird
             return SuccessfulAuthentication(returnUrl);
@@ -270,11 +269,11 @@ namespace Nop.Services.Authentication.External
             if (parameters == null)
                 throw new ArgumentNullException(nameof(parameters));
 
-            if (!_authenticationPluginManager.IsPluginActive(parameters.ProviderSystemName))
+            if (!_authenticationPluginManager.IsPluginActive(parameters.ProviderSystemName, _workContext.CurrentCustomer, _storeContext.CurrentStore.Id))
                 return ErrorAuthentication(new[] { "External authentication method cannot be loaded" }, returnUrl);
 
             //get current logged-in user
-            var currentLoggedInUser = _workContext.CurrentCustomer.IsRegistered() ? _workContext.CurrentCustomer : null;
+            var currentLoggedInUser = _customerService.IsRegistered(_workContext.CurrentCustomer) ? _workContext.CurrentCustomer : null;
 
             //authenticate associated user if already exists
             var associatedUser = GetUserByExternalAuthenticationParameters(parameters);
@@ -307,7 +306,7 @@ namespace Nop.Services.Authentication.External
                 ProviderSystemName = parameters.ProviderSystemName
             };
 
-            _externalAuthenticationRecordRepository.Insert(externalAuthenticationRecord);
+            _externalAuthenticationRecordRepository.Insert(externalAuthenticationRecord, false);
         }
 
         /// <summary>
@@ -329,6 +328,31 @@ namespace Nop.Services.Authentication.External
         }
 
         /// <summary>
+        /// Get the external authentication records by identifier
+        /// </summary>
+        /// <param name="externalAuthenticationRecordId">External authentication record identifier</param>
+        /// <returns>Result</returns>
+        public virtual ExternalAuthenticationRecord GetExternalAuthenticationRecordById(int externalAuthenticationRecordId)
+        {
+            return _externalAuthenticationRecordRepository.GetById(externalAuthenticationRecordId, cache => default);
+        }
+
+        /// <summary>
+        /// Get list of the external authentication records by customer
+        /// </summary>
+        /// <param name="customer">Customer</param>
+        /// <returns>Result</returns>
+        public virtual IList<ExternalAuthenticationRecord> GetCustomerExternalAuthenticationRecords(Customer customer)
+        {
+            if (customer == null)
+                throw new ArgumentNullException(nameof(customer));
+
+            var associationRecords = _externalAuthenticationRecordRepository.Table.Where(ear => ear.CustomerId == customer.Id);
+
+            return associationRecords.ToList();
+        }
+
+        /// <summary>
         /// Remove the association
         /// </summary>
         /// <param name="parameters">External authentication parameters</param>
@@ -341,7 +365,7 @@ namespace Nop.Services.Authentication.External
                 record.ExternalIdentifier.Equals(parameters.ExternalIdentifier) && record.ProviderSystemName.Equals(parameters.ProviderSystemName));
 
             if (associationRecord != null)
-                _externalAuthenticationRecordRepository.Delete(associationRecord);
+                _externalAuthenticationRecordRepository.Delete(associationRecord, false);
         }
 
         /// <summary>
@@ -353,7 +377,7 @@ namespace Nop.Services.Authentication.External
             if (externalAuthenticationRecord == null)
                 throw new ArgumentNullException(nameof(externalAuthenticationRecord));
 
-            _externalAuthenticationRecordRepository.Delete(externalAuthenticationRecord);
+            _externalAuthenticationRecordRepository.Delete(externalAuthenticationRecord, false);
         }
 
         #endregion

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
 using Moq;
 using Nop.Core;
+using Nop.Core.Configuration;
 using Nop.Core.Infrastructure;
 using Nop.Services.Plugins;
 using Nop.Services.Tests.Directory;
@@ -9,6 +11,7 @@ using Nop.Services.Tests.Discounts;
 using Nop.Services.Tests.Payments;
 using Nop.Services.Tests.Shipping;
 using Nop.Services.Tests.Tax;
+using Nop.Tests;
 using NUnit.Framework;
 
 namespace Nop.Services.Tests
@@ -16,8 +19,29 @@ namespace Nop.Services.Tests
     [TestFixture]
     public abstract class ServiceTest
     {
+        protected readonly FakeDataStore _fakeDataStore = new FakeDataStore();
+
         [SetUp]
-        public void SetUp()
+        public virtual void SetUp()
+        {
+            Singleton<NopConfig>.Instance = new NopConfig
+            {
+                DefaultCacheTime = 60,
+                ShortTermCacheTime = 3,
+                BundledFilesCacheTime = 120
+            };
+        }
+
+        public void RunWithTestServiceProvider(Action action)
+        {
+            EngineContext.Replace(new FakeNopEngine());
+
+            action();
+
+            EngineContext.Replace(null);
+        }
+        
+        protected ServiceTest()
         {
             //init plugins
             InitPlugins();
@@ -25,10 +49,10 @@ namespace Nop.Services.Tests
 
         private void InitPlugins()
         {
-            var hostingEnvironment = new Mock<IHostingEnvironment>();
-            hostingEnvironment.Setup(x => x.ContentRootPath).Returns(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            hostingEnvironment.Setup(x => x.WebRootPath).Returns(System.IO.Directory.GetCurrentDirectory());
-            CommonHelper.DefaultFileProvider = new NopFileProvider(hostingEnvironment.Object);
+            var webHostEnvironment = new Mock<IWebHostEnvironment>();
+            webHostEnvironment.Setup(x => x.ContentRootPath).Returns(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            webHostEnvironment.Setup(x => x.WebRootPath).Returns(System.IO.Directory.GetCurrentDirectory());
+            CommonHelper.DefaultFileProvider = new NopFileProvider(webHostEnvironment.Object);
 
             Singleton<IPluginsInfo>.Instance = new PluginsInfo(CommonHelper.DefaultFileProvider)
             {
@@ -71,6 +95,16 @@ namespace Nop.Services.Tests
                     }
                 }
             };
+        }
+        
+        public class FakeNopEngine : NopEngine
+        {
+            public FakeNopEngine(IServiceProvider serviceProvider = null)
+            {
+                ServiceProvider = serviceProvider ?? new TestServiceProvider();
+            }
+
+            public override IServiceProvider ServiceProvider { get; }
         }
     }
 }

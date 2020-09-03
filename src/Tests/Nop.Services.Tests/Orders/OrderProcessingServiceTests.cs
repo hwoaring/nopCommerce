@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using Moq;
 using Nop.Core;
-using Nop.Core.Data;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
@@ -13,19 +13,18 @@ using Nop.Core.Domain.Payments;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Stores;
 using Nop.Core.Domain.Tax;
+using Nop.Core.Events;
 using Nop.Services.Affiliates;
 using Nop.Services.Catalog;
 using Nop.Services.Common;
 using Nop.Services.Customers;
 using Nop.Services.Directory;
 using Nop.Services.Discounts;
-using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Messages;
 using Nop.Services.Orders;
 using Nop.Services.Payments;
-using Nop.Services.Plugins;
 using Nop.Services.Security;
 using Nop.Services.Shipping;
 using Nop.Services.Shipping.Pickup;
@@ -56,13 +55,14 @@ namespace Nop.Services.Tests.Orders
         private Mock<IProductService> _productService;
         private Mock<IDiscountService> _discountService;
         private Mock<ICategoryService> _categoryService;
+        private Mock<ICountryService> _countryService;
         private Mock<IManufacturerService> _manufacturerService;
         private Mock<IProductAttributeParser> _productAttributeParser;
         private PriceCalculationService _priceCalcService;
         private Mock<IEventPublisher> _eventPublisher;
         private Mock<ILocalizationService> _localizationService;
-        private Mock<IRepository<ShippingMethod>> _shippingMethodRepository;
-        private Mock<IRepository<Warehouse>> _warehouseRepository;
+        private FakeRepository<ShippingMethod> _shippingMethodRepository;
+        private FakeRepository<Warehouse> _warehouseRepository;
         private NullLogger _logger;
         private ShippingService _shippingService;
         private Mock<IShipmentService> _shipmentService;
@@ -71,13 +71,16 @@ namespace Nop.Services.Tests.Orders
         private Mock<IGiftCardService> _giftCardService;
         private Mock<IGenericAttributeService> _genericAttributeService;
         private Mock<IGeoLookupService> _geoLookupService;
-        private Mock<ICountryService> _countryService;
         private Mock<IStateProvinceService> _stateProvinceService;
         private Mock<IAddressService> _addressService;
         private TaxService _taxService;
         private Mock<IRewardPointService> _rewardPointService;
         private OrderTotalCalculationService _orderTotalCalcService;
-        private Mock<IOrderService> _orderService;
+
+        private IOrderService _orderService;
+        private FakeRepository<RecurringPayment> _recurringPaymentRepository;
+        private FakeRepository<RecurringPaymentHistory> _recurringPaymentHistoryRepository;
+
         private Mock<IWebHelper> _webHelper;
         private Mock<ILanguageService> _languageService;
         private Mock<IPriceFormatter> _priceFormatter;
@@ -103,15 +106,15 @@ namespace Nop.Services.Tests.Orders
         public new void SetUp()
         {
             _productService = new Mock<IProductService>();
-            _storeContext = new Mock<IStoreContext>();
+
             _discountService = new Mock<IDiscountService>();
             _categoryService = new Mock<ICategoryService>();
             _manufacturerService = new Mock<IManufacturerService>();
             _productAttributeParser = new Mock<IProductAttributeParser>();
             _eventPublisher = new Mock<IEventPublisher>();
             _localizationService = new Mock<ILocalizationService>();
-            _shippingMethodRepository = new Mock<IRepository<ShippingMethod>>();
-            _warehouseRepository = new Mock<IRepository<Warehouse>>();
+            _shippingMethodRepository = new FakeRepository<ShippingMethod>();
+            _warehouseRepository = new FakeRepository<Warehouse>();
             _shipmentService = new Mock<IShipmentService>();
             _paymentService = new Mock<IPaymentService>();
             _checkoutAttributeParser = new Mock<ICheckoutAttributeParser>();
@@ -120,10 +123,8 @@ namespace Nop.Services.Tests.Orders
             _geoLookupService = new Mock<IGeoLookupService>();
             _countryService = new Mock<ICountryService>();
             _stateProvinceService = new Mock<IStateProvinceService>();
-            _eventPublisher = new Mock<IEventPublisher>();
             _addressService = new Mock<IAddressService>();
             _rewardPointService = new Mock<IRewardPointService>();
-            _orderService = new Mock<IOrderService>();
             _webHelper = new Mock<IWebHelper>();
             _languageService = new Mock<ILanguageService>();
             _priceFormatter = new Mock<IPriceFormatter>();
@@ -141,34 +142,33 @@ namespace Nop.Services.Tests.Orders
             _customNumberFormatter = new Mock<ICustomNumberFormatter>();
             _rewardPointService = new Mock<IRewardPointService>();
 
+
             _workContext = null;
 
-            _store = new Store { Id = 1 };
+            //setup
 
+            _storeContext = new Mock<IStoreContext>();
+            _store = new Store { Id = 1 };
             _storeContext.Setup(x => x.CurrentStore).Returns(_store);
 
-            _shoppingCartSettings = new ShoppingCartSettings();
             _catalogSettings = new CatalogSettings();
-
-            var cacheManager = new TestCacheManager();
-
+            var staticCacheManager = new TestCacheManager();
             _currencySettings = new CurrencySettings();
 
             //price calculation service
             _priceCalcService = new PriceCalculationService(_catalogSettings, _currencySettings, _categoryService.Object,
-                _currencyService.Object, _discountService.Object, _manufacturerService.Object, _productAttributeParser.Object,
-                _productService.Object, cacheManager, _storeContext.Object, _workContext, _shoppingCartSettings);
+                _currencyService.Object, _customerService.Object, _discountService.Object, _manufacturerService.Object, _productAttributeParser.Object,
+                _productService.Object, staticCacheManager, _storeContext.Object, _workContext);
 
             _eventPublisher.Setup(x => x.Publish(It.IsAny<object>()));
 
-            var loger = new Mock<ILogger>();
+            var pluginService = new FakePluginService(_catalogSettings);
+            _paymentPluginManager = new PaymentPluginManager(_customerService.Object, pluginService, null, _paymentSettings);
+            _pickupPluginManager = new PickupPluginManager(_customerService.Object, pluginService, _shippingSettings);
+            _shippingPluginManager = new ShippingPluginManager(_customerService.Object, pluginService, _shippingSettings);
+            _taxPluginManager = new TaxPluginManager(_customerService.Object, pluginService, _taxSettings);
 
-            var pluginService = new PluginService(_catalogSettings, _customerService.Object, loger.Object, CommonHelper.DefaultFileProvider, _webHelper.Object);
-            _paymentPluginManager = new PaymentPluginManager(pluginService, null, _paymentSettings);
-            _pickupPluginManager = new PickupPluginManager(pluginService, _shippingSettings);
-            _shippingPluginManager = new ShippingPluginManager(pluginService, _shippingSettings);
-            _taxPluginManager = new TaxPluginManager(pluginService, _taxSettings);
-
+            _shoppingCartSettings = new ShoppingCartSettings();
             //shipping
             _shippingSettings = new ShippingSettings
             {
@@ -180,10 +180,12 @@ namespace Nop.Services.Tests.Orders
             _customerSettings = new CustomerSettings();
             _addressSettings = new AddressSettings();
 
+            var shippingMethodCountryMappingRepository = new FakeRepository<ShippingMethodCountryMapping>();
+
             _shippingService = new ShippingService(_addressService.Object,
-                cacheManager,
                 _checkoutAttributeParser.Object,
-                _eventPublisher.Object,
+                _countryService.Object,
+                _customerService.Object,
                 _genericAttributeService.Object,
                 _localizationService.Object,
                 _logger,
@@ -191,9 +193,11 @@ namespace Nop.Services.Tests.Orders
                 _priceCalcService,
                 _productAttributeParser.Object,
                 _productService.Object,
-                _shippingMethodRepository.Object,
-                _warehouseRepository.Object,
+                _shippingMethodRepository,
+                shippingMethodCountryMappingRepository,
+                _warehouseRepository,
                 _shippingPluginManager,
+                _stateProvinceService.Object,
                 _storeContext.Object,
                 _shippingSettings,
                 _shoppingCartSettings);
@@ -212,11 +216,12 @@ namespace Nop.Services.Tests.Orders
                 _customerSettings,
                 _addressService.Object,
                 _countryService.Object,
+                _customerService.Object,
+                _eventPublisher.Object,
                 _genericAttributeService.Object,
                 _geoLookupService.Object,
                 _logger,
                 _stateProvinceService.Object,
-                cacheManager,
                 _storeContext.Object,
                 _taxPluginManager,
                 _webHelper.Object,
@@ -226,13 +231,23 @@ namespace Nop.Services.Tests.Orders
 
             _rewardPointsSettings = new RewardPointsSettings();
 
+            _recurringPaymentRepository = new FakeRepository<RecurringPayment>();
+
+            _recurringPaymentHistoryRepository = new FakeRepository<RecurringPaymentHistory>();
+           
+            _orderService = new OrderService(null, null, null, null, null, null, null, null, _recurringPaymentRepository, _recurringPaymentHistoryRepository, _shipmentService.Object);
+            
             _orderTotalCalcService = new OrderTotalCalculationService(_catalogSettings,
+                _addressService.Object,
                 _checkoutAttributeParser.Object,
+                _customerService.Object,
                 _discountService.Object,
                 _genericAttributeService.Object,
                 _giftCardService.Object,
+                _orderService,
                 _paymentService.Object,
                 _priceCalcService,
+                _productService.Object,
                 _rewardPointService.Object,
                 _shippingPluginManager,
                 _shippingService,
@@ -259,6 +274,7 @@ namespace Nop.Services.Tests.Orders
             _eventPublisher.Setup(x => x.Publish(It.IsAny<object>()));
 
             _orderProcessingService = new OrderProcessingService(_currencySettings,
+                _addressService.Object,
                 _affiliateService.Object,
                 _checkoutAttributeFormatter.Object,
                 _countryService.Object,
@@ -274,7 +290,7 @@ namespace Nop.Services.Tests.Orders
                 _languageService.Object,
                 _localizationService.Object,
                 _logger,
-                _orderService.Object,
+                _orderService,
                 _orderTotalCalcService,
                 _paymentPluginManager,
                 _paymentService.Object,
@@ -286,11 +302,9 @@ namespace Nop.Services.Tests.Orders
                 _productService.Object,
                 _rewardPointService.Object,
                 _shipmentService.Object,
-                _shippingPluginManager,
                 _shippingService,
                 _shoppingCartService.Object,
                 _stateProvinceService.Object,
-                _storeContext.Object,
                 _taxService,
                 _vendorService.Object,
                 _webHelper.Object,
@@ -316,9 +330,9 @@ namespace Nop.Services.Tests.Orders
                         order.PaymentStatus = ps;
                         order.ShippingStatus = ss;
                         if (os != OrderStatus.Cancelled)
-                            _orderProcessingService.CanCancelOrder(order).ShouldBeTrue();
+                            _orderProcessingService.CanCancelOrder(order).Should().BeTrue();
                         else
-                            _orderProcessingService.CanCancelOrder(order).ShouldBeFalse();
+                            _orderProcessingService.CanCancelOrder(order).Should().BeFalse();
                     }
         }
 
@@ -334,9 +348,9 @@ namespace Nop.Services.Tests.Orders
                         order.PaymentStatus = ps;
                         order.ShippingStatus = ss;
                         if (os != OrderStatus.Cancelled && ps == PaymentStatus.Pending)
-                            _orderProcessingService.CanMarkOrderAsAuthorized(order).ShouldBeTrue();
+                            _orderProcessingService.CanMarkOrderAsAuthorized(order).Should().BeTrue();
                         else
-                            _orderProcessingService.CanMarkOrderAsAuthorized(order).ShouldBeFalse();
+                            _orderProcessingService.CanMarkOrderAsAuthorized(order).Should().BeFalse();
                     }
         }
 
@@ -359,9 +373,9 @@ namespace Nop.Services.Tests.Orders
 
                         if (os != OrderStatus.Cancelled && os != OrderStatus.Pending
                             && ps == PaymentStatus.Authorized)
-                            _orderProcessingService.CanCapture(order).ShouldBeTrue();
+                            _orderProcessingService.CanCapture(order).Should().BeTrue();
                         else
-                            _orderProcessingService.CanCapture(order).ShouldBeFalse();
+                            _orderProcessingService.CanCapture(order).Should().BeFalse();
                     }
 
 
@@ -374,7 +388,7 @@ namespace Nop.Services.Tests.Orders
                         order.PaymentStatus = ps;
                         order.ShippingStatus = ss;
 
-                        _orderProcessingService.CanCapture(order).ShouldBeFalse();
+                        _orderProcessingService.CanCapture(order).Should().BeFalse();
                     }
         }
 
@@ -390,9 +404,9 @@ namespace Nop.Services.Tests.Orders
                         order.PaymentStatus = ps;
                         order.ShippingStatus = ss;
                         if (os == OrderStatus.Cancelled || ps == PaymentStatus.Paid || ps == PaymentStatus.Refunded || ps == PaymentStatus.Voided)
-                            _orderProcessingService.CanMarkOrderAsPaid(order).ShouldBeFalse();
+                            _orderProcessingService.CanMarkOrderAsPaid(order).Should().BeFalse();
                         else
-                            _orderProcessingService.CanMarkOrderAsPaid(order).ShouldBeTrue();
+                            _orderProcessingService.CanMarkOrderAsPaid(order).Should().BeTrue();
                     }
         }
 
@@ -416,9 +430,9 @@ namespace Nop.Services.Tests.Orders
                         order.ShippingStatus = ss;
 
                         if (ps == PaymentStatus.Paid)
-                            _orderProcessingService.CanRefund(order).ShouldBeTrue();
+                            _orderProcessingService.CanRefund(order).Should().BeTrue();
                         else
-                            _orderProcessingService.CanRefund(order).ShouldBeFalse();
+                            _orderProcessingService.CanRefund(order).Should().BeFalse();
                     }
 
 
@@ -432,7 +446,7 @@ namespace Nop.Services.Tests.Orders
                         order.PaymentStatus = ps;
                         order.ShippingStatus = ss;
 
-                        _orderProcessingService.CanRefund(order).ShouldBeFalse();
+                        _orderProcessingService.CanRefund(order).Should().BeFalse();
                     }
         }
 
@@ -453,7 +467,7 @@ namespace Nop.Services.Tests.Orders
                         order.PaymentStatus = ps;
                         order.ShippingStatus = ss;
 
-                        _orderProcessingService.CanRefund(order).ShouldBeFalse();
+                        _orderProcessingService.CanRefund(order).Should().BeFalse();
                     }
         }
 
@@ -473,9 +487,9 @@ namespace Nop.Services.Tests.Orders
                         order.ShippingStatus = ss;
 
                         if (ps == PaymentStatus.Paid)
-                            _orderProcessingService.CanRefundOffline(order).ShouldBeTrue();
+                            _orderProcessingService.CanRefundOffline(order).Should().BeTrue();
                         else
-                            _orderProcessingService.CanRefundOffline(order).ShouldBeFalse();
+                            _orderProcessingService.CanRefundOffline(order).Should().BeFalse();
                     }
         }
 
@@ -492,7 +506,7 @@ namespace Nop.Services.Tests.Orders
                         order.PaymentStatus = ps;
                         order.ShippingStatus = ss;
 
-                        _orderProcessingService.CanRefundOffline(order).ShouldBeFalse();
+                        _orderProcessingService.CanRefundOffline(order).Should().BeFalse();
                     }
         }
 
@@ -516,9 +530,9 @@ namespace Nop.Services.Tests.Orders
                         order.ShippingStatus = ss;
 
                         if (ps == PaymentStatus.Authorized)
-                            _orderProcessingService.CanVoid(order).ShouldBeTrue();
+                            _orderProcessingService.CanVoid(order).Should().BeTrue();
                         else
-                            _orderProcessingService.CanVoid(order).ShouldBeFalse();
+                            _orderProcessingService.CanVoid(order).Should().BeFalse();
                     }
 
 
@@ -532,7 +546,7 @@ namespace Nop.Services.Tests.Orders
                         order.PaymentStatus = ps;
                         order.ShippingStatus = ss;
 
-                        _orderProcessingService.CanVoid(order).ShouldBeFalse();
+                        _orderProcessingService.CanVoid(order).Should().BeFalse();
                     }
         }
 
@@ -553,7 +567,7 @@ namespace Nop.Services.Tests.Orders
                         order.PaymentStatus = ps;
                         order.ShippingStatus = ss;
 
-                        _orderProcessingService.CanVoid(order).ShouldBeFalse();
+                        _orderProcessingService.CanVoid(order).Should().BeFalse();
                     }
         }
 
@@ -573,9 +587,9 @@ namespace Nop.Services.Tests.Orders
                         order.ShippingStatus = ss;
 
                         if (ps == PaymentStatus.Authorized)
-                            _orderProcessingService.CanVoidOffline(order).ShouldBeTrue();
+                            _orderProcessingService.CanVoidOffline(order).Should().BeTrue();
                         else
-                            _orderProcessingService.CanVoidOffline(order).ShouldBeFalse();
+                            _orderProcessingService.CanVoidOffline(order).Should().BeFalse();
                     }
         }
 
@@ -592,7 +606,7 @@ namespace Nop.Services.Tests.Orders
                         order.PaymentStatus = ps;
                         order.ShippingStatus = ss;
 
-                        _orderProcessingService.CanVoidOffline(order).ShouldBeFalse();
+                        _orderProcessingService.CanVoidOffline(order).Should().BeFalse();
                     }
         }
 
@@ -616,9 +630,9 @@ namespace Nop.Services.Tests.Orders
                         order.ShippingStatus = ss;
 
                         if (ps == PaymentStatus.Paid || order.PaymentStatus == PaymentStatus.PartiallyRefunded)
-                            _orderProcessingService.CanPartiallyRefund(order, 10).ShouldBeTrue();
+                            _orderProcessingService.CanPartiallyRefund(order, 10).Should().BeTrue();
                         else
-                            _orderProcessingService.CanPartiallyRefund(order, 10).ShouldBeFalse();
+                            _orderProcessingService.CanPartiallyRefund(order, 10).Should().BeFalse();
                     }
 
 
@@ -632,7 +646,7 @@ namespace Nop.Services.Tests.Orders
                         order.PaymentStatus = ps;
                         order.ShippingStatus = ss;
 
-                        _orderProcessingService.CanPartiallyRefund(order, 10).ShouldBeFalse();
+                        _orderProcessingService.CanPartiallyRefund(order, 10).Should().BeFalse();
                     }
         }
 
@@ -656,7 +670,7 @@ namespace Nop.Services.Tests.Orders
                         order.PaymentStatus = ps;
                         order.ShippingStatus = ss;
 
-                        _orderProcessingService.CanPartiallyRefund(order, 80).ShouldBeFalse();
+                        _orderProcessingService.CanPartiallyRefund(order, 80).Should().BeFalse();
                     }
         }
 
@@ -682,9 +696,9 @@ namespace Nop.Services.Tests.Orders
                             order.ShippingStatus = ss;
 
                             if (ps == PaymentStatus.Paid || order.PaymentStatus == PaymentStatus.PartiallyRefunded)
-                                _orderProcessingService.CanPartiallyRefundOffline(order, 10).ShouldBeTrue();
+                                _orderProcessingService.CanPartiallyRefundOffline(order, 10).Should().BeTrue();
                             else
-                                _orderProcessingService.CanPartiallyRefundOffline(order, 10).ShouldBeFalse();
+                                _orderProcessingService.CanPartiallyRefundOffline(order, 10).Should().BeFalse();
                         }
                     }
         }
@@ -706,12 +720,186 @@ namespace Nop.Services.Tests.Orders
                         order.PaymentStatus = ps;
                         order.ShippingStatus = ss;
 
-                        _orderProcessingService.CanPartiallyRefundOffline(order, 80).ShouldBeFalse();
+                        _orderProcessingService.CanPartiallyRefundOffline(order, 80).Should().BeFalse();
                     }
         }
 
-        //TODO write unit tests for the following methods:
-        //PlaceOrder
-        //CanCancelRecurringPayment, ProcessNextRecurringPayment, CancelRecurringPayment
+        //RecurringPaymentHistory
+        [Test]
+        public void Can_calculate_nextPaymentDate_with_days_as_cycle_period()
+        {
+            var rp = new RecurringPayment
+            {
+                Id = 1,
+                CycleLength = 7,
+                CyclePeriod = RecurringProductCyclePeriod.Days,
+                TotalCycles = 3,
+                StartDateUtc = new DateTime(2010, 3, 1),
+                CreatedOnUtc = new DateTime(2010, 1, 1),
+                IsActive = true,
+            };
+
+            _orderService.InsertRecurringPayment(rp);
+
+            _orderProcessingService.GetNextPaymentDate(rp).Should().Be(new DateTime(2010, 3, 1));
+
+            //add one history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetNextPaymentDate(rp).Should().Be(new DateTime(2010, 3, 8));
+
+            //add one more history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetNextPaymentDate(rp).Should().Be(new DateTime(2010, 3, 15));
+
+            //add one more history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetNextPaymentDate(rp).Should().BeNull();
+        }
+
+        [Test]
+        public void Can_calculate_nextPaymentDate_with_weeks_as_cycle_period()
+        {
+            var rp = new RecurringPayment
+            {
+                Id = 2,
+                CycleLength = 2,
+                CyclePeriod = RecurringProductCyclePeriod.Weeks,
+                TotalCycles = 3,
+                StartDateUtc = new DateTime(2010, 3, 1),
+                CreatedOnUtc = new DateTime(2010, 1, 1),
+                IsActive = true,
+            };
+
+            _orderService.InsertRecurringPayment(rp);
+
+            _orderProcessingService.GetNextPaymentDate(rp).Should().Be(new DateTime(2010, 3, 1));
+
+            //add one history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetNextPaymentDate(rp).Should().Be(new DateTime(2010, 3, 15));
+            //add one more history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetNextPaymentDate(rp).Should().Be(new DateTime(2010, 3, 29));
+            //add one more history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetNextPaymentDate(rp).Should().BeNull();
+        }
+
+        [Test]
+        public void Can_calculate_nextPaymentDate_with_months_as_cycle_period()
+        {
+            var rp = new RecurringPayment
+            {
+                Id = 3,
+                CycleLength = 2,
+                CyclePeriod = RecurringProductCyclePeriod.Months,
+                TotalCycles = 3,
+                StartDateUtc = new DateTime(2010, 3, 1),
+                CreatedOnUtc = new DateTime(2010, 1, 1),
+                IsActive = true,
+            };
+
+            _orderService.InsertRecurringPayment(rp);
+
+            _orderProcessingService.GetNextPaymentDate(rp).Should().Be(new DateTime(2010, 3, 1));
+
+            //add one history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetNextPaymentDate(rp).Should().Be(new DateTime(2010, 5, 1));
+            //add one more history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetNextPaymentDate(rp).Should().Be(new DateTime(2010, 7, 1));
+            //add one more history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetNextPaymentDate(rp).Should().BeNull();
+        }
+
+        [Test]
+        public void Can_calculate_nextPaymentDate_with_years_as_cycle_period()
+        {
+            var rp = new RecurringPayment
+            {
+                Id = 4,
+                CycleLength = 2,
+                CyclePeriod = RecurringProductCyclePeriod.Years,
+                TotalCycles = 3,
+                StartDateUtc = new DateTime(2010, 3, 1),
+                CreatedOnUtc = new DateTime(2010, 1, 1),
+                IsActive = true,
+            };
+
+            _orderService.InsertRecurringPayment(rp);
+
+            _orderProcessingService.GetNextPaymentDate(rp).Should().Be(new DateTime(2010, 3, 1));
+
+            //add one history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetNextPaymentDate(rp).Should().Be(new DateTime(2012, 3, 1));
+            //add one more history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetNextPaymentDate(rp).Should().Be(new DateTime(2014, 3, 1));
+            //add one more history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetNextPaymentDate(rp).Should().BeNull();
+        }
+
+        [Test]
+        public void Next_payment_date_is_null_when_recurring_payment_is_not_active()
+        {
+            var rp = new RecurringPayment
+            {
+                Id = 5,
+                CycleLength = 7,
+                CyclePeriod = RecurringProductCyclePeriod.Days,
+                TotalCycles = 3,
+                StartDateUtc = new DateTime(2010, 3, 1),
+                CreatedOnUtc = new DateTime(2010, 1, 1),
+                IsActive = false,
+            };
+
+            _orderProcessingService.GetNextPaymentDate(rp).Should().BeNull();
+
+            //add one history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetNextPaymentDate(rp).Should().BeNull();
+            //add one more history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetNextPaymentDate(rp).Should().BeNull();
+            //add one more history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetNextPaymentDate(rp).Should().BeNull();
+        }
+
+        [Test]
+        public void Can_calculate_number_of_remaining_cycle()
+        {
+            var rp = new RecurringPayment
+            {
+                Id = 6,
+                CycleLength = 2,
+                CyclePeriod = RecurringProductCyclePeriod.Days,
+                TotalCycles = 3,
+                StartDateUtc = new DateTime(2010, 3, 1),
+                CreatedOnUtc = new DateTime(2010, 1, 1),
+                IsActive = true,
+            };
+
+            _orderService.InsertRecurringPayment(rp);
+
+            _orderProcessingService.GetCyclesRemaining(rp).Should().Be(3);
+
+            //add one history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetCyclesRemaining(rp).Should().Be(2);
+            //add one more history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetCyclesRemaining(rp).Should().Be(1);
+            //add one more history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetCyclesRemaining(rp).Should().Be(0);
+            //add one more history record
+            _orderService.InsertRecurringPaymentHistory(new RecurringPaymentHistory { RecurringPaymentId = rp.Id });
+            _orderProcessingService.GetCyclesRemaining(rp).Should().Be(0);
+        }
     }
 }
