@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Suppliers;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 using Nop.Core.Domain.Marketing;
 
@@ -20,17 +19,15 @@ namespace Nop.Services.Suppliers
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<SupplierUserAuthorityMapping> _supplierUserAuthorityMappingRepository;
 
         #endregion
 
         #region Ctor
 
-        public SupplierUserAuthorityMappingService(IEventPublisher eventPublisher,
+        public SupplierUserAuthorityMappingService(
             IRepository<SupplierUserAuthorityMapping> supplierUserAuthorityMappingRepository)
         {
-            _eventPublisher = eventPublisher;
             _supplierUserAuthorityMappingRepository = supplierUserAuthorityMappingRepository;
         }
 
@@ -40,13 +37,7 @@ namespace Nop.Services.Suppliers
 
         public virtual void InsertEntity(SupplierUserAuthorityMapping entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _supplierUserAuthorityMappingRepository.Insert(entity);
-
-            //event notification
-            _eventPublisher.EntityInserted(entity);
         }
 
         public virtual void DeleteEntity(SupplierUserAuthorityMapping entity, bool delete = false)
@@ -61,11 +52,8 @@ namespace Nop.Services.Suppliers
             else
             {
                 entity.Deleted = true;
-                UpdateEntity(entity);
+                _supplierUserAuthorityMappingRepository.Update(entity);
             }
-
-            //event notification
-            _eventPublisher.EntityDeleted(entity);
         }
 
         public virtual void DeleteEntities(IList<SupplierUserAuthorityMapping> entities, bool deleted = false)
@@ -83,49 +71,23 @@ namespace Nop.Services.Suppliers
                 {
                     entity.Deleted = true;
                 }
-                //delete wUser
-                UpdateEntities(entities);
-            }
-
-            foreach (var entity in entities)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(entity);
+                _supplierUserAuthorityMappingRepository.Update(entities);
             }
         }
 
         public virtual void UpdateEntity(SupplierUserAuthorityMapping entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _supplierUserAuthorityMappingRepository.Update(entity);
-
-            //event notification
-            _eventPublisher.EntityUpdated(entity);
         }
 
         public virtual void UpdateEntities(IList<SupplierUserAuthorityMapping> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            //update
             _supplierUserAuthorityMappingRepository.Update(entities);
-
-            //event notification
-            foreach (var entity in entities)
-            {
-                _eventPublisher.EntityUpdated(entity);
-            }
         }
 
         public virtual SupplierUserAuthorityMapping GetEntityById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _supplierUserAuthorityMappingRepository.ToCachedGetById(id);
+            return _supplierUserAuthorityMappingRepository.GetById(id, cache => default);
         }
 
         public virtual SupplierUserAuthorityMapping GetEntityByUserId(int userId)

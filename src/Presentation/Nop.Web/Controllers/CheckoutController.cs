@@ -1151,6 +1151,28 @@ namespace Nop.Web.Controllers
             });
         }
 
+
+        public virtual IActionResult OnePagePayment()
+        {
+            //validation
+            if (_orderSettings.CheckoutDisabled)
+                return RedirectToRoute("ShoppingCart");
+
+            var cart = _shoppingCartService.GetShoppingCart(_workContext.CurrentCustomer, ShoppingCartType.ShoppingCart, _storeContext.CurrentStore.Id);
+
+            if (!cart.Any())
+                return RedirectToRoute("ShoppingCart");
+
+            if (!_orderSettings.OnePageCheckoutEnabled)
+                return RedirectToRoute("Checkout");
+
+            if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
+                return Challenge();
+
+            var model = _checkoutModelFactory.PrepareOnePageCheckoutModel(cart);
+            return View(model);
+        }
+
         public virtual IActionResult OnePageCheckout()
         {
             //validation

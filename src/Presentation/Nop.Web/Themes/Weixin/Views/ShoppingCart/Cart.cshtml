@@ -1,9 +1,9 @@
 ﻿@model ShoppingCartModel
 @{
-    Layout = "_ColumnsOne";
+    Layout = "_Root_NoFooter";
 
     //title
-    Html.AddTitleParts(T("PageTitle.ShoppingCart").Text);
+    Html.AddTitleParts("购物车");
     //page class
     Html.AppendPageCssClassParts("html-shopping-cart-page");
 }
@@ -19,6 +19,7 @@
         @await Component.InvokeAsync("OrderSummary", new { overriddenModel = Model })
     </div>
 </div>
+<div style="height:45px;display:block;overflow:hidden;"></div>
 
 <script type="text/javascript" asp-location="Footer">
     var SiteUrl = "/";

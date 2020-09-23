@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
 namespace Nop.Services.Weixin
@@ -19,7 +18,6 @@ namespace Nop.Services.Weixin
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<WUser> _wUserRepository;
         private readonly IRepository<WQrCodeLimit> _wQrCodeLimitRepository;
         private readonly IRepository<WQrCodeLimitUserMapping> _wQrCodeLimitUserMappingRepository;
@@ -28,12 +26,11 @@ namespace Nop.Services.Weixin
 
         #region Ctor
 
-        public WQrCodeLimitUserService(IEventPublisher eventPublisher,
+        public WQrCodeLimitUserService(
             IRepository<WUser> wUserRepository,
             IRepository<WQrCodeLimit> wQrCodeLimitRepository,
             IRepository<WQrCodeLimitUserMapping> wQrCodeLimitUserMappingRepository)
         {
-            _eventPublisher = eventPublisher;
             _wUserRepository = wUserRepository;
             _wQrCodeLimitRepository = wQrCodeLimitRepository;
             _wQrCodeLimitUserMappingRepository = wQrCodeLimitUserMappingRepository;
@@ -45,72 +42,32 @@ namespace Nop.Services.Weixin
 
         public virtual void InsertEntity(WQrCodeLimitUserMapping entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _wQrCodeLimitUserMappingRepository.Insert(entity);
-
-            //event notification
-            _eventPublisher.EntityInserted(entity);
         }
 
         public virtual void DeleteEntity(WQrCodeLimitUserMapping entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _wQrCodeLimitUserMappingRepository.Delete(entity);
-
-            //event notification
-            _eventPublisher.EntityDeleted(entity);
         }
 
         public virtual void DeleteEntities(IList<WQrCodeLimitUserMapping> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
             _wQrCodeLimitUserMappingRepository.Delete(entities);
-
-            foreach (var entity in entities)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(entity);
-            }
         }
 
         public virtual void UpdateEntity(WQrCodeLimitUserMapping entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _wQrCodeLimitUserMappingRepository.Update(entity);
-
-            //event notification
-            _eventPublisher.EntityUpdated(entity);
         }
 
         public virtual void UpdateEntities(IList<WQrCodeLimitUserMapping> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            //update
             _wQrCodeLimitUserMappingRepository.Update(entities);
-
-            //event notification
-            foreach (var entity in entities)
-            {
-                _eventPublisher.EntityUpdated(entity);
-            }
         }
 
         public virtual WQrCodeLimitUserMapping GetEntityById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _wQrCodeLimitUserMappingRepository.GetById(id);
+            return _wQrCodeLimitUserMappingRepository.GetById(id, cache => default);
         }
 
         public virtual WQrCodeLimitUserMapping GetActiveEntityByQrCodeLimitIdOrUserId(int qrCodeLimitId, int userId)

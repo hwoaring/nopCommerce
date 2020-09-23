@@ -208,10 +208,10 @@ namespace Nop.Web.Areas.Admin.Factories
             //set some of address fields as enabled and required
             model.FirstNameEnabled = true;
             model.FirstNameRequired = true;
-            model.LastNameEnabled = true;
-            model.LastNameRequired = true;
-            model.EmailEnabled = true;
-            model.EmailRequired = true;
+            model.LastNameEnabled = _addressSettings.LastNameEnabled;
+            model.LastNameRequired = _addressSettings.LastNameRequired;
+            model.EmailEnabled = _addressSettings.EmailEnabled;
+            model.EmailRequired = _addressSettings.EmailRequired;
             model.CompanyEnabled = _addressSettings.CompanyEnabled;
             model.CompanyRequired = _addressSettings.CompanyRequired;
             model.CountryEnabled = _addressSettings.CountryEnabled;

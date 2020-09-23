@@ -7,7 +7,7 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
+
 using Nop.Services.Events;
 
 namespace Nop.Services.Weixin
@@ -19,17 +19,15 @@ namespace Nop.Services.Weixin
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<WQrCodeCategory> _wQrCodeCategoryRepository;
 
         #endregion
 
         #region Ctor
 
-        public WQrCodeCategoryService(IEventPublisher eventPublisher,
+        public WQrCodeCategoryService(
             IRepository<WQrCodeCategory> wQrCodeCategoryRepository)
         {
-            _eventPublisher = eventPublisher;
             _wQrCodeCategoryRepository = wQrCodeCategoryRepository;
         }
 
@@ -39,47 +37,22 @@ namespace Nop.Services.Weixin
 
         public virtual void InsertEntity(WQrCodeCategory entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _wQrCodeCategoryRepository.Insert(entity);
-
-            //event notification
-            _eventPublisher.EntityInserted(entity);
         }
 
         public virtual void UpdateEntity(WQrCodeCategory entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _wQrCodeCategoryRepository.Update(entity);
-
-            //event notification
-            _eventPublisher.EntityUpdated(entity);
         }
 
         public virtual void UpdateEntities(IList<WQrCodeCategory> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            //update
             _wQrCodeCategoryRepository.Update(entities);
-
-            //event notification
-            foreach (var entity in entities)
-            {
-                _eventPublisher.EntityUpdated(entity);
-            }
         }
 
         public virtual WQrCodeCategory GetEntityById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _wQrCodeCategoryRepository.GetById(id);
+            return _wQrCodeCategoryRepository.GetById(id, cache => default);
         }
 
         public virtual List<WQrCodeCategory> GetEntitiesByParentId(int parentId)

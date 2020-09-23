@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
 namespace Nop.Services.Weixin
@@ -19,17 +18,15 @@ namespace Nop.Services.Weixin
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<WUserTag> _wUserTagRepository;
 
         #endregion
 
         #region Ctor
 
-        public WUserTagService(IEventPublisher eventPublisher,
+        public WUserTagService(
             IRepository<WUserTag> wUserTagRepository)
         {
-            _eventPublisher = eventPublisher;
             _wUserTagRepository = wUserTagRepository;
         }
 
@@ -39,13 +36,7 @@ namespace Nop.Services.Weixin
 
         public virtual void InsertWUserTag(WUserTag userTag)
         {
-            if (userTag == null)
-                throw new ArgumentNullException(nameof(userTag));
-
             _wUserTagRepository.Insert(userTag);
-
-            //event notification
-            _eventPublisher.EntityInserted(userTag);
         }
 
         public virtual void DeleteWUserTag(WUserTag userTag, bool delete = false)
@@ -60,11 +51,8 @@ namespace Nop.Services.Weixin
             else
             {
                 userTag.Deleted = true;
-                UpdateWUserTag(userTag);
+                _wUserTagRepository.Update(userTag);
             }
-
-            //event notification
-            _eventPublisher.EntityDeleted(userTag);
         }
 
         public virtual void DeleteWUserTags(IList<WUserTag> userTags, bool deleted = false)
@@ -84,49 +72,23 @@ namespace Nop.Services.Weixin
                     userTag.Deleted = true;
                 }
 
-                //delete wUser
-                UpdateWUserTags(userTags);
-            }
-
-            foreach (var userTag in userTags)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(userTag);
+                _wUserTagRepository.Update(userTags);
             }
         }
 
         public virtual void UpdateWUserTag(WUserTag userTag)
         {
-            if (userTag == null)
-                throw new ArgumentNullException(nameof(userTag));
-
             _wUserTagRepository.Update(userTag);
-
-            //event notification
-            _eventPublisher.EntityUpdated(userTag);
         }
 
         public virtual void UpdateWUserTags(IList<WUserTag> userTags)
         {
-            if (userTags == null)
-                throw new ArgumentNullException(nameof(userTags));
-
-            //update
             _wUserTagRepository.Update(userTags);
-
-            //event notification
-            foreach (var userTag in userTags)
-            {
-                _eventPublisher.EntityUpdated(userTag);
-            }
         }
 
         public virtual WUserTag GetWUserTagById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _wUserTagRepository.GetById(id);
+            return _wUserTagRepository.GetById(id, cache => default);
         }
 
         public virtual WUserTag GetWUserTagByOfficialId(int officialId, int? configId = null)

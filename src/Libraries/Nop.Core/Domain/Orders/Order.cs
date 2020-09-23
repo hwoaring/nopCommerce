@@ -29,6 +29,11 @@ namespace Nop.Core.Domain.Orders
         public int CustomerId { get; set; }
 
         /// <summary>
+        /// 当前订单推荐人ID（使用WUserId）
+        /// </summary>
+        public int RefererId { get; set; }
+
+        /// <summary>
         /// Gets or sets the billing address identifier
         /// </summary>
         public int BillingAddressId { get; set; }

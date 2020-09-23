@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Suppliers;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 using LinqToDB.Linq;
 
@@ -20,17 +19,15 @@ namespace Nop.Services.Suppliers
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<QrCodeSupplierVoucherCouponMapping> _qrCodeSupplierVoucherCouponMappingRepository;
 
         #endregion
 
         #region Ctor
 
-        public QrCodeSupplierVoucherCouponMappingService(IEventPublisher eventPublisher,
+        public QrCodeSupplierVoucherCouponMappingService(
             IRepository<QrCodeSupplierVoucherCouponMapping> qrCodeSupplierVoucherCouponMappingRepository)
         {
-            _eventPublisher = eventPublisher;
             _qrCodeSupplierVoucherCouponMappingRepository = qrCodeSupplierVoucherCouponMappingRepository;
         }
 
@@ -40,72 +37,32 @@ namespace Nop.Services.Suppliers
 
         public virtual void InsertEntity(QrCodeSupplierVoucherCouponMapping entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _qrCodeSupplierVoucherCouponMappingRepository.Insert(entity);
-
-            //event notification
-            _eventPublisher.EntityInserted(entity);
         }
 
         public virtual void DeleteEntity(QrCodeSupplierVoucherCouponMapping entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _qrCodeSupplierVoucherCouponMappingRepository.Delete(entity);
-
-            //event notification
-            _eventPublisher.EntityDeleted(entity);
         }
 
         public virtual void DeleteEntities(IList<QrCodeSupplierVoucherCouponMapping> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
             _qrCodeSupplierVoucherCouponMappingRepository.Delete(entities);
-
-            foreach (var entity in entities)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(entity);
-            }
         }
 
         public virtual void UpdateEntity(QrCodeSupplierVoucherCouponMapping entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _qrCodeSupplierVoucherCouponMappingRepository.Update(entity);
-
-            //event notification
-            _eventPublisher.EntityUpdated(entity);
         }
 
         public virtual void UpdateEntities(IList<QrCodeSupplierVoucherCouponMapping> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            //update
             _qrCodeSupplierVoucherCouponMappingRepository.Update(entities);
-
-            //event notification
-            foreach (var entity in entities)
-            {
-                _eventPublisher.EntityUpdated(entity);
-            }
         }
 
         public virtual QrCodeSupplierVoucherCouponMapping GetEntityById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _qrCodeSupplierVoucherCouponMappingRepository.ToCachedGetById(id);
+            return _qrCodeSupplierVoucherCouponMappingRepository.GetById(id, cache => default);
         }
 
         public virtual List<QrCodeSupplierVoucherCouponMapping> GetEntitiesByIds(int[] entityIds)

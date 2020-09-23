@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Suppliers;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 
@@ -20,17 +19,15 @@ namespace Nop.Services.Suppliers
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<SupplierShop> _supplierShopRepository;
 
         #endregion
 
         #region Ctor
 
-        public SupplierShopService(IEventPublisher eventPublisher,
+        public SupplierShopService(
             IRepository<SupplierShop> supplierShopRepository)
         {
-            _eventPublisher = eventPublisher;
             _supplierShopRepository = supplierShopRepository;
         }
 
@@ -40,13 +37,7 @@ namespace Nop.Services.Suppliers
 
         public virtual void InsertEntity(SupplierShop supplierShop)
         {
-            if (supplierShop == null)
-                throw new ArgumentNullException(nameof(supplierShop));
-
             _supplierShopRepository.Insert(supplierShop);
-
-            //event notification
-            _eventPublisher.EntityInserted(supplierShop);
         }
 
         public virtual void DeleteEntity(SupplierShop supplierShop, bool delete = false)
@@ -61,11 +52,8 @@ namespace Nop.Services.Suppliers
             else
             {
                 supplierShop.Deleted = true;
-                UpdateEntity(supplierShop);
+                _supplierShopRepository.Update(supplierShop);
             }
-
-            //event notification
-            _eventPublisher.EntityDeleted(supplierShop);
         }
 
         public virtual void DeleteEntities(IList<SupplierShop> supplierShops, bool deleted = false)
@@ -83,49 +71,23 @@ namespace Nop.Services.Suppliers
                 {
                     supplierShop.Deleted = true;
                 }
-                //delete wUser
-                UpdateEntities(supplierShops);
-            }
-
-            foreach (var supplierShop in supplierShops)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(supplierShop);
+                _supplierShopRepository.Update(supplierShops);
             }
         }
 
         public virtual void UpdateEntity(SupplierShop supplierShop)
         {
-            if (supplierShop == null)
-                throw new ArgumentNullException(nameof(supplierShop));
-
             _supplierShopRepository.Update(supplierShop);
-
-            //event notification
-            _eventPublisher.EntityUpdated(supplierShop);
         }
 
         public virtual void UpdateEntities(IList<SupplierShop> supplierShops)
         {
-            if (supplierShops == null)
-                throw new ArgumentNullException(nameof(supplierShops));
-
-            //update
             _supplierShopRepository.Update(supplierShops);
-
-            //event notification
-            foreach (var supplierShop in supplierShops)
-            {
-                _eventPublisher.EntityUpdated(supplierShop);
-            }
         }
 
         public virtual SupplierShop GetEntityById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _supplierShopRepository.ToCachedGetById(id);
+            return _supplierShopRepository.GetById(id, cache => default);
         }
 
         public virtual List<SupplierShop> GetEntitiesByIds(int[] entityIds)

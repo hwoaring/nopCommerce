@@ -13,6 +13,16 @@ namespace Nop.Core.Domain.Discounts
         public string Name { get; set; }
 
         /// <summary>
+        /// 短名称（用于前台展示，为空则取Name值）
+        /// </summary>
+        public string ShortName { get; set; }
+
+        /// <summary>
+        /// 折扣描述
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets or sets the admin comment
         /// </summary>
         public string AdminComment { get; set; }
@@ -21,6 +31,26 @@ namespace Nop.Core.Domain.Discounts
         /// Gets or sets the discount type identifier
         /// </summary>
         public int DiscountTypeId { get; set; }
+
+        /// <summary>
+        /// 启用推荐人数要求
+        /// </summary>
+        public bool EnableRefereeRequirement { get; set; }
+
+        /// <summary>
+        /// 最低推荐人数（达到推荐人数可以使用，默认为0）
+        /// </summary>
+        public int MinReferralsNumber { get; set; }
+
+        /// <summary>
+        /// 邀请人数统计开始日期
+        /// </summary>
+        public DateTime? ReferralsNumberStartDateUtc { get; set; }
+
+        /// <summary>
+        /// 邀请人数统计结束日期
+        /// </summary>
+        public DateTime? ReferralsNumberEndDateUtc { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to use percentage
@@ -38,7 +68,7 @@ namespace Nop.Core.Domain.Discounts
         public decimal DiscountAmount { get; set; }
 
         /// <summary>
-        /// 订单总额最低多少金额可以使用折扣券
+        /// 订单总额满多少金额可以使用折扣券
         /// </summary>
         public decimal? MinOrderTotalAmount { get; set; }
 
@@ -73,6 +103,11 @@ namespace Nop.Core.Domain.Discounts
         public bool IsCumulative { get; set; }
 
         /// <summary>
+        /// 折扣信息是否在产品列表页面或详情页面展示
+        /// </summary>
+        public bool FrontDisplay { get; set; }
+
+        /// <summary>
         /// Gets or sets the discount limitation identifier
         /// </summary>
         public int DiscountLimitationId { get; set; }
@@ -93,6 +128,11 @@ namespace Nop.Core.Domain.Discounts
         /// Used with "Assigned to categories" type only.
         /// </summary>
         public bool AppliedToSubCategories { get; set; }
+
+        /// <summary>
+        /// 仅新用户可用
+        /// </summary>
+        public bool NewUserOnly { get; set; }
 
         /// <summary>
         /// Gets or sets the discount type

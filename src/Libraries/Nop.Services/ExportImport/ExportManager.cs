@@ -1723,6 +1723,14 @@ namespace Nop.Services.ExportImport
 
             const string separator = ",";
             var sb = new StringBuilder();
+
+            sb.Append(_localizationService.GetResource("Admin.Promotions.NewsLetterSubscriptions.Fields.Email"));
+            sb.Append(separator);
+            sb.Append(_localizationService.GetResource("Admin.Promotions.NewsLetterSubscriptions.Fields.Active"));
+            sb.Append(separator);
+            sb.Append(_localizationService.GetResource("Admin.Promotions.NewsLetterSubscriptions.Fields.Store"));
+            sb.Append(Environment.NewLine);
+
             foreach (var subscription in subscriptions)
             {
                 sb.Append(subscription.Email);
@@ -1730,7 +1738,7 @@ namespace Nop.Services.ExportImport
                 sb.Append(subscription.Active);
                 sb.Append(separator);
                 sb.Append(subscription.StoreId);
-                sb.Append(Environment.NewLine); //new line
+                sb.Append(Environment.NewLine);
             }
 
             return sb.ToString();
@@ -1812,8 +1820,8 @@ namespace Nop.Services.ExportImport
                 new PropertyByName<Order>("Shipping method", p => p.ShippingMethod),
                 new PropertyByName<Order>("Created on", p => _dateTimeHelper.ConvertToUserTime(p.CreatedOnUtc, DateTimeKind.Utc).ToString("D")),
                 new PropertyByName<Order>("Billing first name", p => orderBillingAddress(p)?.FirstName ?? string.Empty),
-                new PropertyByName<Order>("Billing last name", p => orderBillingAddress(p)?.LastName ?? string.Empty),
-                new PropertyByName<Order>("Billing email", p => orderBillingAddress(p)?.Email ?? string.Empty),
+                new PropertyByName<Order>("Billing last name", p => orderBillingAddress(p)?.LastName ?? string.Empty, !_addressSettings.LastNameEnabled),
+                new PropertyByName<Order>("Billing email", p => orderBillingAddress(p)?.Email ?? string.Empty, !_addressSettings.EmailEnabled),
                 new PropertyByName<Order>("Billing company", p => orderBillingAddress(p)?.Company ?? string.Empty, !_addressSettings.CompanyEnabled),
                 new PropertyByName<Order>("Billing country", p => _countryService.GetCountryByAddress(orderBillingAddress(p)) is Country country ? _localizationService.GetLocalized(country, c => c.Name) : string.Empty, !_addressSettings.CountryEnabled),
                 new PropertyByName<Order>("Billing state province", p => _stateProvinceService.GetStateProvinceByAddress(orderBillingAddress(p)) is StateProvince stateProvince ? _localizationService.GetLocalized(stateProvince, sp => sp.Name) : string.Empty, !_addressSettings.StateProvinceEnabled),
@@ -1825,8 +1833,8 @@ namespace Nop.Services.ExportImport
                 new PropertyByName<Order>("Billing phone number", p => orderBillingAddress(p)?.PhoneNumber ?? string.Empty, !_addressSettings.PhoneEnabled),
                 new PropertyByName<Order>("Billing fax number", p => orderBillingAddress(p)?.FaxNumber ?? string.Empty, !_addressSettings.FaxEnabled),
                 new PropertyByName<Order>("Shipping first name", p => orderAddress(p)?.FirstName ?? string.Empty),
-                new PropertyByName<Order>("Shipping last name", p => orderAddress(p)?.LastName ?? string.Empty),
-                new PropertyByName<Order>("Shipping email", p => orderAddress(p)?.Email ?? string.Empty),
+                new PropertyByName<Order>("Shipping last name", p => orderAddress(p)?.LastName ?? string.Empty, !_addressSettings.LastNameEnabled),
+                new PropertyByName<Order>("Shipping email", p => orderAddress(p)?.Email ?? string.Empty, !_addressSettings.EmailEnabled),
                 new PropertyByName<Order>("Shipping company", p => orderAddress(p)?.Company ?? string.Empty, !_addressSettings.CompanyEnabled),
                 new PropertyByName<Order>("Shipping country", p => _countryService.GetCountryByAddress(orderAddress(p)) is Country country ? _localizationService.GetLocalized(country, c => c.Name) : string.Empty, !_addressSettings.CountryEnabled),
                 new PropertyByName<Order>("Shipping state province", p => _stateProvinceService.GetStateProvinceByAddress(orderAddress(p)) is StateProvince stateProvince ? _localizationService.GetLocalized(stateProvince, sp => sp.Name) : string.Empty, !_addressSettings.StateProvinceEnabled),
@@ -1855,8 +1863,8 @@ namespace Nop.Services.ExportImport
             var addressManager = new PropertyManager<Address>(new[]
             {
                 new PropertyByName<Address>("First name", p => p.FirstName),
-                new PropertyByName<Address>("Last name", p => p.LastName),
-                new PropertyByName<Address>("Email", p => p.Email),
+                new PropertyByName<Address>("Last name", p => p.LastName, !_addressSettings.LastNameEnabled),
+                new PropertyByName<Address>("Email", p => p.Email, !_addressSettings.EmailEnabled),
                 new PropertyByName<Address>("Company", p => p.Company, !_addressSettings.CompanyEnabled),
                 new PropertyByName<Address>("Country", p => _countryService.GetCountryByAddress(p) is Country country ? _localizationService.GetLocalized(country, c => c.Name) : string.Empty, !_addressSettings.CountryEnabled),
                 new PropertyByName<Address>("State province", p => _stateProvinceService.GetStateProvinceByAddress(p) is StateProvince stateProvince ? _localizationService.GetLocalized(stateProvince, sp => sp.Name) : string.Empty, !_addressSettings.StateProvinceEnabled),

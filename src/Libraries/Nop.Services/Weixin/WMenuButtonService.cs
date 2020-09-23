@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
 namespace Nop.Services.Weixin
@@ -19,17 +18,15 @@ namespace Nop.Services.Weixin
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<WMenuButton> _wMenuButtonRepository;
 
         #endregion
 
         #region Ctor
 
-        public WMenuButtonService(IEventPublisher eventPublisher,
+        public WMenuButtonService(
             IRepository<WMenuButton> wMenuButtonRepository)
         {
-            _eventPublisher = eventPublisher;
             _wMenuButtonRepository = wMenuButtonRepository;
         }
 
@@ -39,72 +36,32 @@ namespace Nop.Services.Weixin
 
         public virtual void InsertMenuButton(WMenuButton menuButton)
         {
-            if (menuButton == null)
-                throw new ArgumentNullException(nameof(menuButton));
-
             _wMenuButtonRepository.Insert(menuButton);
-
-            //event notification
-            _eventPublisher.EntityInserted(menuButton);
         }
 
         public virtual void DeleteMenuButton(WMenuButton menuButton)
         {
-            if (menuButton == null)
-                throw new ArgumentNullException(nameof(menuButton));
-
             _wMenuButtonRepository.Delete(menuButton);
-
-            //event notification
-            _eventPublisher.EntityDeleted(menuButton);
         }
 
         public virtual void DeleteMenuButtons(IList<WMenuButton> menuButtons)
         {
-            if (menuButtons == null)
-                throw new ArgumentNullException(nameof(menuButtons));
-
             _wMenuButtonRepository.Delete(menuButtons);
-
-            foreach (var menuButton in menuButtons)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(menuButton);
-            }
         }
 
         public virtual void UpdateMenuButton(WMenuButton menuButton)
         {
-            if (menuButton == null)
-                throw new ArgumentNullException(nameof(menuButton));
-
             _wMenuButtonRepository.Update(menuButton);
-
-            //event notification
-            _eventPublisher.EntityUpdated(menuButton);
         }
 
         public virtual void UpdateMenuButtons(IList<WMenuButton> menuButtons)
         {
-            if (menuButtons == null)
-                throw new ArgumentNullException(nameof(menuButtons));
-
-            //update
             _wMenuButtonRepository.Update(menuButtons);
-
-            //event notification
-            foreach (var menuButton in menuButtons)
-            {
-                _eventPublisher.EntityUpdated(menuButton);
-            }
         }
 
         public virtual WMenuButton GetMenuButtonById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _wMenuButtonRepository.GetById(id);
+            return _wMenuButtonRepository.GetById(id, cache => default);
         }
 
         public virtual IList<int> GetChildMenuButtonIds(int parentId)

@@ -7,7 +7,6 @@ using Nop.Core.Domain.Marketing;
 using Nop.Core.Domain.Suppliers;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
 namespace Nop.Services.Marketing
@@ -19,17 +18,15 @@ namespace Nop.Services.Marketing
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<UserAssetConsumeHistory> _userAssetConsumeHistoryRepository;
 
         #endregion
 
         #region Ctor
 
-        public UserAssetConsumeHistoryService(IEventPublisher eventPublisher,
+        public UserAssetConsumeHistoryService(
             IRepository<UserAssetConsumeHistory> userAssetConsumeHistoryRepository)
         {
-            _eventPublisher = eventPublisher;
             _userAssetConsumeHistoryRepository = userAssetConsumeHistoryRepository;
         }
 
@@ -39,13 +36,7 @@ namespace Nop.Services.Marketing
 
         public virtual void InsertEntity(UserAssetConsumeHistory entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _userAssetConsumeHistoryRepository.Insert(entity);
-
-            //event notification
-            _eventPublisher.EntityInserted(entity);
         }
 
         public virtual void DeleteEntity(UserAssetConsumeHistory entity, bool delete = false)
@@ -60,11 +51,8 @@ namespace Nop.Services.Marketing
             else
             {
                 entity.Deleted = true;
-                UpdateEntity(entity);
+                _userAssetConsumeHistoryRepository.Update(entity);
             }
-
-            //event notification
-            _eventPublisher.EntityDeleted(entity);
         }
 
         public virtual void DeleteEntities(IList<UserAssetConsumeHistory> entities, bool deleted = false)
@@ -82,49 +70,23 @@ namespace Nop.Services.Marketing
                 {
                     entity.Deleted = true;
                 }
-                //delete wUser
-                UpdateEntities(entities);
-            }
-
-            foreach (var entity in entities)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(entity);
+                _userAssetConsumeHistoryRepository.Update(entities);
             }
         }
 
         public virtual void UpdateEntity(UserAssetConsumeHistory entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _userAssetConsumeHistoryRepository.Update(entity);
-
-            //event notification
-            _eventPublisher.EntityUpdated(entity);
         }
 
         public virtual void UpdateEntities(IList<UserAssetConsumeHistory> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            //update
             _userAssetConsumeHistoryRepository.Update(entities);
-
-            //event notification
-            foreach (var entity in entities)
-            {
-                _eventPublisher.EntityUpdated(entity);
-            }
         }
 
         public virtual UserAssetConsumeHistory GetEntityById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _userAssetConsumeHistoryRepository.ToCachedGetById(id);
+            return _userAssetConsumeHistoryRepository.GetById(id, cache => default);
         }
 
         public virtual List<UserAssetConsumeHistory> GetEntitiesByUserId(

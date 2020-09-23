@@ -130,27 +130,10 @@
             </div>
         }
     </div>
-    <div class="product-show-base">
 
-    </div>
-    <div class="module-container product-item-module">
-        <h3 class="title-bar-style1">
-            <i class="line-icon"></i>
-            <span class="title-txt">基本信息</span>
-        </h3>
-        <div class="module-wrap product-item-module-wrap">
-            <ul>
-                <li><span>香型：</span>浓香型</li>
-                <li><span>酒精度：</span>52%vol</li>
-                <li><span>净含量：</span>500ml</li>
-                <li><span>原料：</span>水，糯高粱，小麦，大米，糯米</li>
-                <li><span>酒体设计：</span>赖高淮</li>
-                <li><span>酒体评语：</span>陈香突出，窖香浓郁，醇绵净爽、回味悠长</li>
-                <li><span>工艺：</span>纯粮固态发酵</li>
-                <li><span>产品标准：</span>GB/T10781.1-2006(优级)</li>
-            </ul>
-        </div>
-    </div>
+    <!--Product Specifications-->
+    @await Html.PartialAsync("_ProductSpecifications", Model.ProductSpecifications)
+
     <!--product show-->
     <div class="module-container product-content-module">
         <h3 class="title-bar-style1">
@@ -186,12 +169,11 @@
     <div class="detail_sku_v1_main" style="display: none;" id="popupBuyArea" type="2">
         <div class="main" id="popupMain">
             <div class="header">
-                <img alt="商品图" src="images/product/product-5.jpg" class="avt" id="popupImg">
+                <img alt="@Model.Name" class="avt" id="popupImg">
                 <div>
                     <p class="price price-value-@Model.Id" id="priceSale2">@Model.ProductPrice</p>
                     <p class="prop" id="popupSkuChoose"><span>已选</span> 窖父1961整箱装，整箱装，1个</p>
                 </div>
-
                 <i class="close fa fa-window-close-o" id="popupClose" aria-hidden="true"></i>
             </div>
             <div class="body">

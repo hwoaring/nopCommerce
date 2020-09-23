@@ -74,7 +74,7 @@
                                         <li>
                                             <input id="@(controlId)_@(attributeValue.Id)" type="radio" name="@(controlId)" value="@attributeValue.Id" checked="@attributeValue.IsPreSelected"
                                                    @(attribute.Values.Any(value => value.CustomerEntersQty) ? Html.Raw($"onclick=\"showHideRadioQuantity('{controlId}')\"") : null)/>
-                                            <label for="@(controlId)_@(attributeValue.Id)" class="radio_lable@(attributeValue.IsPreSelected?" checked":null)">@attributeName</label>
+                                            <label for="@(controlId)_@(attributeValue.Id)" class="radio_lable@(attributeValue.IsPreSelected ? " checked" : null)">@attributeName</label>
 
                                             @if (attributeValue.CustomerEntersQty)
                                             {
@@ -114,7 +114,7 @@
                                             <label for="@(controlId)_@(attributeValue.Id)">@attributeName</label>
 
                                             @if (attributeValue.CustomerEntersQty)
-                                    {
+                                            {
                                                 <div class="qty-box" id="@(controlId)_@(attributeValue.Id)_qty_box" style="display:none">
                                                     <label for="@(controlId)_@(attributeValue.Id)_qty">@(T("Products.ProductAttributes.PriceAdjustment.Quantity").Text)</label>
                                                     <input type="text" name="@(controlId)_@(attributeValue.Id)_qty" id="@(controlId)_@(attributeValue.Id)_qty" value="@(attributeValue.Quantity)" />
@@ -243,7 +243,7 @@
                                 <div id="@(controlId + "downloadurl")">
                                     @if (download != null)
                                     {
-                                        <a href="@(Url.Action("GetFileUpload", "Download", new {downloadId = download.DownloadGuid}))" class="download-uploaded-file">@T("Common.FileUploader.DownloadUploadedFile")</a>
+                                        <a href="@(Url.Action("GetFileUpload", "Download", new { downloadId = download.DownloadGuid }))" class="download-uploaded-file">@T("Common.FileUploader.DownloadUploadedFile")</a>
                                     }
                                 </div>
                                 <div>
@@ -415,69 +415,72 @@
 
         //render scripts
         //almost the same implementation is used in the \Views\Product\_RentalInfo.cshtml file
-        <script asp-location="Footer">
-            function @(attributeChangeHandlerFuncName)() {
-                $.ajax({
-                    cache: false,
-                    url: "@Html.Raw(Url.Action("productdetails_attributechange", "shoppingcart", new {productId = productId, validateAttributeConditions = attributesHaveConditions, loadPicture = attributesHaveAssociatedPictures }))",
-                    data: $('#product-details-form').serialize(),
-                    type: "POST",
-                    success: function (data, textStatus, jqXHR) {
-                        if (data.price) {
-                            $('.price-value-@productId').text(data.price);
-                        }
-                        if (data.basepricepangv) {
-                            $('#base-price-pangv-@productId').text(data.basepricepangv);
-                        } else {
-                            $('#base-price-pangv-@productId').hide();
-                        }
-                        if (data.sku) {
-                            $('#sku-@productId').text(data.sku).parent(".sku").show();
-                        } else {
-                            $('#sku-@productId').parent(".sku").hide();
-                        }
-                        if (data.mpn) {
-                            $('#mpn-@productId').text(data.mpn).parent(".manufacturer-part-number").show();
-                        } else {
-                            $('#mpn-@productId').parent(".manufacturer-part-number").hide();
-                        }
-                        if (data.gtin) {
-                            $('#gtin-@productId').text(data.gtin).parent(".gtin").show();
-                        } else {
-                            $('#gtin-@productId').parent(".gtin").hide();
-                        }
-                        if (data.stockAvailability) {
-                            $('#stock-availability-value-@productId').text(data.stockAvailability);
-                        }
-                        if (data.enabledattributemappingids) {
-                            for (var i = 0; i < data.enabledattributemappingids.length; i++) {
-                                $('#@(NopCatalogDefaults.ProductAttributePrefix)label_' + data.enabledattributemappingids[i]).show();
-                                $('#@(NopCatalogDefaults.ProductAttributePrefix)input_' + data.enabledattributemappingids[i]).show();
-                            }
-                        }
-                        if (data.disabledattributemappingids) {
-                            for (var i = 0; i < data.disabledattributemappingids.length; i++) {
-                                $('#@(NopCatalogDefaults.ProductAttributePrefix)label_' + data.disabledattributemappingids[i]).hide();
-                                $('#@(NopCatalogDefaults.ProductAttributePrefix)input_' + data.disabledattributemappingids[i]).hide();
-                            }
-                        }
-                        if (data.pictureDefaultSizeUrl) {
-                            $('#main-product-img-@productId').attr("src", data.pictureDefaultSizeUrl);
-                        }
-                        if (data.pictureFullSizeUrl) {
-                            $('#main-product-img-lightbox-anchor-@productId').attr("href", data.pictureFullSizeUrl);
-                        }
-                        if (data.message) {
-                            alert(data.message);
-                        }
-                        $(document).trigger({ type: "product_attributes_changed", changedData: data });
+<script asp-location="Footer">
+    function @(attributeChangeHandlerFuncName)() {
+        $.ajax({
+            cache: false,
+            url: "@Html.Raw(Url.Action("productdetails_attributechange", "shoppingcart", new { productId = productId, validateAttributeConditions = attributesHaveConditions, loadPicture = attributesHaveAssociatedPictures }))",
+            data: $('#product-details-form').serialize(),
+            type: "POST",
+            success: function (data, textStatus, jqXHR) {
+                if (data.price) {
+                    $('.price-value-@productId').text(data.price);
+                }
+                if (data.basepricepangv) {
+                    $('#base-price-pangv-@productId').text(data.basepricepangv);
+                } else {
+                    $('#base-price-pangv-@productId').hide();
+                }
+                if (data.sku) {
+                    $('#sku-@productId').text(data.sku).parent(".sku").show();
+                } else {
+                    $('#sku-@productId').parent(".sku").hide();
+                }
+                if (data.mpn) {
+                    $('#mpn-@productId').text(data.mpn).parent(".manufacturer-part-number").show();
+                } else {
+                    $('#mpn-@productId').parent(".manufacturer-part-number").hide();
+                }
+                if (data.gtin) {
+                    $('#gtin-@productId').text(data.gtin).parent(".gtin").show();
+                } else {
+                    $('#gtin-@productId').parent(".gtin").hide();
+                }
+                if (data.stockAvailability) {
+                    $('#stock-availability-value-@productId').text(data.stockAvailability);
+                }
+                if (data.enabledattributemappingids) {
+                    for (var i = 0; i < data.enabledattributemappingids.length; i++) {
+                        $('#@(NopCatalogDefaults.ProductAttributePrefix)label_' + data.enabledattributemappingids[i]).show();
+                        $('#@(NopCatalogDefaults.ProductAttributePrefix)input_' + data.enabledattributemappingids[i]).show();
                     }
-                });
+                }
+                if (data.disabledattributemappingids) {
+                    for (var i = 0; i < data.disabledattributemappingids.length; i++) {
+                        $('#@(NopCatalogDefaults.ProductAttributePrefix)label_' + data.disabledattributemappingids[i]).hide();
+                        $('#@(NopCatalogDefaults.ProductAttributePrefix)input_' + data.disabledattributemappingids[i]).hide();
+                    }
+                }
+                if (data.pictureDefaultSizeUrl) {
+                    $('#popupImg').attr("src", data.pictureDefaultSizeUrl);
+                    $('#main-product-img-@productId').attr("src", data.pictureDefaultSizeUrl);
+                }
+                if (data.pictureFullSizeUrl) {
+                    $('#main-product-img-lightbox-anchor-@productId').attr("href", data.pictureFullSizeUrl);
+                }
+                if (data.message) {
+                    alert(data.message);
+                }
+                $(document).trigger({ type: "product_attributes_changed", changedData: data });
             }
-            $(document).ready(function() {
+        });
+    }
+    $(document).ready(function () {
+        $('#popupImg').attr('src', $('#main-product-img-@productId').attr('src'));
                 @(attributeChangeHandlerFuncName)();
                 @Html.Raw(attributeChangeScriptsBuilder.ToString())
             });
-        </script>
+
+</script>
     }
 }

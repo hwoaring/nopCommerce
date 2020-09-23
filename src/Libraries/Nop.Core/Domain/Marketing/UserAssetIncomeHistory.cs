@@ -53,7 +53,7 @@ namespace Nop.Core.Domain.Marketing
         /// </summary>
         public int TransferTimes { get; set; }
 
-        //获得该礼品对应的订单项目Id，系统赠送的没有订单号
+        //获得该礼品/收入等对应的订单Id，系统赠送的没有订单号
         public int PurchasedWithOrderItemId { get; set; }
         /// <summary>
         /// 数值

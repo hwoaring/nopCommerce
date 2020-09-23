@@ -76,6 +76,31 @@ namespace Nop.Core.Domain.Suppliers
         /// 每人最大限制未使用该卡券的数量/最大可用总数（如果使用或过期后，可以重复领取，但要保证在最大领取总数之内）
         /// </summary>
         public int LimitUsableNumber { get; set; }
+
+        #region 推荐人数
+
+        /// <summary>
+        /// 启用推荐人数要求
+        /// </summary>
+        public bool EnableRefereeRequirement { get; set; }
+
+        /// <summary>
+        /// 最低推荐人数（达到推荐人数可以使用，默认为0）
+        /// </summary>
+        public int MinReferralsNumber { get; set; }
+
+        /// <summary>
+        /// 邀请人数统计开始日期
+        /// </summary>
+        public DateTime? ReferralsNumberStartDateUtc { get; set; }
+
+        /// <summary>
+        /// 邀请人数统计结束日期
+        /// </summary>
+        public DateTime? ReferralsNumberEndDateUtc { get; set; }
+
+        #endregion
+
         /// <summary>
         /// 允许转赠次数：0=不允许转赠
         /// </summary>
