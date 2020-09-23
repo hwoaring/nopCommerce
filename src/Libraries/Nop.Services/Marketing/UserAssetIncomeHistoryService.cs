@@ -8,7 +8,6 @@ using Nop.Core.Domain.Suppliers;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 
@@ -20,8 +19,6 @@ namespace Nop.Services.Marketing
     public partial class UserAssetIncomeHistoryService : IUserAssetIncomeHistoryService
     {
         #region Fields
-
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<UserAssetIncomeHistory> _userAssetIncomeHistoryRepository;
         private readonly IRepository<SupplierVoucherCoupon> _supplierVoucherCouponRepository;
 
@@ -29,12 +26,11 @@ namespace Nop.Services.Marketing
 
         #region Ctor
 
-        public UserAssetIncomeHistoryService(IEventPublisher eventPublisher,
+        public UserAssetIncomeHistoryService(
             IRepository<UserAssetIncomeHistory> userAssetIncomeHistoryRepository,
             IRepository<SupplierVoucherCoupon> supplierVoucherCouponRepository
             )
         {
-            _eventPublisher = eventPublisher;
             _userAssetIncomeHistoryRepository = userAssetIncomeHistoryRepository;
             _supplierVoucherCouponRepository = supplierVoucherCouponRepository;
         }
@@ -45,13 +41,7 @@ namespace Nop.Services.Marketing
 
         public virtual void InsertEntity(UserAssetIncomeHistory entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _userAssetIncomeHistoryRepository.Insert(entity);
-
-            //event notification
-            _eventPublisher.EntityInserted(entity);
         }
 
         public virtual void InsertEntityBysupplierVoucherCouponParams(
@@ -211,11 +201,8 @@ namespace Nop.Services.Marketing
             else
             {
                 entity.Deleted = true;
-                UpdateEntity(entity);
+                _userAssetIncomeHistoryRepository.Update(entity);
             }
-
-            //event notification
-            _eventPublisher.EntityDeleted(entity);
         }
 
         public virtual void DeleteEntities(IList<UserAssetIncomeHistory> entities, bool deleted = false)
@@ -233,41 +220,18 @@ namespace Nop.Services.Marketing
                 {
                     entity.Deleted = true;
                 }
-                //delete wUser
-                UpdateEntities(entities);
-            }
-
-            foreach (var entity in entities)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(entity);
+                _userAssetIncomeHistoryRepository.Update(entities);
             }
         }
 
         public virtual void UpdateEntity(UserAssetIncomeHistory entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _userAssetIncomeHistoryRepository.Update(entity);
-
-            //event notification
-            _eventPublisher.EntityUpdated(entity);
         }
 
         public virtual void UpdateEntities(IList<UserAssetIncomeHistory> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            //update
             _userAssetIncomeHistoryRepository.Update(entities);
-
-            //event notification
-            foreach (var entity in entities)
-            {
-                _eventPublisher.EntityUpdated(entity);
-            }
         }
 
         public virtual void ActiveEntity(int userAssetIncomeHistoryId)
@@ -344,7 +308,7 @@ namespace Nop.Services.Marketing
             if (id == 0)
                 return null;
 
-            return _userAssetIncomeHistoryRepository.ToCachedGetById(id);
+            return _userAssetIncomeHistoryRepository.GetById(id, cache => default);
         }
 
         public virtual List<UserAssetIncomeHistory> GetEntitiesByUserId(int wuserId)

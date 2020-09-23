@@ -8,6 +8,11 @@ namespace Nop.Core.Domain.Customers
     public class CustomerSettings : ISettings
     {
         /// <summary>
+        /// 推荐人ID可用秒数。最新推荐用户信息保存在customer中，多少秒之内使用customer保存的推荐用户ID，超出时间采用wuser中的推荐用户ID
+        /// </summary>
+        public int RefereeIdAvailableSeconds { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether usernames are used instead of emails
         /// </summary>
         public bool UsernamesEnabled { get; set; }

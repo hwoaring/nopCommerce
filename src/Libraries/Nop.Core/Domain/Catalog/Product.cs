@@ -238,9 +238,10 @@ namespace Nop.Core.Domain.Catalog
         public string Gtin { get; set; }
 
         /// <summary>
-        /// 是否供应商提供的兑换券/代金券卡
+        /// 是否供应商提供的兑换券/代金券卡产品（是则绑定指定的VoucherCardId）
         /// </summary>
         public bool IsVoucherCard { get; set; }
+
         /// <summary>
         /// 供应商提供的兑换券Id
         /// </summary>
@@ -522,7 +523,7 @@ namespace Nop.Core.Domain.Catalog
         public decimal? MaxDiscountPercentage { get; set; }
 
         /// <summary>
-        /// 【价格保护】使用免费的现金抵用券最大金额（超出金额的券不显示或取最小限定值）
+        /// 【价格保护】使用免费的现金抵用券/虚拟币/这算后的低佣金等最大使用金额（超出金额的券不显示或取最小限定值）
         /// </summary>
         public decimal? MaxDiscountAmount { get; set; }
 

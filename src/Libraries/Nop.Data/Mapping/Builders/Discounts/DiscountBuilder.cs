@@ -18,7 +18,9 @@ namespace Nop.Data.Mapping.Builders.Discounts
         {
             table
                .WithColumn(nameof(Discount.Name)).AsString(200).NotNullable()
-               .WithColumn(nameof(Discount.CouponCode)).AsString(100).Nullable();
+               .WithColumn(nameof(Discount.ShortName)).AsString(64).Nullable()
+               .WithColumn(nameof(Discount.CouponCode)).AsString(100).Nullable()
+               ;
         }
 
         #endregion

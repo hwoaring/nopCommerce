@@ -7,7 +7,6 @@ using Nop.Core.Domain.Marketing;
 using Nop.Core.Domain.Suppliers;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
 namespace Nop.Services.Marketing
@@ -19,17 +18,15 @@ namespace Nop.Services.Marketing
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<UserAsset> _userAssetRepository;
 
         #endregion
 
         #region Ctor
 
-        public UserAssetService(IEventPublisher eventPublisher,
+        public UserAssetService(
             IRepository<UserAsset> userAssetRepository)
         {
-            _eventPublisher = eventPublisher;
             _userAssetRepository = userAssetRepository;
         }
 
@@ -39,13 +36,7 @@ namespace Nop.Services.Marketing
 
         public virtual void InsertEntity(UserAsset entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _userAssetRepository.Insert(entity);
-
-            //event notification
-            _eventPublisher.EntityInserted(entity);
         }
 
         public virtual void DeleteEntity(UserAsset entity, bool delete = false)
@@ -60,11 +51,8 @@ namespace Nop.Services.Marketing
             else
             {
                 entity.Deleted = true;
-                UpdateEntity(entity);
+                _userAssetRepository.Update(entity);
             }
-
-            //event notification
-            _eventPublisher.EntityDeleted(entity);
         }
 
         public virtual void DeleteEntities(IList<UserAsset> entities, bool deleted = false)
@@ -82,49 +70,23 @@ namespace Nop.Services.Marketing
                 {
                     entity.Deleted = true;
                 }
-                //delete wUser
-                UpdateEntities(entities);
-            }
-
-            foreach (var entity in entities)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(entity);
+                _userAssetRepository.Update(entities);
             }
         }
 
         public virtual void UpdateEntity(UserAsset entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _userAssetRepository.Update(entity);
-
-            //event notification
-            _eventPublisher.EntityUpdated(entity);
         }
 
         public virtual void UpdateEntities(IList<UserAsset> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            //update
             _userAssetRepository.Update(entities);
-
-            //event notification
-            foreach (var entity in entities)
-            {
-                _eventPublisher.EntityUpdated(entity);
-            }
         }
 
         public virtual UserAsset GetEntityById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _userAssetRepository.ToCachedGetById(id);
+            return _userAssetRepository.GetById(id, cache => default);
         }
 
         public virtual UserAsset GetEntityByUserId(int wuserId)

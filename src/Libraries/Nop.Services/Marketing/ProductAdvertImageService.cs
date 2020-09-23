@@ -7,7 +7,6 @@ using Nop.Core.Domain.Marketing;
 using Nop.Core.Domain.Suppliers;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
 namespace Nop.Services.Marketing
@@ -19,17 +18,14 @@ namespace Nop.Services.Marketing
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<ProductAdvertImage> _productAdvertImageRepository;
 
         #endregion
 
         #region Ctor
 
-        public ProductAdvertImageService(IEventPublisher eventPublisher,
-            IRepository<ProductAdvertImage> productAdvertImageRepository)
+        public ProductAdvertImageService(IRepository<ProductAdvertImage> productAdvertImageRepository)
         {
-            _eventPublisher = eventPublisher;
             _productAdvertImageRepository = productAdvertImageRepository;
         }
 
@@ -44,8 +40,6 @@ namespace Nop.Services.Marketing
 
             _productAdvertImageRepository.Insert(productAdvertImage);
 
-            //event notification
-            _eventPublisher.EntityInserted(productAdvertImage);
         }
 
         public virtual void DeleteEntity(ProductAdvertImage productAdvertImage, bool delete = false)
@@ -60,11 +54,8 @@ namespace Nop.Services.Marketing
             else
             {
                 productAdvertImage.Deleted = true;
-                UpdateEntity(productAdvertImage);
+                _productAdvertImageRepository.Update(productAdvertImage);
             }
-
-            //event notification
-            _eventPublisher.EntityDeleted(productAdvertImage);
         }
 
         public virtual void DeleteEntities(IList<ProductAdvertImage> productAdvertImages, bool deleted = false)
@@ -82,49 +73,24 @@ namespace Nop.Services.Marketing
                 {
                     productAdvertImage.Deleted = true;
                 }
-                //delete wUser
-                UpdateEntities(productAdvertImages);
-            }
-
-            foreach (var productAdvertImage in productAdvertImages)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(productAdvertImage);
+                _productAdvertImageRepository.Update(productAdvertImages);
             }
         }
 
         public virtual void UpdateEntity(ProductAdvertImage productAdvertImage)
         {
-            if (productAdvertImage == null)
-                throw new ArgumentNullException(nameof(productAdvertImage));
-
             _productAdvertImageRepository.Update(productAdvertImage);
-
-            //event notification
-            _eventPublisher.EntityUpdated(productAdvertImage);
         }
 
         public virtual void UpdateEntities(IList<ProductAdvertImage> productAdvertImages)
         {
-            if (productAdvertImages == null)
-                throw new ArgumentNullException(nameof(productAdvertImages));
-
             //update
             _productAdvertImageRepository.Update(productAdvertImages);
-
-            //event notification
-            foreach (var productAdvertImage in productAdvertImages)
-            {
-                _eventPublisher.EntityUpdated(productAdvertImage);
-            }
         }
 
         public virtual ProductAdvertImage GetEntityById(int id)
         {
-            if (id <= 0)
-                return null;
-
-            return _productAdvertImageRepository.ToCachedGetById(id);
+            return _productAdvertImageRepository.GetById(id, cache => default);
         }
 
         public virtual List<ProductAdvertImage> GetEntitiesByIds(int[] entityIds)

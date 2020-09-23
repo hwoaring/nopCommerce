@@ -197,7 +197,7 @@
         });
     </script>
 
-    @if (Model.IsEditable)
+    @if (Model.IsEditable && Model.CheckoutAttributes.Count > 0)
     {
         <div class="checkout_attribute_option">
 

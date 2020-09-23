@@ -5673,6 +5673,30 @@
   <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.AddressFormFields.CityRequired.Hint">
     <Value>Check if 'City' is required.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.AddressFormFields.LastNameEnabled">
+    <Value>'LastName' enabled</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.AddressFormFields.LastNameEnabled.Hint">
+    <Value>Set if 'LastName' is enabled.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.AddressFormFields.LastNameRequired">
+    <Value>'LastName' required</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.AddressFormFields.LastNameRequired.Hint">
+    <Value>Check if 'LastName' is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.AddressFormFields.EmailEnabled">
+    <Value>'Email' enabled</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.AddressFormFields.EmailEnabled.Hint">
+    <Value>Set if 'Email' is enabled.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.AddressFormFields.EmailRequired">
+    <Value>'Email' required</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.AddressFormFields.EmailRequired.Hint">
+    <Value>Check if 'Email' is required.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.AddressFormFields.CompanyEnabled">
     <Value>'Company' enabled</Value>
   </LocaleResource>

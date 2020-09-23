@@ -17,8 +17,14 @@ namespace Nop.Web.Models.Common
 
         [NopResourceDisplayName("Address.Fields.FirstName")]
         public string FirstName { get; set; }
+
+        public bool LastNameEnabled { get; set; }
+        public bool LastNameRequired { get; set; }
         [NopResourceDisplayName("Address.Fields.LastName")]
         public string LastName { get; set; }
+
+        public bool EmailEnabled { get; set; }
+        public bool EmailRequired { get; set; }
         [DataType(DataType.EmailAddress)]
         [NopResourceDisplayName("Address.Fields.Email")]
         public string Email { get; set; }

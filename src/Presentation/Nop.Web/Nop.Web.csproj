@@ -47,6 +47,8 @@
 
     <Content Include="Themes\Weixin\Views\Checkout\Confirm.cshtml" />
 
+    <Content Include="Themes\Weixin\Views\Checkout\OnePageCheckout - 复制.cshtml" />
+
     <Content Include="Themes\Weixin\Views\Checkout\OnePageCheckout.cshtml" />
 
     <Content Include="Themes\Weixin\Views\Checkout\OpcBillingAddress.cshtml" />
@@ -85,6 +87,8 @@
 
     <Content Include="Themes\Weixin\Views\Product\_ProductPrice.cshtml" />
 
+    <Content Include="Themes\Weixin\Views\Product\_ProductSpecifications.cshtml" />
+
     <Content Include="Themes\Weixin\Views\Product\_ProductTierPrices.cshtml" />
 
     <Content Include="Themes\Weixin\Views\Shared\Components\CheckoutProgress\Default.cshtml" />
@@ -99,6 +103,8 @@
 
     <Content Include="Themes\Weixin\Views\Shared\_ColumnsOne.cshtml" />
 
+    <Content Include="Themes\Weixin\Views\Shared\_CreateOrUpdateAddress.cshtml" />
+
     <Content Include="Themes\Weixin\Views\Shared\_DiscountBox.cshtml" />
 
     <Content Include="Themes\Weixin\Views\Shared\_Header.cshtml" />
@@ -110,6 +116,8 @@
     <Content Include="Themes\Weixin\Views\Shared\_OldInternetExplorerWarning.cshtml" />
 
     <Content Include="Themes\Weixin\Views\Shared\_ProductBox.cshtml" />
+
+    <Content Include="Themes\Weixin\Views\Shared\_Root_NoFooter.cshtml" />
 
     <Content Include="Themes\Weixin\Views\Shared\_Root.cshtml" />
 
@@ -188,6 +196,7 @@
     <None Remove="Themes\Weixin\Views\Checkout\BillingAddress.cshtml" />
     <None Remove="Themes\Weixin\Views\Checkout\Completed.cshtml" />
     <None Remove="Themes\Weixin\Views\Checkout\Confirm.cshtml" />
+    <None Remove="Themes\Weixin\Views\Checkout\OnePageCheckout - 复制.cshtml" />
     <None Remove="Themes\Weixin\Views\Checkout\OnePageCheckout.cshtml" />
     <None Remove="Themes\Weixin\Views\Checkout\OpcBillingAddress.cshtml" />
     <None Remove="Themes\Weixin\Views\Checkout\OpcConfirmOrder.cshtml" />
@@ -207,6 +216,7 @@
     <None Remove="Themes\Weixin\Views\Product\_ProductDetailsPictures.cshtml" />
     <None Remove="Themes\Weixin\Views\Product\_ProductEstimateShipping.cshtml" />
     <None Remove="Themes\Weixin\Views\Product\_ProductPrice.cshtml" />
+    <None Remove="Themes\Weixin\Views\Product\_ProductSpecifications.cshtml" />
     <None Remove="Themes\Weixin\Views\Product\_ProductTierPrices.cshtml" />
     <None Remove="Themes\Weixin\Views\Shared\Components\CheckoutProgress\Default.cshtml" />
     <None Remove="Themes\Weixin\Views\Shared\Components\FooterLinks\Default.cshtml" />
@@ -214,6 +224,7 @@
     <None Remove="Themes\Weixin\Views\Shared\Components\OrderTotals\Default.cshtml" />
     <None Remove="Themes\Weixin\Views\Shared\_CheckoutAttributes.cshtml" />
     <None Remove="Themes\Weixin\Views\Shared\_ColumnsOne.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\_CreateOrUpdateAddress.cshtml" />
     <None Remove="Themes\Weixin\Views\Shared\_DiscountBox.cshtml" />
     <None Remove="Themes\Weixin\Views\Shared\_Header.cshtml" />
     <None Remove="Themes\Weixin\Views\Shared\_JavaScriptDisabledWarning.cshtml" />
@@ -222,6 +233,7 @@
     <None Remove="Themes\Weixin\Views\Shared\_ProductBox.cshtml" />
     <None Remove="Themes\Weixin\Views\Shared\_Root.cshtml" />
     <None Remove="Themes\Weixin\Views\Shared\_Root.Head.cshtml" />
+    <None Remove="Themes\Weixin\Views\Shared\_Root_NoFooter.cshtml" />
     <None Remove="Themes\Weixin\Views\ShoppingCart\Cart.cshtml" />
     <None Remove="Themes\Weixin\Views\ShoppingCart\EmailWishlist.cshtml" />
     <None Remove="Themes\Weixin\Views\ShoppingCart\Wishlist.cshtml" />
@@ -260,6 +272,10 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Update="Themes\Weixin\Views\Checkout\Confirm.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Checkout\OnePageCheckout - 复制.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -339,6 +355,10 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Update="Themes\Weixin\Views\Product\_ProductSpecifications.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Update="Themes\Weixin\Views\Product\_ProductTierPrices.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -367,6 +387,10 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Update="Themes\Weixin\Views\Shared\_CreateOrUpdateAddress.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Update="Themes\Weixin\Views\Shared\_DiscountBox.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -388,6 +412,10 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Update="Themes\Weixin\Views\Shared\_ProductBox.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Themes\Weixin\Views\Shared\_Root_NoFooter.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 using Org.BouncyCastle.Bcpg.OpenPgp;
 
@@ -20,17 +19,15 @@ namespace Nop.Services.Weixin
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<WConfig> _wConfigRepository;
 
         #endregion
 
         #region Ctor
 
-        public WConfigService(IEventPublisher eventPublisher,
+        public WConfigService(
             IRepository<WConfig> wConfigRepository)
         {
-            _eventPublisher = eventPublisher;
             _wConfigRepository = wConfigRepository;
         }
 
@@ -40,13 +37,7 @@ namespace Nop.Services.Weixin
 
         public virtual void InsertWConfig(WConfig wConfig)
         {
-            if (wConfig == null)
-                throw new ArgumentNullException(nameof(wConfig));
-
             _wConfigRepository.Insert(wConfig);
-
-            //event notification
-            _eventPublisher.EntityInserted(wConfig);
         }
 
         public virtual void DeleteWConfig(WConfig wConfig, bool delete = false)
@@ -61,11 +52,8 @@ namespace Nop.Services.Weixin
             else
             {
                 wConfig.Deleted = true;
-                UpdateWConfig(wConfig);
+                _wConfigRepository.Update(wConfig);
             }
-            
-            //event notification
-            _eventPublisher.EntityDeleted(wConfig);
         }
 
         public virtual void DeleteWConfigs(IList<WConfig> wConfigs, bool deleted = false)
@@ -83,49 +71,23 @@ namespace Nop.Services.Weixin
                 {
                     wConfig.Deleted = true;
                 }
-                //delete wUser
-                UpdateWConfigs(wConfigs);
-            }
-            
-            foreach (var wConfig in wConfigs)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(wConfig);
+                _wConfigRepository.Update(wConfigs);
             }
         }
 
         public virtual void UpdateWConfig(WConfig wConfig)
         {
-            if (wConfig == null)
-                throw new ArgumentNullException(nameof(wConfig));
-
             _wConfigRepository.Update(wConfig);
-
-            //event notification
-            _eventPublisher.EntityUpdated(wConfig);
         }
 
         public virtual void UpdateWConfigs(IList<WConfig> wConfigs)
         {
-            if (wConfigs == null)
-                throw new ArgumentNullException(nameof(wConfigs));
-
-            //update
             _wConfigRepository.Update(wConfigs);
-
-            //event notification
-            foreach (var wConfig in wConfigs)
-            {
-                _eventPublisher.EntityUpdated(wConfig);
-            }
         }
 
         public virtual WConfig GetWConfigById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _wConfigRepository.ToCachedGetById(id);
+            return _wConfigRepository.GetById(id, cache => default);
         }
 
         public virtual WConfig GetWUserByOriginalId(string originalId)

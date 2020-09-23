@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Suppliers;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 using Nop.Core.Domain.Marketing;
 
@@ -20,17 +19,15 @@ namespace Nop.Services.Suppliers
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<SupplierVoucherCoupon> _supplierVoucherCouponRepository;
 
         #endregion
 
         #region Ctor
 
-        public SupplierVoucherCouponService(IEventPublisher eventPublisher,
+        public SupplierVoucherCouponService(
             IRepository<SupplierVoucherCoupon> supplierVoucherCouponRepository)
         {
-            _eventPublisher = eventPublisher;
             _supplierVoucherCouponRepository = supplierVoucherCouponRepository;
         }
 
@@ -40,13 +37,7 @@ namespace Nop.Services.Suppliers
 
         public virtual void InsertEntity(SupplierVoucherCoupon entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _supplierVoucherCouponRepository.Insert(entity);
-
-            //event notification
-            _eventPublisher.EntityInserted(entity);
         }
 
         public virtual void DeleteEntity(SupplierVoucherCoupon entity, bool delete = false)
@@ -61,11 +52,8 @@ namespace Nop.Services.Suppliers
             else
             {
                 entity.Deleted = true;
-                UpdateEntity(entity);
+                _supplierVoucherCouponRepository.Update(entity);
             }
-
-            //event notification
-            _eventPublisher.EntityDeleted(entity);
         }
 
         public virtual void DeleteEntities(IList<SupplierVoucherCoupon> entities, bool deleted = false)
@@ -83,49 +71,23 @@ namespace Nop.Services.Suppliers
                 {
                     entity.Deleted = true;
                 }
-                //delete wUser
-                UpdateEntities(entities);
-            }
-
-            foreach (var entity in entities)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(entity);
+                _supplierVoucherCouponRepository.Update(entities);
             }
         }
 
         public virtual void UpdateEntity(SupplierVoucherCoupon entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _supplierVoucherCouponRepository.Update(entity);
-
-            //event notification
-            _eventPublisher.EntityUpdated(entity);
         }
 
         public virtual void UpdateEntities(IList<SupplierVoucherCoupon> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            //update
             _supplierVoucherCouponRepository.Update(entities);
-
-            //event notification
-            foreach (var entity in entities)
-            {
-                _eventPublisher.EntityUpdated(entity);
-            }
         }
 
         public virtual SupplierVoucherCoupon GetEntityById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _supplierVoucherCouponRepository.ToCachedGetById(id);
+            return _supplierVoucherCouponRepository.GetById(id, cache => default);
         }
 
         public virtual List<SupplierVoucherCoupon> GetEntitiesByIds(int[] entityIds)

@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
 namespace Nop.Services.Weixin
@@ -19,17 +18,15 @@ namespace Nop.Services.Weixin
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<WMessageBindMapping> _wMessageBindRepository;
 
         #endregion
 
         #region Ctor
 
-        public WMessageBindService(IEventPublisher eventPublisher,
+        public WMessageBindService(
             IRepository<WMessageBindMapping> wMessageBindRepository)
         {
-            _eventPublisher = eventPublisher;
             _wMessageBindRepository = wMessageBindRepository;
         }
 
@@ -39,74 +36,32 @@ namespace Nop.Services.Weixin
 
         public virtual void InsertEntity(WMessageBindMapping messageBind)
         {
-            if (messageBind == null)
-                throw new ArgumentNullException(nameof(messageBind));
-
             _wMessageBindRepository.Insert(messageBind);
-
-            //event notification
-            _eventPublisher.EntityInserted(messageBind);
         }
 
         public virtual void DeleteEntity(WMessageBindMapping messageBind)
         {
-            if (messageBind == null)
-                throw new ArgumentNullException(nameof(messageBind));
-
-            //Delete
             _wMessageBindRepository.Delete(messageBind);
-
-            //event notification
-            _eventPublisher.EntityDeleted(messageBind);
         }
 
         public virtual void DeleteEntities(IList<WMessageBindMapping> messageBinds)
         {
-            if (messageBinds == null)
-                throw new ArgumentNullException(nameof(messageBinds));
-
-            //delete
             _wMessageBindRepository.Delete(messageBinds);
-
-            foreach (var messageBind in messageBinds)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(messageBind);
-            }
         }
 
         public virtual void UpdateEntity(WMessageBindMapping messageBind)
         {
-            if (messageBind == null)
-                throw new ArgumentNullException(nameof(messageBind));
-
             _wMessageBindRepository.Update(messageBind);
-
-            //event notification
-            _eventPublisher.EntityUpdated(messageBind);
         }
 
         public virtual void UpdateEntities(IList<WMessageBindMapping> messageBinds)
         {
-            if (messageBinds == null)
-                throw new ArgumentNullException(nameof(messageBinds));
-
-            //update
             _wMessageBindRepository.Update(messageBinds);
-
-            //event notification
-            foreach (var messageBind in messageBinds)
-            {
-                _eventPublisher.EntityUpdated(messageBind);
-            }
         }
 
         public virtual WMessageBindMapping GetEntityById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _wMessageBindRepository.GetById(id);
+            return _wMessageBindRepository.GetById(id, cache => default);
         }
 
         public virtual List<WMessageBindMapping> GetEntitiesByIds(int[] messageBindIds)

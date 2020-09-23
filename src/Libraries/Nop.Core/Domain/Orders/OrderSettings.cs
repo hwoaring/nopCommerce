@@ -54,6 +54,11 @@ namespace Nop.Core.Domain.Orders
         public bool TermsOfServiceOnOrderConfirmPage { get; set; }
 
         /// <summary>
+        /// 一键支付（在满足逻辑关系情况下，可以在详情页面直接支付）
+        /// </summary>
+        public bool OneClickPaymentEnabled { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether 'One-page checkout' is enabled
         /// </summary>
         public bool OnePageCheckoutEnabled { get; set; }

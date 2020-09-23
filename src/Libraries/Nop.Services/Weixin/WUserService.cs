@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
 namespace Nop.Services.Weixin
@@ -19,17 +18,15 @@ namespace Nop.Services.Weixin
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<WUser> _wUserRepository;
 
         #endregion
 
         #region Ctor
 
-        public WUserService(IEventPublisher eventPublisher,
+        public WUserService(
             IRepository<WUser> wUserRepository)
         {
-            _eventPublisher = eventPublisher;
             _wUserRepository = wUserRepository;
         }
 
@@ -43,13 +40,7 @@ namespace Nop.Services.Weixin
         /// <param name="wuser"></param>
         public virtual void InsertWUser(WUser wuser)
         {
-            if (wuser == null)
-                throw new ArgumentNullException(nameof(wuser));
-
             _wUserRepository.Insert(wuser);
-
-            //event notification
-            _eventPublisher.EntityInserted(wuser);
         }
 
         /// <summary>
@@ -63,10 +54,7 @@ namespace Nop.Services.Weixin
                 throw new ArgumentNullException(nameof(wUser));
 
             wUser.Deleted = true;
-            UpdateWUser(wUser);
-
-            //event notification
-            _eventPublisher.EntityDeleted(wUser);
+            _wUserRepository.Update(wUser);
         }
 
         /// <summary>
@@ -84,14 +72,7 @@ namespace Nop.Services.Weixin
                 wuser.Deleted = true;
             }
 
-            //delete wUser
-            UpdateWUsers(wUsers);
-
-            foreach (var wuser in wUsers)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(wuser);
-            }
+            _wUserRepository.Update(wUsers);
         }
 
         /// <summary>
@@ -100,13 +81,7 @@ namespace Nop.Services.Weixin
         /// <param name="wuser"></param>
         public virtual void UpdateWUser(WUser wuser)
         {
-            if (wuser == null)
-                throw new ArgumentNullException(nameof(wuser));
-
             _wUserRepository.Update(wuser);
-
-            //event notification
-            _eventPublisher.EntityUpdated(wuser);
         }
 
         /// <summary>
@@ -115,17 +90,7 @@ namespace Nop.Services.Weixin
         /// <param name="wuser"></param>
         public virtual void UpdateWUsers(IList<WUser> wUsers)
         {
-            if (wUsers == null)
-                throw new ArgumentNullException(nameof(wUsers));
-
-            //update
             _wUserRepository.Update(wUsers);
-
-            //event notification
-            foreach (var wuser in wUsers)
-            {
-                _eventPublisher.EntityUpdated(wuser);
-            }
         }
 
         /// <summary>
@@ -135,10 +100,7 @@ namespace Nop.Services.Weixin
         /// <returns></returns>
         public virtual WUser GetWUserById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _wUserRepository.ToCachedGetById(id);
+            return _wUserRepository.GetById(id, cache => default);
         }
 
         /// <summary>

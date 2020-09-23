@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
 namespace Nop.Services.Weixin
@@ -19,17 +18,15 @@ namespace Nop.Services.Weixin
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<WQrCodeLimit> _wQrCodeLimitRepository;
 
         #endregion
 
         #region Ctor
 
-        public WQrCodeLimitService(IEventPublisher eventPublisher,
+        public WQrCodeLimitService(
             IRepository<WQrCodeLimit> wQrCodeLimitRepository)
         {
-            _eventPublisher = eventPublisher;
             _wQrCodeLimitRepository = wQrCodeLimitRepository;
         }
 
@@ -39,47 +36,22 @@ namespace Nop.Services.Weixin
 
         public virtual void InsertWQrCodeLimit(WQrCodeLimit wQrCodeLimit)
         {
-            if (wQrCodeLimit == null)
-                throw new ArgumentNullException(nameof(wQrCodeLimit));
-
             _wQrCodeLimitRepository.Insert(wQrCodeLimit);
-
-            //event notification
-            _eventPublisher.EntityInserted(wQrCodeLimit);
         }
 
         public virtual void UpdateWQrCodeLimit(WQrCodeLimit wQrCodeLimit)
         {
-            if (wQrCodeLimit == null)
-                throw new ArgumentNullException(nameof(wQrCodeLimit));
-
             _wQrCodeLimitRepository.Update(wQrCodeLimit);
-
-            //event notification
-            _eventPublisher.EntityUpdated(wQrCodeLimit);
         }
 
         public virtual void UpdateWQrCodeLimits(IList<WQrCodeLimit> wQrCodeLimits)
         {
-            if (wQrCodeLimits == null)
-                throw new ArgumentNullException(nameof(wQrCodeLimits));
-
-            //update
             _wQrCodeLimitRepository.Update(wQrCodeLimits);
-
-            //event notification
-            foreach (var wQrCodeLimit in wQrCodeLimits)
-            {
-                _eventPublisher.EntityUpdated(wQrCodeLimit);
-            }
         }
 
         public virtual WQrCodeLimit GetWQrCodeLimitById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _wQrCodeLimitRepository.GetById(id);
+            return _wQrCodeLimitRepository.GetById(id, cache => default);
         }
 
         public virtual WQrCodeLimit GetWQrCodeLimitByQrCodeId(int qrCodeId)

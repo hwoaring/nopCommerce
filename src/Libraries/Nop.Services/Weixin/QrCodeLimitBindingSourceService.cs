@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
 namespace Nop.Services.Weixin
@@ -19,17 +18,15 @@ namespace Nop.Services.Weixin
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<QrCodeLimitBindingSource> _qrCodeLimitBindingSourceRepository;
 
         #endregion
 
         #region Ctor
 
-        public QrCodeLimitBindingSourceService(IEventPublisher eventPublisher,
+        public QrCodeLimitBindingSourceService(
             IRepository<QrCodeLimitBindingSource> qrCodeLimitBindingSourceRepository)
         {
-            _eventPublisher = eventPublisher;
             _qrCodeLimitBindingSourceRepository = qrCodeLimitBindingSourceRepository;
         }
 
@@ -39,64 +36,27 @@ namespace Nop.Services.Weixin
 
         public virtual void InsertEntity(QrCodeLimitBindingSource entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _qrCodeLimitBindingSourceRepository.Insert(entity);
-
-            //event notification
-            _eventPublisher.EntityInserted(entity);
         }
 
         public virtual void DeleteEntity(QrCodeLimitBindingSource entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _qrCodeLimitBindingSourceRepository.Delete(entity);
-
-            //event notification
-            _eventPublisher.EntityDeleted(entity);
         }
 
         public virtual void DeleteEntities(IList<QrCodeLimitBindingSource> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
             _qrCodeLimitBindingSourceRepository.Delete(entities);
-
-            foreach (var entity in entities)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(entity);
-            }
         }
 
         public virtual void UpdateEntity(QrCodeLimitBindingSource entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _qrCodeLimitBindingSourceRepository.Update(entity);
-
-            //event notification
-            _eventPublisher.EntityUpdated(entity);
         }
 
         public virtual void UpdateEntities(IList<QrCodeLimitBindingSource> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            //update
             _qrCodeLimitBindingSourceRepository.Update(entities);
-
-            //event notification
-            foreach (var entity in entities)
-            {
-                _eventPublisher.EntityUpdated(entity);
-            }
         }
 
         public virtual QrCodeLimitBindingSource GetEntityById(int id)
@@ -104,7 +64,7 @@ namespace Nop.Services.Weixin
             if (id == 0)
                 return null;
 
-            return _qrCodeLimitBindingSourceRepository.GetById(id);
+            return _qrCodeLimitBindingSourceRepository.GetById(id, cache => default);
         }
 
         public virtual QrCodeLimitBindingSource GetEntityByQrcodeLimitId(int qrCodeLimitId)

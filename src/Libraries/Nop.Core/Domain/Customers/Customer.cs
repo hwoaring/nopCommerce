@@ -43,7 +43,7 @@ namespace Nop.Core.Domain.Customers
         /// </summary>
         public int RefereeId { get; set; }
         /// <summary>
-        /// 推荐用户最近更新时间
+        /// 推荐用户ID最近更新时间（用于多长时间内更新的ID，临时属于另一个推荐人，超出时间属于默认推荐人）
         /// </summary>
         public int RefereeIdUpdateTime { get; set; }
 

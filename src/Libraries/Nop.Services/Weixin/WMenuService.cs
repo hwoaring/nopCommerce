@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
 namespace Nop.Services.Weixin
@@ -19,17 +18,15 @@ namespace Nop.Services.Weixin
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<WMenu> _wMenuRepository;
 
         #endregion
 
         #region Ctor
 
-        public WMenuService(IEventPublisher eventPublisher,
+        public WMenuService(
             IRepository<WMenu> wMenuRepository)
         {
-            _eventPublisher = eventPublisher;
             _wMenuRepository = wMenuRepository;
         }
 
@@ -39,13 +36,7 @@ namespace Nop.Services.Weixin
 
         public virtual void InsertMenu(WMenu menu)
         {
-            if (menu == null)
-                throw new ArgumentNullException(nameof(menu));
-
             _wMenuRepository.Insert(menu);
-
-            //event notification
-            _eventPublisher.EntityInserted(menu);
         }
 
         public virtual void DeleteMenu(WMenu menu, bool delete = false)
@@ -54,10 +45,7 @@ namespace Nop.Services.Weixin
                 throw new ArgumentNullException(nameof(menu));
 
             menu.Deleted = true;
-            UpdateMenu(menu);
-
-            //event notification
-            _eventPublisher.EntityDeleted(menu);
+            _wMenuRepository.Update(menu);
         }
 
         public virtual void DeleteMenus(IList<WMenu> menus, bool deleted = false)
@@ -70,47 +58,22 @@ namespace Nop.Services.Weixin
                 menu.Deleted = true;
             }
 
-            UpdateMenus(menus);
-
-            foreach (var menu in menus)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(menu);
-            }
+            _wMenuRepository.Update(menus);
         }
 
         public virtual void UpdateMenu(WMenu menu)
         {
-            if (menu == null)
-                throw new ArgumentNullException(nameof(menu));
-
             _wMenuRepository.Update(menu);
-
-            //event notification
-            _eventPublisher.EntityUpdated(menu);
         }
 
         public virtual void UpdateMenus(IList<WMenu> menus)
         {
-            if (menus == null)
-                throw new ArgumentNullException(nameof(menus));
-
-            //update
             _wMenuRepository.Update(menus);
-
-            //event notification
-            foreach (var menu in menus)
-            {
-                _eventPublisher.EntityUpdated(menu);
-            }
         }
 
         public virtual WMenu GetMenuById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _wMenuRepository.GetById(id);
+            return _wMenuRepository.GetById(id, cache => default);
         }
 
         public virtual WMenu GetMenuByMenuId(long menuId)

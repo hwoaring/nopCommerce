@@ -1,8 +1,10 @@
 @model CustomerUserSettingsModel
 
-<script>
+    <script>
     $(document).ready(function () {
         $("#@Html.IdFor(model => model.AddressSettings.CountryEnabled)").click(toggleAddressCountryFormField);
+        $("#@Html.IdFor(model => model.AddressSettings.LastNameEnabled)").click(toggleAddressRequiredFormField);
+        $("#@Html.IdFor(model => model.AddressSettings.EmailEnabled)").click(toggleAddressRequiredFormField);
         $("#@Html.IdFor(model => model.AddressSettings.CompanyEnabled)").click(toggleAddressRequiredFormField);
         $("#@Html.IdFor(model => model.AddressSettings.StreetAddressEnabled)").click(toggleAddressRequiredFormField);
         $("#@Html.IdFor(model => model.AddressSettings.StreetAddress2Enabled)").click(toggleAddressRequiredFormField);
@@ -26,6 +28,19 @@
     }
 
     function toggleAddressRequiredFormField() {
+        if ($('#@Html.IdFor(model => model.AddressSettings.LastNameEnabled)').is(':checked')) {
+            $('#pnlAddressLastNameRequired').show();
+        }
+        else {
+            $('#pnlAddressLastNameRequired').hide();
+        }
+        if ($('#@Html.IdFor(model => model.AddressSettings.EmailEnabled)').is(':checked')) {
+            $('#pnlAddressEmailRequired').show();
+        }
+        else {
+            $('#pnlAddressEmailRequired').hide();
+        }
+
         if ($('#@Html.IdFor(model => model.AddressSettings.CompanyEnabled)').is(':checked')) {
             $('#pnlAddressCompanyRequired').show();
         }
@@ -82,13 +97,53 @@
             $('#pnlAddressFaxRequired').hide();
         }
     }
-</script>
+    </script>
 
 <div class="panel-group">
     <div class="panel-body">
         <p>
             <em>@T("Admin.Configuration.Settings.CustomerUser.AddressFormFields.Description")</em>
         </p>
+        <div class="form-group">
+            <div class="col-md-3">
+                <nop-label asp-for="AddressSettings.LastNameEnabled" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="AddressSettings.LastNameEnabled" />
+                <span asp-validation-for="AddressSettings.LastNameEnabled"></span>
+            </div>
+        </div>
+        <nop-nested-setting asp-for="AddressSettings.LastNameEnabled">
+            <div class="form-group" id="pnlAddressLastNameRequired">
+                <div class="col-md-3">
+                    <nop-label asp-for="AddressSettings.LastNameRequired" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="AddressSettings.LastNameRequired" />
+                    <span asp-validation-for="AddressSettings.LastNameRequired"></span>
+                </div>
+            </div>
+        </nop-nested-setting>
+        <div class="form-group">
+            <div class="col-md-3">
+                <nop-label asp-for="AddressSettings.EmailEnabled" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="AddressSettings.EmailEnabled" />
+                <span asp-validation-for="AddressSettings.EmailEnabled"></span>
+            </div>
+        </div>
+        <nop-nested-setting asp-for="AddressSettings.EmailEnabled">
+            <div class="form-group" id="pnlAddressEmailRequired">
+                <div class="col-md-3">
+                    <nop-label asp-for="AddressSettings.EmailRequired" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="AddressSettings.EmailRequired" />
+                    <span asp-validation-for="AddressSettings.EmailRequired"></span>
+                </div>
+            </div>
+        </nop-nested-setting>
         <div class="form-group">
             <div class="col-md-3">
                 <nop-label asp-for="AddressSettings.CompanyEnabled" />

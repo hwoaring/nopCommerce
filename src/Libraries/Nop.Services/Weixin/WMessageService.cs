@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
 namespace Nop.Services.Weixin
@@ -19,17 +18,15 @@ namespace Nop.Services.Weixin
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<WMessage> _wMessageRepository;
 
         #endregion
 
         #region Ctor
 
-        public WMessageService(IEventPublisher eventPublisher,
+        public WMessageService(
             IRepository<WMessage> wMessageRepository)
         {
-            _eventPublisher = eventPublisher;
             _wMessageRepository = wMessageRepository;
         }
 
@@ -39,13 +36,7 @@ namespace Nop.Services.Weixin
 
         public virtual void InsertWMessage(WMessage wMessage)
         {
-            if (wMessage == null)
-                throw new ArgumentNullException(nameof(wMessage));
-
             _wMessageRepository.Insert(wMessage);
-
-            //event notification
-            _eventPublisher.EntityInserted(wMessage);
         }
 
         public virtual void DeleteWMessage(WMessage wMessage, bool delete = false)
@@ -60,11 +51,8 @@ namespace Nop.Services.Weixin
             else
             {
                 wMessage.Deleted = true;
-                UpdateWMessage(wMessage);
+                _wMessageRepository.Update(wMessage);
             }
-
-            //event notification
-            _eventPublisher.EntityDeleted(wMessage);
         }
 
         public virtual void DeleteWMessages(IList<WMessage> wMessages, bool deleted = false)
@@ -82,49 +70,23 @@ namespace Nop.Services.Weixin
                 {
                     wMessage.Deleted = true;
                 }
-                //delete wUser
-                UpdateWMessages(wMessages);
-            }
-
-            foreach (var wMessage in wMessages)
-            {
-                //event notification
-                _eventPublisher.EntityDeleted(wMessage);
+                _wMessageRepository.Update(wMessages);
             }
         }
 
         public virtual void UpdateWMessage(WMessage wMessage)
         {
-            if (wMessage == null)
-                throw new ArgumentNullException(nameof(wMessage));
-
             _wMessageRepository.Update(wMessage);
-
-            //event notification
-            _eventPublisher.EntityUpdated(wMessage);
         }
 
         public virtual void UpdateWMessages(IList<WMessage> wMessages)
         {
-            if (wMessages == null)
-                throw new ArgumentNullException(nameof(wMessages));
-
-            //update
             _wMessageRepository.Update(wMessages);
-
-            //event notification
-            foreach (var wMessage in wMessages)
-            {
-                _eventPublisher.EntityUpdated(wMessage);
-            }
         }
 
         public virtual WMessage GetWMessageById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _wMessageRepository.GetById(id);
+            return _wMessageRepository.GetById(id, cache => default);
         }
 
         public virtual List<WMessage> GetWMessagesByIds(int[] wMessageIds)

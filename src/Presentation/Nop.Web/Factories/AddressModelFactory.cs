@@ -272,6 +272,10 @@ namespace Nop.Web.Factories
             }
 
             //form fields
+            model.LastNameEnabled = addressSettings.LastNameEnabled;
+            model.LastNameRequired = addressSettings.LastNameRequired;
+            model.EmailEnabled = addressSettings.EmailEnabled;
+            model.EmailRequired = addressSettings.EmailRequired;
             model.CompanyEnabled = addressSettings.CompanyEnabled;
             model.CompanyRequired = addressSettings.CompanyRequired;
             model.StreetAddressEnabled = addressSettings.StreetAddressEnabled;

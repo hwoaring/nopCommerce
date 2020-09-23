@@ -6379,6 +6379,7 @@ namespace Nop.Services.Installation
 
             settingService.SaveSetting(new CustomerSettings
             {
+                RefereeIdAvailableSeconds = 0,
                 UsernamesEnabled = false,
                 CheckUsernameAvailabilityEnabled = false,
                 AllowUsersToChangeUsernames = false,
@@ -6448,6 +6449,10 @@ namespace Nop.Services.Installation
 
             settingService.SaveSetting(new AddressSettings
             {
+                LastNameEnabled = true,
+                LastNameRequired = true,
+                EmailEnabled = true,
+                EmailRequired = true,
                 CompanyEnabled = true,
                 StreetAddressEnabled = true,
                 StreetAddressRequired = true,
@@ -6584,6 +6589,7 @@ namespace Nop.Services.Installation
                 TermsOfServiceOnShoppingCartPage = true,
                 TermsOfServiceOnOrderConfirmPage = false,
                 OnePageCheckoutEnabled = true,
+                OneClickPaymentEnabled = false,
                 OnePageCheckoutDisplayOrderTotalsOnPaymentInfoTab = false,
                 DisableBillingAddressCheckoutStep = false,
                 DisableOrderCompletedPage = false,

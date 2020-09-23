@@ -150,10 +150,14 @@ namespace Nop.Services.Common
             if (string.IsNullOrWhiteSpace(address.FirstName))
                 return false;
 
-            if (string.IsNullOrWhiteSpace(address.LastName))
+            if (_addressSettings.LastNameEnabled &&
+                _addressSettings.LastNameRequired &&
+                string.IsNullOrWhiteSpace(address.LastName))
                 return false;
 
-            if (string.IsNullOrWhiteSpace(address.Email))
+            if (_addressSettings.EmailEnabled &&
+                _addressSettings.EmailRequired &&
+                string.IsNullOrWhiteSpace(address.Email))
                 return false;
 
             if (_addressSettings.CompanyEnabled &&

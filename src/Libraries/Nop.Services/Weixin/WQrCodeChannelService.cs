@@ -7,7 +7,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Html;
 using Nop.Data;
-using Nop.Services.Caching.Extensions;
 using Nop.Services.Events;
 
 namespace Nop.Services.Weixin
@@ -19,17 +18,15 @@ namespace Nop.Services.Weixin
     {
         #region Fields
 
-        private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<WQrCodeChannel> _wQrCodeChannelRepository;
 
         #endregion
 
         #region Ctor
 
-        public WQrCodeChannelService(IEventPublisher eventPublisher,
+        public WQrCodeChannelService(
             IRepository<WQrCodeChannel> wQrCodeChannelRepository)
         {
-            _eventPublisher = eventPublisher;
             _wQrCodeChannelRepository = wQrCodeChannelRepository;
         }
 
@@ -39,47 +36,22 @@ namespace Nop.Services.Weixin
 
         public virtual void InsertEntity(WQrCodeChannel entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _wQrCodeChannelRepository.Insert(entity);
-
-            //event notification
-            _eventPublisher.EntityInserted(entity);
         }
 
         public virtual void UpdateEntity(WQrCodeChannel entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
             _wQrCodeChannelRepository.Update(entity);
-
-            //event notification
-            _eventPublisher.EntityUpdated(entity);
         }
 
         public virtual void UpdateEntities(IList<WQrCodeChannel> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            //update
             _wQrCodeChannelRepository.Update(entities);
-
-            //event notification
-            foreach (var entity in entities)
-            {
-                _eventPublisher.EntityUpdated(entity);
-            }
         }
 
         public virtual WQrCodeChannel GetEntityById(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _wQrCodeChannelRepository.GetById(id);
+            return _wQrCodeChannelRepository.GetById(id, cache => default);
         }
 
         public virtual List<WQrCodeChannel> GetEntitiesByParentId(int parentId)

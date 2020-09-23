@@ -7,6 +7,6 @@ namespace Nop.Core.Domain.Marketing
     /// </summary>
     public class MarketingSettings : ISettings
     {
-   
+        
     }
 }

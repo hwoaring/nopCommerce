@@ -1,0 +1,23 @@
+﻿@model IList<ProductSpecificationModel>
+@using Nop.Core.Domain.Catalog;
+@if (Model.Count > 0)
+{
+    <div class="module-container product-item-module">
+        <h3 class="title-bar-style1">
+            <i class="line-icon"></i>
+            <span class="title-txt">基本信息</span>
+        </h3>
+        <div class="module-wrap product-item-module-wrap">
+            <ul>
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    var item = Model[i];
+                <li><span>@item.SpecificationAttributeName：</span>@Html.Raw(item.ValueRaw)</li>
+                }
+                <li><span>工艺：</span>纯粮固态发酵</li>
+                <li><span>产品标准：</span>GB/T10781.1-2006(优级)</li>
+                <li><span>生产厂家：</span>泸州赖族酒业有限公司</li>
+            </ul>
+        </div>
+    </div>
+}

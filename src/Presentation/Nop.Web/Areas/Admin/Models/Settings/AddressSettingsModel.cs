@@ -12,6 +12,18 @@ namespace Nop.Web.Areas.Admin.Models.Settings
 
         public int ActiveStoreScopeConfiguration { get; set; }
 
+        [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.AddressFormFields.LastNameEnabled")]
+        public bool LastNameEnabled { get; set; }
+
+        [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.AddressFormFields.LastNameRequired")]
+        public bool LastNameRequired { get; set; }
+
+        [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.AddressFormFields.EmailEnabled")]
+        public bool EmailEnabled { get; set; }
+
+        [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.AddressFormFields.EmailRequired")]
+        public bool EmailRequired { get; set; }
+
         [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.AddressFormFields.CompanyEnabled")]
         public bool CompanyEnabled { get; set; }
 

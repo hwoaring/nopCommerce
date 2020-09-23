@@ -8,6 +8,22 @@ namespace Nop.Core.Domain.Common
     public class AddressSettings : ISettings
     {
         /// <summary>
+        /// 是否启用
+        /// </summary>
+        public bool LastNameEnabled { get; set; }
+        /// <summary>
+        /// 是否必须
+        /// </summary>
+        public bool LastNameRequired { get; set; }
+        /// <summary>
+        /// 是否启用
+        /// </summary>
+        public bool EmailEnabled { get; set; }
+        /// <summary>
+        /// 是否必须
+        /// </summary>
+        public bool EmailRequired { get; set; }
+        /// <summary>
         /// Gets or sets a value indicating whether 'Company' is enabled
         /// </summary>
         public bool CompanyEnabled { get; set; }
