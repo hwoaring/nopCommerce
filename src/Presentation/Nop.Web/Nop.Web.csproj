@@ -38,6 +38,7 @@
     <None Remove="Plugins\**;Themes\**" />
 
     <Content Include="Plugins\bin\placeholder.txt" CopyToPublishDirectory="PreserveNewest" />
+    <None Include="Plugins\**" CopyToPublishDirectory="PreserveNewest" />
 
     <Content Include="Themes\Weixin\Views\Catalog\CategoryTemplate.ProductsInGridOrLines.cshtml" />
 

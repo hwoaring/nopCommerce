@@ -1723,6 +1723,14 @@ namespace Nop.Services.ExportImport
 
             const string separator = ",";
             var sb = new StringBuilder();
+
+            sb.Append(_localizationService.GetResource("Admin.Promotions.NewsLetterSubscriptions.Fields.Email"));
+            sb.Append(separator);
+            sb.Append(_localizationService.GetResource("Admin.Promotions.NewsLetterSubscriptions.Fields.Active"));
+            sb.Append(separator);
+            sb.Append(_localizationService.GetResource("Admin.Promotions.NewsLetterSubscriptions.Fields.Store"));
+            sb.Append(Environment.NewLine);
+
             foreach (var subscription in subscriptions)
             {
                 sb.Append(subscription.Email);
@@ -1730,7 +1738,7 @@ namespace Nop.Services.ExportImport
                 sb.Append(subscription.Active);
                 sb.Append(separator);
                 sb.Append(subscription.StoreId);
-                sb.Append(Environment.NewLine); //new line
+                sb.Append(Environment.NewLine);
             }
 
             return sb.ToString();
