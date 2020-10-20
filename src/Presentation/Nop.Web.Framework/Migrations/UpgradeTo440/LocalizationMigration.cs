@@ -108,7 +108,7 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo440
                 "RewardPoints.Message.Expired",
                 "ShoppingCart.AddToWishlist.Update",
                 "ShoppingCart.UpdateCartItem",
-                "Tax.SelectType"
+                "Tax.SelectType",
             });
 
             localizationService.AddLocaleResource(new Dictionary<string, string>
@@ -168,11 +168,11 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo440
                 ["Admin.Configuration.AppSettings.Plugin.ClearPluginShadowDirectoryOnStartup"] = "Clear plugin shadow directory on startup",
                 ["Admin.Configuration.AppSettings.Plugin.ClearPluginShadowDirectoryOnStartup.Hint"] = "Enable this setting to clear the plugin shadow directory (/Plugins/bin) on application startup.",
                 ["Admin.Configuration.AppSettings.Plugin.CopyLockedPluginAssembilesToSubdirectoriesOnStartup"] = "Copy locked plugins to subdirectories on startup",
-                ["Admin.Configuration.AppSettings.Plugin.CopyLockedPluginAssembilesToSubdirectoriesOnStartup.Hint"] = "Enable this seting to copy 'locked' assemblies from the plugin shadow directory (/Plugins/bin) to temporary subdirectories on application startup.",
+                ["Admin.Configuration.AppSettings.Plugin.CopyLockedPluginAssembilesToSubdirectoriesOnStartup.Hint"] = "Enable this setting to copy 'locked' assemblies from the plugin shadow directory (/Plugins/bin) to temporary subdirectories on application startup.",
                 ["Admin.Configuration.AppSettings.Plugin.UseUnsafeLoadAssembly"] = "Use unsafe load assembly",
-                ["Admin.Configuration.AppSettings.Plugin.UseUnsafeLoadAssembly.Hint"] = "Enable this seting to load an assembly into the load-from context, bypassing some security checks.",
+                ["Admin.Configuration.AppSettings.Plugin.UseUnsafeLoadAssembly.Hint"] = "Enable this setting to load an assembly into the load-from context, bypassing some security checks.",
                 ["Admin.Configuration.AppSettings.Plugin.UsePluginsShadowCopy"] = "Use plugins shadow copy",
-                ["Admin.Configuration.AppSettings.Plugin.UsePluginsShadowCopy.Hint"] = "Enable this seting to copy plugins to the shadow directory (/Plugins/bin) on application startup.",
+                ["Admin.Configuration.AppSettings.Plugin.UsePluginsShadowCopy.Hint"] = "Enable this setting to copy plugins to the shadow directory (/Plugins/bin) on application startup.",
                 ["Admin.Configuration.AppSettings.Common"] = "Common configuration",
                 ["Admin.Configuration.AppSettings.Common.DisplayFullErrorStack"] = "Display full error",
                 ["Admin.Configuration.AppSettings.Common.DisplayFullErrorStack.Hint"] = "Enable this setting to display the full error in production environment. It's ignored (always enabled) in development environment.",
@@ -183,7 +183,7 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo440
                 ["Admin.Configuration.AppSettings.Common.CrawlerOnlyUserAgentStringsPath"] = "Crawler user agent strings path",
                 ["Admin.Configuration.AppSettings.Common.CrawlerOnlyUserAgentStringsPath.Hint"] = "Specify a path to the file with crawler only user agent strings. Leave empty to always use full version of user agent strings file.",
                 ["Admin.Configuration.AppSettings.Common.UseSessionStateTempDataProvider"] = "Use session state for TempData",
-                ["Admin.Configuration.AppSettings.Common.UseSessionStateTempDataProvider.Hint"] = "Enable this seting to store TempData in the session state. By default the cookie-based TempData provider is used to store TempData in cookies.",
+                ["Admin.Configuration.AppSettings.Common.UseSessionStateTempDataProvider.Hint"] = "Enable this setting to store TempData in the session state. By default the cookie-based TempData provider is used to store TempData in cookies.",
                 ["Admin.System.Warnings.PluginNotEnabled.AutoFixAndRestart"] = "Uninstall and delete all not used plugins automatically (site will be restarted)",
                 ["ActivityLog.AddNewSpecAttributeGroup"] = "Added a new specification attribute group ('{0}')",
                 ["ActivityLog.EditSpecAttributeGroup"] = "Edited a specification attribute group ('{0}')",
@@ -209,12 +209,53 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo440
                 ["Admin.Catalog.Attributes.SpecificationAttributes.SpecificationAttributeGroup.Updated"] = "The attribute group has been updated successfully.",
                 ["Admin.Catalog.Products.SpecificationAttributes.NameFormat"] = "{0} >> {1}",
                 ["Admin.System.Warnings.PluginsOverrideSameService"] = "The \"{0}\" interface/class has been overridden in those assemblies: {1}. This situation may cause errors because there is only one of them will be used (Please contact the assembly(ies) developers to solve this problem.)",
+                ["Admin.System.Warnings.PluginNotEnabled.AutoFixAndRestart"] = "Uninstall and delete all not used plugins automatically (site will be restarted)",
+
+                //<MFA #475>
+                ["Admin.Configuration.Authentication"] = "Authentication",
+                ["Admin.Configuration.Authentication.MultiFactorMethods"] = "Multi-factor authentication",
+                ["Admin.Configuration.Authentication.MultiFactorMethods.BackToList"] = "back to multi-factor authentication method list",
+                ["Admin.Configuration.Authentication.MultiFactorMethods.Configure"] = "Configure",
+                ["Admin.Configuration.Authentication.MultiFactorMethods.Fields.DisplayOrder"] = "Display order",
+                ["Admin.Configuration.Authentication.MultiFactorMethods.Fields.FriendlyName"] = "Friendly name",
+                ["Admin.Configuration.Authentication.MultiFactorMethods.Fields.IsActive"] = "Is active",
+                ["Admin.Configuration.Authentication.MultiFactorMethods.Fields.SystemName"] = "System name",
+
+                ["Permission.Authentication.ManageMultifactorMethods"] = "Admin area. Manage Multi-factor Authentication Methods",
+
+                ["MultiFactorAuthentication.Notification.SelectedMethodIsNotActive"] = "The multi-factor authentication provider specified in your account settings has been deactivated. Please contact your administrator.",
+
+                ["PageTitle.MultiFactorAuthentication"] = "Multi-factor authentication",
+                ["PageTitle.MultiFactorVerification"] = "Multi-factor verification",
+                ["Account.MultiFactorAuthentication.Fields.IsEnabled"] = "Is enabled",
+                ["Account.MultiFactorAuthentication.Settings"] = "Settings",
+                ["Account.MultiFactorAuthentication.Providers"] = "Authentication providers",
+                ["Account.MultiFactorAuthentication.Providers.NoActive"] = "No active providers",
+                ["Account.MultiFactorAuthentication.Description"] = "<p>To activate multi-factor authentication for your account, you need: </p></br><ol><li>1. Activate the 'Is enabled' setting.</li><li>2. Choose one of the multi-factor authentication providers.</li><li>3. Save.</li><li>4. Configure the selected multi-factor authentication provider by following the instructions on the individual settings page of the selected provider.</li></ol></br><p> WARNING. After saving the selected provider, be sure to configure it, otherwise you will be denied access the next time you try to enter your account.</p>",
+                //</MFA #475>
+
                 ["Admin.Configuration.Plugins.Description.DownloadMorePlugins"] = "You can download more nopCommerce plugins in our <a href=\"https://www.nopcommerce.com/marketplace?utm_source=admin-panel&utm_medium=menu&utm_campaign=marketplace&utm_content=all-plugins\" target=\"_blank\">marketplace</a>",
                 ["Admin.Configuration.Payment.Methods.DownloadMorePlugins"] = "You can download more plugins in our <a href=\"https://www.nopcommerce.com/extensions?category=payment-modules&utm_source=admin-panel&utm_medium=menu&utm_campaign=marketplace&utm_content=payment-plugins\" target=\"_blank\">marketplace</a>",
                 ["Admin.Configuration.Shipping.Providers.DownloadMorePlugins"] = "You can download more plugins in our <a href=\"https://www.nopcommerce.com/extensions?category=shipping-delivery&utm_source=admin-panel&utm_medium=menu&utm_campaign=marketplace&utm_content=shipping-plugins\" target=\"_blank\">marketplace</a>",
                 ["Admin.Configuration.Tax.Providers.DownloadMorePlugins"] = "You can download more plugins in our <a href=\"https://www.nopcommerce.com/extensions?category=taxes&utm_source=admin-panel&utm_medium=menu&utm_campaign=marketplace&utm_content=tax-plugins\" target=\"_blank\">marketplace</a>",
                 ["Admin.Configuration.Settings.GeneralCommon.DefaultStoreTheme.GetMore"] = "You can get more themes in our <a href=\"https://www.nopcommerce.com/themes?utm_source=admin-panel&utm_medium=menu&utm_campaign=marketplace&utm_content=general-common-theme\" target=\"_blank\">marketplace</a>",
-                ["Admin.Configuration.Plugins.OfficialFeed.Instructions"] = "Here you can find third-party extensions and themes which are developed by our community and partners. They are also available in our <a href=\"https://www.nopcommerce.com/marketplace?utm_source=admin-panel&utm_medium=menu&utm_campaign=marketplace&utm_content=official-plugins\" target=\"_blank\">marketplace</a>"
+                ["Admin.Configuration.Plugins.OfficialFeed.Instructions"] = "Here you can find third-party extensions and themes which are developed by our community and partners. They are also available in our <a href=\"https://www.nopcommerce.com/marketplace?utm_source=admin-panel&utm_medium=menu&utm_campaign=marketplace&utm_content=official-plugins\" target=\"_blank\">marketplace</a>",
+                ["Admin.Catalog.Attributes.CheckoutAttributes.Values.AddNew"] = "Add a new checkout attribute value",
+
+                ["Admin.Configuration.Settings.Catalog.OneReviewPerProductFromCustomer"] = "One review per product from customer",
+                ["Admin.Configuration.Settings.Catalog.OneReviewPerProductFromCustomer.Hint"] = "Check to restrict customer to add just 1 review per product.",
+                ["Reviews.AlreadyAddedProductReviews"] = "Product review is already added for this product",
+                ["Admin.Configuration.Plugins.ChangesApplyAfterReboot"] = "Changes will be applied after restart application",
+                ["Admin.Configuration.Plugins.Fields.IsEnabled"] = "Enabled",
+                ["Admin.Customers.ActivityLog.Fields.IpAddress.Hint"] = "A customer IP address.",
+                ["Plugins.Widgets.GoogleAnalytics.UseJsToSendEcommerceInfo"] = "Use JS to send eCommerce info",
+                ["Plugins.Widgets.GoogleAnalytics.UseJsToSendEcommerceInfo.Hint"] = "Check to use JS code to send eCommerce info from the order completed page. But in case of redirection payment methods some customers may skip it. Otherwise, eCommerce information will be sent using HTTP request. Information is sent each time an order is paid but UTM is not supported in this mode.",
+                ["Plugins.Widgets.GoogleAnalytics.IncludeCustomerId"] = "Include customer ID",
+                ["Plugins.Widgets.GoogleAnalytics.IncludeCustomerId.Hint"] = "Check to include customer identifier to script.",
+                ["Admin.Configuration.Plugins.DiscardChanges"] = "Discard changes",
+                ["Admin.Configuration.Plugins.DiscardChanges.Progress"] = "Discarding changes on plugins...",
+                ["Admin.Configuration.Plugins.ApplyChanges"] = "Restart application to apply changes",
+                ["Admin.Configuration.Plugins.ApplyChanges.Progress"] = "Applying changes on plugins...",
             });
 
             // rename locales
@@ -248,6 +289,16 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo440
                 new { Name = "Admin.Catalog.Attributes.SpecificationAttributes.UsedByProducts", NewName = "Admin.Catalog.Attributes.SpecificationAttributes.SpecificationAttribute.UsedByProducts" },
                 new { Name = "Admin.Catalog.Attributes.SpecificationAttributes.UsedByProducts.Product", NewName = "Admin.Catalog.Attributes.SpecificationAttributes.SpecificationAttribute.UsedByProducts.Product" },
                 new { Name = "Admin.Catalog.Attributes.SpecificationAttributes.UsedByProducts.Published", NewName = "Admin.Catalog.Attributes.SpecificationAttributes.SpecificationAttribute.UsedByProducts.Published" },
+                //<MFA #475>
+                new { Name = "Admin.Configuration.ExternalAuthenticationMethods.Fields.DisplayOrder", NewName = "Admin.Configuration.Authentication.ExternalMethods.Fields.DisplayOrder"},
+                new { Name = "Admin.Configuration.ExternalAuthenticationMethods.Fields.FriendlyName", NewName = "Admin.Configuration.Authentication.ExternalMethods.Fields.FriendlyName"},
+                new { Name = "Admin.Configuration.ExternalAuthenticationMethods.Fields.IsActive", NewName = "Admin.Configuration.Authentication.ExternalMethods.Fields.IsActive"},
+                new { Name = "Admin.Configuration.ExternalAuthenticationMethods.Fields.SystemName", NewName = "Admin.Configuration.Authentication.ExternalMethods.Fields.SystemName"},
+                new { Name = "Admin.Configuration.ExternalAuthenticationMethods.BackToList", NewName = "Admin.Configuration.Authentication.ExternalMethods.BackToList"},
+                new { Name = "Admin.Configuration.ExternalAuthenticationMethods.Configure", NewName = "Admin.Configuration.Authentication.ExternalMethods.Configure"},
+                new { Name = "Admin.Configuration.ExternalAuthenticationMethods", NewName = "Admin.Configuration.Authentication.ExternalMethods"},
+                new { Name = "Permission.ManageExternalAuthenticationMethods", NewName = "Permission.Authentication.ManageExternalMethods"},
+                //</MFA #475>
             };
 
             var languageService = EngineContext.Current.Resolve<ILanguageService>();
