@@ -38,20 +38,6 @@
         observeParents: true
     });
 
-    //返回顶部
-    window.onscroll = function () {
-        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-        if (scrollTop > 300) {
-            backTop.style.display = 'block';
-        }
-        else {
-            backTop.style.display = 'none';
-        }
-    };
-    var backTop = document.getElementById("backTop");
-    backTop.onclick = function () {
-        document.documentElement.scrollTop = document.body.scrollTop = 0
-    };
 </script>
 
 <script type="text/javascript" asp-location="Head">

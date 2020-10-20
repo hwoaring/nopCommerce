@@ -46,6 +46,10 @@ namespace Nop.Core.Configuration
         /// </summary>
         public CommonConfig CommonConfig { get; set; } = new CommonConfig();
 
+        //public SenparcSetting SenparcSetting { get; set; } = new SenparcSetting();
+
+        //public SenparcWeixinSetting SenparcWeixinSetting { get; set; } = new SenparcWeixinSetting();
+
         /// <summary>
         /// Gets or sets additional configuration parameters
         /// </summary>

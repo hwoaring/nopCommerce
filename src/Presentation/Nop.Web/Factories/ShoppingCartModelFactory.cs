@@ -843,6 +843,8 @@ namespace Nop.Web.Factories
 
             //simple properties
             model.OnePageCheckoutEnabled = _orderSettings.OnePageCheckoutEnabled;
+            model.OnePagePaymentEnabled = _orderSettings.OnePagePaymentEnabled;
+            model.OneClickPaymentEnabled = _orderSettings.OneClickPaymentEnabled;
 
             if (!cart.Any())
                 return model;

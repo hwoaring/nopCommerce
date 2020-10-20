@@ -552,6 +552,8 @@ namespace Nop.Web.Factories
             {
                 OrderId = order.Id,
                 OnePageCheckoutEnabled = _orderSettings.OnePageCheckoutEnabled,
+                OnePagePaymentEnabled = _orderSettings.OnePagePaymentEnabled,
+                OneClickPaymentEnabled = _orderSettings.OneClickPaymentEnabled,
                 CustomOrderNumber = order.CustomOrderNumber
             };
 
@@ -587,6 +589,23 @@ namespace Nop.Web.Factories
             };
             return model;
         }
+
+        public virtual OnePagePaymentModel PrepareOnePagePaymentModel(IList<ShoppingCartItem> cart)
+        {
+            if (cart == null)
+                throw new ArgumentNullException(nameof(cart));
+
+            var model = new OnePagePaymentModel
+            {
+                ShippingRequired = _shoppingCartService.ShoppingCartRequiresShipping(cart),
+                ContactInfoRequired = false,
+                IDCardRequired = false,
+                DisableBillingAddressCheckoutStep = _orderSettings.DisableBillingAddressCheckoutStep,
+                ShippingAddress = PrepareShippingAddressModel(cart, prePopulateNewAddressWithCustomerFields: true)
+            };
+            return model;
+        }
+
 
         #endregion
     }

@@ -22,6 +22,8 @@ namespace Nop.Web.Models.ShoppingCart
         }
 
         public bool OnePageCheckoutEnabled { get; set; }
+        public bool OnePagePaymentEnabled { get; set; }
+        public bool OneClickPaymentEnabled { get; set; }
 
         public bool ShowSku { get; set; }
         public bool ShowProductImages { get; set; }

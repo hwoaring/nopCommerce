@@ -178,6 +178,9 @@ namespace Nop.Web.Infrastructure
             endpointRouteBuilder.MapControllerRoute("CheckoutOnePage", $"{pattern}onepagecheckout/",
                 new { controller = "Checkout", action = "OnePageCheckout" });
 
+            endpointRouteBuilder.MapControllerRoute("PaymentOnePage", $"{pattern}onepagepayment/",
+                new { controller = "Checkout", action = "OnePagePayment" });
+
             endpointRouteBuilder.MapControllerRoute("CheckoutShippingAddress", $"{pattern}checkout/shippingaddress",
                 new { controller = "Checkout", action = "ShippingAddress" });
 

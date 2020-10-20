@@ -7833,6 +7833,18 @@
   <LocaleResource Name="Admin.Configuration.Settings.Order.OnePageCheckoutEnabled.Hint">
     <Value>One page checkout is a single web page your customers can use to buy a products/service from you.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.OneClickPaymentEnabled">
+    <Value>Use One Click Payment</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.OneClickPaymentEnabled.Hint">
+    <Value>One Click Payment allow customers payment from product item page checkout and payment.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.OnePagePaymentEnabled">
+    <Value>Use one page payment</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Order.OnePagePaymentEnabled.Hint">
+    <Value>One page payment is a single web page your customers can use to buy a products/service from you.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Order.OrderIdent">
     <Value>Order ID</Value>
   </LocaleResource>

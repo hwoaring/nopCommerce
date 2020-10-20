@@ -74,8 +74,9 @@ namespace Senparc.Weixin.MP.CommonService.Infrastructure.Extensions
             if (!DataSettingsManager.DatabaseIsInstalled)
                 return;
 
-            var senparcSetting = EngineContext.Current.Resolve<SenparcSetting>();
-            var senparcWeixinSetting = EngineContext.Current.Resolve<SenparcWeixinSetting>();
+            //var appSettings = EngineContext.Current.Resolve<AppSettings>();
+            var senparcSetting = EngineContext.Current.Resolve<CO2NET.SenparcSetting>();
+            var senparcWeixinSetting = EngineContext.Current.Resolve<Weixin.Entities.SenparcWeixinSetting>();
             var webHostEnvironment = EngineContext.Current.Resolve<IWebHostEnvironment>();
             var fileProvider = EngineContext.Current.Resolve<INopFileProvider>();
 
@@ -371,7 +372,7 @@ namespace Senparc.Weixin.MP.CommonService.Infrastructure.Extensions
         /// </summary>
         /// <param name="senparcSetting"></param>
         /// <returns></returns>
-        private static bool UseRedis(SenparcSetting senparcSetting, out string redisConfigurationStr)
+        private static bool UseRedis(CO2NET.SenparcSetting senparcSetting, out string redisConfigurationStr)
         {
             redisConfigurationStr = senparcSetting.Cache_Redis_Configuration;
             var useRedis = !string.IsNullOrEmpty(redisConfigurationStr) && redisConfigurationStr != "#{Cache_Redis_Configuration}#"/*默认值，不启用*/;
@@ -383,7 +384,7 @@ namespace Senparc.Weixin.MP.CommonService.Infrastructure.Extensions
         /// </summary>
         /// <param name="senparcSetting"></param>
         /// <returns></returns>
-        private static bool UseMemcached(SenparcSetting senparcSetting, out string memcachedConfigurationStr)
+        private static bool UseMemcached(CO2NET.SenparcSetting senparcSetting, out string memcachedConfigurationStr)
         {
             memcachedConfigurationStr = senparcSetting.Cache_Memcached_Configuration;
             var useMemcached = !string.IsNullOrEmpty(memcachedConfigurationStr) && memcachedConfigurationStr != "#{Cache_Memcached_Configuration}#";
@@ -394,10 +395,10 @@ namespace Senparc.Weixin.MP.CommonService.Infrastructure.Extensions
         /// 获取扩展缓存策略
         /// </summary>
         /// <returns></returns>
-        private static IList<IDomainExtensionCacheStrategy> GetExCacheStrategies(SenparcSetting senparcSetting)
+        private static IList<IDomainExtensionCacheStrategy> GetExCacheStrategies(CO2NET.SenparcSetting senparcSetting)
         {
             var exContainerCacheStrategies = new List<IDomainExtensionCacheStrategy>();
-            senparcSetting ??= new SenparcSetting();
+            senparcSetting ??= new CO2NET.SenparcSetting();
 
             //注意：以下两个 if 判断仅作为演示，方便大家添加自定义的扩展缓存策略，
 

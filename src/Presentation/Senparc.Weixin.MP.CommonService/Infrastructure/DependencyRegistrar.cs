@@ -19,7 +19,7 @@ namespace Senparc.Weixin.MP.CommonService.Infrastructure
         /// <param name="builder">Container builder</param>
         /// <param name="typeFinder">Type finder</param>
         /// <param name="config">Config</param>
-        public virtual void Register(ContainerBuilder builder, ITypeFinder typeFinder, NopConfig config)
+        public virtual void Register(ContainerBuilder builder, ITypeFinder typeFinder, AppSettings appSettings)
         {
             builder.RegisterType<WConfigService>().As<IWConfigService>().InstancePerLifetimeScope();
             builder.RegisterType<WLocationService>().As<IWLocationService>().InstancePerLifetimeScope();

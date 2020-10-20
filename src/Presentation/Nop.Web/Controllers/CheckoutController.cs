@@ -252,7 +252,12 @@ namespace Nop.Web.Controllers
             }
 
             if (_orderSettings.OnePageCheckoutEnabled)
-                return RedirectToRoute("CheckoutOnePage");
+            {
+                if (_orderSettings.OnePagePaymentEnabled)
+                    return RedirectToRoute("PaymentOnePage");
+                else
+                    return RedirectToRoute("CheckoutOnePage");
+            }
 
             return RedirectToRoute("CheckoutBillingAddress");
         }
@@ -308,7 +313,12 @@ namespace Nop.Web.Controllers
                 return RedirectToRoute("ShoppingCart");
 
             if (_orderSettings.OnePageCheckoutEnabled)
-                return RedirectToRoute("CheckoutOnePage");
+            {
+                if (_orderSettings.OnePagePaymentEnabled)
+                    return RedirectToRoute("PaymentOnePage");
+                else
+                    return RedirectToRoute("CheckoutOnePage");
+            }
 
             if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
                 return Challenge();
@@ -380,7 +390,12 @@ namespace Nop.Web.Controllers
                 return RedirectToRoute("ShoppingCart");
 
             if (_orderSettings.OnePageCheckoutEnabled)
-                return RedirectToRoute("CheckoutOnePage");
+            {
+                if (_orderSettings.OnePagePaymentEnabled)
+                    return RedirectToRoute("PaymentOnePage");
+                else
+                    return RedirectToRoute("CheckoutOnePage");
+            }
 
             if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
                 return Challenge();
@@ -463,7 +478,12 @@ namespace Nop.Web.Controllers
                 return RedirectToRoute("ShoppingCart");
 
             if (_orderSettings.OnePageCheckoutEnabled)
-                return RedirectToRoute("CheckoutOnePage");
+            {
+                if (_orderSettings.OnePagePaymentEnabled)
+                    return RedirectToRoute("PaymentOnePage");
+                else
+                    return RedirectToRoute("CheckoutOnePage");
+            }
 
             if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
                 return Challenge();
@@ -513,7 +533,12 @@ namespace Nop.Web.Controllers
                 return RedirectToRoute("ShoppingCart");
 
             if (_orderSettings.OnePageCheckoutEnabled)
-                return RedirectToRoute("CheckoutOnePage");
+            {
+                if (_orderSettings.OnePagePaymentEnabled)
+                    return RedirectToRoute("PaymentOnePage");
+                else
+                    return RedirectToRoute("CheckoutOnePage");
+            }
 
             if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
                 return Challenge();
@@ -599,7 +624,12 @@ namespace Nop.Web.Controllers
                 return RedirectToRoute("ShoppingCart");
 
             if (_orderSettings.OnePageCheckoutEnabled)
-                return RedirectToRoute("CheckoutOnePage");
+            {
+                if (_orderSettings.OnePagePaymentEnabled)
+                    return RedirectToRoute("PaymentOnePage");
+                else
+                    return RedirectToRoute("CheckoutOnePage");
+            }
 
             if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
                 return Challenge();
@@ -651,7 +681,12 @@ namespace Nop.Web.Controllers
                 return RedirectToRoute("ShoppingCart");
 
             if (_orderSettings.OnePageCheckoutEnabled)
-                return RedirectToRoute("CheckoutOnePage");
+            {
+                if (_orderSettings.OnePagePaymentEnabled)
+                    return RedirectToRoute("PaymentOnePage");
+                else
+                    return RedirectToRoute("CheckoutOnePage");
+            }
 
             if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
                 return Challenge();
@@ -728,7 +763,12 @@ namespace Nop.Web.Controllers
                 return RedirectToRoute("ShoppingCart");
 
             if (_orderSettings.OnePageCheckoutEnabled)
-                return RedirectToRoute("CheckoutOnePage");
+            {
+                if (_orderSettings.OnePagePaymentEnabled)
+                    return RedirectToRoute("PaymentOnePage");
+                else
+                    return RedirectToRoute("CheckoutOnePage");
+            }
 
             if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
                 return Challenge();
@@ -783,7 +823,12 @@ namespace Nop.Web.Controllers
                 return RedirectToRoute("ShoppingCart");
 
             if (_orderSettings.OnePageCheckoutEnabled)
-                return RedirectToRoute("CheckoutOnePage");
+            {
+                if (_orderSettings.OnePagePaymentEnabled)
+                    return RedirectToRoute("PaymentOnePage");
+                else
+                    return RedirectToRoute("CheckoutOnePage");
+            }
 
             if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
                 return Challenge();
@@ -830,7 +875,12 @@ namespace Nop.Web.Controllers
                 return RedirectToRoute("ShoppingCart");
 
             if (_orderSettings.OnePageCheckoutEnabled)
-                return RedirectToRoute("CheckoutOnePage");
+            {
+                if (_orderSettings.OnePagePaymentEnabled)
+                    return RedirectToRoute("PaymentOnePage");
+                else
+                    return RedirectToRoute("CheckoutOnePage");
+            }
 
             if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
                 return Challenge();
@@ -882,7 +932,12 @@ namespace Nop.Web.Controllers
                 return RedirectToRoute("ShoppingCart");
 
             if (_orderSettings.OnePageCheckoutEnabled)
-                return RedirectToRoute("CheckoutOnePage");
+            {
+                if (_orderSettings.OnePagePaymentEnabled)
+                    return RedirectToRoute("PaymentOnePage");
+                else
+                    return RedirectToRoute("CheckoutOnePage");
+            }
 
             if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
                 return Challenge();
@@ -935,7 +990,12 @@ namespace Nop.Web.Controllers
                 return RedirectToRoute("ShoppingCart");
 
             if (_orderSettings.OnePageCheckoutEnabled)
-                return RedirectToRoute("CheckoutOnePage");
+            {
+                if (_orderSettings.OnePagePaymentEnabled)
+                    return RedirectToRoute("PaymentOnePage");
+                else
+                    return RedirectToRoute("CheckoutOnePage");
+            }
 
             if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
                 return Challenge();
@@ -958,7 +1018,12 @@ namespace Nop.Web.Controllers
                 return RedirectToRoute("ShoppingCart");
 
             if (_orderSettings.OnePageCheckoutEnabled)
-                return RedirectToRoute("CheckoutOnePage");
+            {
+                if (_orderSettings.OnePagePaymentEnabled)
+                    return RedirectToRoute("PaymentOnePage");
+                else
+                    return RedirectToRoute("CheckoutOnePage");
+            }
 
             if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
                 return Challenge();
@@ -1149,28 +1214,6 @@ namespace Nop.Web.Controllers
                 },
                 goto_section = "payment_info"
             });
-        }
-
-
-        public virtual IActionResult OnePagePayment()
-        {
-            //validation
-            if (_orderSettings.CheckoutDisabled)
-                return RedirectToRoute("ShoppingCart");
-
-            var cart = _shoppingCartService.GetShoppingCart(_workContext.CurrentCustomer, ShoppingCartType.ShoppingCart, _storeContext.CurrentStore.Id);
-
-            if (!cart.Any())
-                return RedirectToRoute("ShoppingCart");
-
-            if (!_orderSettings.OnePageCheckoutEnabled)
-                return RedirectToRoute("Checkout");
-
-            if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
-                return Challenge();
-
-            var model = _checkoutModelFactory.PrepareOnePageCheckoutModel(cart);
-            return View(model);
         }
 
         public virtual IActionResult OnePageCheckout()
@@ -1850,5 +1893,32 @@ namespace Nop.Web.Controllers
         }
 
         #endregion
+
+        #region Methods(one page payment)
+
+
+        public virtual IActionResult OnePagePayment()
+        {
+            //validation
+            if (_orderSettings.CheckoutDisabled)
+                return RedirectToRoute("ShoppingCart");
+
+            var cart = _shoppingCartService.GetShoppingCart(_workContext.CurrentCustomer, ShoppingCartType.ShoppingCart, _storeContext.CurrentStore.Id);
+
+            if (!cart.Any())
+                return RedirectToRoute("ShoppingCart");
+
+            if (!_orderSettings.OnePageCheckoutEnabled)
+                return RedirectToRoute("Checkout");
+
+            if (_customerService.IsGuest(_workContext.CurrentCustomer) && !_orderSettings.AnonymousCheckoutAllowed)
+                return Challenge();
+
+            var model = _checkoutModelFactory.PrepareOnePagePaymentModel(cart);
+            return View(model);
+        }
+
+        #endregion
+
     }
 }

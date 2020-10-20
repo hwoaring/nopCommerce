@@ -6612,6 +6612,7 @@ namespace Nop.Services.Installation
                 TermsOfServiceOnShoppingCartPage = true,
                 TermsOfServiceOnOrderConfirmPage = false,
                 OnePageCheckoutEnabled = true,
+                OnePagePaymentEnabled = false,
                 OneClickPaymentEnabled = false,
                 OnePageCheckoutDisplayOrderTotalsOnPaymentInfoTab = false,
                 DisableBillingAddressCheckoutStep = false,

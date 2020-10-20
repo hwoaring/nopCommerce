@@ -67,6 +67,14 @@ namespace Nop.Web.Areas.Admin.Models.Settings
         public bool OnePageCheckoutEnabled { get; set; }
         public bool OnePageCheckoutEnabled_OverrideForStore { get; set; }
 
+        [NopResourceDisplayName("Admin.Configuration.Settings.Order.OnePagePayMentEnabled")]
+        public bool OnePagePaymentEnabled { get; set; }
+        public bool OnePagePaymentEnabled_OverrideForStore { get; set; }
+
+        [NopResourceDisplayName("Admin.Configuration.Settings.Order.OneClickPaymentEnabled")]
+        public bool OneClickPaymentEnabled { get; set; }
+        public bool OneClickPaymentEnabled_OverrideForStore { get; set; }
+
         [NopResourceDisplayName("Admin.Configuration.Settings.Order.OnePageCheckoutDisplayOrderTotalsOnPaymentInfoTab")]
         public bool OnePageCheckoutDisplayOrderTotalsOnPaymentInfoTab { get; set; }
         public bool OnePageCheckoutDisplayOrderTotalsOnPaymentInfoTab_OverrideForStore { get; set; }
