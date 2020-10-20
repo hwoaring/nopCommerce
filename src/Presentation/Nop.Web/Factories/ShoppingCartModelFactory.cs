@@ -1292,9 +1292,11 @@ namespace Nop.Web.Factories
                             });
                         }
                     }
-                    else
-                        foreach (var error in getShippingOptionResponse.Errors)
-                            model.Warnings.Add(error);
+                }
+                else
+                {
+                    foreach (var error in getShippingOptionResponse.Errors)
+                        model.Errors.Add(error);
                 }
 
                 var pickupPointsNumber = 0;
@@ -1320,8 +1322,10 @@ namespace Nop.Web.Factories
                         }
                     }
                     else
+                    {
                         foreach (var error in pickupPointsResponse.Errors)
-                            model.Warnings.Add(error);
+                            model.Errors.Add(error);
+                    }
                 }
 
                 ShippingOption selectedShippingOption = null;
