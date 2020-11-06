@@ -6155,8 +6155,6 @@ namespace Nop.Services.Installation
                 UseSystemEmailForContactUsForm = true,
 
                 DisplayJavaScriptDisabledWarning = false,
-                UseFullTextSearch = false,
-                FullTextMode = FulltextSearchMode.ExactMatch,
                 Log404Errors = true,
                 BreadcrumbDelimiter = "/",
                 BbcodeEditorOpenLinksInNewWindow = false,
@@ -6637,7 +6635,8 @@ namespace Nop.Services.Installation
                 BypassShippingMethodSelectionIfOnlyOne = false,
                 UseCubeRootMethod = true,
                 ConsiderAssociatedProductsDimensions = true,
-                ShipSeparatelyOneItemEach = true
+                ShipSeparatelyOneItemEach = true,
+                RequestDelay = 300,
             });
 
             settingService.SaveSetting(new PaymentSettings
