@@ -15,23 +15,18 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Senparc.Weixin.Exceptions;
-using Senparc.Weixin.MP.Entities;
-using Senparc.Weixin.MP.Helpers;
 using Senparc.NeuChar.Entities;
 using Senparc.NeuChar.Helpers;
 using Senparc.CO2NET.Utilities;
-
-#if NET45
-using System.Web;
-using System.Configuration;
 //DPBMARK MP
-using Senparc.Weixin.MP.CommonService.TemplateMessage;
+using Senparc.Weixin.MP.Entities;
+using Senparc.Weixin.MP.Helpers;
+using Senparc.CO2NET.Trace;
 //DPBMARK_END
-#else
 using Microsoft.AspNetCore.Http;
-using Senparc.Weixin.MP.CommonService.TemplateMessage;
+using Senparc.Weixin.MP.CommonService.TemplateMessage;//DPBMARK MP DPBMARK_END
 using Senparc.Weixin.MP.CommonService.Utilities;
-#endif
+
 
 
 namespace Senparc.Weixin.MP.CommonService
@@ -67,12 +62,8 @@ namespace Senparc.Weixin.MP.CommonService
                         var strongResponseMessage = requestMessage.CreateResponseMessage<ResponseMessageText>();
 
                         //获取Senparc.Weixin.MP.dll版本信息
-#if NET45
-                        var dllPath = HttpContext.Current.Server.MapPath("~/bin/Senparc.Weixin.MP.dll");
-#else
                         //var dllPath = ServerUtility.ContentRootMapPath("~/bin/Release/netcoreapp2.2/Senparc.Weixin.MP.dll");//本地测试路径
                         var dllPath = ServerUtility.ContentRootMapPath("~/Senparc.Weixin.MP.dll");//发布路径
-#endif
 
                         var fileVersionInfo = FileVersionInfo.GetVersionInfo(dllPath);
 
@@ -128,22 +119,28 @@ namespace Senparc.Weixin.MP.CommonService
                     //需要忽略的类型
                     var ignoreErrorCodes = new[]
                     {
-                                ReturnCode.获取access_token时AppSecret错误或者access_token无效,
-                                ReturnCode.access_token超时,
-                                ReturnCode.template_id不正确,
-                                ReturnCode.缺少access_token参数,
-                                ReturnCode.回复时间超过限制,
-                                ReturnCode.api功能未授权,
-                                ReturnCode.用户未授权该api,
-                                ReturnCode.参数错误invalid_parameter,
-                                ReturnCode.接口调用超过限制,
-                                ReturnCode.需要接收者关注,//43004
-                                ReturnCode.超出响应数量限制,//43004 - out of response count limit，一般只允许连续接收20条客服消息
-
-                                //其他更多可能的情况
-                            };
+                        ReturnCode.获取access_token时AppSecret错误或者access_token无效,
+                        ReturnCode.access_token超时,
+                        ReturnCode.template_id不正确,
+                        ReturnCode.调用接口的IP地址不在白名单中,//比较容易出现，需要注意！
+                        ReturnCode.缺少access_token参数,
+                        ReturnCode.回复时间超过限制,
+                        ReturnCode.api功能未授权,
+                        ReturnCode.用户未授权该api,
+                        ReturnCode.参数错误invalid_parameter,
+                        ReturnCode.接口调用超过限制,
+                        ReturnCode.需要接收者关注,//43004
+                        ReturnCode.超出响应数量限制,//43004 - out of response count limit，一般只允许连续接收20条客服消息
+                        
+                        //其他更多可能的情况
+                    };
                     if (ignoreErrorCodes.Contains(jsonEx.JsonResult.errcode))
                     {
+                        if (jsonEx.JsonResult.errcode == ReturnCode.调用接口的IP地址不在白名单中)
+                        {
+                            SenparcTrace.SendCustomLog("无法发送模板消息", "IP 未设置到白名单");
+                        }
+
                         sendTemplateMessage = false;//防止无限递归，这种请款那个下不发送消息
                     }
 
