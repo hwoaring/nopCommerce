@@ -58,7 +58,6 @@ namespace Nop.Web.Areas.Admin.Factories
         private readonly ICustomerAttributeModelFactory _customerAttributeModelFactory;
         private readonly INopDataProvider _dataProvider;
         private readonly IDateTimeHelper _dateTimeHelper;
-        private readonly IFulltextService _fulltextService;
         private readonly IGdprService _gdprService;
         private readonly ILocalizedModelFactory _localizedModelFactory;
         private readonly IGenericAttributeService _genericAttributeService;
@@ -86,7 +85,6 @@ namespace Nop.Web.Areas.Admin.Factories
             ICustomerAttributeModelFactory customerAttributeModelFactory,
             INopDataProvider dataProvider,
             IDateTimeHelper dateTimeHelper,
-            IFulltextService fulltextService,
             IGdprService gdprService,
             ILocalizedModelFactory localizedModelFactory,
             IGenericAttributeService genericAttributeService,
@@ -110,7 +108,6 @@ namespace Nop.Web.Areas.Admin.Factories
             _customerAttributeModelFactory = customerAttributeModelFactory;
             _dataProvider = dataProvider;
             _dateTimeHelper = dateTimeHelper;
-            _fulltextService = fulltextService;
             _gdprService = gdprService;
             _localizedModelFactory = localizedModelFactory;
             _genericAttributeService = genericAttributeService;
@@ -581,30 +578,6 @@ namespace Nop.Web.Areas.Admin.Factories
                 LoadAllLocalizedPropertiesOnStartup = localizationSettings.LoadAllLocalizedPropertiesOnStartup,
                 LoadAllUrlRecordsOnStartup = localizationSettings.LoadAllUrlRecordsOnStartup
             };
-
-            return model;
-        }
-
-        /// <summary>
-        /// Prepare full-text settings model
-        /// </summary>
-        /// <returns>Full-text settings model</returns>
-        protected virtual FullTextSettingsModel PrepareFullTextSettingsModel()
-        {
-            //load settings for a chosen store scope
-            var storeId = _storeContext.ActiveStoreScopeConfiguration;
-            var commonSettings = _settingService.LoadSetting<CommonSettings>(storeId);
-
-            //fill in model values from the entity
-            var model = new FullTextSettingsModel
-            {
-                Enabled = commonSettings.UseFullTextSearch,
-                SearchMode = (int)commonSettings.FullTextMode
-            };
-
-            //fill in additional values (not existing in the entity)
-            model.Supported = _fulltextService.IsFullTextSupported();
-            model.SearchModeValues = commonSettings.FullTextMode.ToSelectList();
 
             return model;
         }
@@ -1537,9 +1510,6 @@ namespace Nop.Web.Areas.Admin.Factories
 
             //prepare PDF settings model
             model.LocalizationSettings = PrepareLocalizationSettingsModel();
-
-            //prepare full-text settings model
-            model.FullTextSettings = PrepareFullTextSettingsModel();
 
             //prepare admin area settings model
             model.AdminAreaSettings = PrepareAdminAreaSettingsModel();

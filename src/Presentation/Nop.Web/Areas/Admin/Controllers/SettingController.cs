@@ -63,7 +63,6 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly ICustomerService _customerService;
         private readonly INopDataProvider _dataProvider;
         private readonly IEncryptionService _encryptionService;
-        private readonly IFulltextService _fulltextService;
         private readonly IGenericAttributeService _genericAttributeService;
         private readonly IGdprService _gdprService;
         private readonly ILocalizedEntityService _localizedEntityService;
@@ -92,7 +91,6 @@ namespace Nop.Web.Areas.Admin.Controllers
             ICustomerService customerService,
             INopDataProvider dataProvider,
             IEncryptionService encryptionService,
-            IFulltextService fulltextService,
             IGenericAttributeService genericAttributeService,
             IGdprService gdprService,
             ILocalizedEntityService localizedEntityService,
@@ -117,7 +115,6 @@ namespace Nop.Web.Areas.Admin.Controllers
             _customerService = customerService;
             _dataProvider = dataProvider;
             _encryptionService = encryptionService;
-            _fulltextService = fulltextService;
             _genericAttributeService = genericAttributeService;
             _gdprService = gdprService;
             _localizedEntityService = localizedEntityService;
@@ -1546,11 +1543,6 @@ namespace Nop.Web.Areas.Admin.Controllers
             localizationSettings.LoadAllUrlRecordsOnStartup = model.LocalizationSettings.LoadAllUrlRecordsOnStartup;
             _settingService.SaveSetting(localizationSettings);
 
-            //full-text (not overridable)
-            commonSettings = _settingService.LoadSetting<CommonSettings>();
-            commonSettings.FullTextMode = (FulltextSearchMode)model.FullTextSettings.SearchMode;
-            _settingService.SaveSetting(commonSettings);
-
             //display default menu item
             var displayDefaultMenuItemSettings = _settingService.LoadSetting<DisplayDefaultMenuItemSettings>(storeScope);
 
@@ -1709,47 +1701,6 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _settingService.SaveSetting(securitySettings);
 
                 _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.EncryptionKey.Changed"));
-            }
-            catch (Exception exc)
-            {
-                _notificationService.ErrorNotification(exc);
-            }
-
-            return RedirectToAction("GeneralCommon");
-        }
-
-        [HttpPost, ActionName("GeneralCommon")]
-        [FormValueRequired("togglefulltext")]
-        public virtual IActionResult ToggleFullText(GeneralCommonSettingsModel model)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
-                return AccessDeniedView();
-
-            var storeScope = _storeContext.ActiveStoreScopeConfiguration;
-            var commonSettings = _settingService.LoadSetting<CommonSettings>(storeScope);
-            try
-            {
-                if (!_fulltextService.IsFullTextSupported())
-                    throw new NopException(_localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.FullTextSettings.NotSupported"));
-
-                if (commonSettings.UseFullTextSearch)
-                {
-                    _fulltextService.DisableFullText();
-
-                    commonSettings.UseFullTextSearch = false;
-                    _settingService.SaveSetting(commonSettings);
-
-                    _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.FullTextSettings.Disabled"));
-                }
-                else
-                {
-                    _fulltextService.EnableFullText();
-
-                    commonSettings.UseFullTextSearch = true;
-                    _settingService.SaveSetting(commonSettings);
-
-                    _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.FullTextSettings.Enabled"));
-                }
             }
             catch (Exception exc)
             {
