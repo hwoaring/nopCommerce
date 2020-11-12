@@ -1,5 +1,5 @@
 ﻿/* COMMON */
-.content {
+.content, .content-wrapper > .content {
   padding-bottom: 55px;
 }
 
@@ -112,6 +112,10 @@ ul.common-list {
 .fa.false-icon {
   color: #D22D2D;
   font-size: 20px;
+}
+
+.small-box.bg-yellow, .bg-yellow, .bg-yellow > a {
+  color: white !important;
 }
 
 .new-item-notification {
@@ -423,7 +427,7 @@ ul.common-list {
 
 .interaction-type select {
   width: 70px;
-  height: 26px;
+  height: 28px;
   line-height: 25px;
   font-size: 12px;
   margin-top: 2px;
@@ -1603,7 +1607,7 @@ span.grid-report-item {
 
   .parent-setting.opened + .nested-setting .form-group.parent-setting div[class^="col-md-"] + div[class^="col-md-"]:before {
     position: absolute;
-    height: 36px;
+    height: 46px;
     content: "";
     margin-right: -10px;
     margin-top: -18px;
@@ -1662,11 +1666,13 @@ span.grid-report-item {
 }
 
 .onoffswitch {
-  position: relative;
-  width: 130px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+    display: table;
+    position: relative;
+    min-width: 130px;
+    max-width: 100%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .onoffswitch-checkbox {
@@ -1674,11 +1680,13 @@ span.grid-report-item {
 }
 
 .onoffswitch-label {
-  display: block;
-  overflow: hidden;
-  cursor: pointer;
-  border: 1px solid #367fa9;
-  border-radius: 3px;
+    display: table;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid #367fa9;
+    border-radius: 3px;
+    min-width: 130px;
 }
 
 .onoffswitch-inner {
@@ -1692,22 +1700,18 @@ span.grid-report-item {
     display: block;
     float: right;
     width: 50%;
-    height: 34px;
     padding: 0;
-    padding-top: 3px;
-    line-height: 32px;
-    font-size: 14px;
     color: white;
-    font-family: Trebuchet, Arial, sans-serif;
-    font-weight: bold;
-  }
-
-  .onoffswitch-inner:before {
+    font-weight: 400;
+    white-space: nowrap;
+    height: 37px;
+    line-height: 37px;
+}
+.onoffswitch-inner:before {
     content: attr(data-locale-advanced);
     padding-right: 10px;
     background-color: #3c8dbc;
     color: #FFFFFF;
-    height: 36px;
   }
 
   .onoffswitch-inner:after {
@@ -1719,17 +1723,18 @@ span.grid-report-item {
   }
 
 .onoffswitch-switch {
-  display: block;
-  width: 16px;
-  margin: 6.5px;
-  background: #FFFFFF;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 95px;
-  border: 1px solid #367fa9;
-  border-radius: 15px;
-  transition: all 0.3s ease-in 0s;
+    display: block;
+    width: 16px;
+    margin: 4px 0;
+    background: #FFFFFF;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 100%;
+    margin-left: -25px;
+    border: 1px solid #367fa9;
+    border-radius: 15px;
+    transition: all 0.3s ease-in 0s;
 }
 
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
@@ -1737,7 +1742,9 @@ span.grid-report-item {
 }
 
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
-  left: 0px;
+    left: 0px;
+    margin-left: 7px;
+    transition: all 0.3s ease-in 0s;
 }
 
 
@@ -1871,6 +1878,7 @@ span.grid-report-item {
 .content-header .pull-right > .btn, .content-header .pull-right > .btn-group {
   float: right;
   margin-right: 3px;
+  position: inherit;
 }
 
 
@@ -1920,6 +1928,14 @@ div.dataTables_wrapper .data-tables-refresh > div {
     border-top: 1px solid #f3f3f3;
     border-left: 1px solid #e3e3e3;
   }
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: white;
+}
+
+tr.even {
+  background-color: #f4f4f4;
+}
 
 .dataTables_scrollBody .dataTables_wrapper {
   width: 95%;
