@@ -311,6 +311,12 @@ namespace Nop.Web.Areas.Admin.Models.Catalog
         [NopResourceDisplayName("Admin.Catalog.Products.Fields.CallForPrice")]
         public bool CallForPrice { get; set; }
 
+        [NopResourceDisplayName("Admin.Catalog.Products.Fields.DistributorPrice")]
+        public decimal DistributorPrice { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.Fields.AgentPrice")]
+        public decimal AgentPrice { get; set; }
+
         [NopResourceDisplayName("Admin.Catalog.Products.Fields.Price")]
         public decimal Price { get; set; }
 

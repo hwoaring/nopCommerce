@@ -25,6 +25,8 @@ namespace Nop.Data.Mapping.Builders.Catalog
                 .WithColumn(nameof(Product.MetaImageUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Product.MetaLinkUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Product.ShareImageUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Product.Url)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Product.PurchaseUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Product.Sku)).AsString(400).Nullable()
                 .WithColumn(nameof(Product.ManufacturerPartNumber)).AsString(400).Nullable()
                 .WithColumn(nameof(Product.Gtin)).AsString(400).Nullable()

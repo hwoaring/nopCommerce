@@ -44,10 +44,16 @@ namespace Nop.Core.Domain.Catalog
         /// 缩微图（方图或小图）
         /// </summary>
         public string CoverThumbImageUrl { get; set; }
+
         /// <summary>
-        /// 跳转链接
+        /// 跳转链接，在列表页点击详情链接跳转
         /// </summary>
         public string Url { get; set; }
+
+        /// <summary>
+        /// 购买链接：用于分享购买其他平台发布的产品，点击购买按钮跳转
+        /// </summary>
+        public string PurchaseUrl{ get; set; }
 
         /// <summary>
         /// Gets or sets the short description
@@ -159,6 +165,11 @@ namespace Nop.Core.Domain.Catalog
         /// 供应商ID
         /// </summary>
         public int SupplierId { get; set; }
+
+        /// <summary>
+        /// 文章或产品发布人ID
+        /// </summary>
+        public int PublisherId { get; set; }
 
         /// <summary>
         /// 是否需要联系人信息（不用邮寄的虚拟物品或卡券等，订单保存是否需要联系人信息：姓名，电话）
@@ -569,6 +580,16 @@ namespace Nop.Core.Domain.Catalog
         public bool CallForPrice { get; set; }
 
         /// <summary>
+        /// 分销商价格
+        /// </summary>
+        public decimal DistributorPrice { get; set; }
+
+        /// <summary>
+        /// 代理商价格
+        /// </summary>
+        public decimal AgentPrice { get; set; }
+
+        /// <summary>
         /// Gets or sets the price
         /// </summary>
         public decimal Price { get; set; }
@@ -707,6 +728,12 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets a value indicating whether the entity has been deleted
         /// </summary>
         public bool Deleted { get; set; }
+
+        /// <summary>
+        /// 是否通过审核（编辑或其他商家上的产品需要先通过审核）
+        /// </summary>
+        public bool Audited { get; set; }
+
         /// <summary>
         /// 浏览次数
         /// </summary>

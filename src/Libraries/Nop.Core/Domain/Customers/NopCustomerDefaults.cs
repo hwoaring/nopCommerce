@@ -38,6 +38,16 @@
         public static string SuppliersRoleName => "Suppliers";
 
         /// <summary>
+        /// 代理商
+        /// </summary>
+        public static string AgentsRoleName => "Agents";
+
+        /// <summary>
+        /// 分销商
+        /// </summary>
+        public static string DistributorsRoleName => "Distributors";
+
+        /// <summary>
         /// Gets a system name of 'salers' customer role,销售员，分销商
         /// </summary>
         public static string SalersRoleName => "Salers";

@@ -68,6 +68,16 @@ namespace Nop.Core.Domain.Catalog
         public int DisplayOrder { get; set; }
 
         /// <summary>
+        /// 分销商价格调整
+        /// </summary>
+        public decimal DistributorPriceAdjustment { get; set; }
+
+        /// <summary>
+        /// 代理商价格调整
+        /// </summary>
+        public decimal AgentPriceAdjustment { get; set; }
+
+        /// <summary>
         /// Gets or sets the price adjustment (used only with AttributeValueType.Simple)
         /// </summary>
         public decimal PriceAdjustment { get; set; }

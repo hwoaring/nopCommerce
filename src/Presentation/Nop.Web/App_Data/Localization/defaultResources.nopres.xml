@@ -3126,6 +3126,18 @@
   <LocaleResource Name="Admin.Catalog.Products.Fields.Price.Hint">
     <Value>The price of the product. You can manage currency by selecting Configuration &gt; Currencies.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.Fields.DistributorPrice">
+    <Value>Distributor Price</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.Fields.DistributorPrice.Hint">
+    <Value>The Distributor Price of the product. You can manage currency by selecting Configuration &gt; Currencies.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.Fields.AgentPrice">
+    <Value>Agent Price</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.Fields.AgentPrice.Hint">
+    <Value>The Agent Price of the product. You can manage currency by selecting Configuration &gt; Currencies.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.ProductAvailabilityRange">
     <Value>Product availability range</Value>
   </LocaleResource>

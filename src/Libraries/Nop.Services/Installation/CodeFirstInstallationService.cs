@@ -4490,6 +4490,13 @@ namespace Nop.Services.Installation
                 IsSystemRole = true,
                 SystemName = NopCustomerDefaults.GuestsRoleName
             };
+            var crSuppliers = new CustomerRole
+            {
+                Name = "Suppliers",
+                Active = true,
+                IsSystemRole = true,
+                SystemName = NopCustomerDefaults.SuppliersRoleName
+            };
             var crVendors = new CustomerRole
             {
                 Name = "Vendors",
@@ -4497,13 +4504,21 @@ namespace Nop.Services.Installation
                 IsSystemRole = true,
                 SystemName = NopCustomerDefaults.VendorsRoleName
             };
-            var crSuppliers = new CustomerRole
+            var crAgents = new CustomerRole
             {
-                Name = "Suppliers",
+                Name = "Agents",
                 Active = true,
                 IsSystemRole = true,
-                SystemName = NopCustomerDefaults.VendorsRoleName
+                SystemName = NopCustomerDefaults.AgentsRoleName
             };
+            var crDistributors = new CustomerRole
+            {
+                Name = "Distributors",
+                Active = true,
+                IsSystemRole = true,
+                SystemName = NopCustomerDefaults.DistributorsRoleName
+            };
+
             var customerRoles = new List<CustomerRole>
             {
                 crAdministrators,
@@ -4511,7 +4526,9 @@ namespace Nop.Services.Installation
                 crRegistered,
                 crGuests,
                 crVendors,
-                crSuppliers
+                crSuppliers,
+                crAgents,
+                crDistributors
             };
             InsertInstallationData(customerRoles);
 
