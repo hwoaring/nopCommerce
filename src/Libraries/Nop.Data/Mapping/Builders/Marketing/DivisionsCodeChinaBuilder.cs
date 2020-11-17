@@ -20,6 +20,7 @@ namespace Nop.Data.Mapping.Builders.Marketing
                 .WithColumn(nameof(DivisionsCodeChina.AreaCode)).AsAnsiString(15).NotNullable()
                 .WithColumn(nameof(DivisionsCodeChina.AreaName)).AsString(64).NotNullable()
                 .WithColumn(nameof(DivisionsCodeChina.CountryCode)).AsAnsiString(15).Nullable()
+                .WithColumn(nameof(DivisionsCodeChina.Abbreviation)).AsString(15).Nullable()
                 ;
         }
 
