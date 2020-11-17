@@ -27,6 +27,7 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Infrastructure;
 using Nop.Data;
+using Nop.Services.Authentication.MultiFactor;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
 using Nop.Services.Customers;
@@ -67,6 +68,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly IGdprService _gdprService;
         private readonly ILocalizedEntityService _localizedEntityService;
         private readonly ILocalizationService _localizationService;
+        private readonly IMultiFactorAuthenticationPluginManager _multiFactorAuthenticationPluginManager;
         private readonly INopFileProvider _fileProvider;
         private readonly INotificationService _notificationService;
         private readonly IOrderService _orderService;
@@ -95,6 +97,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             IGdprService gdprService,
             ILocalizedEntityService localizedEntityService,
             ILocalizationService localizationService,
+            IMultiFactorAuthenticationPluginManager multiFactorAuthenticationPluginManager,
             INopFileProvider fileProvider,
             INotificationService notificationService,
             IOrderService orderService,
@@ -119,6 +122,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             _gdprService = gdprService;
             _localizedEntityService = localizedEntityService;
             _localizationService = localizationService;
+            _multiFactorAuthenticationPluginManager = multiFactorAuthenticationPluginManager;
             _fileProvider = fileProvider;
             _notificationService = notificationService;
             _orderService = orderService;
@@ -1049,7 +1053,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             var addressSettings = _settingService.LoadSetting<AddressSettings>(storeScope);
             var dateTimeSettings = _settingService.LoadSetting<DateTimeSettings>(storeScope);
             var externalAuthenticationSettings = _settingService.LoadSetting<ExternalAuthenticationSettings>(storeScope);
-
+            var multiFactorAuthenticationSettings = _settingService.LoadSetting<MultiFactorAuthenticationSettings>(storeScope);
+           
             customerSettings = model.CustomerSettings.ToSettings(customerSettings);
 
             if (customerSettings.UsernameValidationEnabled && customerSettings.UsernameValidationUseRegex)
@@ -1099,6 +1104,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             externalAuthenticationSettings.AllowCustomersToRemoveAssociations = model.ExternalAuthenticationSettings.AllowCustomersToRemoveAssociations;
             _settingService.SaveSetting(externalAuthenticationSettings);
+
+            multiFactorAuthenticationSettings = model.MultiFactorAuthenticationSettings.ToSettings(multiFactorAuthenticationSettings);
+            _settingService.SaveSetting(multiFactorAuthenticationSettings);
 
             //activity log
             _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
@@ -1903,6 +1911,20 @@ namespace Nop.Web.Areas.Admin.Controllers
                 {
                     Result = _localizationService.GetResource(
                         "Admin.Configuration.Settings.GeneralCommon.LoadAllLocaleRecordsOnStartup.Warning")
+                });
+
+            return Json(new { Result = string.Empty });
+        }
+
+        //Action that displays a notification (warning) to the store owner about the absence of active authentication providers
+        public IActionResult ForceMultifactorAuthenticationWarning(bool forceMultifactorAuthentication)
+        {
+            //ForceMultifactorAuthentication is set and the store haven't active Authentication provider , so display warning
+            if (forceMultifactorAuthentication && !_multiFactorAuthenticationPluginManager.HasActivePlugins())
+                return Json(new
+                {
+                    Result = _localizationService.GetResource(
+                        "Admin.Configuration.Settings.CustomerUser.ForceMultifactorAuthentication.Warning")
                 });
 
             return Json(new { Result = string.Empty });

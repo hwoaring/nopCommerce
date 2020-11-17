@@ -6485,6 +6485,11 @@ namespace Nop.Services.Installation
                 PhoneNumberValidationRule = "^[0-9]{1,14}?$"
             });
 
+            settingService.SaveSetting(new MultiFactorAuthenticationSettings
+            {
+                ForceMultifactorAuthentication = false
+            });
+
             settingService.SaveSetting(new AddressSettings
             {
                 LastNameEnabled = true,
