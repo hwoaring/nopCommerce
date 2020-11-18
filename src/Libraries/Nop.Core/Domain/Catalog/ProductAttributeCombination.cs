@@ -46,6 +46,26 @@
         public decimal? OverriddenPrice { get; set; }
 
         /// <summary>
+        /// 覆盖分销商价格
+        /// </summary>
+        public decimal? OverriddenDistributorPrice { get; set; }
+
+        /// <summary>
+        /// 覆盖代理商价格
+        /// </summary>
+        public decimal? OverriddenAgentPrice { get; set; }
+
+        /// <summary>
+        /// 覆盖原价
+        /// </summary>
+        public decimal? OverriddenOldPrice { get; set; }
+
+        /// <summary>
+        /// 覆盖产品花费价
+        /// </summary>
+        public decimal? OverriddenProductCost { get; set; }
+
+        /// <summary>
         /// Gets or sets the quantity when admin should be notified
         /// </summary>
         public int NotifyAdminForQuantityBelow { get; set; }

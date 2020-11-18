@@ -713,6 +713,10 @@ namespace Nop.Web.Areas.Admin.Controllers
                     ManufacturerPartNumber = null,
                     Gtin = null,
                     OverriddenPrice = null,
+                    OverriddenDistributorPrice = null,
+                    OverriddenAgentPrice = null,
+                    OverriddenOldPrice = null,
+                    OverriddenProductCost = null,
                     NotifyAdminForQuantityBelow = 1,
                     PictureId = 0
                 };

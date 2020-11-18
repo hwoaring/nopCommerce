@@ -344,6 +344,10 @@ namespace Nop.Services.Catalog
                     ManufacturerPartNumber = combination.ManufacturerPartNumber,
                     Gtin = combination.Gtin,
                     OverriddenPrice = combination.OverriddenPrice,
+                    OverriddenDistributorPrice = combination.OverriddenDistributorPrice,
+                    OverriddenAgentPrice = combination.OverriddenAgentPrice,
+                    OverriddenOldPrice = combination.OverriddenOldPrice,
+                    OverriddenProductCost = combination.OverriddenProductCost,
                     NotifyAdminForQuantityBelow = combination.NotifyAdminForQuantityBelow,
                     PictureId = combinationPictureId
                 };

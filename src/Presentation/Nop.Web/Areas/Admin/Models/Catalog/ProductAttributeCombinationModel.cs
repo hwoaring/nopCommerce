@@ -48,6 +48,22 @@ namespace Nop.Web.Areas.Admin.Models.Catalog
         [UIHint("DecimalNullable")]
         public decimal? OverriddenPrice { get; set; }
 
+        [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.OverriddenDistributorPrice")]
+        [UIHint("DecimalNullable")]
+        public decimal? OverriddenDistributorPrice { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.OverriddenAgentPrice")]
+        [UIHint("DecimalNullable")]
+        public decimal? OverriddenAgentPrice { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.OverriddenOldPrice")]
+        [UIHint("DecimalNullable")]
+        public decimal? OverriddenOldPrice { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.OverriddenProductCost")]
+        [UIHint("DecimalNullable")]
+        public decimal? OverriddenProductCost { get; set; }
+
         [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.NotifyAdminForQuantityBelow")]
         public int NotifyAdminForQuantityBelow { get; set; }
 
