@@ -1857,8 +1857,9 @@ namespace Nop.Services.ExportImport
         /// Import states from TXT file
         /// </summary>
         /// <param name="stream">Stream</param>
+        /// <param name="writeLog">Indicates whether to add logging</param>
         /// <returns>Number of imported states</returns>
-        public virtual int ImportStatesFromTxt(Stream stream)
+        public virtual int ImportStatesFromTxt(Stream stream, bool writeLog = true)
         {
             var count = 0;
             using (var reader = new StreamReader(stream))
@@ -1916,8 +1917,11 @@ namespace Nop.Services.ExportImport
             }
 
             //activity log
-            _customerActivityService.InsertActivity("ImportStates",
+            if (writeLog)
+            {
+                _customerActivityService.InsertActivity("ImportStates",
                 string.Format(_localizationService.GetResource("ActivityLog.ImportStates"), count));
+            }
 
             return count;
         }

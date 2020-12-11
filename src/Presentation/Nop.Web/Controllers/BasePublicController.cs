@@ -6,10 +6,10 @@ using Senparc.Weixin.MP.CommonService.Mvc.Filters;
 namespace Nop.Web.Controllers
 {
     [WwwRequirement]
+    [CheckLanguageSeoCode]
     [CheckWeixinOAuth]
     [CheckAccessPublicStore]
     [CheckAccessClosedStore]
-    [CheckLanguageSeoCode]
     [CheckDiscountCoupon]
     [CheckAffiliate]
     [CheckOpenId]
