@@ -970,7 +970,8 @@ namespace Nop.Services.Media
         {
             using var image = Image.Load<Rgba32>(pictureBinary, out var imageFormat);
             //resize the image in accordance with the maximum size
-            if (Math.Max(image.Height, image.Width) > _mediaSettings.MaximumImageSize)
+            //if (Math.Max(image.Height, image.Width) > _mediaSettings.MaximumImageSize)
+            if (_mediaSettings.MaximumImageSize > 0 && Math.Max(image.Height, image.Width) > _mediaSettings.MaximumImageSize)
             {
                 image.Mutate(imageProcess => imageProcess.Resize(new ResizeOptions
                 {

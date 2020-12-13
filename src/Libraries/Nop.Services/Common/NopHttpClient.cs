@@ -39,7 +39,7 @@ namespace Nop.Services.Common
             IWorkContext workContext)
         {
             //configure client https://www.nopcommerce.com/
-            client.BaseAddress = new Uri("https://www.yourdomain.com/");
+            client.BaseAddress = new Uri("https://www.nopcommerce.com/");  //https://www.yourdomain.com/
             client.Timeout = TimeSpan.FromSeconds(5);
             client.DefaultRequestHeaders.Add(HeaderNames.UserAgent, $"nopCommerce-{NopVersion.CURRENT_VERSION}");
 
@@ -71,6 +71,8 @@ namespace Nop.Services.Common
         /// <returns>The asynchronous task whose result contains the warning text</returns>
         public virtual async Task<string> GetCopyrightWarningAsync()
         {
+            return null;
+
             //prepare URL to request
             var language = _languageService.GetTwoLetterIsoLanguageName(_workContext.WorkingLanguage);
             var url = string.Format(NopCommonDefaults.NopCopyrightWarningPath,
@@ -92,9 +94,9 @@ namespace Nop.Services.Common
             var language = _languageService.GetTwoLetterIsoLanguageName(_workContext.WorkingLanguage);
             var url = string.Format(NopCommonDefaults.NopNewsRssPath,
                 NopVersion.CURRENT_VERSION,
-                _webHelper.IsLocalRequest(_httpContextAccessor.HttpContext.Request),
+                true, //_webHelper.IsLocalRequest(_httpContextAccessor.HttpContext.Request),
                 _adminAreaSettings.HideAdvertisementsOnAdminArea,
-                _webHelper.GetStoreLocation(),
+                "https://localhost:44315/", //_webHelper.GetStoreLocation(),
                 language).ToLowerInvariant();
 
             //get news feed
@@ -114,9 +116,9 @@ namespace Nop.Services.Common
             //prepare URL to request
             var url = string.Format(NopCommonDefaults.NopInstallationCompletedPath,
                 NopVersion.CURRENT_VERSION,
-                _webHelper.IsLocalRequest(_httpContextAccessor.HttpContext.Request),
+                true, //_webHelper.IsLocalRequest(_httpContextAccessor.HttpContext.Request),
                 WebUtility.UrlEncode(email),
-                _webHelper.GetStoreLocation(),
+                "https://localhost:44315/", //_webHelper.GetStoreLocation(),
                 languageCode,
                 culture)
                 .ToLowerInvariant();

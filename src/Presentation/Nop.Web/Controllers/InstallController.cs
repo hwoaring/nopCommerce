@@ -229,7 +229,7 @@ namespace Nop.Web.Controllers
                             var result = JsonConvert.DeserializeAnonymousType(resultString,
                                 new { Message = string.Empty, LanguagePack = new { Culture = string.Empty, Progress = 0, DownloadLink = string.Empty } });
                             if (result.LanguagePack.Progress > NopCommonDefaults.LanguagePackMinTranslationProgressToInstall)
-                                downloadUrl = result.LanguagePack.DownloadLink;
+                                downloadUrl = result.LanguagePack.DownloadLink; //https://downloads.nopcommerce.com/languagepacks/origin/localization_nopCommerce-4.30/lang/zh-CN/language_pack.zh-CN.xml
                         }
                         catch { }
                     }

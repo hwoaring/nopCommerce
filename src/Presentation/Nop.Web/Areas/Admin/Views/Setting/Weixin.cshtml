@@ -34,9 +34,9 @@
             @await Component.InvokeAsync("SettingMode")
             <div asp-validation-summary="All"></div>
             
-            <nop-panels id="weixinsettings-panels">
-                <nop-panel asp-name="weixinsettings-common" asp-icon="fa fa-info" asp-title="@T("Admin.Configuration.Settings.Weixin.BlockTitle.Common")" asp-hide-block-attribute-name="@hideCommonBlockAttributeName" asp-hide="@hideCommonBlock" asp-advanced="false">@await Html.PartialAsync("_Weixin.Common", Model)</nop-panel>
-            </nop-panels>
+            <nop-cards id="weixinsettings-cards">
+                <nop-card asp-name="weixinsettings-common" asp-icon="fa fa-info" asp-title="@T("Admin.Configuration.Settings.Weixin.BlockTitle.Common")" asp-hide-block-attribute-name="@hideCommonBlockAttributeName" asp-hide="@hideCommonBlock" asp-advanced="false">@await Html.PartialAsync("_Weixin.Common", Model)</nop-card>
+            </nop-cards>
         </div>
     </div>
 </form>
