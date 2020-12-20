@@ -74,9 +74,9 @@ namespace Nop.Services.Common
             return null;
 
             //prepare URL to request
-            var language = _languageService.GetTwoLetterIsoLanguageName(_workContext.WorkingLanguage);
+            var language = _languageService.GetTwoLetterIsoLanguageName(await _workContext.GetWorkingLanguageAsync());
             var url = string.Format(NopCommonDefaults.NopCopyrightWarningPath,
-                _storeContext.CurrentStore.Url,
+                (await _storeContext.GetCurrentStoreAsync()).Url,
                 _webHelper.IsLocalRequest(_httpContextAccessor.HttpContext.Request),
                 language).ToLowerInvariant();
 
@@ -91,7 +91,7 @@ namespace Nop.Services.Common
         public virtual async Task<RssFeed> GetNewsRssAsync()
         {
             //prepare URL to request
-            var language = _languageService.GetTwoLetterIsoLanguageName(_workContext.WorkingLanguage);
+            var language = _languageService.GetTwoLetterIsoLanguageName(await _workContext.GetWorkingLanguageAsync());
             var url = string.Format(NopCommonDefaults.NopNewsRssPath,
                 NopVersion.CURRENT_VERSION,
                 true, //_webHelper.IsLocalRequest(_httpContextAccessor.HttpContext.Request),
@@ -100,7 +100,7 @@ namespace Nop.Services.Common
                 language).ToLowerInvariant();
 
             //get news feed
-            using var stream = await _httpClient.GetStreamAsync(url);
+            await using var stream = await _httpClient.GetStreamAsync(url);
             return await RssFeed.LoadAsync(stream);
         }
 
@@ -136,7 +136,7 @@ namespace Nop.Services.Common
         public virtual async Task<string> GetExtensionsCategoriesAsync()
         {
             //prepare URL to request
-            var language = _languageService.GetTwoLetterIsoLanguageName(_workContext.WorkingLanguage);
+            var language = _languageService.GetTwoLetterIsoLanguageName(await _workContext.GetWorkingLanguageAsync());
             var url = string.Format(NopCommonDefaults.NopExtensionsCategoriesPath, language).ToLowerInvariant();
 
             //get XML response
@@ -150,7 +150,7 @@ namespace Nop.Services.Common
         public virtual async Task<string> GetExtensionsVersionsAsync()
         {
             //prepare URL to request
-            var language = _languageService.GetTwoLetterIsoLanguageName(_workContext.WorkingLanguage);
+            var language = _languageService.GetTwoLetterIsoLanguageName(await _workContext.GetWorkingLanguageAsync());
             var url = string.Format(NopCommonDefaults.NopExtensionsVersionsPath, language).ToLowerInvariant();
 
             //get XML response
@@ -172,7 +172,7 @@ namespace Nop.Services.Common
             int pageIndex = 0, int pageSize = int.MaxValue)
         {
             //prepare URL to request
-            var language = _languageService.GetTwoLetterIsoLanguageName(_workContext.WorkingLanguage);
+            var language = _languageService.GetTwoLetterIsoLanguageName(await _workContext.GetWorkingLanguageAsync());
             var url = string.Format(NopCommonDefaults.NopExtensionsPath,
                 categoryId, versionId, price, WebUtility.UrlEncode(searchTerm), pageIndex, pageSize, language).ToLowerInvariant();
 

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Nop.Core;
 using Nop.Core.Domain;
@@ -94,8 +95,7 @@ namespace Nop.Services.Installation
 
         #region Ctor
 
-        public CodeFirstInstallationService(
-            INopDataProvider dataProvider,
+        public CodeFirstInstallationService(INopDataProvider dataProvider,
             INopFileProvider fileProvider,
             IRepository<ActivityLogType> activityLogTypeRepository,
             IRepository<Address> addressRepository,
@@ -162,49 +162,47 @@ namespace Nop.Services.Installation
 
         #region Utilities
 
-        protected virtual T InsertInstallationData<T>(T entity) where T : BaseEntity
+        protected virtual async Task<T> InsertInstallationDataAsync<T>(T entity) where T : BaseEntity
         {
-            return _dataProvider.InsertEntity(entity);
+            return await _dataProvider.InsertEntityAsync(entity);
         }
 
-        protected virtual void InsertInstallationData<T>(params T[] entities) where T : BaseEntity
+        protected virtual async Task InsertInstallationDataAsync<T>(params T[] entities) where T : BaseEntity
         {
-            foreach (var entity in entities)
-            {
-                InsertInstallationData(entity);
-            }
+            await _dataProvider.BulkInsertEntitiesAsync(entities);
         }
 
-        protected virtual void InsertInstallationData<T>(IList<T> entities) where T : BaseEntity
+        protected virtual async Task InsertInstallationDataAsync<T>(IList<T> entities) where T : BaseEntity
         {
             if (!entities.Any())
                 return;
 
-            InsertInstallationData(entities.ToArray());
+            await InsertInstallationDataAsync(entities.ToArray());
         }
 
-        protected virtual void UpdateInstallationData<T>(T entity) where T : BaseEntity
+        protected virtual async Task UpdateInstallationDataAsync<T>(T entity) where T : BaseEntity
         {
-            _dataProvider.UpdateEntity(entity);
+            await _dataProvider.UpdateEntityAsync(entity);
         }
 
-        protected virtual void UpdateInstallationData<T>(IList<T> entities) where T : BaseEntity
+        protected virtual async Task UpdateInstallationDataAsync<T>(IList<T> entities) where T : BaseEntity
         {
             if (!entities.Any())
                 return;
 
             foreach (var entity in entities)
-                _dataProvider.UpdateEntity(entity);
+                await _dataProvider.UpdateEntityAsync(entity);
         }
 
-        protected virtual SpecificationAttributeOption GetSpecificationAttributeOption(string specAttributeName, string specAttributeOptionName)
+        protected virtual async Task<int> GetSpecificationAttributeOptionIdAsync(string specAttributeName, string specAttributeOptionName)
         {
-            var specificationAttribute = _specificationAttributeRepository.Table.Single(sa => sa.Name == specAttributeName);
+            var specificationAttribute = await _specificationAttributeRepository.Table
+                .SingleAsync(sa => sa.Name == specAttributeName);
 
-            var specificationAttributeOption = _specificationAttributeOptionRepository.Table.Single(sao =>
-                sao.Name == specAttributeOptionName && sao.SpecificationAttributeId == specificationAttribute.Id);
+            var specificationAttributeOption = await _specificationAttributeOptionRepository.Table
+                .SingleAsync(sao => sao.Name == specAttributeOptionName && sao.SpecificationAttributeId == specificationAttribute.Id);
 
-            return specificationAttributeOption;
+            return specificationAttributeOption.Id;
         }
 
         /// <summary>
@@ -214,14 +212,14 @@ namespace Nop.Services.Installation
         /// <param name="fileName"></param>
         /// <param name="displayOrder"></param>
         /// <returns>Identifier of inserted picture</returns>
-        protected virtual int InsertProductPicture(Product product, string fileName, int displayOrder = 1, bool isCoverImage = false, bool published = true)
+        protected virtual async Task<int> InsertProductPictureAsync(Product product, string fileName, int displayOrder = 1, bool isCoverImage = false, bool published = true)
         {
             var pictureService = EngineContext.Current.Resolve<IPictureService>();
             var sampleImagesPath = GetSamplesPath();
 
-            var pic = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, fileName)), MimeTypes.ImageJpeg, pictureService.GetPictureSeName(product.Name));
+            var pic = await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, fileName)), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync(product.Name));
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductPicture
                 {
                     ProductId = product.Id,
@@ -234,7 +232,7 @@ namespace Nop.Services.Installation
             return pic.Id;
         }
 
-        protected virtual string ValidateSeName<T>(T entity, string seName) where T : BaseEntity
+        protected virtual async Task<string> ValidateSeNameAsync<T>(T entity, string seName) where T : BaseEntity
         {
             //duplicate of ValidateSeName method of \Nop.Services\Seo\UrlRecordService.cs (we cannot inject it here)
             if (entity == null)
@@ -249,9 +247,7 @@ namespace Nop.Services.Installation
             {
                 var c2 = c.ToString();
                 if (okChars.Contains(c2))
-                {
                     sb.Append(c2);
-                }
             }
 
             seName = sb.ToString();
@@ -274,7 +270,7 @@ namespace Nop.Services.Installation
                 var query = from ur in _urlRecordRepository.Table
                             where tempSeName != null && ur.Slug == tempSeName
                             select ur;
-                var urlRecord = query.FirstOrDefault();
+                var urlRecord = await query.FirstOrDefaultAsync();
 
                 var entityName = entity.GetType().Name;
                 var reserved = urlRecord != null && !(urlRecord.EntityId == entity.Id && urlRecord.EntityName.Equals(entityName, StringComparison.InvariantCultureIgnoreCase));
@@ -295,7 +291,7 @@ namespace Nop.Services.Installation
             return _fileProvider.GetAbsolutePath(NopInstallationDefaults.SampleImagesPath);
         }
 
-        protected virtual void InstallStores()
+        protected virtual async Task InstallStoresAsync()
         {
             var storeUrl = _webHelper.GetStoreLocation();
             var stores = new List<Store>
@@ -315,10 +311,10 @@ namespace Nop.Services.Installation
                 }
             };
 
-            InsertInstallationData(stores);
+            await InsertInstallationDataAsync(stores);
         }
 
-        protected virtual void InstallMeasures(RegionInfo regionInfo)
+        protected virtual async Task InstallMeasuresAsync(RegionInfo regionInfo)
         {
             var isMetric = regionInfo?.IsMetric ?? false;
 
@@ -354,7 +350,7 @@ namespace Nop.Services.Installation
                 }
             };
 
-            InsertInstallationData(measureDimensions);
+            await InsertInstallationDataAsync(measureDimensions);
 
             var measureWeights = new List<MeasureWeight>
             {
@@ -388,43 +384,24 @@ namespace Nop.Services.Installation
                 }
             };
 
-            InsertInstallationData(measureWeights);
+            await InsertInstallationDataAsync(measureWeights);
         }
 
-        protected virtual void InstallTaxCategories()
+        protected virtual async Task InstallTaxCategoriesAsync()
         {
             var taxCategories = new List<TaxCategory>
             {
-                new TaxCategory
-                    {
-                        Name = "Books",
-                        DisplayOrder = 1
-                    },
-                new TaxCategory
-                    {
-                        Name = "Electronics & Software",
-                        DisplayOrder = 5
-                    },
-                new TaxCategory
-                    {
-                        Name = "Downloadable Products",
-                        DisplayOrder = 10
-                    },
-                new TaxCategory
-                    {
-                        Name = "Jewelry",
-                        DisplayOrder = 15
-                    },
-                new TaxCategory
-                    {
-                        Name = "Apparel",
-                        DisplayOrder = 20
-                    }
+                new TaxCategory {Name = "Books", DisplayOrder = 1},
+                new TaxCategory {Name = "Electronics & Software", DisplayOrder = 5},
+                new TaxCategory {Name = "Downloadable Products", DisplayOrder = 10},
+                new TaxCategory {Name = "Jewelry", DisplayOrder = 15},
+                new TaxCategory {Name = "Apparel", DisplayOrder = 20}
             };
-            InsertInstallationData(taxCategories);
+
+            await InsertInstallationDataAsync(taxCategories);
         }
 
-        protected virtual void InstallLanguages(string languagePackDownloadLink, CultureInfo cultureInfo, RegionInfo regionInfo)
+        protected virtual async Task InstallLanguagesAsync(string languagePackDownloadLink, CultureInfo cultureInfo, RegionInfo regionInfo)
         {
             var localizationService = EngineContext.Current.Resolve<ILocalizationService>();
 
@@ -439,7 +416,7 @@ namespace Nop.Services.Installation
                 Published = true,
                 DisplayOrder = 1
             };
-            InsertInstallationData(defaultLanguage);
+            await InsertInstallationDataAsync(defaultLanguage);
 
             //Install locale resources for default culture
             var directoryPath = _fileProvider.MapPath(NopInstallationDefaults.LocalizationResourcesPath);
@@ -447,7 +424,7 @@ namespace Nop.Services.Installation
             foreach (var filePath in _fileProvider.EnumerateFiles(directoryPath, pattern))
             {
                 using var streamReader = new StreamReader(filePath);
-                localizationService.ImportResourcesFromXml(defaultLanguage, streamReader);
+                await localizationService.ImportResourcesFromXmlAsync(defaultLanguage, streamReader);
             }
 
             if (cultureInfo == null || regionInfo == null || cultureInfo.Name == NopCommonDefaults.DefaultLanguageCulture)
@@ -463,7 +440,7 @@ namespace Nop.Services.Installation
                 Published = true,
                 DisplayOrder = 2
             };
-            InsertInstallationData(language);
+            await InsertInstallationDataAsync(language);
 
             if (string.IsNullOrEmpty(languagePackDownloadLink))
                 return;
@@ -473,18 +450,18 @@ namespace Nop.Services.Installation
             {
                 var httpClientFactory = EngineContext.Current.Resolve<IHttpClientFactory>();
                 var httpClient = httpClientFactory.CreateClient(NopHttpDefaults.DefaultHttpClient);
-                using var stream = httpClient.GetStreamAsync(languagePackDownloadLink).Result;
+                await using var stream = await httpClient.GetStreamAsync(languagePackDownloadLink);
                 using var streamReader = new StreamReader(stream);
-                localizationService.ImportResourcesFromXml(language, streamReader);
+                await localizationService.ImportResourcesFromXmlAsync(language, streamReader);
 
                 //set this language as default
                 language.DisplayOrder = 0;
-                UpdateInstallationData(language);
+                await UpdateInstallationDataAsync(language);
             }
             catch { }
         }
 
-        protected virtual void InstallCurrencies(CultureInfo cultureInfo, RegionInfo regionInfo)
+        protected virtual async Task InstallCurrenciesAsync(CultureInfo cultureInfo, RegionInfo regionInfo)
         {
             //set some currencies with a rate against the USD
             var defaultCurrencies = new List<string>() { "USD", "AUD", "GBP", "CAD", "CNY", "EUR", "HKD", "JPY", "RUB", "SEK", "INR" };
@@ -662,10 +639,11 @@ namespace Nop.Services.Installation
                 }
             }
 
-            InsertInstallationData(currencies);
+
+            await InsertInstallationDataAsync(currencies);
         }
 
-        protected virtual void InstallCountriesAndStates()
+        protected virtual async Task InstallCountriesAndStatesAsync()
         {
             var countries = ISO3166.GetCollection().Select(country => new Country
             {
@@ -680,7 +658,7 @@ namespace Nop.Services.Installation
                 Published = true
             }).ToList();
 
-            InsertInstallationData(countries.ToArray());
+            await InsertInstallationDataAsync(countries.ToArray());
 
             //Import states for all countries
             var directoryPath = _fileProvider.MapPath(NopInstallationDefaults.LocalizationResourcesPath);
@@ -691,12 +669,12 @@ namespace Nop.Services.Installation
             var importManager = scope.ServiceProvider.GetRequiredService<IImportManager>();
             foreach (var filePath in _fileProvider.EnumerateFiles(directoryPath, pattern))
             {
-                using var stream = new FileStream(filePath, FileMode.Open);
-                importManager.ImportStatesFromTxt(stream, false);
+                await using var stream = new FileStream(filePath, FileMode.Open);
+                await importManager.ImportStatesFromTxtAsync(stream, false);
             }
         }
 
-        protected virtual void InstallShippingMethods()
+        protected virtual async Task InstallShippingMethodsAsync()
         {
             var shippingMethods = new List<ShippingMethod>
             {
@@ -720,10 +698,11 @@ namespace Nop.Services.Installation
                     DisplayOrder = 3
                 }
             };
-            InsertInstallationData(shippingMethods);
+
+            await InsertInstallationDataAsync(shippingMethods);
         }
 
-        protected virtual void InstallDeliveryDates()
+        protected virtual async Task InstallDeliveryDatesAsync()
         {
             var deliveryDates = new List<DeliveryDate>
             {
@@ -743,10 +722,11 @@ namespace Nop.Services.Installation
                     DisplayOrder = 10
                 }
             };
-            InsertInstallationData(deliveryDates);
+
+            await InsertInstallationDataAsync(deliveryDates);
         }
 
-        protected virtual void InstallProductAvailabilityRanges()
+        protected virtual async Task InstallProductAvailabilityRangesAsync()
         {
             var productAvailabilityRanges = new List<ProductAvailabilityRange>
             {
@@ -766,19 +746,20 @@ namespace Nop.Services.Installation
                     DisplayOrder = 3
                 }
             };
-            InsertInstallationData(productAvailabilityRanges);
+
+            await InsertInstallationDataAsync(productAvailabilityRanges);
         }
 
-        protected virtual void InstallSampleCustomers()
+        protected virtual async Task InstallSampleCustomersAsync()
         {
-            var crRegistered = _customerRoleRepository.Table.FirstOrDefault(customerRole =>
-                customerRole.SystemName == NopCustomerDefaults.RegisteredRoleName);
+            var crRegistered = await _customerRoleRepository.Table
+                .FirstOrDefaultAsync(customerRole => customerRole.SystemName == NopCustomerDefaults.RegisteredRoleName);
 
             if (crRegistered == null)
                 throw new ArgumentNullException(nameof(crRegistered));
 
             //default store 
-            var defaultStore = _storeRepository.Table.FirstOrDefault();
+            var defaultStore = await _storeRepository.Table.FirstOrDefaultAsync();
 
             if (defaultStore == null)
                 throw new Exception("No default store could be loaded");
@@ -797,7 +778,7 @@ namespace Nop.Services.Installation
                 LastActivityDateUtc = DateTime.UtcNow,
                 RegisteredInStoreId = storeId
             };
-            var defaultSecondUserAddress = InsertInstallationData(
+            var defaultSecondUserAddress = await InsertInstallationDataAsync(
                 new Address
                 {
                     FirstName = "Steve",
@@ -818,13 +799,13 @@ namespace Nop.Services.Installation
             secondUser.BillingAddressId = defaultSecondUserAddress.Id;
             secondUser.ShippingAddressId = defaultSecondUserAddress.Id;
 
-            InsertInstallationData(secondUser);
+            await InsertInstallationDataAsync(secondUser);
 
-            InsertInstallationData(new CustomerAddressMapping { CustomerId = secondUser.Id, AddressId = defaultSecondUserAddress.Id });
-            InsertInstallationData(new CustomerCustomerRoleMapping { CustomerId = secondUser.Id, CustomerRoleId = crRegistered.Id });
+            await InsertInstallationDataAsync(new CustomerAddressMapping { CustomerId = secondUser.Id, AddressId = defaultSecondUserAddress.Id });
+            await InsertInstallationDataAsync(new CustomerCustomerRoleMapping { CustomerId = secondUser.Id, CustomerRoleId = crRegistered.Id });
 
             //set default customer name
-            InsertInstallationData(new GenericAttribute
+            await InsertInstallationDataAsync(new GenericAttribute
             {
                 EntityId = secondUser.Id,
                 Key = NopCustomerDefaults.FirstNameAttribute,
@@ -844,7 +825,7 @@ namespace Nop.Services.Installation
             });
 
             //set customer password
-            InsertInstallationData(new CustomerPassword
+            await InsertInstallationDataAsync(new CustomerPassword
             {
                 CustomerId = secondUser.Id,
                 Password = "123456",
@@ -866,7 +847,7 @@ namespace Nop.Services.Installation
                 RegisteredInStoreId = storeId
             };
 
-            var defaultThirdUserAddress = InsertInstallationData(
+            var defaultThirdUserAddress = await InsertInstallationDataAsync(
                 new Address
                 {
                     FirstName = "Arthur",
@@ -886,13 +867,13 @@ namespace Nop.Services.Installation
             thirdUser.BillingAddressId = defaultThirdUserAddress.Id;
             thirdUser.ShippingAddressId = defaultThirdUserAddress.Id;
 
-            InsertInstallationData(thirdUser);
+            await InsertInstallationDataAsync(thirdUser);
 
-            InsertInstallationData(new CustomerAddressMapping { CustomerId = thirdUser.Id, AddressId = defaultThirdUserAddress.Id });
-            InsertInstallationData(new CustomerCustomerRoleMapping { CustomerId = thirdUser.Id, CustomerRoleId = crRegistered.Id });
+            await InsertInstallationDataAsync(new CustomerAddressMapping { CustomerId = thirdUser.Id, AddressId = defaultThirdUserAddress.Id });
+            await InsertInstallationDataAsync(new CustomerCustomerRoleMapping { CustomerId = thirdUser.Id, CustomerRoleId = crRegistered.Id });
 
             //set default customer name
-            InsertInstallationData(new GenericAttribute
+            await InsertInstallationDataAsync(new GenericAttribute
             {
                 EntityId = thirdUser.Id,
                 Key = NopCustomerDefaults.FirstNameAttribute,
@@ -912,7 +893,7 @@ namespace Nop.Services.Installation
             });
 
             //set customer password
-            InsertInstallationData(new CustomerPassword
+            await InsertInstallationDataAsync(new CustomerPassword
             {
                 CustomerId = thirdUser.Id,
                 Password = "123456",
@@ -933,7 +914,7 @@ namespace Nop.Services.Installation
                 LastActivityDateUtc = DateTime.UtcNow,
                 RegisteredInStoreId = storeId
             };
-            var defaultFourthUserAddress = InsertInstallationData(
+            var defaultFourthUserAddress = await InsertInstallationDataAsync(
                 new Address
                 {
                     FirstName = "James",
@@ -953,13 +934,13 @@ namespace Nop.Services.Installation
             fourthUser.BillingAddressId = defaultFourthUserAddress.Id;
             fourthUser.ShippingAddressId = defaultFourthUserAddress.Id;
 
-            InsertInstallationData(fourthUser);
+            await InsertInstallationDataAsync(fourthUser);
 
-            InsertInstallationData(new CustomerAddressMapping { CustomerId = fourthUser.Id, AddressId = defaultFourthUserAddress.Id });
-            InsertInstallationData(new CustomerCustomerRoleMapping { CustomerId = fourthUser.Id, CustomerRoleId = crRegistered.Id });
+            await InsertInstallationDataAsync(new CustomerAddressMapping { CustomerId = fourthUser.Id, AddressId = defaultFourthUserAddress.Id });
+            await InsertInstallationDataAsync(new CustomerCustomerRoleMapping { CustomerId = fourthUser.Id, CustomerRoleId = crRegistered.Id });
 
             //set default customer name
-            InsertInstallationData(new GenericAttribute
+            await InsertInstallationDataAsync(new GenericAttribute
             {
                 EntityId = fourthUser.Id,
                 Key = NopCustomerDefaults.FirstNameAttribute,
@@ -979,7 +960,7 @@ namespace Nop.Services.Installation
             });
 
             //set customer password
-            InsertInstallationData(new CustomerPassword
+            await InsertInstallationDataAsync(new CustomerPassword
             {
                 CustomerId = fourthUser.Id,
                 Password = "123456",
@@ -1000,7 +981,7 @@ namespace Nop.Services.Installation
                 LastActivityDateUtc = DateTime.UtcNow,
                 RegisteredInStoreId = storeId
             };
-            var defaultFifthUserAddress = InsertInstallationData(
+            var defaultFifthUserAddress = await InsertInstallationDataAsync(
                 new Address
                 {
                     FirstName = "Brenda",
@@ -1021,13 +1002,13 @@ namespace Nop.Services.Installation
             fifthUser.BillingAddressId = defaultFifthUserAddress.Id;
             fifthUser.ShippingAddressId = defaultFifthUserAddress.Id;
 
-            InsertInstallationData(fifthUser);
+            await InsertInstallationDataAsync(fifthUser);
 
-            InsertInstallationData(new CustomerAddressMapping { CustomerId = fifthUser.Id, AddressId = defaultFifthUserAddress.Id });
-            InsertInstallationData(new CustomerCustomerRoleMapping { CustomerId = fifthUser.Id, CustomerRoleId = crRegistered.Id });
+            await InsertInstallationDataAsync(new CustomerAddressMapping { CustomerId = fifthUser.Id, AddressId = defaultFifthUserAddress.Id });
+            await InsertInstallationDataAsync(new CustomerCustomerRoleMapping { CustomerId = fifthUser.Id, CustomerRoleId = crRegistered.Id });
 
             //set default customer name
-            InsertInstallationData(new GenericAttribute
+            await InsertInstallationDataAsync(new GenericAttribute
             {
                 EntityId = fifthUser.Id,
                 Key = NopCustomerDefaults.FirstNameAttribute,
@@ -1047,7 +1028,7 @@ namespace Nop.Services.Installation
             });
 
             //set customer password
-            InsertInstallationData(new CustomerPassword
+            await InsertInstallationDataAsync(new CustomerPassword
             {
                 CustomerId = fifthUser.Id,
                 Password = "123456",
@@ -1068,7 +1049,7 @@ namespace Nop.Services.Installation
                 LastActivityDateUtc = DateTime.UtcNow,
                 RegisteredInStoreId = storeId
             };
-            var defaultSixthUserAddress = InsertInstallationData(
+            var defaultSixthUserAddress = await InsertInstallationDataAsync(
                 new Address
                 {
                     FirstName = "Victoria",
@@ -1080,8 +1061,8 @@ namespace Nop.Services.Installation
                     Address1 = "201 1st Avenue South",
                     Address2 = string.Empty,
                     City = "Saskatoon",
-                    StateProvinceId = _stateProvinceRepository.Table.FirstOrDefault(sp => sp.Name == "Saskatchewan")?.Id,
-                    CountryId = _countryRepository.Table.FirstOrDefault(c => c.ThreeLetterIsoCode == "CAN")?.Id,
+                    StateProvinceId = (await _stateProvinceRepository.Table.FirstOrDefaultAsync(sp => sp.Name == "Saskatchewan"))?.Id,
+                    CountryId = (await _countryRepository.Table.FirstOrDefaultAsync(c => c.ThreeLetterIsoCode == "CAN"))?.Id,
                     ZipPostalCode = "S7K 1J9",
                     CreatedOnUtc = DateTime.UtcNow
                 });
@@ -1089,13 +1070,13 @@ namespace Nop.Services.Installation
             sixthUser.BillingAddressId = defaultSixthUserAddress.Id;
             sixthUser.ShippingAddressId = defaultSixthUserAddress.Id;
 
-            InsertInstallationData(sixthUser);
+            await InsertInstallationDataAsync(sixthUser);
 
-            InsertInstallationData(new CustomerAddressMapping { CustomerId = sixthUser.Id, AddressId = defaultSixthUserAddress.Id });
-            InsertInstallationData(new CustomerCustomerRoleMapping { CustomerId = sixthUser.Id, CustomerRoleId = crRegistered.Id });
+            await InsertInstallationDataAsync(new CustomerAddressMapping { CustomerId = sixthUser.Id, AddressId = defaultSixthUserAddress.Id });
+            await InsertInstallationDataAsync(new CustomerCustomerRoleMapping { CustomerId = sixthUser.Id, CustomerRoleId = crRegistered.Id });
 
             //set default customer name
-            InsertInstallationData(new GenericAttribute
+            await InsertInstallationDataAsync(new GenericAttribute
             {
                 EntityId = sixthUser.Id,
                 Key = NopCustomerDefaults.FirstNameAttribute,
@@ -1115,7 +1096,7 @@ namespace Nop.Services.Installation
             });
 
             //set customer password
-            InsertInstallationData(new CustomerPassword
+            await InsertInstallationDataAsync(new CustomerPassword
             {
                 CustomerId = sixthUser.Id,
                 Password = "123456",
@@ -1125,7 +1106,7 @@ namespace Nop.Services.Installation
             });
         }
 
-        protected virtual void InstallCustomersAndUsers(string defaultUserEmail, string defaultUserPassword)
+        protected virtual async Task InstallCustomersAndUsersAsync(string defaultUserEmail, string defaultUserPassword)
         {
             var crAdministrators = new CustomerRole
             {
@@ -1195,10 +1176,11 @@ namespace Nop.Services.Installation
                 crAgents,
                 crDistributors
             };
-            InsertInstallationData(customerRoles);
+
+            await InsertInstallationDataAsync(customerRoles);
 
             //default store 
-            var defaultStore = _storeRepository.Table.FirstOrDefault();
+            var defaultStore = await _storeRepository.Table.FirstOrDefaultAsync();
 
             if (defaultStore == null)
                 throw new Exception("No default store could be loaded");
@@ -1217,7 +1199,7 @@ namespace Nop.Services.Installation
                 RegisteredInStoreId = storeId
             };
 
-            var defaultAdminUserAddress = InsertInstallationData(
+            var defaultAdminUserAddress = await InsertInstallationDataAsync(
                 new Address
                 {
                     FirstName = "John",
@@ -1238,17 +1220,17 @@ namespace Nop.Services.Installation
             adminUser.BillingAddressId = defaultAdminUserAddress.Id;
             adminUser.ShippingAddressId = defaultAdminUserAddress.Id;
 
-            InsertInstallationData(adminUser);
+            await InsertInstallationDataAsync(adminUser);
 
-            InsertInstallationData(new CustomerAddressMapping { CustomerId = adminUser.Id, AddressId = defaultAdminUserAddress.Id });
+            await InsertInstallationDataAsync(new CustomerAddressMapping { CustomerId = adminUser.Id, AddressId = defaultAdminUserAddress.Id });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new CustomerCustomerRoleMapping { CustomerId = adminUser.Id, CustomerRoleId = crAdministrators.Id },
                 new CustomerCustomerRoleMapping { CustomerId = adminUser.Id, CustomerRoleId = crForumModerators.Id },
                 new CustomerCustomerRoleMapping { CustomerId = adminUser.Id, CustomerRoleId = crRegistered.Id });
 
             //set default customer name
-            InsertInstallationData(new GenericAttribute
+            await InsertInstallationDataAsync(new GenericAttribute
             {
                 EntityId = adminUser.Id,
                 Key = NopCustomerDefaults.FirstNameAttribute,
@@ -1269,7 +1251,7 @@ namespace Nop.Services.Installation
 
             //set hashed admin password
             var customerRegistrationService = EngineContext.Current.Resolve<ICustomerRegistrationService>();
-            customerRegistrationService.ChangePassword(new ChangePasswordRequest(defaultUserEmail, false,
+            await customerRegistrationService.ChangePasswordAsync(new ChangePasswordRequest(defaultUserEmail, false,
                  PasswordFormat.Hashed, defaultUserPassword, null, NopCustomerServicesDefaults.DefaultHashedPasswordFormat));
 
             //search engine (crawler) built-in user
@@ -1286,9 +1268,9 @@ namespace Nop.Services.Installation
                 RegisteredInStoreId = storeId
             };
 
-            InsertInstallationData(searchEngineUser);
+            await InsertInstallationDataAsync(searchEngineUser);
 
-            InsertInstallationData(new CustomerCustomerRoleMapping { CustomerRoleId = crGuests.Id, CustomerId = searchEngineUser.Id });
+            await InsertInstallationDataAsync(new CustomerCustomerRoleMapping { CustomerRoleId = crGuests.Id, CustomerId = searchEngineUser.Id });
 
             //built-in user for background tasks
             var backgroundTaskUser = new Customer
@@ -1304,12 +1286,12 @@ namespace Nop.Services.Installation
                 RegisteredInStoreId = storeId
             };
 
-            InsertInstallationData(backgroundTaskUser);
+            await InsertInstallationDataAsync(backgroundTaskUser);
 
-            InsertInstallationData(new CustomerCustomerRoleMapping { CustomerId = backgroundTaskUser.Id, CustomerRoleId = crGuests.Id });
+            await InsertInstallationDataAsync(new CustomerCustomerRoleMapping { CustomerId = backgroundTaskUser.Id, CustomerRoleId = crGuests.Id });
         }
 
-        protected virtual void InstallOrders()
+        protected virtual async Task InstallOrdersAsync()
         {
             Address cloneAddress(Address address)
             {
@@ -1336,15 +1318,15 @@ namespace Nop.Services.Installation
             }
 
             //default store
-            var defaultStore = _storeRepository.Table.FirstOrDefault();
+            var defaultStore = await _storeRepository.Table.FirstOrDefaultAsync();
             if (defaultStore == null)
                 throw new Exception("No default store could be loaded");
 
             //first order
-            var firstCustomer = _customerRepository.Table.First(c => c.Email == "steve_gates@nopCommerce.com");
+            var firstCustomer = await _customerRepository.Table.FirstAsync(c => c.Email == "steve_gates@nopCommerce.com");
 
-            var firstCustomerBillingAddress = InsertInstallationData(cloneAddress(_addressRepository.GetById(firstCustomer.BillingAddressId)));
-            var firstCustomerShippingAddress = InsertInstallationData(cloneAddress(_addressRepository.GetById(firstCustomer.ShippingAddressId)));
+            var firstCustomerBillingAddress = await InsertInstallationDataAsync(cloneAddress(await _addressRepository.GetByIdAsync(firstCustomer.BillingAddressId)));
+            var firstCustomerShippingAddress = await InsertInstallationDataAsync(cloneAddress(await _addressRepository.GetByIdAsync(firstCustomer.ShippingAddressId)));
 
             var firstOrder = new Order
             {
@@ -1400,9 +1382,10 @@ namespace Nop.Services.Installation
                 CreatedOnUtc = DateTime.UtcNow,
                 CustomOrderNumber = string.Empty
             };
-            InsertInstallationData(firstOrder);
+
+            await InsertInstallationDataAsync(firstOrder);
             firstOrder.CustomOrderNumber = firstOrder.Id.ToString();
-            UpdateInstallationData(firstOrder);
+            await UpdateInstallationDataAsync(firstOrder);
 
             //item Apple iCam
             var firstOrderItem1 = new OrderItem
@@ -1427,10 +1410,11 @@ namespace Nop.Services.Installation
                 RentalStartDateUtc = null,
                 RentalEndDateUtc = null
             };
-            InsertInstallationData(firstOrderItem1);
+
+            await InsertInstallationDataAsync(firstOrderItem1);
 
             //item Leica T Mirrorless Digital Camera
-            var fierstOrderItem2 = new OrderItem
+            var firstOrderItem2 = new OrderItem
             {
                 OrderItemGuid = Guid.NewGuid(),
                 OrderId = firstOrder.Id,
@@ -1452,7 +1436,8 @@ namespace Nop.Services.Installation
                 RentalStartDateUtc = null,
                 RentalEndDateUtc = null
             };
-            InsertInstallationData(fierstOrderItem2);
+
+            await InsertInstallationDataAsync(firstOrderItem2);
 
             //item $25 Virtual Gift Card
             var firstOrderItem3 = new OrderItem
@@ -1477,7 +1462,8 @@ namespace Nop.Services.Installation
                 RentalStartDateUtc = null,
                 RentalEndDateUtc = null
             };
-            InsertInstallationData(firstOrderItem3);
+
+            await InsertInstallationDataAsync(firstOrderItem3);
 
             var firstOrderGiftcard = new GiftCard
             {
@@ -1494,16 +1480,18 @@ namespace Nop.Services.Installation
                 IsRecipientNotified = false,
                 CreatedOnUtc = DateTime.UtcNow
             };
-            InsertInstallationData(firstOrderGiftcard);
+
+            await InsertInstallationDataAsync(firstOrderGiftcard);
 
             //order notes
-            InsertInstallationData(new OrderNote
+            await InsertInstallationDataAsync(new OrderNote
             {
                 CreatedOnUtc = DateTime.UtcNow,
                 Note = "Order placed",
                 OrderId = firstOrder.Id
             });
-            InsertInstallationData(new OrderNote
+
+            await InsertInstallationDataAsync(new OrderNote
             {
                 CreatedOnUtc = DateTime.UtcNow,
                 Note = "Order paid",
@@ -1511,10 +1499,10 @@ namespace Nop.Services.Installation
             });
 
             //second order
-            var secondCustomer = _customerRepository.Table.First(c => c.Email == "arthur_holmes@nopCommerce.com");
+            var secondCustomer = await _customerRepository.Table.FirstAsync(c => c.Email == "arthur_holmes@nopCommerce.com");
 
-            var secondCustomerBillingAddress = InsertInstallationData(cloneAddress(_addressRepository.GetById(secondCustomer.BillingAddressId)));
-            var secondCustomerShippingAddress = InsertInstallationData(cloneAddress(_addressRepository.GetById(secondCustomer.ShippingAddressId)));
+            var secondCustomerBillingAddress = await InsertInstallationDataAsync(cloneAddress(await _addressRepository.GetByIdAsync(secondCustomer.BillingAddressId)));
+            var secondCustomerShippingAddress = await InsertInstallationDataAsync(cloneAddress(await _addressRepository.GetByIdAsync(secondCustomer.ShippingAddressId)));
 
             var secondOrder = new Order
             {
@@ -1570,12 +1558,13 @@ namespace Nop.Services.Installation
                 CreatedOnUtc = DateTime.UtcNow,
                 CustomOrderNumber = string.Empty
             };
-            InsertInstallationData(secondOrder);
+
+            await InsertInstallationDataAsync(secondOrder);
             secondOrder.CustomOrderNumber = secondOrder.Id.ToString();
-            UpdateInstallationData(secondOrder);
+            await UpdateInstallationDataAsync(secondOrder);
 
             //order notes
-            InsertInstallationData(new OrderNote
+            await InsertInstallationDataAsync(new OrderNote
             {
                 CreatedOnUtc = DateTime.UtcNow,
                 Note = "Order placed",
@@ -1605,7 +1594,8 @@ namespace Nop.Services.Installation
                 RentalStartDateUtc = null,
                 RentalEndDateUtc = null
             };
-            InsertInstallationData(secondOrderItem1);
+
+            await InsertInstallationDataAsync(secondOrderItem1);
 
             //item Flower Girl Bracelet
             var secondOrderItem2 = new OrderItem
@@ -1630,19 +1620,20 @@ namespace Nop.Services.Installation
                 RentalStartDateUtc = null,
                 RentalEndDateUtc = null
             };
-            InsertInstallationData(secondOrderItem2);
+
+            await InsertInstallationDataAsync(secondOrderItem2);
 
             //third order
-            var thirdCustomer = _customerRepository.Table.First(c => c.Email == "james_pan@nopCommerce.com");
+            var thirdCustomer = await _customerRepository.Table.FirstAsync(c => c.Email == "james_pan@nopCommerce.com");
 
-            var thirdCustomerBillingAddress = InsertInstallationData(cloneAddress(_addressRepository.GetById(thirdCustomer.BillingAddressId)));
+            var thirdCustomerBillingAddress = await InsertInstallationDataAsync(cloneAddress(await _addressRepository.GetByIdAsync(thirdCustomer.BillingAddressId)));
 
             var thirdOrder = new Order
             {
                 StoreId = defaultStore.Id,
                 OrderGuid = Guid.NewGuid(),
                 CustomerId = thirdCustomer.Id,
-                CustomerLanguageId = _languageRepository.Table.First().Id,
+                CustomerLanguageId = (await _languageRepository.Table.FirstAsync()).Id,
                 CustomerIp = "127.0.0.1",
                 OrderSubtotalInclTax = 8.80M,
                 OrderSubtotalExclTax = 8.80M,
@@ -1690,12 +1681,13 @@ namespace Nop.Services.Installation
                 CreatedOnUtc = DateTime.UtcNow,
                 CustomOrderNumber = string.Empty
             };
-            InsertInstallationData(thirdOrder);
+
+            await InsertInstallationDataAsync(thirdOrder);
             thirdOrder.CustomOrderNumber = thirdOrder.Id.ToString();
-            UpdateInstallationData(thirdOrder);
+            await UpdateInstallationDataAsync(thirdOrder);
 
             //order notes
-            InsertInstallationData(new OrderNote
+            await InsertInstallationDataAsync(new OrderNote
             {
                 CreatedOnUtc = DateTime.UtcNow,
                 Note = "Order placed",
@@ -1725,7 +1717,8 @@ namespace Nop.Services.Installation
                 RentalStartDateUtc = null,
                 RentalEndDateUtc = null
             };
-            InsertInstallationData(thirdOrderItem1);
+
+            await InsertInstallationDataAsync(thirdOrderItem1);
 
             //item Night Visions
             var thirdOrderItem2 = new OrderItem
@@ -1750,7 +1743,8 @@ namespace Nop.Services.Installation
                 RentalStartDateUtc = null,
                 RentalEndDateUtc = null
             };
-            InsertInstallationData(thirdOrderItem2);
+
+            await InsertInstallationDataAsync(thirdOrderItem2);
 
             //item Science & Faith
             var thirdOrderItem3 = new OrderItem
@@ -1775,14 +1769,15 @@ namespace Nop.Services.Installation
                 RentalStartDateUtc = null,
                 RentalEndDateUtc = null
             };
-            InsertInstallationData(thirdOrderItem3);
+
+            await InsertInstallationDataAsync(thirdOrderItem3);
 
             //fourth order
-            var fourthCustomer = _customerRepository.Table.First(c => c.Email == "brenda_lindgren@nopCommerce.com");
+            var fourthCustomer = await _customerRepository.Table.FirstAsync(c => c.Email == "brenda_lindgren@nopCommerce.com");
 
-            var fourthCustomerBillingAddress = InsertInstallationData(cloneAddress(_addressRepository.GetById(fourthCustomer.BillingAddressId)));
-            var fourthCustomerShippingAddress = InsertInstallationData(cloneAddress(_addressRepository.GetById(fourthCustomer.ShippingAddressId)));
-            var fourthCustomerPickupAddress = InsertInstallationData(cloneAddress(_addressRepository.GetById(fourthCustomer.ShippingAddressId)));
+            var fourthCustomerBillingAddress = await InsertInstallationDataAsync(cloneAddress(await _addressRepository.GetByIdAsync(fourthCustomer.BillingAddressId)));
+            var fourthCustomerShippingAddress = await InsertInstallationDataAsync(cloneAddress(await _addressRepository.GetByIdAsync(fourthCustomer.ShippingAddressId)));
+            var fourthCustomerPickupAddress = await InsertInstallationDataAsync(cloneAddress(await _addressRepository.GetByIdAsync(fourthCustomer.ShippingAddressId)));
 
             var fourthOrder = new Order
             {
@@ -1839,24 +1834,27 @@ namespace Nop.Services.Installation
                 CreatedOnUtc = DateTime.UtcNow,
                 CustomOrderNumber = string.Empty
             };
-            InsertInstallationData(fourthOrder);
+
+            await InsertInstallationDataAsync(fourthOrder);
             fourthOrder.CustomOrderNumber = fourthOrder.Id.ToString();
-            UpdateInstallationData(fourthOrder);
+            await UpdateInstallationDataAsync(fourthOrder);
 
             //order notes
-            InsertInstallationData(new OrderNote
+            await InsertInstallationDataAsync(new OrderNote
             {
                 CreatedOnUtc = DateTime.UtcNow,
                 Note = "Order placed",
                 OrderId = fourthOrder.Id
             });
-            InsertInstallationData(new OrderNote
+
+            await InsertInstallationDataAsync(new OrderNote
             {
                 CreatedOnUtc = DateTime.UtcNow,
                 Note = "Order paid",
                 OrderId = fourthOrder.Id
             });
-            InsertInstallationData(new OrderNote
+
+            await InsertInstallationDataAsync(new OrderNote
             {
                 CreatedOnUtc = DateTime.UtcNow,
                 Note = "Order shipped",
@@ -1886,7 +1884,8 @@ namespace Nop.Services.Installation
                 RentalStartDateUtc = null,
                 RentalEndDateUtc = null
             };
-            InsertInstallationData(fourthOrderItem1);
+
+            await InsertInstallationDataAsync(fourthOrderItem1);
 
             //item First Prize Pies
             var fourthOrderItem2 = new OrderItem
@@ -1911,7 +1910,8 @@ namespace Nop.Services.Installation
                 RentalStartDateUtc = null,
                 RentalEndDateUtc = null
             };
-            InsertInstallationData(fourthOrderItem2);
+
+            await InsertInstallationDataAsync(fourthOrderItem2);
 
             //item Fahrenheit 451 by Ray Bradbury
             var fourthOrderItem3 = new OrderItem
@@ -1936,7 +1936,8 @@ namespace Nop.Services.Installation
                 RentalStartDateUtc = null,
                 RentalEndDateUtc = null
             };
-            InsertInstallationData(fourthOrderItem3);
+
+            await InsertInstallationDataAsync(fourthOrderItem3);
 
             //shipments
             //shipment 1
@@ -1950,7 +1951,8 @@ namespace Nop.Services.Installation
                 AdminComment = string.Empty,
                 CreatedOnUtc = DateTime.UtcNow
             };
-            InsertInstallationData(fourthOrderShipment1);
+
+            await InsertInstallationDataAsync(fourthOrderShipment1);
 
             var fourthOrderShipment1Item1 = new ShipmentItem
             {
@@ -1959,7 +1961,8 @@ namespace Nop.Services.Installation
                 WarehouseId = 0,
                 ShipmentId = fourthOrderShipment1.Id
             };
-            InsertInstallationData(fourthOrderShipment1Item1);
+
+            await InsertInstallationDataAsync(fourthOrderShipment1Item1);
 
             var fourthOrderShipment1Item2 = new ShipmentItem
             {
@@ -1968,7 +1971,8 @@ namespace Nop.Services.Installation
                 WarehouseId = 0,
                 ShipmentId = fourthOrderShipment1.Id
             };
-            InsertInstallationData(fourthOrderShipment1Item2);
+
+            await InsertInstallationDataAsync(fourthOrderShipment1Item2);
 
             //shipment 2
             var fourthOrderShipment2 = new Shipment
@@ -1981,7 +1985,8 @@ namespace Nop.Services.Installation
                 AdminComment = string.Empty,
                 CreatedOnUtc = DateTime.UtcNow
             };
-            InsertInstallationData(fourthOrderShipment2);
+
+            await InsertInstallationDataAsync(fourthOrderShipment2);
 
             var fourthOrderShipment2Item1 = new ShipmentItem
             {
@@ -1990,13 +1995,14 @@ namespace Nop.Services.Installation
                 WarehouseId = 0,
                 ShipmentId = fourthOrderShipment2.Id
             };
-            InsertInstallationData(fourthOrderShipment2Item1);
+
+            await InsertInstallationDataAsync(fourthOrderShipment2Item1);
 
             //fifth order
             var fifthCustomer = _customerRepository.Table.First(c => c.Email == "victoria_victoria@nopCommerce.com");
 
-            var fifthCustomerBillingAddress = InsertInstallationData(cloneAddress(_addressRepository.GetById(fifthCustomer.BillingAddressId)));
-            var fifthCustomerShippingAddress = InsertInstallationData(cloneAddress(_addressRepository.GetById(fifthCustomer.ShippingAddressId)));
+            var fifthCustomerBillingAddress = await InsertInstallationDataAsync(cloneAddress(await _addressRepository.GetByIdAsync(fifthCustomer.BillingAddressId)));
+            var fifthCustomerShippingAddress = await InsertInstallationDataAsync(cloneAddress(await _addressRepository.GetByIdAsync(fifthCustomer.ShippingAddressId)));
 
             var fifthOrder = new Order
             {
@@ -2052,30 +2058,34 @@ namespace Nop.Services.Installation
                 CreatedOnUtc = DateTime.UtcNow,
                 CustomOrderNumber = string.Empty
             };
-            InsertInstallationData(fifthOrder);
+
+            await InsertInstallationDataAsync(fifthOrder);
             fifthOrder.CustomOrderNumber = fifthOrder.Id.ToString();
-            UpdateInstallationData(fifthOrder);
+            await UpdateInstallationDataAsync(fifthOrder);
 
             //order notes
-            InsertInstallationData(new OrderNote
+            await InsertInstallationDataAsync(new OrderNote
             {
                 CreatedOnUtc = DateTime.UtcNow,
                 Note = "Order placed",
                 OrderId = fifthOrder.Id
             });
-            InsertInstallationData(new OrderNote
+
+            await InsertInstallationDataAsync(new OrderNote
             {
                 CreatedOnUtc = DateTime.UtcNow,
                 Note = "Order paid",
                 OrderId = fifthOrder.Id
             });
-            InsertInstallationData(new OrderNote
+
+            await InsertInstallationDataAsync(new OrderNote
             {
                 CreatedOnUtc = DateTime.UtcNow,
                 Note = "Order shipped",
                 OrderId = fifthOrder.Id
             });
-            InsertInstallationData(new OrderNote
+
+            await InsertInstallationDataAsync(new OrderNote
             {
                 CreatedOnUtc = DateTime.UtcNow,
                 Note = "Order delivered",
@@ -2105,7 +2115,8 @@ namespace Nop.Services.Installation
                 RentalStartDateUtc = null,
                 RentalEndDateUtc = null
             };
-            InsertInstallationData(fifthOrderItem1);
+
+            await InsertInstallationDataAsync(fifthOrderItem1);
 
             //shipment 1
             var fifthOrderShipment1 = new Shipment
@@ -2118,7 +2129,8 @@ namespace Nop.Services.Installation
                 AdminComment = string.Empty,
                 CreatedOnUtc = DateTime.UtcNow
             };
-            InsertInstallationData(fifthOrderShipment1);
+
+            await InsertInstallationDataAsync(fifthOrderShipment1);
 
             var fifthOrderShipment1Item1 = new ShipmentItem
             {
@@ -2127,17 +2139,18 @@ namespace Nop.Services.Installation
                 WarehouseId = 0,
                 ShipmentId = fifthOrderShipment1.Id
             };
-            InsertInstallationData(fifthOrderShipment1Item1);
+
+            await InsertInstallationDataAsync(fifthOrderShipment1Item1);
         }
 
-        protected virtual void InstallActivityLog(string defaultUserEmail)
+        protected virtual async Task InstallActivityLogAsync(string defaultUserEmail)
         {
             //default customer/user
             var defaultCustomer = _customerRepository.Table.FirstOrDefault(x => x.Email == defaultUserEmail);
             if (defaultCustomer == null)
                 throw new Exception("Cannot load default customer");
 
-            InsertInstallationData(new ActivityLog
+            await InsertInstallationDataAsync(new ActivityLog
             {
                 ActivityLogTypeId = _activityLogTypeRepository.Table.FirstOrDefault(alt => alt.SystemKeyword == "EditCategory")?.Id ?? throw new Exception("Cannot load LogType: EditCategory"),
                 Comment = "Edited a category ('Computers')",
@@ -2146,7 +2159,7 @@ namespace Nop.Services.Installation
                 IpAddress = "127.0.0.1"
             });
 
-            InsertInstallationData(new ActivityLog
+            await InsertInstallationDataAsync(new ActivityLog
             {
                 ActivityLogTypeId = _activityLogTypeRepository.Table.FirstOrDefault(alt => alt.SystemKeyword == "EditDiscount")?.Id ?? throw new Exception("Cannot load LogType: EditDiscount"),
                 Comment = "Edited a discount ('Sample discount with coupon code')",
@@ -2155,7 +2168,7 @@ namespace Nop.Services.Installation
                 IpAddress = "127.0.0.1"
             });
 
-            InsertInstallationData(new ActivityLog
+            await InsertInstallationDataAsync(new ActivityLog
             {
                 ActivityLogTypeId = _activityLogTypeRepository.Table.FirstOrDefault(alt => alt.SystemKeyword == "EditSpecAttribute")?.Id ?? throw new Exception("Cannot load LogType: EditSpecAttribute"),
                 Comment = "Edited a specification attribute ('CPU Type')",
@@ -2164,7 +2177,7 @@ namespace Nop.Services.Installation
                 IpAddress = "127.0.0.1"
             });
 
-            InsertInstallationData(new ActivityLog
+            await InsertInstallationDataAsync(new ActivityLog
             {
                 ActivityLogTypeId = _activityLogTypeRepository.Table.FirstOrDefault(alt => alt.SystemKeyword == "AddNewProductAttribute")?.Id ?? throw new Exception("Cannot load LogType: AddNewProductAttribute"),
                 Comment = "Added a new product attribute ('Some attribute')",
@@ -2173,7 +2186,7 @@ namespace Nop.Services.Installation
                 IpAddress = "127.0.0.1"
             });
 
-            InsertInstallationData(new ActivityLog
+            await InsertInstallationDataAsync(new ActivityLog
             {
                 ActivityLogTypeId = _activityLogTypeRepository.Table.FirstOrDefault(alt => alt.SystemKeyword == "DeleteGiftCard")?.Id ?? throw new Exception("Cannot load LogType: DeleteGiftCard"),
                 Comment = "Deleted a gift card ('bdbbc0ef-be57')",
@@ -2183,44 +2196,49 @@ namespace Nop.Services.Installation
             });
         }
 
-        protected virtual void InstallSearchTerms()
+        protected virtual async Task InstallSearchTermsAsync()
         {
             //default store
             var defaultStore = _storeRepository.Table.FirstOrDefault();
             if (defaultStore == null)
                 throw new Exception("No default store could be loaded");
 
-            InsertInstallationData(new SearchTerm
+            await InsertInstallationDataAsync(new SearchTerm
             {
                 Count = 34,
                 Keyword = "computer",
                 StoreId = defaultStore.Id
             });
-            InsertInstallationData(new SearchTerm
+
+            await InsertInstallationDataAsync(new SearchTerm
             {
                 Count = 30,
                 Keyword = "camera",
                 StoreId = defaultStore.Id
             });
-            InsertInstallationData(new SearchTerm
+
+            await InsertInstallationDataAsync(new SearchTerm
             {
                 Count = 27,
                 Keyword = "jewelry",
                 StoreId = defaultStore.Id
             });
-            InsertInstallationData(new SearchTerm
+
+            await InsertInstallationDataAsync(new SearchTerm
             {
                 Count = 26,
                 Keyword = "shoes",
                 StoreId = defaultStore.Id
             });
-            InsertInstallationData(new SearchTerm
+
+            await InsertInstallationDataAsync(new SearchTerm
             {
                 Count = 19,
                 Keyword = "jeans",
                 StoreId = defaultStore.Id
             });
-            InsertInstallationData(new SearchTerm
+
+            await InsertInstallationDataAsync(new SearchTerm
             {
                 Count = 10,
                 Keyword = "gift",
@@ -2228,7 +2246,7 @@ namespace Nop.Services.Installation
             });
         }
 
-        protected virtual void InstallEmailAccounts()
+        protected virtual async Task InstallEmailAccountsAsync()
         {
             var emailAccounts = new List<EmailAccount>
             {
@@ -2244,10 +2262,11 @@ namespace Nop.Services.Installation
                     UseDefaultCredentials = false
                 }
             };
-            InsertInstallationData(emailAccounts);
+
+            await InsertInstallationDataAsync(emailAccounts);
         }
 
-        protected virtual void InstallMessageTemplates()
+        protected virtual async Task InstallMessageTemplatesAsync()
         {
             var eaGeneral = _emailAccountRepository.Table.FirstOrDefault();
             if (eaGeneral == null)
@@ -2632,10 +2651,11 @@ namespace Nop.Services.Installation
                     EmailAccountId = eaGeneral.Id
                 }
             };
-            InsertInstallationData(messageTemplates);
+
+            await InsertInstallationDataAsync(messageTemplates);
         }
 
-        protected virtual void InstallTopics()
+        protected virtual async Task InstallTopicsAsync()
         {
             var defaultTopicTemplate =
                 _topicTemplateRepository.Table.FirstOrDefault(tt => tt.Name == "Default template");
@@ -2800,23 +2820,24 @@ namespace Nop.Services.Installation
                     TopicTemplateId = defaultTopicTemplate.Id
                 }
             };
-            InsertInstallationData(topics);
+
+            await InsertInstallationDataAsync(topics);
 
             //search engine names
             foreach (var topic in topics)
             {
-                InsertInstallationData(new UrlRecord
+                await InsertInstallationDataAsync(new UrlRecord
                 {
                     EntityId = topic.Id,
                     EntityName = nameof(Topic),
                     LanguageId = 0,
                     IsActive = true,
-                    Slug = ValidateSeName(topic, !string.IsNullOrEmpty(topic.Title) ? topic.Title : topic.SystemName)
+                    Slug = await ValidateSeNameAsync(topic, !string.IsNullOrEmpty(topic.Title) ? topic.Title : topic.SystemName)
                 });
             }
         }
 
-        protected virtual void InstallSettings(RegionInfo regionInfo)
+        protected virtual async Task InstallSettingsAsync(RegionInfo regionInfo)
         {
             var isMetric = regionInfo?.IsMetric ?? false;
             var country = regionInfo?.TwoLetterISORegionName ?? string.Empty;
@@ -2824,7 +2845,7 @@ namespace Nop.Services.Installation
             var isEurope = ISO3166.FromCountryCode(country)?.SubjectToVat ?? false;
 
             var settingService = EngineContext.Current.Resolve<ISettingService>();
-            settingService.SaveSetting(new PdfSettings
+            await settingService.SaveSettingAsync(new PdfSettings
             {
                 LogoPictureId = 0,
                 LetterPageSizeEnabled = false,
@@ -2834,7 +2855,7 @@ namespace Nop.Services.Installation
                 InvoiceFooterTextColumn2 = null
             });
 
-            settingService.SaveSetting(new SitemapSettings
+            await settingService.SaveSettingAsync(new SitemapSettings
             {
                 SitemapEnabled = true,
                 SitemapPageSize = 200,
@@ -2847,7 +2868,7 @@ namespace Nop.Services.Installation
                 SitemapIncludeTopics = true
             });
 
-            settingService.SaveSetting(new SitemapXmlSettings
+            await settingService.SaveSettingAsync(new SitemapXmlSettings
             {
                 SitemapXmlEnabled = true,
                 SitemapXmlIncludeBlogPosts = true,
@@ -2860,7 +2881,7 @@ namespace Nop.Services.Installation
                 SitemapXmlIncludeTopics = true
             });
 
-            settingService.SaveSetting(new CommonSettings
+            await settingService.SaveSettingAsync(new CommonSettings
             {
                 UseSystemEmailForContactUsForm = true,
 
@@ -2881,7 +2902,7 @@ namespace Nop.Services.Installation
                 RestartTimeout = NopCommonDefaults.RestartTimeout
             });
 
-            settingService.SaveSetting(new SeoSettings
+            await settingService.SaveSettingAsync(new SeoSettings
             {
                 PageTitleSeparator = ". ",
                 PageTitleSeoAdjustment = PageTitleSeoAdjustment.PagenameAfterStorename,
@@ -2956,7 +2977,7 @@ namespace Nop.Services.Installation
                 CustomHeadTags = string.Empty
             });
 
-            settingService.SaveSetting(new AdminAreaSettings
+            await settingService.SaveSettingAsync(new AdminAreaSettings
             {
                 DefaultGridPageSize = 15,
                 PopupGridPageSize = 7,
@@ -2970,7 +2991,7 @@ namespace Nop.Services.Installation
                 UseIsoDateFormatInJsonResult = true
             });
 
-            settingService.SaveSetting(new ProductEditorSettings
+            await settingService.SaveSettingAsync(new ProductEditorSettings
             {
                 Weight = true,
                 Dimensions = true,
@@ -2979,7 +3000,7 @@ namespace Nop.Services.Installation
                 PAngV = isGermany
             });
 
-            settingService.SaveSetting(new GdprSettings
+            await settingService.SaveSettingAsync(new GdprSettings
             {
                 GdprEnabled = false,
                 LogPrivacyPolicyConsent = true,
@@ -2987,7 +3008,7 @@ namespace Nop.Services.Installation
                 LogUserProfileChanges = true
             });
 
-            settingService.SaveSetting(new CatalogSettings
+            await settingService.SaveSettingAsync(new CatalogSettings
             {
                 AllowViewUnpublishedProductPage = true,
                 DisplayDiscontinuedMessageForUnpublishedProducts = true,
@@ -3074,7 +3095,7 @@ namespace Nop.Services.Installation
                 UseAjaxLoadMenu = false
             });
 
-            settingService.SaveSetting(new LocalizationSettings
+            await settingService.SaveSettingAsync(new LocalizationSettings
             {
                 DefaultAdminLanguageId = _languageRepository.Table.Single(l => l.LanguageCulture == NopCommonDefaults.DefaultLanguageCulture).Id,
                 UseImagesForLanguageSelection = false,
@@ -3086,7 +3107,7 @@ namespace Nop.Services.Installation
                 IgnoreRtlPropertyForAdminArea = false
             });
 
-            settingService.SaveSetting(new CustomerSettings
+            await settingService.SaveSettingAsync(new CustomerSettings
             {
                 RefereeIdAvailableSeconds = 0,
                 UsernamesEnabled = false,
@@ -3156,12 +3177,12 @@ namespace Nop.Services.Installation
                 PhoneNumberValidationRule = "^[0-9]{1,14}?$"
             });
 
-            settingService.SaveSetting(new MultiFactorAuthenticationSettings
+            await settingService.SaveSettingAsync(new MultiFactorAuthenticationSettings
             {
                 ForceMultifactorAuthentication = false
             });
 
-            settingService.SaveSetting(new AddressSettings
+            await settingService.SaveSettingAsync(new AddressSettings
             {
                 LastNameEnabled = true,
                 LastNameRequired = true,
@@ -3184,7 +3205,7 @@ namespace Nop.Services.Installation
                 FaxEnabled = true
             });
 
-            settingService.SaveSetting(new MediaSettings
+            await settingService.SaveSettingAsync(new MediaSettings
             {
                 AvatarPictureSize = 120,
                 ProductThumbPictureSize = 415,
@@ -3207,7 +3228,7 @@ namespace Nop.Services.Installation
                 UseAbsoluteImagePath = true
             });
 
-            settingService.SaveSetting(new StoreInformationSettings
+            await settingService.SaveSettingAsync(new StoreInformationSettings
             {
                 StoreClosed = false,
                 DefaultStoreTheme = "DefaultClean",
@@ -3219,14 +3240,14 @@ namespace Nop.Services.Installation
                 HidePoweredByNopCommerce = false
             });
 
-            settingService.SaveSetting(new ExternalAuthenticationSettings
+            await settingService.SaveSettingAsync(new ExternalAuthenticationSettings
             {
                 RequireEmailValidation = false,
                 LogErrors = false,
                 AllowCustomersToRemoveAssociations = true
             });
 
-            settingService.SaveSetting(new RewardPointsSettings
+            await settingService.SaveSettingAsync(new RewardPointsSettings
             {
                 Enabled = true,
                 ExchangeRate = 1,
@@ -3245,7 +3266,7 @@ namespace Nop.Services.Installation
             });
 
             var primaryCurrency = "USD";
-            settingService.SaveSetting(new CurrencySettings
+            await settingService.SaveSettingAsync(new CurrencySettings
             {
                 DisplayCurrencyLabel = false,
                 PrimaryStoreCurrencyId = _currencyRepository.Table.Single(c => c.CurrencyCode == primaryCurrency).Id,
@@ -3257,13 +3278,13 @@ namespace Nop.Services.Installation
             var baseDimension = isMetric ? "meters" : "inches";
             var baseWeight = isMetric ? "kg" : "lb";
 
-            settingService.SaveSetting(new MeasureSettings
+            await settingService.SaveSettingAsync(new MeasureSettings
             {
                 BaseDimensionId = _measureDimensionRepository.Table.Single(m => m.SystemKeyword == baseDimension).Id,
                 BaseWeightId = _measureWeightRepository.Table.Single(m => m.SystemKeyword == baseWeight).Id
             });
 
-            settingService.SaveSetting(new MessageTemplatesSettings
+            await settingService.SaveSettingAsync(new MessageTemplatesSettings
             {
                 CaseInvariantReplacement = false,
                 Color1 = "#b9babe",
@@ -3271,7 +3292,7 @@ namespace Nop.Services.Installation
                 Color3 = "#dde2e6"
             });
 
-            settingService.SaveSetting(new ShoppingCartSettings
+            await settingService.SaveSettingAsync(new ShoppingCartSettings
             {
                 DisplayCartAfterAddingProduct = false,
                 DisplayWishlistAfterAddingProduct = false,
@@ -3296,7 +3317,7 @@ namespace Nop.Services.Installation
                 RenderAssociatedAttributeValueQuantity = true
             });
 
-            settingService.SaveSetting(new OrderSettings
+            await settingService.SaveSettingAsync(new OrderSettings
             {
                 ReturnRequestNumberMask = "{ID}",
                 IsReOrderAllowed = true,
@@ -3333,7 +3354,7 @@ namespace Nop.Services.Installation
                 AllowAdminsToBuyCallForPriceProducts = true
             });
 
-            settingService.SaveSetting(new SecuritySettings
+            await settingService.SaveSettingAsync(new SecuritySettings
             {
                 EncryptionKey = CommonHelper.GenerateRandomDigitCode(16),
                 AdminAreaAllowedIpAddresses = null,
@@ -3342,7 +3363,7 @@ namespace Nop.Services.Installation
                 AllowNonAsciiCharactersInHeaders = true
             });
 
-            settingService.SaveSetting(new ShippingSettings
+            await settingService.SaveSettingAsync(new ShippingSettings
             {
                 ActiveShippingRateComputationMethodSystemNames = new List<string> { "Shipping.FixedByWeightByTotal" },
                 ActivePickupPointProviderSystemNames = new List<string> { "Pickup.PickupInStore" },
@@ -3368,7 +3389,7 @@ namespace Nop.Services.Installation
                 RequestDelay = 300,
             });
 
-            settingService.SaveSetting(new PaymentSettings
+            await settingService.SaveSettingAsync(new PaymentSettings
             {
                 ActivePaymentMethodSystemNames = new List<string>
                     {
@@ -3383,7 +3404,7 @@ namespace Nop.Services.Installation
                 RegenerateOrderGuidInterval = 180
             });
 
-            settingService.SaveSetting(new TaxSettings
+            await settingService.SaveSettingAsync(new TaxSettings
             {
                 TaxBasedOn = TaxBasedOn.BillingAddress,
                 TaxBasedOnPickupPointAddress = false,
@@ -3413,13 +3434,13 @@ namespace Nop.Services.Installation
                 LogErrors = false
             });
 
-            settingService.SaveSetting(new DateTimeSettings
+            await settingService.SaveSettingAsync(new DateTimeSettings
             {
                 DefaultStoreTimeZoneId = string.Empty,
                 AllowCustomersToSetTimeZone = false
             });
 
-            settingService.SaveSetting(new BlogSettings
+            await settingService.SaveSettingAsync(new BlogSettings
             {
                 Enabled = true,
                 PostsPageSize = 10,
@@ -3430,7 +3451,7 @@ namespace Nop.Services.Installation
                 BlogCommentsMustBeApproved = false,
                 ShowBlogCommentsPerStore = false
             });
-            settingService.SaveSetting(new NewsSettings
+            await settingService.SaveSettingAsync(new NewsSettings
             {
                 Enabled = true,
                 AllowNotRegisteredUsersToLeaveComments = true,
@@ -3443,7 +3464,7 @@ namespace Nop.Services.Installation
                 ShowNewsCommentsPerStore = false
             });
 
-            settingService.SaveSetting(new ForumSettings
+            await settingService.SaveSettingAsync(new ForumSettings
             {
                 ForumsEnabled = false,
                 RelativeDateTimeFormattingEnabled = true,
@@ -3480,7 +3501,7 @@ namespace Nop.Services.Installation
                 ForumSearchTermMinimumLength = 3
             });
 
-            settingService.SaveSetting(new VendorSettings
+            await settingService.SaveSettingAsync(new VendorSettings
             {
                 DefaultVendorPageSizeOptions = "6, 3, 9",
                 VendorsBlockItemsToDisplay = 0,
@@ -3497,17 +3518,17 @@ namespace Nop.Services.Installation
             var eaGeneral = _emailAccountRepository.Table.FirstOrDefault();
             if (eaGeneral == null)
                 throw new Exception("Default email account cannot be loaded");
-            settingService.SaveSetting(new EmailAccountSettings
+            await settingService.SaveSettingAsync(new EmailAccountSettings
             {
                 DefaultEmailAccountId = eaGeneral.Id
             });
 
-            settingService.SaveSetting(new WidgetSettings
+            await settingService.SaveSettingAsync(new WidgetSettings
             {
                 ActiveWidgetSystemNames = new List<string> { "Widgets.NivoSlider" }
             });
 
-            settingService.SaveSetting(new DisplayDefaultMenuItemSettings
+            await settingService.SaveSettingAsync(new DisplayDefaultMenuItemSettings
             {
                 DisplayHomepageMenuItem = true,
                 DisplayNewProductsMenuItem = true,
@@ -3518,7 +3539,7 @@ namespace Nop.Services.Installation
                 DisplayContactUsMenuItem = true
             });
 
-            settingService.SaveSetting(new DisplayDefaultFooterItemSettings
+            await settingService.SaveSettingAsync(new DisplayDefaultFooterItemSettings
             {
                 DisplaySitemapFooterItem = true,
                 DisplayContactUsFooterItem = true,
@@ -3537,7 +3558,7 @@ namespace Nop.Services.Installation
                 DisplayApplyVendorAccountFooterItem = true
             });
 
-            settingService.SaveSetting(new CaptchaSettings
+            await settingService.SaveSettingAsync(new CaptchaSettings
             {
                 ReCaptchaApiUrl = "https://www.google.com/recaptcha/",
                 ReCaptchaDefaultLanguage = string.Empty,
@@ -3562,12 +3583,12 @@ namespace Nop.Services.Installation
                 ShowOnRegistrationPage = false,
             });
 
-            settingService.SaveSetting(new MessagesSettings
+            await settingService.SaveSettingAsync(new MessagesSettings
             {
                 UsePopupNotifications = false
             });
 
-            settingService.SaveSetting(new ProxySettings
+            await settingService.SaveSettingAsync(new ProxySettings
             {
                 Enabled = false,
                 Address = string.Empty,
@@ -3578,7 +3599,7 @@ namespace Nop.Services.Installation
                 PreAuthenticate = true
             });
 
-            settingService.SaveSetting(new CookieSettings
+            await settingService.SaveSettingAsync(new CookieSettings
             {
                 CompareProductsCookieExpires = 24 * 10,
                 RecentlyViewedProductsCookieExpires = 24 * 10,
@@ -3597,9 +3618,9 @@ namespace Nop.Services.Installation
             });
         }
 
-        protected virtual void InstallCheckoutAttributes()
+        protected virtual async Task InstallCheckoutAttributesAsync()
         {
-            var ca1 = InsertInstallationData(new CheckoutAttribute
+            var ca1 = await InsertInstallationDataAsync(new CheckoutAttribute
             {
                 Name = "Gift wrapping",
                 IsRequired = true,
@@ -3608,7 +3629,7 @@ namespace Nop.Services.Installation
                 DisplayOrder = 1
             });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new CheckoutAttributeValue
                 {
                     Name = "No",
@@ -3626,22 +3647,22 @@ namespace Nop.Services.Installation
                 });
         }
 
-        protected virtual void InstallSpecificationAttributes()
+        protected virtual async Task InstallSpecificationAttributesAsync()
         {
-            var sag1 = InsertInstallationData(
+            var sag1 = await InsertInstallationDataAsync(
                 new SpecificationAttributeGroup
                 {
                     Name = "System unit"
                 });
 
-            var sa1 = InsertInstallationData(
+            var sa1 = await InsertInstallationDataAsync(
                 new SpecificationAttribute
                 {
                     Name = "Screensize",
                     DisplayOrder = 1
                 });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new SpecificationAttributeOption
                 {
                     SpecificationAttributeId = sa1.Id,
@@ -3673,7 +3694,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 5
                 });
 
-            var sa2 = InsertInstallationData(
+            var sa2 = await InsertInstallationDataAsync(
                 new SpecificationAttribute
                 {
                     Name = "CPU Type",
@@ -3681,7 +3702,7 @@ namespace Nop.Services.Installation
                     SpecificationAttributeGroupId = sag1.Id
                 });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new SpecificationAttributeOption
                 {
                     SpecificationAttributeId = sa2.Id,
@@ -3695,7 +3716,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 2
                 });
 
-            var sa3 = InsertInstallationData(
+            var sa3 = await InsertInstallationDataAsync(
                 new SpecificationAttribute
                 {
                     Name = "Memory",
@@ -3703,7 +3724,7 @@ namespace Nop.Services.Installation
                     SpecificationAttributeGroupId = sag1.Id
                 });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new SpecificationAttributeOption
                 {
                     SpecificationAttributeId = sa3.Id,
@@ -3723,7 +3744,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 3
                 });
 
-            var sa4 = InsertInstallationData(
+            var sa4 = await InsertInstallationDataAsync(
                 new SpecificationAttribute
                 {
                     Name = "Hard drive",
@@ -3731,7 +3752,7 @@ namespace Nop.Services.Installation
                     SpecificationAttributeGroupId = sag1.Id
                 });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new SpecificationAttributeOption
                 {
                     SpecificationAttributeId = sa4.Id,
@@ -3751,14 +3772,14 @@ namespace Nop.Services.Installation
                     DisplayOrder = 3
                 });
 
-            var sa5 = InsertInstallationData(
+            var sa5 = await InsertInstallationDataAsync(
                 new SpecificationAttribute
                 {
                     Name = "Color",
                     DisplayOrder = 1
                 });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new SpecificationAttributeOption
                 {
                     SpecificationAttributeId = sa5.Id,
@@ -3782,7 +3803,7 @@ namespace Nop.Services.Installation
                 });
         }
 
-        protected virtual void InstallProductAttributes()
+        protected virtual async Task InstallProductAttributesAsync()
         {
             var productAttributes = new List<ProductAttribute>
             {
@@ -3823,10 +3844,11 @@ namespace Nop.Services.Installation
                     Name = "Software"
                 }
             };
-            InsertInstallationData(productAttributes);
+
+            await InsertInstallationDataAsync(productAttributes);
         }
 
-        protected virtual void InstallCategories()
+        protected virtual async Task InstallCategoriesAsync()
         {
             //pictures
             var pictureService = EngineContext.Current.Resolve<IPictureService>();
@@ -3846,7 +3868,7 @@ namespace Nop.Services.Installation
                 PageSize = 6,
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_computers.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName("Computers")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_computers.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync("Computers"))).Id,
                 IncludeInTopMenu = true,
                 Published = true,
                 DisplayOrder = 1,
@@ -3854,7 +3876,8 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categoryComputers);
-            InsertInstallationData(categoryComputers);
+
+            await InsertInstallationDataAsync(categoryComputers);
 
             var categoryDesktops = new Category
             {
@@ -3864,7 +3887,7 @@ namespace Nop.Services.Installation
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
                 ParentCategoryId = categoryComputers.Id,
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_desktops.jpg")), MimeTypes.ImagePJpeg, pictureService.GetPictureSeName("Desktops")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_desktops.jpg")), MimeTypes.ImagePJpeg, await pictureService.GetPictureSeNameAsync("Desktops"))).Id,
                 PriceRanges = "-1000;1000-1200;1200-;",
                 IncludeInTopMenu = true,
                 Published = true,
@@ -3873,7 +3896,8 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categoryDesktops);
-            InsertInstallationData(categoryDesktops);
+
+            await InsertInstallationDataAsync(categoryDesktops);
 
             var categoryNotebooks = new Category
             {
@@ -3883,7 +3907,7 @@ namespace Nop.Services.Installation
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
                 ParentCategoryId = categoryComputers.Id,
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_notebooks.jpg")), MimeTypes.ImagePJpeg, pictureService.GetPictureSeName("Notebooks")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_notebooks.jpg")), MimeTypes.ImagePJpeg, await pictureService.GetPictureSeNameAsync("Notebooks"))).Id,
                 IncludeInTopMenu = true,
                 Published = true,
                 DisplayOrder = 2,
@@ -3891,7 +3915,8 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categoryNotebooks);
-            InsertInstallationData(categoryNotebooks);
+
+            await InsertInstallationDataAsync(categoryNotebooks);
 
             var categorySoftware = new Category
             {
@@ -3901,7 +3926,7 @@ namespace Nop.Services.Installation
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
                 ParentCategoryId = categoryComputers.Id,
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_software.jpg")), MimeTypes.ImagePJpeg, pictureService.GetPictureSeName("Software")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_software.jpg")), MimeTypes.ImagePJpeg, await pictureService.GetPictureSeNameAsync("Software"))).Id,
                 IncludeInTopMenu = true,
                 Published = true,
                 DisplayOrder = 3,
@@ -3909,7 +3934,8 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categorySoftware);
-            InsertInstallationData(categorySoftware);
+
+            await InsertInstallationDataAsync(categorySoftware);
 
             var categoryElectronics = new Category
             {
@@ -3918,7 +3944,7 @@ namespace Nop.Services.Installation
                 PageSize = 6,
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_electronics.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName("Electronics")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_electronics.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync("Electronics"))).Id,
                 IncludeInTopMenu = true,
                 Published = true,
                 ShowOnHomepage = true,
@@ -3927,7 +3953,8 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categoryElectronics);
-            InsertInstallationData(categoryElectronics);
+
+            await InsertInstallationDataAsync(categoryElectronics);
 
             var categoryCameraPhoto = new Category
             {
@@ -3937,7 +3964,7 @@ namespace Nop.Services.Installation
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
                 ParentCategoryId = categoryElectronics.Id,
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_camera_photo.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName("Camera, photo")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_camera_photo.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync("Camera, photo"))).Id,
                 PriceRanges = "-500;500-;",
                 IncludeInTopMenu = true,
                 Published = true,
@@ -3946,7 +3973,8 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categoryCameraPhoto);
-            InsertInstallationData(categoryCameraPhoto);
+
+            await InsertInstallationDataAsync(categoryCameraPhoto);
 
             var categoryCellPhones = new Category
             {
@@ -3956,7 +3984,7 @@ namespace Nop.Services.Installation
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
                 ParentCategoryId = categoryElectronics.Id,
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_cell_phones.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName("Cell phones")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_cell_phones.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync("Cell phones"))).Id,
                 IncludeInTopMenu = true,
                 Published = true,
                 DisplayOrder = 2,
@@ -3964,7 +3992,8 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categoryCellPhones);
-            InsertInstallationData(categoryCellPhones);
+
+            await InsertInstallationDataAsync(categoryCellPhones);
 
             var categoryOthers = new Category
             {
@@ -3974,7 +4003,7 @@ namespace Nop.Services.Installation
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
                 ParentCategoryId = categoryElectronics.Id,
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_accessories.jpg")), MimeTypes.ImagePJpeg, pictureService.GetPictureSeName("Accessories")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_accessories.jpg")), MimeTypes.ImagePJpeg, await pictureService.GetPictureSeNameAsync("Accessories"))).Id,
                 IncludeInTopMenu = true,
                 PriceRanges = "-100;100-;",
                 Published = true,
@@ -3983,7 +4012,8 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categoryOthers);
-            InsertInstallationData(categoryOthers);
+
+            await InsertInstallationDataAsync(categoryOthers);
 
             var categoryApparel = new Category
             {
@@ -3992,7 +4022,7 @@ namespace Nop.Services.Installation
                 PageSize = 6,
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_apparel.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName("Apparel")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_apparel.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync("Apparel"))).Id,
                 IncludeInTopMenu = true,
                 Published = true,
                 ShowOnHomepage = true,
@@ -4001,7 +4031,8 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categoryApparel);
-            InsertInstallationData(categoryApparel);
+
+            await InsertInstallationDataAsync(categoryApparel);
 
             var categoryShoes = new Category
             {
@@ -4011,7 +4042,7 @@ namespace Nop.Services.Installation
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
                 ParentCategoryId = categoryApparel.Id,
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_shoes.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName("Shoes")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_shoes.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync("Shoes"))).Id,
                 PriceRanges = "-500;500-;",
                 IncludeInTopMenu = true,
                 Published = true,
@@ -4020,7 +4051,8 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categoryShoes);
-            InsertInstallationData(categoryShoes);
+
+            await InsertInstallationDataAsync(categoryShoes);
 
             var categoryClothing = new Category
             {
@@ -4030,7 +4062,7 @@ namespace Nop.Services.Installation
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
                 ParentCategoryId = categoryApparel.Id,
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_clothing.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName("Clothing")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_clothing.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync("Clothing"))).Id,
                 IncludeInTopMenu = true,
                 Published = true,
                 DisplayOrder = 2,
@@ -4038,7 +4070,8 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categoryClothing);
-            InsertInstallationData(categoryClothing);
+
+            await InsertInstallationDataAsync(categoryClothing);
 
             var categoryAccessories = new Category
             {
@@ -4048,7 +4081,7 @@ namespace Nop.Services.Installation
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
                 ParentCategoryId = categoryApparel.Id,
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_apparel_accessories.jpg")), MimeTypes.ImagePJpeg, pictureService.GetPictureSeName("Apparel Accessories")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_apparel_accessories.jpg")), MimeTypes.ImagePJpeg, await pictureService.GetPictureSeNameAsync("Apparel Accessories"))).Id,
                 IncludeInTopMenu = true,
                 PriceRanges = "-100;100-;",
                 Published = true,
@@ -4057,7 +4090,8 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categoryAccessories);
-            InsertInstallationData(categoryAccessories);
+
+            await InsertInstallationDataAsync(categoryAccessories);
 
             var categoryDigitalDownloads = new Category
             {
@@ -4066,7 +4100,7 @@ namespace Nop.Services.Installation
                 PageSize = 6,
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_digital_downloads.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName("Digital downloads")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_digital_downloads.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync("Digital downloads"))).Id,
                 IncludeInTopMenu = true,
                 Published = true,
                 ShowOnHomepage = true,
@@ -4075,7 +4109,8 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categoryDigitalDownloads);
-            InsertInstallationData(categoryDigitalDownloads);
+
+            await InsertInstallationDataAsync(categoryDigitalDownloads);
 
             var categoryBooks = new Category
             {
@@ -4086,7 +4121,7 @@ namespace Nop.Services.Installation
                 PageSize = 6,
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_book.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName("Book")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_book.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync("Book"))).Id,
                 PriceRanges = "-25;25-50;50-;",
                 IncludeInTopMenu = true,
                 Published = true,
@@ -4095,7 +4130,8 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categoryBooks);
-            InsertInstallationData(categoryBooks);
+
+            await InsertInstallationDataAsync(categoryBooks);
 
             var categoryJewelry = new Category
             {
@@ -4104,7 +4140,7 @@ namespace Nop.Services.Installation
                 PageSize = 6,
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_jewelry.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName("Jewelry")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_jewelry.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync("Jewelry"))).Id,
                 PriceRanges = "0-500;500-700;700-3000;",
                 IncludeInTopMenu = true,
                 Published = true,
@@ -4113,7 +4149,8 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categoryJewelry);
-            InsertInstallationData(categoryJewelry);
+
+            await InsertInstallationDataAsync(categoryJewelry);
 
             var categoryGiftCards = new Category
             {
@@ -4122,7 +4159,7 @@ namespace Nop.Services.Installation
                 PageSize = 6,
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "category_gift_cards.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName("Gift Cards")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "category_gift_cards.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync("Gift Cards"))).Id,
                 IncludeInTopMenu = true,
                 Published = true,
                 DisplayOrder = 7,
@@ -4130,23 +4167,22 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
             allCategories.Add(categoryGiftCards);
-            InsertInstallationData(categoryGiftCards);
+
+            await InsertInstallationDataAsync(categoryGiftCards);
 
             //search engine names
             foreach (var category in allCategories)
-            {
-                InsertInstallationData(new UrlRecord
+                await InsertInstallationDataAsync(new UrlRecord
                 {
                     EntityId = category.Id,
                     EntityName = nameof(Category),
                     LanguageId = 0,
                     IsActive = true,
-                    Slug = ValidateSeName(category, category.Name)
+                    Slug = await ValidateSeNameAsync(category, category.Name)
                 });
-            }
         }
 
-        protected virtual void InstallManufacturers()
+        protected virtual async Task InstallManufacturersAsync()
         {
             var pictureService = EngineContext.Current.Resolve<IPictureService>();
             var sampleImagesPath = GetSamplesPath();
@@ -4165,12 +4201,14 @@ namespace Nop.Services.Installation
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
                 Published = true,
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "manufacturer_apple.jpg")), MimeTypes.ImagePJpeg, pictureService.GetPictureSeName("Apple")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "manufacturer_apple.jpg")), MimeTypes.ImagePJpeg, await pictureService.GetPictureSeNameAsync("Apple"))).Id,
                 DisplayOrder = 1,
                 CreatedOnUtc = DateTime.UtcNow,
                 UpdatedOnUtc = DateTime.UtcNow
             };
-            InsertInstallationData(manufacturerAsus);
+
+            await InsertInstallationDataAsync(manufacturerAsus);
+
             allManufacturers.Add(manufacturerAsus);
 
             var manufacturerHp = new Manufacturer
@@ -4181,12 +4219,14 @@ namespace Nop.Services.Installation
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
                 Published = true,
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "manufacturer_hp.jpg")), MimeTypes.ImagePJpeg, pictureService.GetPictureSeName("Hp")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "manufacturer_hp.jpg")), MimeTypes.ImagePJpeg, await pictureService.GetPictureSeNameAsync("Hp"))).Id,
                 DisplayOrder = 5,
                 CreatedOnUtc = DateTime.UtcNow,
                 UpdatedOnUtc = DateTime.UtcNow
             };
-            InsertInstallationData(manufacturerHp);
+
+            await InsertInstallationDataAsync(manufacturerHp);
+
             allManufacturers.Add(manufacturerHp);
 
             var manufacturerNike = new Manufacturer
@@ -4197,29 +4237,29 @@ namespace Nop.Services.Installation
                 AllowCustomersToSelectPageSize = true,
                 PageSizeOptions = "6, 3, 9",
                 Published = true,
-                PictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "manufacturer_nike.jpg")), MimeTypes.ImagePJpeg, pictureService.GetPictureSeName("Nike")).Id,
+                PictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "manufacturer_nike.jpg")), MimeTypes.ImagePJpeg, await pictureService.GetPictureSeNameAsync("Nike"))).Id,
                 DisplayOrder = 5,
                 CreatedOnUtc = DateTime.UtcNow,
                 UpdatedOnUtc = DateTime.UtcNow
             };
-            InsertInstallationData(manufacturerNike);
+
+            await InsertInstallationDataAsync(manufacturerNike);
+
             allManufacturers.Add(manufacturerNike);
 
             //search engine names
             foreach (var manufacturer in allManufacturers)
-            {
-                InsertInstallationData(new UrlRecord
+                await InsertInstallationDataAsync(new UrlRecord
                 {
                     EntityId = manufacturer.Id,
                     EntityName = nameof(Manufacturer),
                     LanguageId = 0,
                     IsActive = true,
-                    Slug = ValidateSeName(manufacturer, manufacturer.Name)
+                    Slug = await ValidateSeNameAsync(manufacturer, manufacturer.Name)
                 });
-            }
         }
 
-        protected virtual void InstallComputers(ProductTemplate productTemplateSimple, List<Product> allProducts, string sampleImagesPath, IPictureService pictureService, List<RelatedProduct> relatedProducts)
+        protected virtual async Task InstallComputersAsync(ProductTemplate productTemplateSimple, List<Product> allProducts, string sampleImagesPath, IPictureService pictureService, List<RelatedProduct> relatedProducts)
         {
             var productBuildComputer = new Product
             {
@@ -4258,23 +4298,23 @@ namespace Nop.Services.Installation
 
             allProducts.Add(productBuildComputer);
 
-            InsertInstallationData(productBuildComputer);
+            await InsertInstallationDataAsync(productBuildComputer);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productBuildComputer.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Desktops").Id,
                 DisplayOrder = 1
             });
 
-            var pic_product_Desktops_1 = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "product_Desktops_1.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName(productBuildComputer.Name));
-            var pic_product_Desktops_2 = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "product_Desktops_2.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName(productBuildComputer.Name));
+            var picProductDesktops1 = await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "product_Desktops_1.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync(productBuildComputer.Name));
+            var picProductDesktops2 = await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "product_Desktops_2.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync(productBuildComputer.Name));
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductPicture
                 {
                     ProductId = productBuildComputer.Id,
-                    PictureId = pic_product_Desktops_1.Id,
+                    PictureId = picProductDesktops1.Id,
                     DisplayOrder = 1,
                     IsCoverImage = false,
                     Published = true
@@ -4282,13 +4322,13 @@ namespace Nop.Services.Installation
                 new ProductPicture
                 {
                     ProductId = productBuildComputer.Id,
-                    PictureId = pic_product_Desktops_2.Id,
+                    PictureId = picProductDesktops2.Id,
                     DisplayOrder = 2,
                     IsCoverImage = false,
                     Published = true
                 });
 
-            var pamProcessor = InsertInstallationData(new ProductAttributeMapping
+            var pamProcessor = await InsertInstallationDataAsync(new ProductAttributeMapping
             {
                 ProductId = productBuildComputer.Id,
                 ProductAttributeId = _productAttributeRepository.Table.Single(x => x.Name == "Processor").Id,
@@ -4296,7 +4336,7 @@ namespace Nop.Services.Installation
                 IsRequired = true
             });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamProcessor.Id,
@@ -4314,7 +4354,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 2
                 });
 
-            var pamRAM = InsertInstallationData(new ProductAttributeMapping
+            var pamRam = await InsertInstallationDataAsync(new ProductAttributeMapping
             {
                 ProductId = productBuildComputer.Id,
                 ProductAttributeId = _productAttributeRepository.Table.Single(x => x.Name == "RAM").Id,
@@ -4322,17 +4362,17 @@ namespace Nop.Services.Installation
                 IsRequired = true
             });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
-                    ProductAttributeMappingId = pamRAM.Id,
+                    ProductAttributeMappingId = pamRam.Id,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "2 GB",
                     DisplayOrder = 1
                 },
                 new ProductAttributeValue
                 {
-                    ProductAttributeMappingId = pamRAM.Id,
+                    ProductAttributeMappingId = pamRam.Id,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "4GB",
                     PriceAdjustment = 20,
@@ -4340,14 +4380,14 @@ namespace Nop.Services.Installation
                 },
                 new ProductAttributeValue
                 {
-                    ProductAttributeMappingId = pamRAM.Id,
+                    ProductAttributeMappingId = pamRam.Id,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "8GB",
                     PriceAdjustment = 60,
                     DisplayOrder = 3
                 });
 
-            var pamHDD = InsertInstallationData(
+            var pamHdd = await InsertInstallationDataAsync(
                 new ProductAttributeMapping
                 {
                     ProductId = productBuildComputer.Id,
@@ -4356,24 +4396,24 @@ namespace Nop.Services.Installation
                     IsRequired = true
                 });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
-                    ProductAttributeMappingId = pamHDD.Id,
+                    ProductAttributeMappingId = pamHdd.Id,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "320 GB",
                     DisplayOrder = 1
                 },
                 new ProductAttributeValue
                 {
-                    ProductAttributeMappingId = pamHDD.Id,
+                    ProductAttributeMappingId = pamHdd.Id,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "400 GB",
                     PriceAdjustment = 100,
                     DisplayOrder = 2
                 });
 
-            var pamOS = InsertInstallationData(
+            var pamOs = await InsertInstallationDataAsync(
                 new ProductAttributeMapping
                 {
                     ProductId = productBuildComputer.Id,
@@ -4382,10 +4422,10 @@ namespace Nop.Services.Installation
                     IsRequired = true
                 });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
-                    ProductAttributeMappingId = pamOS.Id,
+                    ProductAttributeMappingId = pamOs.Id,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "Vista Home",
                     PriceAdjustment = 50,
@@ -4394,21 +4434,21 @@ namespace Nop.Services.Installation
                 },
                 new ProductAttributeValue
                 {
-                    ProductAttributeMappingId = pamOS.Id,
+                    ProductAttributeMappingId = pamOs.Id,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "Vista Premium",
                     PriceAdjustment = 60,
                     DisplayOrder = 2
                 });
 
-            var pamSoftware = InsertInstallationData(new ProductAttributeMapping
+            var pamSoftware = await InsertInstallationDataAsync(new ProductAttributeMapping
             {
                 ProductId = productBuildComputer.Id,
                 ProductAttributeId = _productAttributeRepository.Table.Single(x => x.Name == "Software").Id,
                 AttributeControlType = AttributeControlType.Checkboxes
             });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamSoftware.Id,
@@ -4435,8 +4475,8 @@ namespace Nop.Services.Installation
                     DisplayOrder = 2
                 });
 
-            AddProductTag(productBuildComputer, "awesome");
-            AddProductTag(productBuildComputer, "computer");
+            await AddProductTagAsync(productBuildComputer, "awesome");
+            await AddProductTagAsync(productBuildComputer, "computer");
 
             var productDigitalStorm = new Product
             {
@@ -4471,28 +4511,28 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productDigitalStorm);
 
-            InsertInstallationData(productDigitalStorm);
+            await InsertInstallationDataAsync(productDigitalStorm);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productDigitalStorm.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Desktops").Id,
                 DisplayOrder = 1
             });
 
-            var pic_product_DigitalStorm = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "product_DigitalStorm.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName(productDigitalStorm.Name));
+            var picProductDigitalStorm = await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "product_DigitalStorm.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync(productDigitalStorm.Name));
 
-            InsertInstallationData(new ProductPicture
+            await InsertInstallationDataAsync(new ProductPicture
             {
                 ProductId = productDigitalStorm.Id,
-                PictureId = pic_product_DigitalStorm.Id,
+                PictureId = picProductDigitalStorm.Id,
                 DisplayOrder = 1,
                 IsCoverImage = false,
                 Published = true
             });
 
-            AddProductTag(productDigitalStorm, "cool");
-            AddProductTag(productDigitalStorm, "computer");
+            await AddProductTagAsync(productDigitalStorm, "cool");
+            await AddProductTagAsync(productDigitalStorm, "computer");
 
             var productLenovoIdeaCentre = new Product
             {
@@ -4527,28 +4567,28 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productLenovoIdeaCentre);
 
-            InsertInstallationData(productLenovoIdeaCentre);
+            await InsertInstallationDataAsync(productLenovoIdeaCentre);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productLenovoIdeaCentre.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Desktops").Id,
                 DisplayOrder = 1
             });
 
-            var pic_product_LenovoIdeaCentre = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "product_LenovoIdeaCentre.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName(productLenovoIdeaCentre.Name));
+            var picProductLenovoIdeaCentre = await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "product_LenovoIdeaCentre.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync(productLenovoIdeaCentre.Name));
 
-            InsertInstallationData(new ProductPicture
+            await InsertInstallationDataAsync(new ProductPicture
             {
                 ProductId = productLenovoIdeaCentre.Id,
-                PictureId = pic_product_LenovoIdeaCentre.Id,
+                PictureId = picProductLenovoIdeaCentre.Id,
                 DisplayOrder = 1,
                 IsCoverImage = false,
                 Published = true
             });
 
-            AddProductTag(productLenovoIdeaCentre, "awesome");
-            AddProductTag(productLenovoIdeaCentre, "computer");
+            await AddProductTagAsync(productLenovoIdeaCentre, "awesome");
+            await AddProductTagAsync(productLenovoIdeaCentre, "computer");
 
             var productAppleMacBookPro = new Product
             {
@@ -4585,49 +4625,49 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productAppleMacBookPro);
 
-            InsertInstallationData(productAppleMacBookPro);
+            await InsertInstallationDataAsync(productAppleMacBookPro);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productAppleMacBookPro.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Notebooks").Id,
                 DisplayOrder = 1
             });
 
-            InsertInstallationData(new ProductManufacturer
+            await InsertInstallationDataAsync(new ProductManufacturer
             {
                 ProductId = productAppleMacBookPro.Id,
                 ManufacturerId = _manufacturerRepository.Table.Single(c => c.Name == "Apple").Id,
                 DisplayOrder = 2
             });
 
-            var pic_product_macbook_1 = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "product_macbook_1.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName(productAppleMacBookPro.Name));
-            var pic_product_macbook_2 = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "product_macbook_2.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName(productAppleMacBookPro.Name));
+            var picProductMacBook1 = await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "product_macbook_1.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync(productAppleMacBookPro.Name));
+            var picProductMacBook2 = await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "product_macbook_2.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync(productAppleMacBookPro.Name));
 
-            InsertInstallationData(new ProductPicture
+            await InsertInstallationDataAsync(new ProductPicture
             {
                 ProductId = productAppleMacBookPro.Id,
-                PictureId = pic_product_macbook_1.Id,
+                PictureId = picProductMacBook1.Id,
                 DisplayOrder = 1,
                 IsCoverImage = false,
                 Published = true
             }, new ProductPicture
             {
                 ProductId = productAppleMacBookPro.Id,
-                PictureId = pic_product_macbook_2.Id,
+                PictureId = picProductMacBook2.Id,
                 DisplayOrder = 2,
                 IsCoverImage = false,
                 Published = true
             });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductSpecificationAttribute
                 {
                     ProductId = productAppleMacBookPro.Id,
                     AllowFiltering = false,
                     ShowOnProductPage = true,
                     DisplayOrder = 1,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Screensize", "13.0''").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Screensize", "13.0''")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -4635,7 +4675,7 @@ namespace Nop.Services.Installation
                     AllowFiltering = true,
                     ShowOnProductPage = true,
                     DisplayOrder = 2,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("CPU Type", "Intel Core i5").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("CPU Type", "Intel Core i5")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -4643,12 +4683,12 @@ namespace Nop.Services.Installation
                     AllowFiltering = true,
                     ShowOnProductPage = true,
                     DisplayOrder = 3,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Memory", "4 GB").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Memory", "4 GB")
                 });
 
-            AddProductTag(productAppleMacBookPro, "compact");
-            AddProductTag(productAppleMacBookPro, "awesome");
-            AddProductTag(productAppleMacBookPro, "computer");
+            await AddProductTagAsync(productAppleMacBookPro, "compact");
+            await AddProductTagAsync(productAppleMacBookPro, "awesome");
+            await AddProductTagAsync(productAppleMacBookPro, "computer");
 
             var productAsusN551JK = new Product
             {
@@ -4684,34 +4724,34 @@ namespace Nop.Services.Installation
 
             allProducts.Add(productAsusN551JK);
 
-            InsertInstallationData(productAsusN551JK);
+            await InsertInstallationDataAsync(productAsusN551JK);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productAsusN551JK.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Notebooks").Id,
                 DisplayOrder = 1
             });
 
-            var pic_product_asuspc_N551JK = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "product_asuspc_N551JK.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName(productAsusN551JK.Name));
+            var picProductAsuspcN551Jk = await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "product_asuspc_N551JK.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync(productAsusN551JK.Name));
 
-            InsertInstallationData(new ProductPicture
+            await InsertInstallationDataAsync(new ProductPicture
             {
                 ProductId = productAsusN551JK.Id,
-                PictureId = pic_product_asuspc_N551JK.Id,
+                PictureId = picProductAsuspcN551Jk.Id,
                 DisplayOrder = 1,
                 IsCoverImage = false,
                 Published = true
             });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductSpecificationAttribute
                 {
                     ProductId = productAsusN551JK.Id,
                     AllowFiltering = false,
                     ShowOnProductPage = true,
                     DisplayOrder = 1,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Screensize", "15.6''").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Screensize", "15.6''")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -4719,7 +4759,7 @@ namespace Nop.Services.Installation
                     AllowFiltering = true,
                     ShowOnProductPage = true,
                     DisplayOrder = 2,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("CPU Type", "Intel Core i7").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("CPU Type", "Intel Core i7")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -4727,7 +4767,7 @@ namespace Nop.Services.Installation
                     AllowFiltering = true,
                     ShowOnProductPage = true,
                     DisplayOrder = 3,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Memory", "16 GB").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Memory", "16 GB")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -4735,12 +4775,12 @@ namespace Nop.Services.Installation
                     AllowFiltering = false,
                     ShowOnProductPage = true,
                     DisplayOrder = 4,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Hard drive", "1 TB").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Hard drive", "1 TB")
                 });
 
-            AddProductTag(productAsusN551JK, "compact");
-            AddProductTag(productAsusN551JK, "awesome");
-            AddProductTag(productAsusN551JK, "computer");
+            await AddProductTagAsync(productAsusN551JK, "compact");
+            await AddProductTagAsync(productAsusN551JK, "awesome");
+            await AddProductTagAsync(productAsusN551JK, "computer");
 
             var productSamsungSeries = new Product
             {
@@ -4776,34 +4816,34 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productSamsungSeries);
 
-            InsertInstallationData(productSamsungSeries);
+            await InsertInstallationDataAsync(productSamsungSeries);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productSamsungSeries.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Notebooks").Id,
                 DisplayOrder = 1
             });
 
-            var pic_product_SamsungNP900X4C = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "product_SamsungNP900X4C.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName(productSamsungSeries.Name));
+            var picProductSamsungNp900X4C = await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "product_SamsungNP900X4C.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync(productSamsungSeries.Name));
 
-            InsertInstallationData(new ProductPicture
+            await InsertInstallationDataAsync(new ProductPicture
             {
                 ProductId = productSamsungSeries.Id,
-                PictureId = pic_product_SamsungNP900X4C.Id,
+                PictureId = picProductSamsungNp900X4C.Id,
                 DisplayOrder = 1,
                 IsCoverImage = false,
                 Published = true
             });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductSpecificationAttribute
                 {
                     ProductId = productSamsungSeries.Id,
                     AllowFiltering = false,
                     ShowOnProductPage = true,
                     DisplayOrder = 1,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Screensize", "15.0''").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Screensize", "15.0''")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -4811,7 +4851,7 @@ namespace Nop.Services.Installation
                     AllowFiltering = true,
                     ShowOnProductPage = true,
                     DisplayOrder = 2,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("CPU Type", "Intel Core i5").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("CPU Type", "Intel Core i5")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -4819,7 +4859,7 @@ namespace Nop.Services.Installation
                     AllowFiltering = true,
                     ShowOnProductPage = true,
                     DisplayOrder = 3,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Memory", "8 GB").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Memory", "8 GB")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -4827,12 +4867,12 @@ namespace Nop.Services.Installation
                     AllowFiltering = false,
                     ShowOnProductPage = true,
                     DisplayOrder = 4,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Hard drive", "128 GB").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Hard drive", "128 GB")
                 });
 
-            AddProductTag(productSamsungSeries, "nice");
-            AddProductTag(productSamsungSeries, "computer");
-            AddProductTag(productSamsungSeries, "compact");
+            await AddProductTagAsync(productSamsungSeries, "nice");
+            await AddProductTagAsync(productSamsungSeries, "computer");
+            await AddProductTagAsync(productSamsungSeries, "compact");
 
             var productHpSpectre = new Product
             {
@@ -4867,29 +4907,29 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productHpSpectre);
 
-            InsertInstallationData(productHpSpectre);
+            await InsertInstallationDataAsync(productHpSpectre);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productHpSpectre.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Notebooks").Id,
                 DisplayOrder = 1
             });
 
-            InsertInstallationData(new ProductManufacturer
+            await InsertInstallationDataAsync(new ProductManufacturer
             {
                 ProductId = productHpSpectre.Id,
                 ManufacturerId = _manufacturerRepository.Table.Single(c => c.Name == "HP").Id,
                 DisplayOrder = 3
             });
 
-            var pic_product_HPSpectreXT_1 = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "product_HPSpectreXT_1.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName(productHpSpectre.Name));
-            var pic_product_HPSpectreXT_2 = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "product_HPSpectreXT_2.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName(productHpSpectre.Name));
+            var picProductHpSpectreXt1 = await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "product_HPSpectreXT_1.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync(productHpSpectre.Name));
+            var picProductHpSpectreXt2 = await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "product_HPSpectreXT_2.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync(productHpSpectre.Name));
 
-            InsertInstallationData(new ProductPicture
+            await InsertInstallationDataAsync(new ProductPicture
             {
                 ProductId = productHpSpectre.Id,
-                PictureId = pic_product_HPSpectreXT_1.Id,
+                PictureId = picProductHpSpectreXt1.Id,
                 DisplayOrder = 1,
                 IsCoverImage = false,
                 Published = true
@@ -4897,20 +4937,20 @@ namespace Nop.Services.Installation
             new ProductPicture
             {
                 ProductId = productHpSpectre.Id,
-                PictureId = pic_product_HPSpectreXT_2.Id,
+                PictureId = picProductHpSpectreXt2.Id,
                 DisplayOrder = 2,
                 IsCoverImage = false,
                 Published = true
             });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductSpecificationAttribute
                 {
                     ProductId = productHpSpectre.Id,
                     AllowFiltering = false,
                     ShowOnProductPage = true,
                     DisplayOrder = 1,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Screensize", "13.3''").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Screensize", "13.3''")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -4918,7 +4958,7 @@ namespace Nop.Services.Installation
                     AllowFiltering = true,
                     ShowOnProductPage = true,
                     DisplayOrder = 2,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("CPU Type", "Intel Core i5").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("CPU Type", "Intel Core i5")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -4926,7 +4966,7 @@ namespace Nop.Services.Installation
                     AllowFiltering = true,
                     ShowOnProductPage = true,
                     DisplayOrder = 3,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Memory", "4 GB").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Memory", "4 GB")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -4934,11 +4974,11 @@ namespace Nop.Services.Installation
                     AllowFiltering = false,
                     ShowOnProductPage = true,
                     DisplayOrder = 4,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Hard drive", "128 GB").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Hard drive", "128 GB")
                 });
 
-            AddProductTag(productHpSpectre, "nice");
-            AddProductTag(productHpSpectre, "computer");
+            await AddProductTagAsync(productHpSpectre, "nice");
+            await AddProductTagAsync(productHpSpectre, "computer");
 
             var productHpEnvy = new Product
             {
@@ -4973,41 +5013,41 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productHpEnvy);
 
-            InsertInstallationData(productHpEnvy);
+            await InsertInstallationDataAsync(productHpEnvy);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productHpEnvy.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Notebooks").Id,
                 DisplayOrder = 1
             });
 
-            InsertInstallationData(new ProductManufacturer
+            await InsertInstallationDataAsync(new ProductManufacturer
             {
                 ProductId = productHpEnvy.Id,
                 ManufacturerId = _manufacturerRepository.Table.Single(c => c.Name == "HP").Id,
                 DisplayOrder = 4
             });
 
-            var pic_product_HpEnvy6 = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "product_HpEnvy6.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName(productHpEnvy.Name));
+            var picProductHpEnvy6 = await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "product_HpEnvy6.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync(productHpEnvy.Name));
 
-            InsertInstallationData(new ProductPicture
+            await InsertInstallationDataAsync(new ProductPicture
             {
                 ProductId = productHpEnvy.Id,
-                PictureId = pic_product_HpEnvy6.Id,
+                PictureId = picProductHpEnvy6.Id,
                 DisplayOrder = 1,
                 IsCoverImage = false,
                 Published = true
             });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductSpecificationAttribute
                 {
                     ProductId = productHpEnvy.Id,
                     AllowFiltering = false,
                     ShowOnProductPage = true,
                     DisplayOrder = 1,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Screensize", "15.6''").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Screensize", "15.6''")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -5015,7 +5055,7 @@ namespace Nop.Services.Installation
                     AllowFiltering = true,
                     ShowOnProductPage = true,
                     DisplayOrder = 2,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("CPU Type", "Intel Core i7").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("CPU Type", "Intel Core i7")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -5023,7 +5063,7 @@ namespace Nop.Services.Installation
                     AllowFiltering = true,
                     ShowOnProductPage = true,
                     DisplayOrder = 3,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Memory", "8 GB").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Memory", "8 GB")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -5031,12 +5071,12 @@ namespace Nop.Services.Installation
                     AllowFiltering = false,
                     ShowOnProductPage = true,
                     DisplayOrder = 4,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Hard drive", "500 GB").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Hard drive", "500 GB")
                 });
 
-            AddProductTag(productHpEnvy, "computer");
-            AddProductTag(productHpEnvy, "cool");
-            AddProductTag(productHpEnvy, "compact");
+            await AddProductTagAsync(productHpEnvy, "computer");
+            await AddProductTagAsync(productHpEnvy, "cool");
+            await AddProductTagAsync(productHpEnvy, "compact");
 
             var productLenovoThinkpad = new Product
             {
@@ -5071,34 +5111,34 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productLenovoThinkpad);
 
-            InsertInstallationData(productLenovoThinkpad);
+            await InsertInstallationDataAsync(productLenovoThinkpad);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productLenovoThinkpad.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Notebooks").Id,
                 DisplayOrder = 1
             });
 
-            var pic_product_LenovoThinkpad = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "product_LenovoThinkpad.jpeg")), MimeTypes.ImageJpeg, pictureService.GetPictureSeName(productLenovoThinkpad.Name));
+            var picProductLenovoThinkpad = await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "product_LenovoThinkpad.jpeg")), MimeTypes.ImageJpeg, await pictureService.GetPictureSeNameAsync(productLenovoThinkpad.Name));
 
-            InsertInstallationData(new ProductPicture
+            await InsertInstallationDataAsync(new ProductPicture
             {
                 ProductId = productLenovoThinkpad.Id,
-                PictureId = pic_product_LenovoThinkpad.Id,
+                PictureId = picProductLenovoThinkpad.Id,
                 DisplayOrder = 1,
                 IsCoverImage = false,
                 Published = true
             });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductSpecificationAttribute
                 {
                     ProductId = productLenovoThinkpad.Id,
                     AllowFiltering = false,
                     ShowOnProductPage = true,
                     DisplayOrder = 1,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Screensize", "14.0''").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Screensize", "14.0''")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -5106,12 +5146,12 @@ namespace Nop.Services.Installation
                     AllowFiltering = true,
                     ShowOnProductPage = true,
                     DisplayOrder = 2,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("CPU Type", "Intel Core i7").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("CPU Type", "Intel Core i7")
                 });
 
-            AddProductTag(productLenovoThinkpad, "awesome");
-            AddProductTag(productLenovoThinkpad, "computer");
-            AddProductTag(productLenovoThinkpad, "compact");
+            await AddProductTagAsync(productLenovoThinkpad, "awesome");
+            await AddProductTagAsync(productLenovoThinkpad, "computer");
+            await AddProductTagAsync(productLenovoThinkpad, "compact");
 
             var productAdobePhotoshop = new Product
             {
@@ -5146,19 +5186,19 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productAdobePhotoshop);
 
-            InsertInstallationData(productAdobePhotoshop);
+            await InsertInstallationDataAsync(productAdobePhotoshop);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productAdobePhotoshop.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Software").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productAdobePhotoshop, "product_AdobePhotoshop.jpeg");
+            await InsertProductPictureAsync(productAdobePhotoshop, "product_AdobePhotoshop.jpeg");
 
-            AddProductTag(productAdobePhotoshop, "computer");
-            AddProductTag(productAdobePhotoshop, "awesome");
+            await AddProductTagAsync(productAdobePhotoshop, "computer");
+            await AddProductTagAsync(productAdobePhotoshop, "awesome");
 
             var productWindows8Pro = new Product
             {
@@ -5193,19 +5233,19 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productWindows8Pro);
 
-            InsertInstallationData(productWindows8Pro);
+            await InsertInstallationDataAsync(productWindows8Pro);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productWindows8Pro.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Software").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productWindows8Pro, "product_Windows8.jpeg");
+            await InsertProductPictureAsync(productWindows8Pro, "product_Windows8.jpeg");
 
-            AddProductTag(productWindows8Pro, "awesome");
-            AddProductTag(productWindows8Pro, "computer");
+            await AddProductTagAsync(productWindows8Pro, "awesome");
+            await AddProductTagAsync(productWindows8Pro, "computer");
 
             var productSoundForge = new Product
             {
@@ -5244,20 +5284,20 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productSoundForge);
 
-            InsertInstallationData(productSoundForge);
+            await InsertInstallationDataAsync(productSoundForge);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productSoundForge.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Software").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productSoundForge, "product_SoundForge.jpeg");
+            await InsertProductPictureAsync(productSoundForge, "product_SoundForge.jpeg");
 
-            AddProductTag(productSoundForge, "game");
-            AddProductTag(productSoundForge, "computer");
-            AddProductTag(productSoundForge, "cool");
+            await AddProductTagAsync(productSoundForge, "game");
+            await AddProductTagAsync(productSoundForge, "computer");
+            await AddProductTagAsync(productSoundForge, "cool");
 
             relatedProducts.AddRange(new[]
             {
@@ -5424,7 +5464,7 @@ namespace Nop.Services.Installation
             });
         }
 
-        protected virtual void InstallElectronics(ProductTemplate productTemplateSimple, ProductTemplate productTemplateGrouped, List<Product> allProducts, string sampleImagesPath, IPictureService pictureService, List<RelatedProduct> relatedProducts)
+        protected virtual async Task InstallElectronicsAsync(ProductTemplate productTemplateSimple, ProductTemplate productTemplateGrouped, List<Product> allProducts, string sampleImagesPath, IPictureService pictureService, List<RelatedProduct> relatedProducts)
         {
             //this one is a grouped product with two associated ones
             var productNikonD5500DSLR = new Product
@@ -5460,22 +5500,22 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productNikonD5500DSLR);
 
-            InsertInstallationData(productNikonD5500DSLR);
+            await InsertInstallationDataAsync(productNikonD5500DSLR);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productNikonD5500DSLR.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Camera & photo").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productNikonD5500DSLR, "product_NikonCamera_1.jpeg");
-            InsertProductPicture(productNikonD5500DSLR, "product_NikonCamera_2.jpeg", 2);
+            await InsertProductPictureAsync(productNikonD5500DSLR, "product_NikonCamera_1.jpeg");
+            await InsertProductPictureAsync(productNikonD5500DSLR, "product_NikonCamera_2.jpeg", 2);
 
-            AddProductTag(productNikonD5500DSLR, "cool");
-            AddProductTag(productNikonD5500DSLR, "camera");
+            await AddProductTagAsync(productNikonD5500DSLR, "cool");
+            await AddProductTagAsync(productNikonD5500DSLR, "camera");
 
-            var productNikonD5500DSLR_associated_1 = new Product
+            var productNikonD5500DslrAssociated1 = new Product
             {
                 ProductType = ProductType.SimpleProduct,
                 VisibleIndividually = false, //hide this products
@@ -5505,13 +5545,13 @@ namespace Nop.Services.Installation
                 CreatedOnUtc = DateTime.UtcNow,
                 UpdatedOnUtc = DateTime.UtcNow
             };
-            allProducts.Add(productNikonD5500DSLR_associated_1);
+            allProducts.Add(productNikonD5500DslrAssociated1);
 
-            InsertInstallationData(productNikonD5500DSLR_associated_1);
+            await InsertInstallationDataAsync(productNikonD5500DslrAssociated1);
 
-            InsertProductPicture(productNikonD5500DSLR_associated_1, "product_NikonCamera_black.jpeg");
+            await InsertProductPictureAsync(productNikonD5500DslrAssociated1, "product_NikonCamera_black.jpeg");
 
-            var productNikonD5500DSLR_associated_2 = new Product
+            var productNikonD5500DslrAssociated2 = new Product
             {
                 ProductType = ProductType.SimpleProduct,
                 VisibleIndividually = false, //hide this products
@@ -5541,11 +5581,11 @@ namespace Nop.Services.Installation
                 CreatedOnUtc = DateTime.UtcNow,
                 UpdatedOnUtc = DateTime.UtcNow
             };
-            allProducts.Add(productNikonD5500DSLR_associated_2);
+            allProducts.Add(productNikonD5500DslrAssociated2);
 
-            InsertInstallationData(productNikonD5500DSLR_associated_2);
+            await InsertInstallationDataAsync(productNikonD5500DslrAssociated2);
 
-            InsertProductPicture(productNikonD5500DSLR_associated_2, "product_NikonCamera_red.jpeg");
+            await InsertProductPictureAsync(productNikonD5500DslrAssociated2, "product_NikonCamera_red.jpeg");
 
             var productLeica = new Product
             {
@@ -5580,19 +5620,19 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productLeica);
 
-            InsertInstallationData(productLeica);
+            await InsertInstallationDataAsync(productLeica);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productLeica.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Camera & photo").Id,
                 DisplayOrder = 3
             });
 
-            InsertProductPicture(productLeica, "product_LeicaT.jpeg");
+            await InsertProductPictureAsync(productLeica, "product_LeicaT.jpeg");
 
-            AddProductTag(productLeica, "camera");
-            AddProductTag(productLeica, "cool");
+            await AddProductTagAsync(productLeica, "camera");
+            await AddProductTagAsync(productLeica, "cool");
 
             var productAppleICam = new Product
             {
@@ -5627,23 +5667,23 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productAppleICam);
 
-            InsertInstallationData(productAppleICam);
+            await InsertInstallationDataAsync(productAppleICam);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productAppleICam.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Camera & photo").Id,
                 DisplayOrder = 2
             });
 
-            InsertInstallationData(new ProductManufacturer
+            await InsertInstallationDataAsync(new ProductManufacturer
             {
                 ProductId = productAppleICam.Id,
                 ManufacturerId = _manufacturerRepository.Table.Single(c => c.Name == "Apple").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productAppleICam, "product_iCam.jpeg");
+            await InsertProductPictureAsync(productAppleICam, "product_iCam.jpeg");
 
             var productHtcOne = new Product
             {
@@ -5680,20 +5720,20 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productHtcOne);
 
-            InsertInstallationData(productHtcOne);
+            await InsertInstallationDataAsync(productHtcOne);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productHtcOne.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Cell phones").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productHtcOne, "product_HTC_One_M8.jpeg");
+            await InsertProductPictureAsync(productHtcOne, "product_HTC_One_M8.jpeg");
 
-            AddProductTag(productHtcOne, "cell");
-            AddProductTag(productHtcOne, "compact");
-            AddProductTag(productHtcOne, "awesome");
+            await AddProductTagAsync(productHtcOne, "cell");
+            await AddProductTagAsync(productHtcOne, "compact");
+            await AddProductTagAsync(productHtcOne, "awesome");
 
             var productHtcOneMini = new Product
             {
@@ -5729,21 +5769,21 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productHtcOneMini);
 
-            InsertInstallationData(productHtcOneMini);
+            await InsertInstallationDataAsync(productHtcOneMini);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productHtcOneMini.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Cell phones").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productHtcOneMini, "product_HTC_One_Mini_1.jpeg");
-            InsertProductPicture(productHtcOneMini, "product_HTC_One_Mini_2.jpeg", 2);
+            await InsertProductPictureAsync(productHtcOneMini, "product_HTC_One_Mini_1.jpeg");
+            await InsertProductPictureAsync(productHtcOneMini, "product_HTC_One_Mini_2.jpeg", 2);
 
-            AddProductTag(productHtcOneMini, "awesome");
-            AddProductTag(productHtcOneMini, "compact");
-            AddProductTag(productHtcOneMini, "cell");
+            await AddProductTagAsync(productHtcOneMini, "awesome");
+            await AddProductTagAsync(productHtcOneMini, "compact");
+            await AddProductTagAsync(productHtcOneMini, "cell");
 
             var productNokiaLumia = new Product
             {
@@ -5778,20 +5818,20 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productNokiaLumia);
 
-            InsertInstallationData(productNokiaLumia);
+            await InsertInstallationDataAsync(productNokiaLumia);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productNokiaLumia.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Cell phones").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productNokiaLumia, "product_Lumia1020.jpeg");
+            await InsertProductPictureAsync(productNokiaLumia, "product_Lumia1020.jpeg");
 
-            AddProductTag(productNokiaLumia, "awesome");
-            AddProductTag(productNokiaLumia, "cool");
-            AddProductTag(productNokiaLumia, "camera");
+            await AddProductTagAsync(productNokiaLumia, "awesome");
+            await AddProductTagAsync(productNokiaLumia, "cool");
+            await AddProductTagAsync(productNokiaLumia, "camera");
 
             var productBeatsPill = new Product
             {
@@ -5829,19 +5869,19 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productBeatsPill);
 
-            InsertInstallationData(productBeatsPill);
+            await InsertInstallationDataAsync(productBeatsPill);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productBeatsPill.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Others").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productBeatsPill, "product_PillBeats_1.jpeg");
-            InsertProductPicture(productBeatsPill, "product_PillBeats_2.jpeg", 2);
+            await InsertProductPictureAsync(productBeatsPill, "product_PillBeats_1.jpeg");
+            await InsertProductPictureAsync(productBeatsPill, "product_PillBeats_2.jpeg", 2);
 
-            InsertInstallationData(new List<TierPrice>
+            await InsertInstallationDataAsync(new List<TierPrice>
             {
                 new TierPrice
                 {
@@ -5865,8 +5905,8 @@ namespace Nop.Services.Installation
                 }
             });
 
-            AddProductTag(productBeatsPill, "computer");
-            AddProductTag(productBeatsPill, "cool");
+            await AddProductTagAsync(productBeatsPill, "computer");
+            await AddProductTagAsync(productBeatsPill, "cool");
 
             var productUniversalTabletCover = new Product
             {
@@ -5901,19 +5941,19 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productUniversalTabletCover);
 
-            InsertInstallationData(productUniversalTabletCover);
+            await InsertInstallationDataAsync(productUniversalTabletCover);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productUniversalTabletCover.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Others").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productUniversalTabletCover, "product_TabletCover.jpeg");
+            await InsertProductPictureAsync(productUniversalTabletCover, "product_TabletCover.jpeg");
 
-            AddProductTag(productUniversalTabletCover, "computer");
-            AddProductTag(productUniversalTabletCover, "cool");
+            await AddProductTagAsync(productUniversalTabletCover, "computer");
+            await AddProductTagAsync(productUniversalTabletCover, "cool");
 
             var productPortableSoundSpeakers = new Product
             {
@@ -5948,16 +5988,16 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productPortableSoundSpeakers);
 
-            InsertInstallationData(productPortableSoundSpeakers);
+            await InsertInstallationDataAsync(productPortableSoundSpeakers);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productPortableSoundSpeakers.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Others").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productPortableSoundSpeakers, "product_Speakers.jpeg");
+            await InsertProductPictureAsync(productPortableSoundSpeakers, "product_Speakers.jpeg");
 
             relatedProducts.AddRange(new[]
             {
@@ -6044,7 +6084,7 @@ namespace Nop.Services.Installation
             });
         }
 
-        protected virtual void InstallApparel(ProductTemplate productTemplateSimple, List<Product> allProducts, string sampleImagesPath, IPictureService pictureService, List<RelatedProduct> relatedProducts, ProductAvailabilityRange productAvailabilityRange)
+        protected virtual async Task InstallApparelAsync(ProductTemplate productTemplateSimple, List<Product> allProducts, string sampleImagesPath, IPictureService pictureService, List<RelatedProduct> relatedProducts, ProductAvailabilityRange productAvailabilityRange)
         {
             var productNikeFloral = new Product
             {
@@ -6079,35 +6119,35 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productNikeFloral);
 
-            InsertInstallationData(productNikeFloral);
+            await InsertInstallationDataAsync(productNikeFloral);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productNikeFloral.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Shoes").Id,
                 DisplayOrder = 1
             });
 
-            InsertInstallationData(new ProductManufacturer
+            await InsertInstallationDataAsync(new ProductManufacturer
             {
                 ProductId = productNikeFloral.Id,
                 ManufacturerId = _manufacturerRepository.Table.Single(c => c.Name == "Nike").Id,
                 DisplayOrder = 2
             });
 
-            var pic_product_NikeFloralShoe_1Id = InsertProductPicture(productNikeFloral, "product_NikeFloralShoe_1.jpg");
-            var pic_product_NikeFloralShoe_2Id = InsertProductPicture(productNikeFloral, "product_NikeFloralShoe_2.jpg", 2);
+            var picProductNikeFloralShoe1Id = await InsertProductPictureAsync(productNikeFloral, "product_NikeFloralShoe_1.jpg");
+            var picProductNikeFloralShoe2Id = await InsertProductPictureAsync(productNikeFloral, "product_NikeFloralShoe_2.jpg", 2);
 
-            InsertInstallationData(new ProductSpecificationAttribute
+            await InsertInstallationDataAsync(new ProductSpecificationAttribute
             {
                 ProductId = productNikeFloral.Id,
                 AllowFiltering = true,
                 ShowOnProductPage = false,
                 DisplayOrder = 1,
-                SpecificationAttributeOptionId = GetSpecificationAttributeOption("Color", "Grey").Id
+                SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Color", "Grey")
             });
 
-            var pamSize = InsertInstallationData(
+            var pamSize = await InsertInstallationDataAsync(
                 new ProductAttributeMapping
                 {
                     ProductId = productNikeFloral.Id,
@@ -6116,7 +6156,7 @@ namespace Nop.Services.Installation
                     IsRequired = true
                 });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamSize.Id,
@@ -6146,7 +6186,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 4
                 });
 
-            var pamColor = InsertInstallationData(
+            var pamColor = await InsertInstallationDataAsync(
                 new ProductAttributeMapping
                 {
                     ProductId = productNikeFloral.Id,
@@ -6155,7 +6195,7 @@ namespace Nop.Services.Installation
                     IsRequired = true
                 });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamColor.Id,
@@ -6171,7 +6211,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 2
                 });
 
-            var pamPrint = InsertInstallationData(
+            var pamPrint = await InsertInstallationDataAsync(
                 new ProductAttributeMapping
                 {
                     ProductId = productNikeFloral.Id,
@@ -6180,31 +6220,31 @@ namespace Nop.Services.Installation
                     IsRequired = true
                 });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamPrint.Id,
-                    PictureId = pic_product_NikeFloralShoe_1Id,
+                    PictureId = picProductNikeFloralShoe1Id,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "Natural",
                     DisplayOrder = 1,
-                    ImageSquaresPictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "p_attribute_print_2.jpg")), MimeTypes.ImagePJpeg, pictureService.GetPictureSeName("Natural Print")).Id
+                    ImageSquaresPictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "p_attribute_print_2.jpg")), MimeTypes.ImagePJpeg, await pictureService.GetPictureSeNameAsync("Natural Print"))).Id
                 },
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamPrint.Id,
-                    PictureId = pic_product_NikeFloralShoe_2Id,
+                    PictureId = picProductNikeFloralShoe2Id,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "Fresh",
                     DisplayOrder = 2,
-                    ImageSquaresPictureId = pictureService.InsertPicture(_fileProvider.ReadAllBytes(_fileProvider.Combine(sampleImagesPath, "p_attribute_print_1.jpg")), MimeTypes.ImagePJpeg, pictureService.GetPictureSeName("Fresh Print")).Id
+                    ImageSquaresPictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "p_attribute_print_1.jpg")), MimeTypes.ImagePJpeg, await pictureService.GetPictureSeNameAsync("Fresh Print"))).Id
                 });
 
-            AddProductTag(productNikeFloral, "cool");
-            AddProductTag(productNikeFloral, "shoes");
-            AddProductTag(productNikeFloral, "apparel");
+            await AddProductTagAsync(productNikeFloral, "cool");
+            await AddProductTagAsync(productNikeFloral, "shoes");
+            await AddProductTagAsync(productNikeFloral, "apparel");
 
-            UpdateInstallationData(productNikeFloral);
+            await UpdateInstallationDataAsync(productNikeFloral);
 
             var productAdidas = new Product
             {
@@ -6240,27 +6280,27 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productAdidas);
 
-            InsertInstallationData(productAdidas);
+            await InsertInstallationDataAsync(productAdidas);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productAdidas.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Shoes").Id,
                 DisplayOrder = 1
             });
 
-            var pic_product_adidasId = InsertProductPicture(productAdidas, "product_adidas.jpg");
-            var pic_product_adidas_2Id = InsertProductPicture(productAdidas, "product_adidas_2.jpg", 2);
-            var pic_product_adidas_3Id = InsertProductPicture(productAdidas, "product_adidas_3.jpg", 3);
+            var picProductAdidasId = await InsertProductPictureAsync(productAdidas, "product_adidas.jpg");
+            var picProductAdidas2Id = await InsertProductPictureAsync(productAdidas, "product_adidas_2.jpg", 2);
+            var picProductAdidas3Id = await InsertProductPictureAsync(productAdidas, "product_adidas_3.jpg", 3);
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductSpecificationAttribute
                 {
                     ProductId = productAdidas.Id,
                     AllowFiltering = true,
                     ShowOnProductPage = false,
                     DisplayOrder = 1,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Color", "Grey").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Color", "Grey")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -6268,7 +6308,7 @@ namespace Nop.Services.Installation
                     AllowFiltering = true,
                     ShowOnProductPage = false,
                     DisplayOrder = 2,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Color", "Red").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Color", "Red")
                 },
                 new ProductSpecificationAttribute
                 {
@@ -6276,10 +6316,10 @@ namespace Nop.Services.Installation
                     AllowFiltering = true,
                     ShowOnProductPage = false,
                     DisplayOrder = 3,
-                    SpecificationAttributeOptionId = GetSpecificationAttributeOption("Color", "Blue").Id
+                    SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Color", "Blue")
                 });
 
-            var pamAdidasSize = InsertInstallationData(
+            var pamAdidasSize = await InsertInstallationDataAsync(
                 new ProductAttributeMapping
                 {
                     ProductId = productAdidas.Id,
@@ -6288,7 +6328,7 @@ namespace Nop.Services.Installation
                     IsRequired = true
                 });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamAdidasSize.Id,
@@ -6318,7 +6358,7 @@ namespace Nop.Services.Installation
                     DisplayOrder = 4
                 });
 
-            var pamAdidasColor = InsertInstallationData(
+            var pamAdidasColor = await InsertInstallationDataAsync(
                 new ProductAttributeMapping
                 {
                     ProductId = productAdidas.Id,
@@ -6327,11 +6367,11 @@ namespace Nop.Services.Installation
                     IsRequired = true
                 });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamAdidasColor.Id,
-                    PictureId = pic_product_adidasId,
+                    PictureId = picProductAdidasId,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "Red",
                     IsPreSelected = true,
@@ -6341,7 +6381,7 @@ namespace Nop.Services.Installation
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamAdidasColor.Id,
-                    PictureId = pic_product_adidas_2Id,
+                    PictureId = picProductAdidas2Id,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "Blue",
                     ColorSquaresRgb = "#363656",
@@ -6350,18 +6390,18 @@ namespace Nop.Services.Installation
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamAdidasColor.Id,
-                    PictureId = pic_product_adidas_3Id,
+                    PictureId = picProductAdidas3Id,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "Silver",
                     ColorSquaresRgb = "#c5c5d5",
                     DisplayOrder = 3
                 });
 
-            AddProductTag(productAdidas, "cool");
-            AddProductTag(productAdidas, "shoes");
-            AddProductTag(productAdidas, "apparel");
+            await AddProductTagAsync(productAdidas, "cool");
+            await AddProductTagAsync(productAdidas, "shoes");
+            await AddProductTagAsync(productAdidas, "apparel");
 
-            UpdateInstallationData(productAdidas);
+            await UpdateInstallationDataAsync(productAdidas);
 
             var productNikeZoom = new Product
             {
@@ -6397,36 +6437,36 @@ namespace Nop.Services.Installation
 
             allProducts.Add(productNikeZoom);
 
-            InsertInstallationData(productNikeZoom);
+            await InsertInstallationDataAsync(productNikeZoom);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productNikeZoom.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Shoes").Id,
                 DisplayOrder = 1
             });
 
-            InsertInstallationData(new ProductManufacturer
+            await InsertInstallationDataAsync(new ProductManufacturer
             {
                 ProductId = productNikeZoom.Id,
                 ManufacturerId = _manufacturerRepository.Table.Single(c => c.Name == "Nike").Id,
                 DisplayOrder = 2
             });
 
-            InsertProductPicture(productNikeZoom, "product_NikeZoom.jpg");
+            await InsertProductPictureAsync(productNikeZoom, "product_NikeZoom.jpg");
 
-            InsertInstallationData(new ProductSpecificationAttribute
+            await InsertInstallationDataAsync(new ProductSpecificationAttribute
             {
                 ProductId = productNikeZoom.Id,
                 AllowFiltering = true,
                 ShowOnProductPage = false,
                 DisplayOrder = 1,
-                SpecificationAttributeOptionId = GetSpecificationAttributeOption("Color", "Grey").Id
+                SpecificationAttributeOptionId = await GetSpecificationAttributeOptionIdAsync("Color", "Grey")
             });
 
-            AddProductTag(productNikeZoom, "jeans");
-            AddProductTag(productNikeZoom, "cool");
-            AddProductTag(productNikeZoom, "apparel");
+            await AddProductTagAsync(productNikeZoom, "jeans");
+            await AddProductTagAsync(productNikeZoom, "cool");
+            await AddProductTagAsync(productNikeZoom, "apparel");
 
             var productNikeTailwind = new Product
             {
@@ -6461,25 +6501,25 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productNikeTailwind);
 
-            InsertInstallationData(productNikeTailwind);
+            await InsertInstallationDataAsync(productNikeTailwind);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productNikeTailwind.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Clothing").Id,
                 DisplayOrder = 1
             });
 
-            InsertInstallationData(new ProductManufacturer
+            await InsertInstallationDataAsync(new ProductManufacturer
             {
                 ProductId = productNikeTailwind.Id,
                 ManufacturerId = _manufacturerRepository.Table.Single(c => c.Name == "Nike").Id,
                 DisplayOrder = 2
             });
 
-            InsertProductPicture(productNikeTailwind, "product_NikeShirt.jpg");
+            await InsertProductPictureAsync(productNikeTailwind, "product_NikeShirt.jpg");
 
-            var pamNikeSize = InsertInstallationData(
+            var pamNikeSize = await InsertInstallationDataAsync(
                 new ProductAttributeMapping
                 {
                     ProductId = productNikeTailwind.Id,
@@ -6488,7 +6528,7 @@ namespace Nop.Services.Installation
                     IsRequired = true
                 });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamNikeSize.Id,
@@ -6532,9 +6572,9 @@ namespace Nop.Services.Installation
                     DisplayOrder = 6
                 });
 
-            AddProductTag(productNikeTailwind, "cool");
-            AddProductTag(productNikeTailwind, "apparel");
-            AddProductTag(productNikeTailwind, "shirt");
+            await AddProductTagAsync(productNikeTailwind, "cool");
+            await AddProductTagAsync(productNikeTailwind, "apparel");
+            await AddProductTagAsync(productNikeTailwind, "shirt");
 
             var productOversizedWomenTShirt = new Product
             {
@@ -6571,18 +6611,18 @@ namespace Nop.Services.Installation
 
             allProducts.Add(productOversizedWomenTShirt);
 
-            InsertInstallationData(productOversizedWomenTShirt);
+            await InsertInstallationDataAsync(productOversizedWomenTShirt);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productOversizedWomenTShirt.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Clothing").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productOversizedWomenTShirt, "product_WomenTShirt.jpg");
+            await InsertProductPictureAsync(productOversizedWomenTShirt, "product_WomenTShirt.jpg");
 
-            InsertInstallationData(new List<TierPrice>
+            await InsertInstallationDataAsync(new List<TierPrice>
             {
                 new TierPrice
                 {
@@ -6604,9 +6644,9 @@ namespace Nop.Services.Installation
                 }
             });
 
-            AddProductTag(productOversizedWomenTShirt, "cool");
-            AddProductTag(productOversizedWomenTShirt, "apparel");
-            AddProductTag(productOversizedWomenTShirt, "shirt");
+            await AddProductTagAsync(productOversizedWomenTShirt, "cool");
+            await AddProductTagAsync(productOversizedWomenTShirt, "apparel");
+            await AddProductTagAsync(productOversizedWomenTShirt, "shirt");
 
             var productCustomTShirt = new Product
             {
@@ -6641,18 +6681,18 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productCustomTShirt);
 
-            InsertInstallationData(productCustomTShirt);
+            await InsertInstallationDataAsync(productCustomTShirt);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productCustomTShirt.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Clothing").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productCustomTShirt, "product_CustomTShirt.jpeg");
+            await InsertProductPictureAsync(productCustomTShirt, "product_CustomTShirt.jpeg");
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductAttributeMapping
                 {
                     ProductId = productCustomTShirt.Id,
@@ -6662,9 +6702,9 @@ namespace Nop.Services.Installation
                     IsRequired = true
                 });
 
-            AddProductTag(productCustomTShirt, "cool");
-            AddProductTag(productCustomTShirt, "shirt");
-            AddProductTag(productCustomTShirt, "apparel");
+            await AddProductTagAsync(productCustomTShirt, "cool");
+            await AddProductTagAsync(productCustomTShirt, "shirt");
+            await AddProductTagAsync(productCustomTShirt, "apparel");
 
             var productLeviJeans = new Product
             {
@@ -6701,19 +6741,19 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productLeviJeans);
 
-            InsertInstallationData(productLeviJeans);
+            await InsertInstallationDataAsync(productLeviJeans);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productLeviJeans.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Clothing").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productLeviJeans, "product_LeviJeans_1.jpg");
-            InsertProductPicture(productLeviJeans, "product_LeviJeans_2.jpg", 2);
+            await InsertProductPictureAsync(productLeviJeans, "product_LeviJeans_1.jpg");
+            await InsertProductPictureAsync(productLeviJeans, "product_LeviJeans_2.jpg", 2);
 
-            InsertInstallationData(new List<TierPrice>
+            await InsertInstallationDataAsync(new List<TierPrice>
             {
                 new TierPrice
                 {
@@ -6735,9 +6775,9 @@ namespace Nop.Services.Installation
                 }
             });
 
-            AddProductTag(productLeviJeans, "cool");
-            AddProductTag(productLeviJeans, "jeans");
-            AddProductTag(productLeviJeans, "apparel");
+            await AddProductTagAsync(productLeviJeans, "cool");
+            await AddProductTagAsync(productLeviJeans, "jeans");
+            await AddProductTagAsync(productLeviJeans, "apparel");
 
             var productObeyHat = new Product
             {
@@ -6772,18 +6812,18 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productObeyHat);
 
-            InsertInstallationData(productObeyHat);
+            await InsertInstallationDataAsync(productObeyHat);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productObeyHat.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Accessories").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productObeyHat, "product_hat.jpg");
+            await InsertProductPictureAsync(productObeyHat, "product_hat.jpg");
 
-            var pamObeyHatSize = InsertInstallationData(
+            var pamObeyHatSize = await InsertInstallationDataAsync(
                 new ProductAttributeMapping
                 {
                     ProductId = productObeyHat.Id,
@@ -6792,7 +6832,7 @@ namespace Nop.Services.Installation
                     IsRequired = true
                 });
 
-            InsertInstallationData(
+            await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamObeyHatSize.Id,
@@ -6822,8 +6862,8 @@ namespace Nop.Services.Installation
                     DisplayOrder = 4
                 });
 
-            AddProductTag(productObeyHat, "apparel");
-            AddProductTag(productObeyHat, "cool");
+            await AddProductTagAsync(productObeyHat, "apparel");
+            await AddProductTagAsync(productObeyHat, "cool");
 
             var productBelt = new Product
             {
@@ -6859,16 +6899,16 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productBelt);
 
-            InsertInstallationData(productBelt);
+            await InsertInstallationDataAsync(productBelt);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productBelt.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Accessories").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productBelt, "product_Belt.jpeg");
+            await InsertProductPictureAsync(productBelt, "product_Belt.jpeg");
 
             var productSunglasses = new Product
             {
@@ -6903,19 +6943,19 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productSunglasses);
 
-            InsertInstallationData(productSunglasses);
+            await InsertInstallationDataAsync(productSunglasses);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productSunglasses.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Accessories").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productSunglasses, "product_Sunglasses.jpg");
+            await InsertProductPictureAsync(productSunglasses, "product_Sunglasses.jpg");
 
-            AddProductTag(productSunglasses, "apparel");
-            AddProductTag(productSunglasses, "cool");
+            await AddProductTagAsync(productSunglasses, "apparel");
+            await AddProductTagAsync(productSunglasses, "cool");
 
             relatedProducts.AddRange(new[]
             {
@@ -6983,28 +7023,28 @@ namespace Nop.Services.Installation
             });
         }
 
-        protected virtual void InstallDigitalDownloads(ProductTemplate productTemplateSimple, List<Product> allProducts, string sampleImagesPath, IPictureService pictureService, List<RelatedProduct> relatedProducts, string sampleDownloadsPath, IDownloadService downloadService)
+        protected virtual async Task InstallDigitalDownloadsAsync(ProductTemplate productTemplateSimple, List<Product> allProducts, string sampleImagesPath, IPictureService pictureService, List<RelatedProduct> relatedProducts, string sampleDownloadsPath, IDownloadService downloadService)
         {
             var downloadNightVision1 = new Download
             {
                 DownloadGuid = Guid.NewGuid(),
                 ContentType = MimeTypes.ApplicationXZipCo,
-                DownloadBinary = _fileProvider.ReadAllBytes(sampleDownloadsPath + "product_NightVision_1.zip"),
+                DownloadBinary = await _fileProvider.ReadAllBytesAsync(sampleDownloadsPath + "product_NightVision_1.zip"),
                 Extension = ".zip",
                 Filename = "Night_Vision_1",
                 IsNew = true
             };
-            downloadService.InsertDownload(downloadNightVision1);
+            await downloadService.InsertDownloadAsync(downloadNightVision1);
             var downloadNightVision2 = new Download
             {
                 DownloadGuid = Guid.NewGuid(),
                 ContentType = MimeTypes.TextPlain,
-                DownloadBinary = _fileProvider.ReadAllBytes(sampleDownloadsPath + "product_NightVision_2.txt"),
+                DownloadBinary = await _fileProvider.ReadAllBytesAsync(sampleDownloadsPath + "product_NightVision_2.txt"),
                 Extension = ".txt",
                 Filename = "Night_Vision_1",
                 IsNew = true
             };
-            downloadService.InsertDownload(downloadNightVision2);
+            await downloadService.InsertDownloadAsync(downloadNightVision2);
             var productNightVision = new Product
             {
                 ProductType = ProductType.SimpleProduct,
@@ -7040,40 +7080,40 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productNightVision);
 
-            InsertInstallationData(productNightVision);
+            await InsertInstallationDataAsync(productNightVision);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productNightVision.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Digital downloads").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productNightVision, "product_NightVisions.jpeg");
+            await InsertProductPictureAsync(productNightVision, "product_NightVisions.jpeg");
 
-            AddProductTag(productNightVision, "awesome");
-            AddProductTag(productNightVision, "digital");
+            await AddProductTagAsync(productNightVision, "awesome");
+            await AddProductTagAsync(productNightVision, "digital");
 
             var downloadIfYouWait1 = new Download
             {
                 DownloadGuid = Guid.NewGuid(),
                 ContentType = MimeTypes.ApplicationXZipCo,
-                DownloadBinary = _fileProvider.ReadAllBytes(sampleDownloadsPath + "product_IfYouWait_1.zip"),
+                DownloadBinary = await _fileProvider.ReadAllBytesAsync(sampleDownloadsPath + "product_IfYouWait_1.zip"),
                 Extension = ".zip",
                 Filename = "If_You_Wait_1",
                 IsNew = true
             };
-            downloadService.InsertDownload(downloadIfYouWait1);
+            await downloadService.InsertDownloadAsync(downloadIfYouWait1);
             var downloadIfYouWait2 = new Download
             {
                 DownloadGuid = Guid.NewGuid(),
                 ContentType = MimeTypes.TextPlain,
-                DownloadBinary = _fileProvider.ReadAllBytes(sampleDownloadsPath + "product_IfYouWait_2.txt"),
+                DownloadBinary = await _fileProvider.ReadAllBytesAsync(sampleDownloadsPath + "product_IfYouWait_2.txt"),
                 Extension = ".txt",
                 Filename = "If_You_Wait_1",
                 IsNew = true
             };
-            downloadService.InsertDownload(downloadIfYouWait2);
+            await downloadService.InsertDownloadAsync(downloadIfYouWait2);
             var productIfYouWait = new Product
             {
                 ProductType = ProductType.SimpleProduct,
@@ -7111,30 +7151,30 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productIfYouWait);
 
-            InsertInstallationData(productIfYouWait);
+            await InsertInstallationDataAsync(productIfYouWait);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productIfYouWait.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Digital downloads").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productIfYouWait, "product_IfYouWait.jpeg");
+            await InsertProductPictureAsync(productIfYouWait, "product_IfYouWait.jpeg");
 
-            AddProductTag(productIfYouWait, "digital");
-            AddProductTag(productIfYouWait, "awesome");
+            await AddProductTagAsync(productIfYouWait, "digital");
+            await AddProductTagAsync(productIfYouWait, "awesome");
 
             var downloadScienceAndFaith = new Download
             {
                 DownloadGuid = Guid.NewGuid(),
                 ContentType = MimeTypes.ApplicationXZipCo,
-                DownloadBinary = _fileProvider.ReadAllBytes(sampleDownloadsPath + "product_ScienceAndFaith_1.zip"),
+                DownloadBinary = await _fileProvider.ReadAllBytesAsync(sampleDownloadsPath + "product_ScienceAndFaith_1.zip"),
                 Extension = ".zip",
                 Filename = "Science_And_Faith",
                 IsNew = true
             };
-            downloadService.InsertDownload(downloadScienceAndFaith);
+            await downloadService.InsertDownloadAsync(downloadScienceAndFaith);
             var productScienceAndFaith = new Product
             {
                 ProductType = ProductType.SimpleProduct,
@@ -7171,19 +7211,19 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productScienceAndFaith);
 
-            InsertInstallationData(productScienceAndFaith);
+            await InsertInstallationDataAsync(productScienceAndFaith);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productScienceAndFaith.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Digital downloads").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productScienceAndFaith, "product_ScienceAndFaith.jpeg");
+            await InsertProductPictureAsync(productScienceAndFaith, "product_ScienceAndFaith.jpeg");
 
-            AddProductTag(productScienceAndFaith, "digital");
-            AddProductTag(productScienceAndFaith, "awesome");
+            await AddProductTagAsync(productScienceAndFaith, "digital");
+            await AddProductTagAsync(productScienceAndFaith, "awesome");
 
             relatedProducts.AddRange(new[]
             {
@@ -7210,7 +7250,7 @@ namespace Nop.Services.Installation
             });
         }
 
-        protected virtual void InstallBooks(ProductTemplate productTemplateSimple, List<Product> allProducts, string sampleImagesPath, IPictureService pictureService, List<RelatedProduct> relatedProducts)
+        protected virtual async Task InstallBooksAsync(ProductTemplate productTemplateSimple, List<Product> allProducts, string sampleImagesPath, IPictureService pictureService, List<RelatedProduct> relatedProducts)
         {
             var productFahrenheit = new Product
             {
@@ -7247,20 +7287,20 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productFahrenheit);
 
-            InsertInstallationData(productFahrenheit);
+            await InsertInstallationDataAsync(productFahrenheit);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productFahrenheit.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Books").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productFahrenheit, "product_Fahrenheit451.jpeg");
+            await InsertProductPictureAsync(productFahrenheit, "product_Fahrenheit451.jpeg");
 
-            AddProductTag(productFahrenheit, "awesome");
-            AddProductTag(productFahrenheit, "book");
-            AddProductTag(productFahrenheit, "nice");
+            await AddProductTagAsync(productFahrenheit, "awesome");
+            await AddProductTagAsync(productFahrenheit, "book");
+            await AddProductTagAsync(productFahrenheit, "nice");
 
             var productFirstPrizePies = new Product
             {
@@ -7296,18 +7336,18 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productFirstPrizePies);
 
-            InsertInstallationData(productFirstPrizePies);
+            await InsertInstallationDataAsync(productFirstPrizePies);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productFirstPrizePies.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Books").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productFirstPrizePies, "product_FirstPrizePies.jpeg");
+            await InsertProductPictureAsync(productFirstPrizePies, "product_FirstPrizePies.jpeg");
 
-            AddProductTag(productFirstPrizePies, "book");
+            await AddProductTagAsync(productFirstPrizePies, "book");
 
             var productPrideAndPrejudice = new Product
             {
@@ -7343,18 +7383,18 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productPrideAndPrejudice);
 
-            InsertInstallationData(productPrideAndPrejudice);
+            await InsertInstallationDataAsync(productPrideAndPrejudice);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productPrideAndPrejudice.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Books").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productPrideAndPrejudice, "product_PrideAndPrejudice.jpeg");
+            await InsertProductPictureAsync(productPrideAndPrejudice, "product_PrideAndPrejudice.jpeg");
 
-            AddProductTag(productPrideAndPrejudice, "book");
+            await AddProductTagAsync(productPrideAndPrejudice, "book");
 
             relatedProducts.AddRange(new[]
             {
@@ -7391,7 +7431,7 @@ namespace Nop.Services.Installation
             });
         }
 
-        protected virtual void InstallJewelry(ProductTemplate productTemplateSimple, List<Product> allProducts, string sampleImagesPath, IPictureService pictureService, List<RelatedProduct> relatedProducts)
+        protected virtual async Task InstallJewelryAsync(ProductTemplate productTemplateSimple, List<Product> allProducts, string sampleImagesPath, IPictureService pictureService, List<RelatedProduct> relatedProducts)
         {
             var productElegantGemstoneNecklace = new Product
             {
@@ -7430,19 +7470,19 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productElegantGemstoneNecklace);
 
-            InsertInstallationData(productElegantGemstoneNecklace);
+            await InsertInstallationDataAsync(productElegantGemstoneNecklace);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productElegantGemstoneNecklace.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Jewelry").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productElegantGemstoneNecklace, "product_GemstoneNecklaces.jpg");
+            await InsertProductPictureAsync(productElegantGemstoneNecklace, "product_GemstoneNecklaces.jpg");
 
-            AddProductTag(productElegantGemstoneNecklace, "jewelry");
-            AddProductTag(productElegantGemstoneNecklace, "awesome");
+            await AddProductTagAsync(productElegantGemstoneNecklace, "jewelry");
+            await AddProductTagAsync(productElegantGemstoneNecklace, "awesome");
 
             var productFlowerGirlBracelet = new Product
             {
@@ -7478,19 +7518,19 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productFlowerGirlBracelet);
 
-            InsertInstallationData(productFlowerGirlBracelet);
+            await InsertInstallationDataAsync(productFlowerGirlBracelet);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productFlowerGirlBracelet.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Jewelry").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productFlowerGirlBracelet, "product_FlowerBracelet.jpg");
+            await InsertProductPictureAsync(productFlowerGirlBracelet, "product_FlowerBracelet.jpg");
 
-            AddProductTag(productFlowerGirlBracelet, "awesome");
-            AddProductTag(productFlowerGirlBracelet, "jewelry");
+            await AddProductTagAsync(productFlowerGirlBracelet, "awesome");
+            await AddProductTagAsync(productFlowerGirlBracelet, "jewelry");
 
             var productEngagementRing = new Product
             {
@@ -7525,19 +7565,19 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(productEngagementRing);
 
-            InsertInstallationData(productEngagementRing);
+            await InsertInstallationDataAsync(productEngagementRing);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = productEngagementRing.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Jewelry").Id,
                 DisplayOrder = 1
             });
 
-            InsertProductPicture(productEngagementRing, "product_EngagementRing_1.jpg");
+            await InsertProductPictureAsync(productEngagementRing, "product_EngagementRing_1.jpg");
 
-            AddProductTag(productEngagementRing, "jewelry");
-            AddProductTag(productEngagementRing, "awesome");
+            await AddProductTagAsync(productEngagementRing, "jewelry");
+            await AddProductTagAsync(productEngagementRing, "awesome");
 
             relatedProducts.AddRange(new[]
             {
@@ -7574,7 +7614,7 @@ namespace Nop.Services.Installation
             });
         }
 
-        protected virtual void InstallGiftCards(ProductTemplate productTemplateSimple, List<Product> allProducts, string sampleImagesPath, IPictureService pictureService, List<RelatedProduct> relatedProducts, DeliveryDate deliveryDate)
+        protected virtual async Task InstallGiftCardsAsync(ProductTemplate productTemplateSimple, List<Product> allProducts, string sampleImagesPath, IPictureService pictureService, List<RelatedProduct> relatedProducts, DeliveryDate deliveryDate)
         {
             var product25GiftCard = new Product
             {
@@ -7603,19 +7643,19 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(product25GiftCard);
 
-            InsertInstallationData(product25GiftCard);
+            await InsertInstallationDataAsync(product25GiftCard);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = product25GiftCard.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Gift Cards").Id,
                 DisplayOrder = 2
             });
 
-            InsertProductPicture(product25GiftCard, "product_25giftcart.jpeg");
+            await InsertProductPictureAsync(product25GiftCard, "product_25giftcart.jpeg");
 
-            AddProductTag(product25GiftCard, "nice");
-            AddProductTag(product25GiftCard, "gift");
+            await AddProductTagAsync(product25GiftCard, "nice");
+            await AddProductTagAsync(product25GiftCard, "gift");
 
             var product50GiftCard = new Product
             {
@@ -7651,16 +7691,16 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(product50GiftCard);
 
-            InsertInstallationData(product50GiftCard);
+            await InsertInstallationDataAsync(product50GiftCard);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = product50GiftCard.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Gift Cards").Id,
                 DisplayOrder = 3
             });
 
-            InsertProductPicture(product50GiftCard, "product_50giftcart.jpeg");
+            await InsertProductPictureAsync(product50GiftCard, "product_50giftcart.jpeg");
 
             var product100GiftCard = new Product
             {
@@ -7694,19 +7734,19 @@ namespace Nop.Services.Installation
             };
             allProducts.Add(product100GiftCard);
 
-            InsertInstallationData(product100GiftCard);
+            await InsertInstallationDataAsync(product100GiftCard);
 
-            InsertInstallationData(new ProductCategory
+            await InsertInstallationDataAsync(new ProductCategory
             {
                 ProductId = product100GiftCard.Id,
                 CategoryId = _categoryRepository.Table.Single(c => c.Name == "Gift Cards").Id,
                 DisplayOrder = 4
             });
 
-            InsertProductPicture(product100GiftCard, "product_100giftcart.jpeg");
+            await InsertProductPictureAsync(product100GiftCard, "product_100giftcart.jpeg");
         }
 
-        protected virtual void InstallProducts(string defaultUserEmail)
+        protected virtual async Task InstallProductsAsync(string defaultUserEmail)
         {
             var productTemplateSimple = _productTemplateRepository.Table.FirstOrDefault(pt => pt.Name == "Simple product");
             if (productTemplateSimple == null)
@@ -7750,35 +7790,33 @@ namespace Nop.Services.Installation
             var relatedProducts = new List<RelatedProduct>();
 
             //desktops, notebooks, software
-            InstallComputers(productTemplateSimple, allProducts, sampleImagesPath, pictureService, relatedProducts);
+            await InstallComputersAsync(productTemplateSimple, allProducts, sampleImagesPath, pictureService, relatedProducts);
             //camera & photo, cell phones, others
-            InstallElectronics(productTemplateSimple, productTemplateGrouped, allProducts, sampleImagesPath, pictureService, relatedProducts);
+            await InstallElectronicsAsync(productTemplateSimple, productTemplateGrouped, allProducts, sampleImagesPath, pictureService, relatedProducts);
             //shoes, clothing, accessories
-            InstallApparel(productTemplateSimple, allProducts, sampleImagesPath, pictureService, relatedProducts, productAvailabilityRange);
+            await InstallApparelAsync(productTemplateSimple, allProducts, sampleImagesPath, pictureService, relatedProducts, productAvailabilityRange);
             //digital downloads
-            InstallDigitalDownloads(productTemplateSimple, allProducts, sampleImagesPath, pictureService, relatedProducts, sampleDownloadsPath, downloadService);
+            await InstallDigitalDownloadsAsync(productTemplateSimple, allProducts, sampleImagesPath, pictureService, relatedProducts, sampleDownloadsPath, downloadService);
             //books
-            InstallBooks(productTemplateSimple, allProducts, sampleImagesPath, pictureService, relatedProducts);
+            await InstallBooksAsync(productTemplateSimple, allProducts, sampleImagesPath, pictureService, relatedProducts);
             //jewelry
-            InstallJewelry(productTemplateSimple, allProducts, sampleImagesPath, pictureService, relatedProducts);
+            await InstallJewelryAsync(productTemplateSimple, allProducts, sampleImagesPath, pictureService, relatedProducts);
             //gift cards
-            InstallGiftCards(productTemplateSimple, allProducts, sampleImagesPath, pictureService, relatedProducts, deliveryDate);
+            await InstallGiftCardsAsync(productTemplateSimple, allProducts, sampleImagesPath, pictureService, relatedProducts, deliveryDate);
 
             //search engine names
             foreach (var product in allProducts)
-            {
-                InsertInstallationData(new UrlRecord
+                await InsertInstallationDataAsync(new UrlRecord
                 {
                     EntityId = product.Id,
                     EntityName = nameof(Product),
                     LanguageId = 0,
                     IsActive = true,
-                    Slug = ValidateSeName(product, product.Name)
+                    Slug = await ValidateSeNameAsync(product, product.Name)
                 });
-            }
 
             //related products
-            InsertInstallationData(relatedProducts);
+            await InsertInstallationDataAsync(relatedProducts);
 
             //reviews
             using (var random = new SecureRandomNumberGenerator())
@@ -7795,7 +7833,7 @@ namespace Nop.Services.Installation
                     //rating from 4 to 5
                     var rating = random.Next(4, 6);
 
-                    InsertInstallationData(new ProductReview
+                    await InsertInstallationDataAsync(new ProductReview
                     {
                         CustomerId = defaultCustomer.Id,
                         ProductId = product.Id,
@@ -7815,13 +7853,12 @@ namespace Nop.Services.Installation
                 }
             }
 
-            UpdateInstallationData(allProducts);
+            await UpdateInstallationDataAsync(allProducts);
 
             //stock quantity history
             foreach (var product in allProducts)
-            {
                 if (product.StockQuantity > 0)
-                    InsertInstallationData(new StockQuantityHistory
+                    await InsertInstallationDataAsync(new StockQuantityHistory
                     {
                         ProductId = product.Id,
                         WarehouseId = product.WarehouseId > 0 ? (int?)product.WarehouseId : null,
@@ -7830,10 +7867,9 @@ namespace Nop.Services.Installation
                         Message = "The stock quantity has been edited",
                         CreatedOnUtc = DateTime.UtcNow
                     });
-            }
         }
 
-        protected virtual void InstallForums()
+        protected virtual async Task InstallForumsAsync()
         {
             var forumGroup = new ForumGroup
             {
@@ -7843,7 +7879,7 @@ namespace Nop.Services.Installation
                 UpdatedOnUtc = DateTime.UtcNow
             };
 
-            InsertInstallationData(forumGroup);
+            await InsertInstallationDataAsync(forumGroup);
 
             var newProductsForum = new Forum
             {
@@ -7858,7 +7894,8 @@ namespace Nop.Services.Installation
                 CreatedOnUtc = DateTime.UtcNow,
                 UpdatedOnUtc = DateTime.UtcNow
             };
-            InsertInstallationData(newProductsForum);
+
+            await InsertInstallationDataAsync(newProductsForum);
 
             var mobileDevicesForum = new Forum
             {
@@ -7873,7 +7910,8 @@ namespace Nop.Services.Installation
                 CreatedOnUtc = DateTime.UtcNow,
                 UpdatedOnUtc = DateTime.UtcNow
             };
-            InsertInstallationData(mobileDevicesForum);
+
+            await InsertInstallationDataAsync(mobileDevicesForum);
 
             var packagingShippingForum = new Forum
             {
@@ -7887,10 +7925,11 @@ namespace Nop.Services.Installation
                 CreatedOnUtc = DateTime.UtcNow,
                 UpdatedOnUtc = DateTime.UtcNow
             };
-            InsertInstallationData(packagingShippingForum);
+
+            await InsertInstallationDataAsync(packagingShippingForum);
         }
 
-        protected virtual void InstallDiscounts()
+        protected virtual async Task InstallDiscountsAsync()
         {
             var discounts = new List<Discount>
             {
@@ -7917,10 +7956,11 @@ namespace Nop.Services.Installation
                     CouponCode = "456"
                 }
             };
-            InsertInstallationData(discounts);
+
+            await InsertInstallationDataAsync(discounts);
         }
 
-        protected virtual void InstallBlogPosts(string defaultUserEmail)
+        protected virtual async Task InstallBlogPostsAsync(string defaultUserEmail)
         {
             var defaultLanguage = _languageRepository.Table.FirstOrDefault();
 
@@ -7947,26 +7987,24 @@ namespace Nop.Services.Installation
                     LanguageId = defaultLanguage.Id,
                     Title = "Why your online store needs a wish list",
                     BodyOverview = "<p>What comes to your mind, when you hear the term&rdquo; wish list&rdquo;? The application of this feature is exactly how it sounds like: a list of things that you wish to get. As an online store owner, would you like your customers to be able to save products in a wish list so that they review or buy them later? Would you like your customers to be able to share their wish list with friends and family for gift giving?</p><p>Offering your customers a feature of wish list as part of shopping cart is a great way to build loyalty to your store site. Having the feature of wish list on a store site allows online businesses to engage with their customers in a smart way as it allows the shoppers to create a list of what they desire and their preferences for future purchase.</p>",
-                    Body = "<p>What comes to your mind, when you hear the term&rdquo; wish list&rdquo;? The application of this feature is exactly how it sounds like: a list of things that you wish to get. As an online store owner, would you like your customers to be able to save products in a wish list so that they review or buy them later? Would you like your customers to be able to share their wish list with friends and family for gift giving?</p><p>Offering your customers a feature of wish list as part of shopping cart is a great way to build loyalty to your store site. Having the feature of wish list on a store site allows online businesses to engage with their customers in a smart way as it allows the shoppers to create a list of what they desire and their preferences for future purchase.</p><p>Does every e-Commerce store needs a wish list? The answer to this question in most cases is yes, because of the following reasons:</p><p><strong>Understanding the needs of your customers</strong> - A wish list is a great way to know what is in your customer&rsquo;s mind. Try to think the purchase history as a small portion of the customer&rsquo;s preferences. But, the wish list is like a wide open door that can give any online business a lot of valuable information about their customer and what they like or desire.</p><p><strong>Shoppers like to share their wish list with friends and family</strong> - Providing your customers a way to email their wish list to their friends and family is a pleasant way to make online shopping enjoyable for the shoppers. It is always a good idea to make the wish list sharable by a unique link so that it can be easily shared though different channels like email or on social media sites.</p><p><strong>Wish list can be a great marketing tool</strong> &ndash; Another way to look at wish list is a great marketing tool because it is extremely targeted and the recipients are always motivated to use it. For example: when your younger brother tells you that his wish list is on a certain e-Commerce store. What is the first thing you are going to do? You are most likely to visit the e-Commerce store, check out the wish list and end up buying something for your younger brother.</p><p>So, how a wish list is a marketing tool? The reason is quite simple, it introduce your online store to new customers just how it is explained in the above example.</p><p><strong>Encourage customers to return to the store site</strong> &ndash; Having a feature of wish list on the store site can increase the return traffic because it encourages customers to come back and buy later. Allowing the customers to save the wish list to their online accounts gives them a reason return to the store site and login to the account at any time to view or edit the wish list items.</p><p><strong>Wish list can be used for gifts for different occasions like weddings or birthdays. So, what kind of benefits a gift-giver gets from a wish list?</strong></p><ul><li>It gives them a surety that they didn&rsquo;t buy a wrong gift</li><li>It guarantees that the recipient will like the gift</li><li>It avoids any awkward moments when the recipient unwraps the gift and as a gift-giver you got something that the recipient do not want</li></ul><p><strong>Wish list is a great feature to have on a store site &ndash; So, what kind of benefits a business owner gets from a wish list</strong></p><ul><li>It is a great way to advertise an online store as many people do prefer to shop where their friend or family shop online</li><li>It allows the current customers to return to the store site and open doors for the new customers</li><li>It allows store admins to track what&rsquo;s in customers wish list and run promotions accordingly to target specific customer segments</li></ul><p><a href=\"https://www.yourdomain.com/\">yourdomain</a> offers the feature of wish list that allows customers to create a list of products that they desire or planning to buy in future.</p>",
+                    Body = "<p>What comes to your mind, when you hear the term&rdquo; wish list&rdquo;? The application of this feature is exactly how it sounds like: a list of things that you wish to get. As an online store owner, would you like your customers to be able to save products in a wish list so that they review or buy them later? Would you like your customers to be able to share their wish list with friends and family for gift giving?</p><p>Offering your customers a feature of wish list as part of shopping cart is a great way to build loyalty to your store site. Having the feature of wish list on a store site allows online businesses to engage with their customers in a smart way as it allows the shoppers to create a list of what they desire and their preferences for future purchase.</p><p>Does every e-Commerce store needs a wish list? The answer to this question in most cases is yes, because of the following reasons:</p><p><strong>Understanding the needs of your customers</strong> - A wish list is a great way to know what is in your customer&rsquo;s mind. Try to think the purchase history as a small portion of the customer&rsquo;s preferences. But, the wish list is like a wide open door that can give any online business a lot of valuable information about their customer and what they like or desire.</p><p><strong>Shoppers like to share their wish list with friends and family</strong> - Providing your customers a way to email their wish list to their friends and family is a pleasant way to make online shopping enjoyable for the shoppers. It is always a good idea to make the wish list sharable by a unique link so that it can be easily shared though different channels like email or on social media sites.</p><p><strong>Wish list can be a great marketing tool</strong> &ndash; Another way to look at wish list is a great marketing tool because it is extremely targeted and the recipients are always motivated to use it. For example: when your younger brother tells you that his wish list is on a certain e-Commerce store. What is the first thing you are going to do? You are most likely to visit the e-Commerce store, check out the wish list and end up buying something for your younger brother.</p><p>So, how a wish list is a marketing tool? The reason is quite simple, it introduce your online store to new customers just how it is explained in the above example.</p><p><strong>Encourage customers to return to the store site</strong> &ndash; Having a feature of wish list on the store site can increase the return traffic because it encourages customers to come back and buy later. Allowing the customers to save the wish list to their online accounts gives them a reason return to the store site and login to the account at any time to view or edit the wish list items.</p><p><strong>Wish list can be used for gifts for different occasions like weddings or birthdays. So, what kind of benefits a gift-giver gets from a wish list?</strong></p><ul><li>It gives them a surety that they didn&rsquo;t buy a wrong gift</li><li>It guarantees that the recipient will like the gift</li><li>It aasync Tasks any awkward moments when the recipient unwraps the gift and as a gift-giver you got something that the recipient do not want</li></ul><p><strong>Wish list is a great feature to have on a store site &ndash; So, what kind of benefits a business owner gets from a wish list</strong></p><ul><li>It is a great way to advertise an online store as many people do prefer to shop where their friend or family shop online</li><li>It allows the current customers to return to the store site and open doors for the new customers</li><li>It allows store admins to track what&rsquo;s in customers wish list and run promotions accordingly to target specific customer segments</li></ul><p><a href=\"https://www.nopcommerce.com/\">nopCommerce</a> offers the feature of wish list that allows customers to create a list of products that they desire or planning to buy in future.</p>",
                     Tags = "e-commerce, nopCommerce, sample tag, money",
                     CreatedOnUtc = DateTime.UtcNow.AddSeconds(1)
                 }
             };
 
-            InsertInstallationData(blogPosts);
+            await InsertInstallationDataAsync(blogPosts);
 
             //search engine names
             foreach (var blogPost in blogPosts)
-            {
-                InsertInstallationData(new UrlRecord
+                await InsertInstallationDataAsync(new UrlRecord
                 {
                     EntityId = blogPost.Id,
                     EntityName = nameof(BlogPost),
                     LanguageId = blogPost.LanguageId,
                     IsActive = true,
-                    Slug = ValidateSeName(blogPost, blogPost.Title)
+                    Slug = await ValidateSeNameAsync(blogPost, blogPost.Title)
                 });
-            }
 
             //comments
             var defaultCustomer = _customerRepository.Table.FirstOrDefault(x => x.Email == defaultUserEmail);
@@ -7979,8 +8017,7 @@ namespace Nop.Services.Installation
                 throw new Exception("No default store could be loaded");
 
             foreach (var blogPost in blogPosts)
-            {
-                blogService.InsertBlogComment(new BlogComment
+                await blogService.InsertBlogCommentAsync(new BlogComment
                 {
                     BlogPostId = blogPost.Id,
                     CustomerId = defaultCustomer.Id,
@@ -7989,12 +8026,11 @@ namespace Nop.Services.Installation
                     StoreId = defaultStore.Id,
                     CreatedOnUtc = DateTime.UtcNow
                 });
-            }
 
-            UpdateInstallationData(blogPosts);
+            await UpdateInstallationDataAsync(blogPosts);
         }
 
-        protected virtual void InstallNews(string defaultUserEmail)
+        protected virtual async Task InstallNewsAsync(string defaultUserEmail)
         {
             var defaultLanguage = _languageRepository.Table.FirstOrDefault();
 
@@ -8036,20 +8072,19 @@ namespace Nop.Services.Installation
                     CreatedOnUtc = DateTime.UtcNow.AddSeconds(2)
                 }
             };
-            InsertInstallationData(news);
+
+            await InsertInstallationDataAsync(news);
 
             //search engine names
             foreach (var newsItem in news)
-            {
-                InsertInstallationData(new UrlRecord
+                await InsertInstallationDataAsync(new UrlRecord
                 {
                     EntityId = newsItem.Id,
                     EntityName = nameof(NewsItem),
                     LanguageId = newsItem.LanguageId,
                     IsActive = true,
-                    Slug = ValidateSeName(newsItem, newsItem.Title)
+                    Slug = await ValidateSeNameAsync(newsItem, newsItem.Title)
                 });
-            }
 
             //comments
             var defaultCustomer = _customerRepository.Table.FirstOrDefault(x => x.Email == defaultUserEmail);
@@ -8062,8 +8097,7 @@ namespace Nop.Services.Installation
                 throw new Exception("No default store could be loaded");
 
             foreach (var newsItem in news)
-            {
-                newsService.InsertNewsComment(new NewsComment
+                await newsService.InsertNewsCommentAsync(new NewsComment
                 {
                     NewsItemId = newsItem.Id,
                     CustomerId = defaultCustomer.Id,
@@ -8073,12 +8107,11 @@ namespace Nop.Services.Installation
                     StoreId = defaultStore.Id,
                     CreatedOnUtc = DateTime.UtcNow
                 });
-            }
 
-            UpdateInstallationData(news);
+            await UpdateInstallationDataAsync(news);
         }
 
-        protected virtual void InstallPolls()
+        protected virtual async Task InstallPollsAsync()
         {
             var defaultLanguage = _languageRepository.Table.FirstOrDefault();
 
@@ -8095,9 +8128,9 @@ namespace Nop.Services.Installation
                 DisplayOrder = 1
             };
 
-            InsertInstallationData(poll1);
+            await InsertInstallationDataAsync(poll1);
 
-            var answers = new List<PollAnswer>()
+            var answers = new List<PollAnswer>
             {
                 new PollAnswer
             {
@@ -8125,10 +8158,10 @@ namespace Nop.Services.Installation
             }
             };
 
-            InsertInstallationData(answers);
+            await InsertInstallationDataAsync(answers);
         }
 
-        protected virtual void InstallActivityLogTypes()
+        protected virtual async Task InstallActivityLogTypesAsync()
         {
             var activityLogTypes = new List<ActivityLogType>
             {
@@ -9053,10 +9086,11 @@ namespace Nop.Services.Installation
                     Name = "Upload a favicon and app icons"
                 }
             };
-            InsertInstallationData(activityLogTypes);
+
+            await InsertInstallationDataAsync(activityLogTypes);
         }
 
-        protected virtual void InstallProductTemplates()
+        protected virtual async Task InstallProductTemplatesAsync()
         {
             var productTemplates = new List<ProductTemplate>
             {
@@ -9075,10 +9109,11 @@ namespace Nop.Services.Installation
                     IgnoredProductTypes = ((int)ProductType.SimpleProduct).ToString()
                 }
             };
-            InsertInstallationData(productTemplates);
+
+            await InsertInstallationDataAsync(productTemplates);
         }
 
-        protected virtual void InstallCategoryTemplates()
+        protected virtual async Task InstallCategoryTemplatesAsync()
         {
             var categoryTemplates = new List<CategoryTemplate>
             {
@@ -9089,10 +9124,11 @@ namespace Nop.Services.Installation
                     DisplayOrder = 1
                 }
             };
-            InsertInstallationData(categoryTemplates);
+
+            await InsertInstallationDataAsync(categoryTemplates);
         }
 
-        protected virtual void InstallManufacturerTemplates()
+        protected virtual async Task InstallManufacturerTemplatesAsync()
         {
             var manufacturerTemplates = new List<ManufacturerTemplate>
             {
@@ -9103,10 +9139,11 @@ namespace Nop.Services.Installation
                     DisplayOrder = 1
                 }
             };
-            InsertInstallationData(manufacturerTemplates);
+
+            await InsertInstallationDataAsync(manufacturerTemplates);
         }
 
-        protected virtual void InstallTopicTemplates()
+        protected virtual async Task InstallTopicTemplatesAsync()
         {
             var topicTemplates = new List<TopicTemplate>
             {
@@ -9117,10 +9154,11 @@ namespace Nop.Services.Installation
                     DisplayOrder = 1
                 }
             };
-            InsertInstallationData(topicTemplates);
+
+            await InsertInstallationDataAsync(topicTemplates);
         }
 
-        protected virtual void InstallScheduleTasks()
+        protected virtual async Task InstallScheduleTasksAsync()
         {
             var tasks = new List<ScheduleTask>
             {
@@ -9176,10 +9214,10 @@ namespace Nop.Services.Installation
                 }
             };
 
-            InsertInstallationData(tasks);
+            await InsertInstallationDataAsync(tasks);
         }
 
-        protected virtual void InstallReturnRequestReasons()
+        protected virtual async Task InstallReturnRequestReasonsAsync()
         {
             var returnRequestReasons = new List<ReturnRequestReason>
             {
@@ -9199,10 +9237,11 @@ namespace Nop.Services.Installation
                     DisplayOrder = 3
                 }
             };
-            InsertInstallationData(returnRequestReasons);
+
+            await InsertInstallationDataAsync(returnRequestReasons);
         }
 
-        protected virtual void InstallReturnRequestActions()
+        protected virtual async Task InstallReturnRequestActionsAsync()
         {
             var returnRequestActions = new List<ReturnRequestAction>
             {
@@ -9222,10 +9261,11 @@ namespace Nop.Services.Installation
                     DisplayOrder = 3
                 }
             };
-            InsertInstallationData(returnRequestActions);
+
+            await InsertInstallationDataAsync(returnRequestActions);
         }
 
-        protected virtual void InstallWarehouses()
+        protected virtual async Task InstallWarehousesAsync()
         {
             var warehouse1address = new Address
             {
@@ -9236,7 +9276,9 @@ namespace Nop.Services.Installation
                 ZipPostalCode = "10021",
                 CreatedOnUtc = DateTime.UtcNow
             };
-            InsertInstallationData(warehouse1address);
+
+            await InsertInstallationDataAsync(warehouse1address);
+
             var warehouse2address = new Address
             {
                 Address1 = "300 South Spring Stree",
@@ -9246,7 +9288,9 @@ namespace Nop.Services.Installation
                 ZipPostalCode = "90013",
                 CreatedOnUtc = DateTime.UtcNow
             };
-            InsertInstallationData(warehouse2address);
+
+            await InsertInstallationDataAsync(warehouse2address);
+
             var warehouses = new List<Warehouse>
             {
                 new Warehouse
@@ -9261,10 +9305,10 @@ namespace Nop.Services.Installation
                 }
             };
 
-            InsertInstallationData(warehouses);
+            await InsertInstallationDataAsync(warehouses);
         }
 
-        protected virtual void InstallVendors()
+        protected virtual async Task InstallVendorsAsync()
         {
             var vendors = new List<Vendor>
             {
@@ -9296,23 +9340,21 @@ namespace Nop.Services.Installation
                 }
             };
 
-            InsertInstallationData(vendors);
+            await InsertInstallationDataAsync(vendors);
 
             //search engine names
             foreach (var vendor in vendors)
-            {
-                InsertInstallationData(new UrlRecord
+                await InsertInstallationDataAsync(new UrlRecord
                 {
                     EntityId = vendor.Id,
                     EntityName = nameof(Vendor),
                     LanguageId = 0,
                     IsActive = true,
-                    Slug = ValidateSeName(vendor, vendor.Name)
+                    Slug = await ValidateSeNameAsync(vendor, vendor.Name)
                 });
-            }
         }
 
-        protected virtual void InstallAffiliates()
+        protected virtual async Task InstallAffiliatesAsync()
         {
             var affiliateAddress = new Address
             {
@@ -9328,16 +9370,19 @@ namespace Nop.Services.Installation
                 CountryId = _countryRepository.Table.FirstOrDefault(c => c.ThreeLetterIsoCode == "USA")?.Id,
                 CreatedOnUtc = DateTime.UtcNow
             };
-            InsertInstallationData(affiliateAddress);
+
+            await InsertInstallationDataAsync(affiliateAddress);
+
             var affilate = new Affiliate
             {
                 Active = true,
                 AddressId = affiliateAddress.Id
             };
-            InsertInstallationData(affilate);
+
+            await InsertInstallationDataAsync(affilate);
         }
 
-        private void AddProductTag(Product product, string tag)
+        private async Task AddProductTagAsync(Product product, string tag)
         {
             var productTag = _productTagRepository.Table.FirstOrDefault(pt => pt.Name == tag);
 
@@ -9347,20 +9392,21 @@ namespace Nop.Services.Installation
                 {
                     Name = tag
                 };
-                InsertInstallationData(productTag);
+
+                await InsertInstallationDataAsync(productTag);
 
                 //search engine name
-                InsertInstallationData(new UrlRecord
+                await InsertInstallationDataAsync(new UrlRecord
                 {
                     EntityId = productTag.Id,
                     EntityName = nameof(ProductTag),
                     LanguageId = 0,
                     IsActive = true,
-                    Slug = ValidateSeName(productTag, productTag.Name)
+                    Slug = await ValidateSeNameAsync(productTag, productTag.Name)
                 });
             }
 
-            InsertInstallationData(new ProductProductTagMapping { ProductTagId = productTag.Id, ProductId = product.Id });
+            await InsertInstallationDataAsync(new ProductProductTagMapping { ProductTagId = productTag.Id, ProductId = product.Id });
         }
 
         #endregion
@@ -9375,61 +9421,61 @@ namespace Nop.Services.Installation
         /// <param name="languagePackDownloadLink">Language pack download link</param>
         /// <param name="regionInfo">RegionInfo</param>
         /// <param name="cultureInfo">CultureInfo</param>
-        public virtual void InstallRequiredData(string defaultUserEmail, string defaultUserPassword,
+        public virtual async Task InstallRequiredDataAsync(string defaultUserEmail, string defaultUserPassword,
             string languagePackDownloadLink, RegionInfo regionInfo, CultureInfo cultureInfo)
         {
-            InstallStores();
-            InstallMeasures(regionInfo);
-            InstallTaxCategories();
-            InstallLanguages(languagePackDownloadLink, cultureInfo, regionInfo);
-            InstallCurrencies(cultureInfo, regionInfo);
-            InstallCountriesAndStates();
-            InstallShippingMethods();
-            InstallDeliveryDates();
-            InstallProductAvailabilityRanges();
-            InstallEmailAccounts();
-            InstallMessageTemplates();
-            InstallTopicTemplates();
-            InstallSettings(regionInfo);
-            InstallCustomersAndUsers(defaultUserEmail, defaultUserPassword);
-            InstallTopics();
-            InstallActivityLogTypes();
-            InstallProductTemplates();
-            InstallCategoryTemplates();
-            InstallManufacturerTemplates();
-            InstallScheduleTasks();
-            InstallReturnRequestReasons();
-            InstallReturnRequestActions();
+            await InstallStoresAsync();
+            await InstallMeasuresAsync(regionInfo);
+            await InstallTaxCategoriesAsync();
+            await InstallLanguagesAsync(languagePackDownloadLink, cultureInfo, regionInfo);
+            await InstallCurrenciesAsync(cultureInfo, regionInfo);
+            await InstallCountriesAndStatesAsync();
+            await InstallShippingMethodsAsync();
+            await InstallDeliveryDatesAsync();
+            await InstallProductAvailabilityRangesAsync();
+            await InstallEmailAccountsAsync();
+            await InstallMessageTemplatesAsync();
+            await InstallTopicTemplatesAsync();
+            await InstallSettingsAsync(regionInfo);
+            await InstallCustomersAndUsersAsync(defaultUserEmail, defaultUserPassword);
+            await InstallTopicsAsync();
+            await InstallActivityLogTypesAsync();
+            await InstallProductTemplatesAsync();
+            await InstallCategoryTemplatesAsync();
+            await InstallManufacturerTemplatesAsync();
+            await InstallScheduleTasksAsync();
+            await InstallReturnRequestReasonsAsync();
+            await InstallReturnRequestActionsAsync();
         }
 
         /// <summary>
         /// Install sample data
         /// </summary>
         /// <param name="defaultUserEmail">Default user email</param>
-        public virtual void InstallSampleData(string defaultUserEmail)
+        public virtual async Task InstallSampleDataAsync(string defaultUserEmail)
         {
-            InstallSampleCustomers();
-            InstallCheckoutAttributes();
-            InstallSpecificationAttributes();
-            InstallProductAttributes();
-            InstallCategories();
-            InstallManufacturers();
-            InstallProducts(defaultUserEmail);
-            InstallForums();
-            InstallDiscounts();
-            InstallBlogPosts(defaultUserEmail);
-            InstallNews(defaultUserEmail);
-            InstallPolls();
-            InstallWarehouses();
-            InstallVendors();
-            InstallAffiliates();
-            InstallOrders();
-            InstallActivityLog(defaultUserEmail);
-            InstallSearchTerms();
+            await InstallSampleCustomersAsync();
+            await InstallCheckoutAttributesAsync();
+            await InstallSpecificationAttributesAsync();
+            await InstallProductAttributesAsync();
+            await InstallCategoriesAsync();
+            await InstallManufacturersAsync();
+            await InstallProductsAsync(defaultUserEmail);
+            await InstallForumsAsync();
+            await InstallDiscountsAsync();
+            await InstallBlogPostsAsync(defaultUserEmail);
+            await InstallNewsAsync(defaultUserEmail);
+            await InstallPollsAsync();
+            await InstallWarehousesAsync();
+            await InstallVendorsAsync();
+            await InstallAffiliatesAsync();
+            await InstallOrdersAsync();
+            await InstallActivityLogAsync(defaultUserEmail);
+            await InstallSearchTermsAsync();
 
             var settingService = EngineContext.Current.Resolve<ISettingService>();
 
-            settingService.SaveSetting(new DisplayDefaultMenuItemSettings
+            await settingService.SaveSettingAsync(new DisplayDefaultMenuItemSettings
             {
                 DisplayHomepageMenuItem = false,
                 DisplayNewProductsMenuItem = false,
