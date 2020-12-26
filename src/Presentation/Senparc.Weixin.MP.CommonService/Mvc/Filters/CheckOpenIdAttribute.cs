@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -35,7 +36,7 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
         /// <summary>
         /// Represents a filter that checks and updates WUser OpenId of customer
         /// </summary>
-        private class CheckOpenIdFilter : IActionFilter
+        private class CheckOpenIdFilter : IAsyncActionFilter
         {
             #region Constants
 
@@ -75,35 +76,35 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
             /// Set the wuser referee openid of current customer
             /// </summary>
             /// <param name="affiliate">Affiliate</param>
-            protected void SetCustomerOpenId(string refereeOpenId, long refereeOpenIdHash)
+            protected async Task SetCustomerOpenIdAsync(Customer customer, string refereeOpenId, long refereeOpenIdHash)
             {
                 var update = false;
 
                 //不能自己推荐自己
-                if (!string.IsNullOrEmpty(refereeOpenId) && refereeOpenId.Length < 32 && refereeOpenId != _workContext.CurrentCustomer.OpenId)
+                if (!string.IsNullOrEmpty(refereeOpenId) && refereeOpenId.Length < 32 && refereeOpenId != customer.OpenId)
                 {
-                    var refereeUser = _wUserService.GetWUserByOpenId(refereeOpenId);
+                    var refereeUser = await _wUserService.GetWUserByOpenIdAsync(refereeOpenId);
                     if (refereeUser != null)
                     {
-                        _workContext.CurrentCustomer.RefereeId = refereeUser.Id;
-                        _workContext.CurrentCustomer.RefereeIdUpdateTime = Convert.ToInt32(Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now));
+                        customer.RefereeId = refereeUser.Id;
+                        customer.RefereeIdUpdateTime = Convert.ToInt32(Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now));
                         update = true;
                     }
                 }
                 else if (refereeOpenIdHash > 0)
                 {
-                    var refereeUser = _wUserService.GetWUserByOpenIdHash(refereeOpenIdHash);
-                    if (refereeUser != null && refereeUser.OpenId != _workContext.CurrentCustomer.OpenId)
+                    var refereeUser = await _wUserService.GetWUserByOpenIdHashAsync(refereeOpenIdHash);
+                    if (refereeUser != null && refereeUser.OpenId != customer.OpenId)
                     {
-                        _workContext.CurrentCustomer.RefereeId = refereeUser.Id;
-                        _workContext.CurrentCustomer.RefereeIdUpdateTime = Convert.ToInt32(Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now));
+                        customer.RefereeId = refereeUser.Id;
+                        customer.RefereeIdUpdateTime = Convert.ToInt32(Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now));
                         update = true;
                     }
                 }
 
                 //update openId Info
                 if (update)
-                    _customerService.UpdateCustomer(_workContext.CurrentCustomer);
+                    await _customerService.UpdateCustomerAsync(customer);
             }
 
             #endregion
@@ -114,24 +115,26 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
             /// Called before the action executes, after model binding is complete
             /// </summary>
             /// <param name="context">A context for action filters</param>
-            public void OnActionExecuting(ActionExecutingContext context)
+            private async Task CheckOpenIdAsync(ActionExecutingContext context)
             {
                 if (context == null)
                     throw new ArgumentNullException(nameof(context));
 
-                if (!DataSettingsManager.DatabaseIsInstalled)
+                if (!await DataSettingsManager.IsDatabaseInstalledAsync())
                     return;
 
+                var customer = await _workContext.GetCurrentCustomerAsync();
+
                 //ignore search engines and back ground task
-                if (_workContext.CurrentCustomer.IsSearchEngineAccount()|| _workContext.CurrentCustomer.IsBackgroundTaskAccount())
+                if (customer.IsSearchEngineAccount() || customer.IsBackgroundTaskAccount())
                     return;
 
                 //Customer与OpenId绑定
                 var oauthSession = _httpContextAccessor.HttpContext.Session.Get<OauthSession>(NopWeixinDefaults.WeixinOauthSession);
-                if (oauthSession != null && !string.IsNullOrEmpty(oauthSession.OpenId) && string.IsNullOrEmpty(_workContext.CurrentCustomer.OpenId))
+                if (oauthSession != null && !string.IsNullOrEmpty(oauthSession.OpenId) && string.IsNullOrEmpty(customer.OpenId))
                 {
-                    _workContext.CurrentCustomer.OpenId = oauthSession.OpenId;
-                    _customerService.UpdateCustomer(_workContext.CurrentCustomer);
+                    customer.OpenId = oauthSession.OpenId;
+                    await _customerService.UpdateCustomerAsync(customer);
                 }
 
                 //check request query parameters
@@ -145,16 +148,20 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
                 var openId = openIds.Any() ? openIds.FirstOrDefault() : string.Empty;
                 var openIdHash = openIdsHash.Any() ? (long.TryParse(openIdsHash.FirstOrDefault(), out var hashResult) ? hashResult : 0) : 0;
 
-                SetCustomerOpenId(openId, openIdHash);
+                await SetCustomerOpenIdAsync(customer, openId, openIdHash);
             }
 
             /// <summary>
-            /// Called after the action executes, before the action result
+            /// Called asynchronously before the action, after model binding is complete.
             /// </summary>
             /// <param name="context">A context for action filters</param>
-            public void OnActionExecuted(ActionExecutedContext context)
+            /// <param name="next">A delegate invoked to execute the next action filter or the action itself</param>
+            /// <returns>A task that on completion indicates the filter has executed</returns>
+            public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
             {
-                //do nothing
+                await CheckOpenIdAsync(context);
+                if (context.Result == null)
+                    await next();
             }
 
             #endregion

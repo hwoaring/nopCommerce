@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Marketing;
@@ -39,12 +40,12 @@ namespace Nop.Services.Marketing
 
         #region Methods
 
-        public virtual void InsertEntity(UserAssetIncomeHistory entity)
+        public virtual async Task InsertEntityAsync(UserAssetIncomeHistory entity)
         {
-            _userAssetIncomeHistoryRepository.Insert(entity);
+            await _userAssetIncomeHistoryRepository.InsertAsync(entity);
         }
 
-        public virtual void InsertEntityBysupplierVoucherCouponParams(
+        public virtual async Task InsertEntityBysupplierVoucherCouponParamsAsync(
             SupplierVoucherCoupon supplierVoucherCoupon, 
             int ownerUserId, 
             int orderItemId=0,
@@ -80,7 +81,7 @@ namespace Nop.Services.Marketing
                 NewUserGift = supplierVoucherCoupon.NewUserGift,
                 Approved= supplierVoucherCoupon.AutoApproved, //要使用二维码场景类型判断，并赋值
                 OfflineConsume = supplierVoucherCoupon.OfflineConsume,
-                IsGiftCardActivated = supplierVoucherCoupon.AutoActive ? true : false,
+                IsGiftCardActivated = supplierVoucherCoupon.AutoActive,
                 IsInvalid = true,
                 Completed = false,
                 Deleted = false,
@@ -186,64 +187,39 @@ namespace Nop.Services.Marketing
             }
 
             //插入值
-            InsertEntity(incomeHistory);
+            await InsertEntityAsync(incomeHistory);
         }
 
-        public virtual void DeleteEntity(UserAssetIncomeHistory entity, bool delete = false)
+        public virtual async Task DeleteEntityAsync(UserAssetIncomeHistory entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            if (delete)
-            {
-                _userAssetIncomeHistoryRepository.Delete(entity);
-            }
-            else
-            {
-                entity.Deleted = true;
-                _userAssetIncomeHistoryRepository.Update(entity);
-            }
+            await _userAssetIncomeHistoryRepository.DeleteAsync(entity);
         }
 
-        public virtual void DeleteEntities(IList<UserAssetIncomeHistory> entities, bool deleted = false)
+        public virtual async Task DeleteEntitiesAsync(IList<UserAssetIncomeHistory> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            if (deleted)
-            {
-                _userAssetIncomeHistoryRepository.Delete(entities);
-            }
-            else
-            {
-                foreach (var entity in entities)
-                {
-                    entity.Deleted = true;
-                }
-                _userAssetIncomeHistoryRepository.Update(entities);
-            }
+            await _userAssetIncomeHistoryRepository.DeleteAsync(entities);
         }
 
-        public virtual void UpdateEntity(UserAssetIncomeHistory entity)
+        public virtual async Task UpdateEntityAsync(UserAssetIncomeHistory entity)
         {
-            _userAssetIncomeHistoryRepository.Update(entity);
+            await _userAssetIncomeHistoryRepository.UpdateAsync(entity);
         }
 
-        public virtual void UpdateEntities(IList<UserAssetIncomeHistory> entities)
+        public virtual async Task UpdateEntitiesAsync(IList<UserAssetIncomeHistory> entities)
         {
-            _userAssetIncomeHistoryRepository.Update(entities);
+            await _userAssetIncomeHistoryRepository.UpdateAsync(entities);
         }
 
-        public virtual void ActiveEntity(int userAssetIncomeHistoryId)
+        public virtual async Task ActiveEntityAsync(int userAssetIncomeHistoryId)
         {
-            var entity = GetEntityById(userAssetIncomeHistoryId);
+            var entity = await GetEntityByIdAsync(userAssetIncomeHistoryId);
             if (entity == null || entity.IsGiftCardActivated)
                 return;
 
             //TOTO:激活卡券
             entity.IsGiftCardActivated = true;
 
-            var supplierVoucherCoupon = _supplierVoucherCouponRepository.GetById(entity.SupplierVoucherCouponId);
+            var supplierVoucherCoupon = await _supplierVoucherCouponRepository.GetByIdAsync(entity.SupplierVoucherCouponId);
             if (supplierVoucherCoupon != null)
             {
                 //设置可用时间
@@ -300,18 +276,15 @@ namespace Nop.Services.Marketing
             }
 
             //更新
-            UpdateEntity(entity);
+            await UpdateEntityAsync(entity);
         }
 
-        public virtual UserAssetIncomeHistory GetEntityById(int id)
+        public virtual async Task<UserAssetIncomeHistory> GetEntityByIdAsync(int id)
         {
-            if (id == 0)
-                return null;
-
-            return _userAssetIncomeHistoryRepository.GetById(id, cache => default);
+            return await _userAssetIncomeHistoryRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual List<UserAssetIncomeHistory> GetEntitiesByUserId(int wuserId)
+        public virtual async Task<IList<UserAssetIncomeHistory>> GetEntitiesByUserIdAsync(int wuserId)
         {
             if (wuserId == 0)
                 return new List<UserAssetIncomeHistory>();
@@ -321,10 +294,10 @@ namespace Nop.Services.Marketing
                         !t.Deleted
                         select t;
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual List<UserAssetIncomeHistory> GetEntitiesBySupplierId(
+        public virtual async Task<IList<UserAssetIncomeHistory>> GetEntitiesBySupplierIdAsync(
             int wuserId,
             int supplierId,
             int? supplierShopId = null,
@@ -355,10 +328,10 @@ namespace Nop.Services.Marketing
 
             query = query.Where(q => !q.Deleted);
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual List<UserAssetIncomeHistory> GetEntitiesBySupplierVoucherCouponId(
+        public virtual async Task<IList<UserAssetIncomeHistory>> GetEntitiesBySupplierVoucherCouponIdAsync(
             int wuserId, 
             int supplierVoucherCouponId, 
             bool? onlyUsable = null)
@@ -386,10 +359,10 @@ namespace Nop.Services.Marketing
 
             query = query.Where(q => !q.Deleted);
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IPagedList<UserAssetIncomeHistory> GetEntities(
+        public virtual async Task<IPagedList<UserAssetIncomeHistory>> GetEntitiesAsync(
             int ownerUserId = 0,
             int supplierId = 0,
             int supplierShopId = 0,
@@ -428,7 +401,7 @@ namespace Nop.Services.Marketing
             if (deleted.HasValue)
                 query = query.Where(q => q.Deleted == deleted);
 
-            return new PagedList<UserAssetIncomeHistory>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
 

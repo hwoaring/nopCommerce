@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Marketing;
@@ -34,62 +35,37 @@ namespace Nop.Services.Marketing
 
         #region Methods
 
-        public virtual void InsertEntity(UserAsset entity)
+        public virtual async Task InsertEntityAsync(UserAsset entity)
         {
-            _userAssetRepository.Insert(entity);
+            await _userAssetRepository.InsertAsync(entity);
         }
 
-        public virtual void DeleteEntity(UserAsset entity, bool delete = false)
+        public virtual async Task DeleteEntityAsync(UserAsset entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            if (delete)
-            {
-                _userAssetRepository.Delete(entity);
-            }
-            else
-            {
-                entity.Deleted = true;
-                _userAssetRepository.Update(entity);
-            }
+            await _userAssetRepository.DeleteAsync(entity);
         }
 
-        public virtual void DeleteEntities(IList<UserAsset> entities, bool deleted = false)
+        public virtual async Task DeleteEntitiesAsync(IList<UserAsset> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            if (deleted)
-            {
-                _userAssetRepository.Delete(entities);
-            }
-            else
-            {
-                foreach (var entity in entities)
-                {
-                    entity.Deleted = true;
-                }
-                _userAssetRepository.Update(entities);
-            }
+            await _userAssetRepository.DeleteAsync(entities);
         }
 
-        public virtual void UpdateEntity(UserAsset entity)
+        public virtual async Task UpdateEntityAsync(UserAsset entity)
         {
-            _userAssetRepository.Update(entity);
+            await _userAssetRepository.UpdateAsync(entity);
         }
 
-        public virtual void UpdateEntities(IList<UserAsset> entities)
+        public virtual async Task UpdateEntitiesAsync(IList<UserAsset> entities)
         {
-            _userAssetRepository.Update(entities);
+            await _userAssetRepository.UpdateAsync(entities);
         }
 
-        public virtual UserAsset GetEntityById(int id)
+        public virtual async Task<UserAsset> GetEntityByIdAsync(int id)
         {
-            return _userAssetRepository.GetById(id, cache => default);
+            return await _userAssetRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual UserAsset GetEntityByUserId(int wuserId)
+        public virtual async Task<UserAsset> GetEntityByUserIdAsync(int wuserId)
         {
             if (wuserId == 0)
                 return null;
@@ -98,7 +74,7 @@ namespace Nop.Services.Marketing
                         where t.OwnerUserId==wuserId
                         select t;
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
         #endregion
     }

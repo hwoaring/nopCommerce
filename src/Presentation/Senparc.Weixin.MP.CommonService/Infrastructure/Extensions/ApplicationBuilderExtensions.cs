@@ -71,7 +71,7 @@ namespace Senparc.Weixin.MP.CommonService.Infrastructure.Extensions
         /// <param name="application">Builder for configuring an application's request pipeline</param>
         public static void UseWeixin(this IApplicationBuilder application)
         {
-            if (!DataSettingsManager.DatabaseIsInstalled)
+            if (!DataSettingsManager.IsDatabaseInstalled())
                 return;
 
             //var appSettings = EngineContext.Current.Resolve<AppSettings>();

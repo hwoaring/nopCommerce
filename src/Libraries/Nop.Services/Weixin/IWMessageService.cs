@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Weixin;
 
@@ -9,21 +10,21 @@ namespace Nop.Services.Weixin
     /// </summary>
     public partial interface IWMessageService
     {
-        void InsertWMessage(WMessage wMessage);
+        Task InsertWMessageAsync(WMessage wMessage);
 
-        void DeleteWMessage(WMessage wMessage, bool delete = false);
+        Task DeleteWMessageAsync(WMessage wMessage);
 
-        void DeleteWMessages(IList<WMessage> wMessages, bool deleted = false);
+        Task DeleteWMessagesAsync(IList<WMessage> wMessages);
 
-        void UpdateWMessage(WMessage wMessage);
+        Task UpdateWMessageAsync(WMessage wMessage);
 
-        void UpdateWMessages(IList<WMessage> wMessages);
+        Task UpdateWMessagesAsync(IList<WMessage> wMessages);
 
-        WMessage GetWMessageById(int id);
+        Task<WMessage> GetWMessageByIdAsync(int id);
 
-        List<WMessage> GetWMessagesByIds(int[] wMessageIds);
+        Task<IList<WMessage>> GetWMessagesByIdsAsync(int[] wMessageIds);
 
-        IPagedList<WMessage> GetWMessages(string title = "", bool? published = null, bool? deleted = null, int pageIndex = 0, int pageSize = int.MaxValue);
+        Task<IPagedList<WMessage>> GetWMessagesAsync(string title = "", bool? published = null, bool? deleted = null, int pageIndex = 0, int pageSize = int.MaxValue);
 
     }
 }

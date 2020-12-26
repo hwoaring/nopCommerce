@@ -1,12 +1,13 @@
 ﻿using System;
 using Humanizer;
+using Nop.Core.Domain.Common;
 
 namespace Nop.Core.Domain.Marketing
 {
     /// <summary>
     /// 资产消费表
     /// </summary>
-    public partial class UserAssetConsumeHistory : BaseEntity
+    public partial class UserAssetConsumeHistory : BaseEntity, ISoftDeletedEntity
     {
         /// <summary>
         /// 资产消费明细所属人ID

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Weixin;
 
@@ -12,29 +13,29 @@ namespace Nop.Services.Weixin
     {
         #region WQrCodeLimitUserMapping
 
-        void InsertEntity(WQrCodeLimitUserMapping entity);
+        Task InsertEntityAsync(WQrCodeLimitUserMapping entity);
 
-        void DeleteEntity(WQrCodeLimitUserMapping entity);
+        Task DeleteEntityAsync(WQrCodeLimitUserMapping entity);
 
-        void DeleteEntities(IList<WQrCodeLimitUserMapping> entities);
+        Task DeleteEntitiesAsync(IList<WQrCodeLimitUserMapping> entities);
 
-        void UpdateEntity(WQrCodeLimitUserMapping entity);
+        Task UpdateEntityAsync(WQrCodeLimitUserMapping entity);
 
-        void UpdateEntities(IList<WQrCodeLimitUserMapping> entities);
+        Task UpdateEntitiesAsync(IList<WQrCodeLimitUserMapping> entities);
 
-        WQrCodeLimitUserMapping GetEntityById(int id);
+        Task<WQrCodeLimitUserMapping> GetEntityByIdAsync(int id);
 
-        WQrCodeLimitUserMapping GetActiveEntityByQrCodeLimitIdOrUserId(int qrCodeLimitId, int userId);
+        Task<WQrCodeLimitUserMapping> GetActiveEntityByQrCodeLimitIdOrUserIdAsync(int qrCodeLimitId, int userId);
 
-        WQrCodeLimitUserMapping GetEntityByQrCodeLimitIdAndUserId(int qrCodeLimitId, int userId);
+        Task<WQrCodeLimitUserMapping> GetEntityByQrCodeLimitIdAndUserIdAsync(int qrCodeLimitId, int userId);
 
-        List<WQrCodeLimitUserMapping> GetEntitiesByQrcodeLimitId(int qrCodeLimitId);
+        Task<IList<WQrCodeLimitUserMapping>> GetEntitiesByQrcodeLimitIdAsync(int qrCodeLimitId);
 
-        List<WQrCodeLimitUserMapping> GetEntitiesByUserId(int userId);
+        Task<IList<WQrCodeLimitUserMapping>> GetEntitiesByUserIdAsync(int userId);
 
-        List<WQrCodeLimitUserMapping> GetEntitiesByIds(int[] wEntityIds);
+        Task<IList<WQrCodeLimitUserMapping>> GetEntitiesByIdsAsync(int[] wEntityIds);
 
-        IPagedList<WQrCodeLimitUserMapping> GetEntities(int userId = 0, int qrCodeLimitId = 0, DateTime? expireTime = null, bool? published = null, int pageIndex = 0, int pageSize = int.MaxValue);
+        Task<IPagedList<WQrCodeLimitUserMapping>> GetEntitiesAsync(int userId = 0, int qrCodeLimitId = 0, DateTime? expireTime = null, bool? published = null, int pageIndex = 0, int pageSize = int.MaxValue);
 
         #endregion
     }

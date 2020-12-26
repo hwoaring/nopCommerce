@@ -448,7 +448,7 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="openId"></param>
         /// <returns></returns>
-        public virtual Customer GetCustomerByOpenId(string openId)
+        public virtual async Task<Customer> GetCustomerByOpenIdAsync(string openId)
         {
             if (string.IsNullOrEmpty(openId))
                 return null;
@@ -457,7 +457,7 @@ namespace Nop.Services.Customers
                         where c.OpenId == openId
                         orderby c.Id
                         select c;
-            var customer = query.FirstOrDefault();
+            var customer = await query.FirstOrDefaultAsync();
 
             return customer;
         }
@@ -1307,9 +1307,9 @@ namespace Nop.Services.Customers
             return await IsInCustomerRoleAsync(customer, NopCustomerDefaults.VendorsRoleName, onlyActiveCustomerRoles);
         }
 
-        public virtual bool IsSupplier(Customer customer, bool onlyActiveCustomerRoles = true)
+        public virtual async Task<bool> IsSupplier(Customer customer, bool onlyActiveCustomerRoles = true)
         {
-            return IsInCustomerRole(customer, NopCustomerDefaults.SuppliersRoleName, onlyActiveCustomerRoles);
+            return await IsInCustomerRoleAsync(customer, NopCustomerDefaults.SuppliersRoleName, onlyActiveCustomerRoles);
         }
 
         /// <summary>

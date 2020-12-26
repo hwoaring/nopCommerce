@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Suppliers;
 
@@ -9,25 +10,25 @@ namespace Nop.Services.Suppliers
     /// </summary>
     public partial interface ISupplierUserAuthorityMappingService
     {
-        void InsertEntity(SupplierUserAuthorityMapping entity);
+        Task InsertEntityAsync(SupplierUserAuthorityMapping entity);
 
-        void DeleteEntity(SupplierUserAuthorityMapping entity, bool delete = false);
+        Task DeleteEntityAsync(SupplierUserAuthorityMapping entity);
 
-        void DeleteEntities(IList<SupplierUserAuthorityMapping> entities, bool deleted = false);
+        Task DeleteEntitiesAsync(IList<SupplierUserAuthorityMapping> entities);
 
-        void UpdateEntity(SupplierUserAuthorityMapping entity);
+        Task UpdateEntityAsync(SupplierUserAuthorityMapping entity);
 
-        void UpdateEntities(IList<SupplierUserAuthorityMapping> entities);
+        Task UpdateEntitiesAsync(IList<SupplierUserAuthorityMapping> entities);
 
-        SupplierUserAuthorityMapping GetEntityById(int id);
+        Task<SupplierUserAuthorityMapping> GetEntityByIdAsync(int id);
 
-        SupplierUserAuthorityMapping GetEntityByUserId(int userId);
+        Task<SupplierUserAuthorityMapping> GetEntityByUserIdAsync(int userId);
 
-        List<SupplierUserAuthorityMapping> GetEntitiesByIds(int[] entityIds);
+        Task<IList<SupplierUserAuthorityMapping>> GetEntitiesByIdsAsync(int[] entityIds);
 
-        List<SupplierUserAuthorityMapping> GetEntitiesBySupplierId(int supplierId, int supplierShopId = 0);
+        Task<IList<SupplierUserAuthorityMapping>> GetEntitiesBySupplierIdAsync(int supplierId, int supplierShopId = 0);
 
-        IPagedList<SupplierUserAuthorityMapping> GetEntities(
+        Task<IPagedList<SupplierUserAuthorityMapping>> GetEntitiesAsync(
             int supplierId = 0,
             int supplierShopId = 0,
             bool? financialManager = null,

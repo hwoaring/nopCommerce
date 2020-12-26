@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Vendors;
@@ -34,32 +35,32 @@ namespace Nop.Services.Weixin
 
         #region Methods
 
-        public virtual void InsertLocation(WLocation wlocation)
+        public virtual async Task InsertLocationAsync(WLocation wlocation)
         {
-            _wLocationRepository.Insert(wlocation);
+            await _wLocationRepository.InsertAsync(wlocation);
         }
 
-        public virtual void DeleteLocation(WLocation location)
+        public virtual async Task DeleteLocationAsync(WLocation location)
         {
-            _wLocationRepository.Delete(location);
+            await _wLocationRepository.DeleteAsync(location);
         }
 
-        public virtual void DeleteLocations(IList<WLocation> locations)
+        public virtual async Task DeleteLocationsAsync(IList<WLocation> locations)
         {
-            _wLocationRepository.Delete(locations);
+            await _wLocationRepository.DeleteAsync(locations);
         }
 
-        public virtual void UpdateLocation(WLocation location)
+        public virtual async Task UpdateLocationAsync(WLocation location)
         {
-            _wLocationRepository.Update(location);
+            await _wLocationRepository.UpdateAsync(location);
         }
 
-        public virtual WLocation GetLocationById(int id)
+        public virtual async Task<WLocation> GetLocationByIdAsync(int id)
         {
-            return _wLocationRepository.GetById(id, cache => default);
+            return await _wLocationRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual WLocation GetLocationByUserId(int userId)
+        public virtual async Task<WLocation> GetLocationByUserIdAsync(int userId)
         {
             if (userId == 0)
                 return null;
@@ -69,16 +70,16 @@ namespace Nop.Services.Weixin
                         orderby location.Id descending
                         select location;
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
-        public virtual IPagedList<WLocation> GetLocations(int pageIndex = 0, int pageSize = int.MaxValue)
+        public virtual async Task<IPagedList<WLocation>> GetLocationsAsync(int pageIndex = 0, int pageSize = int.MaxValue)
         {
             var query = _wLocationRepository.Table;
 
             query = query.OrderBy(l => l.Id);
 
-            return new PagedList<WLocation>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
         #endregion

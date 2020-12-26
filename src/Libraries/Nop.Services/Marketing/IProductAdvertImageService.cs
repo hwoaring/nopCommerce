@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,23 +11,23 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IProductActivitiesThemeMappingService
     {
-        void InsertEntity(ProductActivitiesThemeMapping entity);
+        Task InsertEntityAsync(ProductActivitiesThemeMapping entity);
 
-        void DeleteEntity(ProductActivitiesThemeMapping entity);
+        Task DeleteEntityAsync(ProductActivitiesThemeMapping entity);
 
-        void DeleteEntities(IList<ProductActivitiesThemeMapping> entities);
+        Task DeleteEntitiesAsync(IList<ProductActivitiesThemeMapping> entities);
 
-        void UpdateEntity(ProductActivitiesThemeMapping entity);
+        Task UpdateEntityAsync(ProductActivitiesThemeMapping entity);
 
-        void UpdateEntities(IList<ProductActivitiesThemeMapping> entities);
+        Task UpdateEntitiesAsync(IList<ProductActivitiesThemeMapping> entities);
 
-        ProductActivitiesThemeMapping GetEntityById(int productId, int activitiesThemeId);
+        Task<ProductActivitiesThemeMapping> GetEntityByIdAsync(int productId, int activitiesThemeId);
 
-        List<ProductActivitiesThemeMapping> GetEntitiesByProductId(int productId);
+        Task<IList<ProductActivitiesThemeMapping>> GetEntitiesByProductIdAsync(int productId);
 
-        List<ProductActivitiesThemeMapping> GetEntitiesByActivitiesThemeId(int activitiesThemeId);
-        
-        IPagedList<ProductActivitiesThemeMapping> GetEntities(
+        Task<IList<ProductActivitiesThemeMapping>> GetEntitiesByActivitiesThemeIdAsync(int activitiesThemeId);
+
+        Task<IPagedList<ProductActivitiesThemeMapping>> GetEntitiesAsync(
             int productId = 0,
             int activitiesThemeId = 0,
             bool? published = null,

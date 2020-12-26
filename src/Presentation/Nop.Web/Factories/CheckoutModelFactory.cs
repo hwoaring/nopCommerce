@@ -593,18 +593,18 @@ namespace Nop.Web.Factories
             return model;
         }
 
-        public virtual OnePagePaymentModel PrepareOnePagePaymentModel(IList<ShoppingCartItem> cart)
+        public virtual async Task<OnePagePaymentModel> PrepareOnePagePaymentModelAsync(IList<ShoppingCartItem> cart)
         {
             if (cart == null)
                 throw new ArgumentNullException(nameof(cart));
 
             var model = new OnePagePaymentModel
             {
-                ShippingRequired = _shoppingCartService.ShoppingCartRequiresShipping(cart),
+                ShippingRequired = await _shoppingCartService.ShoppingCartRequiresShippingAsync(cart),
                 ContactInfoRequired = false,
                 IDCardRequired = false,
                 DisableBillingAddressCheckoutStep = _orderSettings.DisableBillingAddressCheckoutStep,
-                ShippingAddress = PrepareShippingAddressModel(cart, prePopulateNewAddressWithCustomerFields: true)
+                ShippingAddress = await PrepareShippingAddressModelAsync(cart, prePopulateNewAddressWithCustomerFields: true)
             };
             return model;
         }

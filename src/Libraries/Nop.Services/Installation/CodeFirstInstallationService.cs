@@ -3606,7 +3606,7 @@ namespace Nop.Services.Installation
                 CustomerCookieExpires = 24 * 365
             });
 
-            settingService.SaveSetting(new WeixinSettings
+            await settingService.SaveSettingAsync(new WeixinSettings
             {
                 ForcedAccessWeChatBrowser = true,
                 CheckWebBrowser = false,

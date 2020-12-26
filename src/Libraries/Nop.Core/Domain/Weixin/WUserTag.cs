@@ -1,9 +1,11 @@
-﻿namespace Nop.Core.Domain.Weixin
+﻿using Nop.Core.Domain.Common;
+
+namespace Nop.Core.Domain.Weixin
 {
     /// <summary>
     /// Represents an WUserTag
     /// </summary>
-    public partial class WUserTag : BaseEntity
+    public partial class WUserTag : BaseEntity, ISoftDeletedEntity
     {
         /// <summary>
         /// 平台原始ID，用于区分不同平台

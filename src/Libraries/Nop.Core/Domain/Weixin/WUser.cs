@@ -1,11 +1,12 @@
 ﻿using System;
+using Nop.Core.Domain.Common;
 
 namespace Nop.Core.Domain.Weixin
 {
     /// <summary>
     /// Represents an WUser
     /// </summary>
-    public partial class WUser : BaseEntity
+    public partial class WUser : BaseEntity, ISoftDeletedEntity
     {
         /// <summary>
         /// 用户微信Id

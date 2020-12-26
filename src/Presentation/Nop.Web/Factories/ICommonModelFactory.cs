@@ -39,8 +39,6 @@ namespace Nop.Web.Factories
         /// <returns>Header links model</returns>
         Task<HeaderLinksModel> PrepareHeaderLinksModelAsync();
 
-        FooterLinksModel PrepareFooterLinksModel();
-
         /// <summary>
         /// Prepare the admin header links model
         /// </summary>

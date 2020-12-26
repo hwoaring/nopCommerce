@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Marketing;
@@ -34,62 +35,37 @@ namespace Nop.Services.Marketing
 
         #region Methods
 
-        public virtual void InsertEntity(UserAssetConsumeHistory entity)
+        public virtual async Task InsertEntityAsync(UserAssetConsumeHistory entity)
         {
-            _userAssetConsumeHistoryRepository.Insert(entity);
+            await _userAssetConsumeHistoryRepository.InsertAsync(entity);
         }
 
-        public virtual void DeleteEntity(UserAssetConsumeHistory entity, bool delete = false)
+        public virtual async Task DeleteEntityAsync(UserAssetConsumeHistory entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            if (delete)
-            {
-                _userAssetConsumeHistoryRepository.Delete(entity);
-            }
-            else
-            {
-                entity.Deleted = true;
-                _userAssetConsumeHistoryRepository.Update(entity);
-            }
+            await _userAssetConsumeHistoryRepository.DeleteAsync(entity);
         }
 
-        public virtual void DeleteEntities(IList<UserAssetConsumeHistory> entities, bool deleted = false)
+        public virtual async Task DeleteEntitiesAsync(IList<UserAssetConsumeHistory> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            if (deleted)
-            {
-                _userAssetConsumeHistoryRepository.Delete(entities);
-            }
-            else
-            {
-                foreach (var entity in entities)
-                {
-                    entity.Deleted = true;
-                }
-                _userAssetConsumeHistoryRepository.Update(entities);
-            }
+            await _userAssetConsumeHistoryRepository.DeleteAsync(entities);
         }
 
-        public virtual void UpdateEntity(UserAssetConsumeHistory entity)
+        public virtual async Task UpdateEntityAsync(UserAssetConsumeHistory entity)
         {
-            _userAssetConsumeHistoryRepository.Update(entity);
+            await _userAssetConsumeHistoryRepository.UpdateAsync(entity);
         }
 
-        public virtual void UpdateEntities(IList<UserAssetConsumeHistory> entities)
+        public virtual async Task UpdateEntitiesAsync(IList<UserAssetConsumeHistory> entities)
         {
-            _userAssetConsumeHistoryRepository.Update(entities);
+            await _userAssetConsumeHistoryRepository.UpdateAsync(entities);
         }
 
-        public virtual UserAssetConsumeHistory GetEntityById(int id)
+        public virtual async Task<UserAssetConsumeHistory> GetEntityByIdAsync(int id)
         {
-            return _userAssetConsumeHistoryRepository.GetById(id, cache => default);
+            return await _userAssetConsumeHistoryRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual List<UserAssetConsumeHistory> GetEntitiesByUserId(
+        public virtual async Task<IList<UserAssetConsumeHistory>> GetEntitiesByUserIdAsync(
             int userId,
             bool completed,
             bool isInvalid)
@@ -103,10 +79,10 @@ namespace Nop.Services.Marketing
                         t.IsInvalid == isInvalid
                         select t;
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual List<UserAssetConsumeHistory> GetEntitiesByUserAssetIncomeHistoryId(
+        public virtual async Task<IList<UserAssetConsumeHistory>> GetEntitiesByUserAssetIncomeHistoryIdAsync(
             int userAssetIncomeHistoryId, 
             bool completed, 
             bool isInvalid)
@@ -120,10 +96,10 @@ namespace Nop.Services.Marketing
                         t.IsInvalid == isInvalid
                         select t;
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IPagedList<UserAssetConsumeHistory> GetEntities(
+        public virtual async Task<IPagedList<UserAssetConsumeHistory>> GetEntitiesAsync(
             int ownerUserId = 0,
             int? userAssetIncomeHistoryId = 0,
             AssetConsumType? assetConsumType = null,
@@ -146,7 +122,7 @@ namespace Nop.Services.Marketing
             if (deleted.HasValue)
                 query = query.Where(q => q.Deleted == deleted);
 
-            return new PagedList<UserAssetConsumeHistory>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
         #endregion

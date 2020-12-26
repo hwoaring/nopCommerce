@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,14 +11,14 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IProductProductExtendLabelMappingService
     {
-        void InsertEntity(ProductProductExtendLabelMapping entity);
+        Task InsertEntityAsync(ProductProductExtendLabelMapping entity);
 
-        void DeleteEntity(ProductProductExtendLabelMapping entity);
+        Task DeleteEntityAsync(ProductProductExtendLabelMapping entity);
 
-        void UpdateEntity(ProductProductExtendLabelMapping entity);
+        Task UpdateEntityAsync(ProductProductExtendLabelMapping entity);
 
-        ProductProductExtendLabelMapping GetEntityByProductId(int productId);
-        List<int> GetProductExtendLabelIdsByProductId(int productId);
+        Task<ProductProductExtendLabelMapping> GetEntityByProductIdAsync(int productId);
+        Task<IList<int>> GetProductExtendLabelIdsByProductIdAsync(int productId);
 
     }
 }

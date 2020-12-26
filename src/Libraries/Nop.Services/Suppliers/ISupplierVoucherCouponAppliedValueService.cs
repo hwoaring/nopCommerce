@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Suppliers;
 
@@ -9,16 +10,16 @@ namespace Nop.Services.Suppliers
     /// </summary>
     public partial interface ISupplierVoucherCouponAppliedValueService
     {
-        void InsertEntity(SupplierVoucherCouponAppliedValue entity);
+        Task InsertEntityAsync(SupplierVoucherCouponAppliedValue entity);
 
-        void DeleteEntity(SupplierVoucherCouponAppliedValue entity);
+        Task DeleteEntityAsync(SupplierVoucherCouponAppliedValue entity);
 
-        void DeleteEntities(IList<SupplierVoucherCouponAppliedValue> entities);
+        Task DeleteEntitiesAsync(IList<SupplierVoucherCouponAppliedValue> entities);
 
-        void UpdateEntity(SupplierVoucherCouponAppliedValue entity);
+        Task UpdateEntityAsync(SupplierVoucherCouponAppliedValue entity);
 
-        void UpdateEntities(IList<SupplierVoucherCouponAppliedValue> entities);
+        Task UpdateEntitiesAsync(IList<SupplierVoucherCouponAppliedValue> entities);
 
-        SupplierVoucherCouponAppliedValue GetEntityById(int id);
+        Task<SupplierVoucherCouponAppliedValue> GetEntityByIdAsync(int id);
     }
 }

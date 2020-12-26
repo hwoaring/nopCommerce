@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Weixin;
 
@@ -9,24 +10,24 @@ namespace Nop.Services.Weixin
     /// </summary>
     public partial interface IWConfigService
     {
-        void InsertWConfig(WConfig wConfig);
+        Task InsertWConfigAsync(WConfig wConfig);
 
-        void DeleteWConfig(WConfig wConfig, bool delete = false);
+        Task DeleteWConfigAsync(WConfig wConfig);
 
-        void DeleteWConfigs(IList<WConfig> wConfigs, bool deleted = false);
+        Task DeleteWConfigsAsync(IList<WConfig> wConfigs);
 
-        void UpdateWConfig(WConfig wConfig);
+        Task UpdateWConfigAsync(WConfig wConfig);
 
-        void UpdateWConfigs(IList<WConfig> wConfigs);
+        Task UpdateWConfigsAsync(IList<WConfig> wConfigs);
 
-        WConfig GetWConfigById(int id);
+        Task<WConfig> GetWConfigByIdAsync(int id);
 
-        WConfig GetWUserByOriginalId(string originalId);
+        Task<WConfig> GetWConfigByOriginalIdAsync(string originalId);
 
-        WConfig GetWConfigByStoreId(int storeId);
+        Task<WConfig> GetWConfigByStoreIdAsync(int storeId);
 
-        List<WConfig> GetWConfigsByIds(int[] wConfigIds);
+        Task<IList<WConfig>> GetWConfigsByIdsAsync(int[] wConfigIds);
 
-        IPagedList<WConfig> GetUsers(bool showDeleted = false, int pageIndex = 0, int pageSize = int.MaxValue);
+        Task<IPagedList<WConfig>> GetWConfigsAsync(bool showDeleted = false, int pageIndex = 0, int pageSize = int.MaxValue);
     }
 }

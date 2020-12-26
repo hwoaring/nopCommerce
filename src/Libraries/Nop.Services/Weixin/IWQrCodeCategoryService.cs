@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Weixin;
 
@@ -9,19 +10,19 @@ namespace Nop.Services.Weixin
     /// </summary>
     public partial interface IWQrCodeCategoryService
     {
-        void InsertEntity(WQrCodeCategory entity);
+        Task InsertEntityAsync(WQrCodeCategory entity);
 
-        void UpdateEntity(WQrCodeCategory entity);
+        Task UpdateEntityAsync(WQrCodeCategory entity);
 
-        void UpdateEntities(IList<WQrCodeCategory> entities);
+        Task UpdateEntitiesAsync(IList<WQrCodeCategory> entities);
 
-        WQrCodeCategory GetEntityById(int id);
+        Task<WQrCodeCategory> GetEntityByIdAsync(int id);
 
-        List<WQrCodeCategory> GetEntitiesByParentId(int parentId);
+        Task<IList<WQrCodeCategory>> GetEntitiesByParentIdAsync(int parentId);
 
-        IList<WQrCodeCategory> GetAllEntities();
+        Task<IList<WQrCodeCategory>> GetAllEntitiesAsync();
 
-        IPagedList<WQrCodeCategory> GetEntities(bool showDeleted = false, int pageIndex = 0, int pageSize = int.MaxValue);
+        Task<IPagedList<WQrCodeCategory>> GetEntitiesAsync(bool showDeleted = false, int pageIndex = 0, int pageSize = int.MaxValue);
 
     }
 }

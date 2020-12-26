@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Suppliers;
 
@@ -10,22 +11,22 @@ namespace Nop.Services.Suppliers
     /// </summary>
     public partial interface IProductSupplierVoucherCouponMappingService
     {
-        void InsertEntity(ProductSupplierVoucherCouponMapping entity);
+        Task InsertEntityAsync(ProductSupplierVoucherCouponMapping entity);
 
-        void DeleteEntity(ProductSupplierVoucherCouponMapping entity);
+        Task DeleteEntityAsync(ProductSupplierVoucherCouponMapping entity);
 
-        void DeleteEntities(IList<ProductSupplierVoucherCouponMapping> entities);
+        Task DeleteEntitiesAsync(IList<ProductSupplierVoucherCouponMapping> entities);
 
-        void UpdateEntity(ProductSupplierVoucherCouponMapping entity);
+        Task UpdateEntityAsync(ProductSupplierVoucherCouponMapping entity);
 
-        void UpdateEntities(IList<ProductSupplierVoucherCouponMapping> entities);
+        Task UpdateEntitiesAsync(IList<ProductSupplierVoucherCouponMapping> entities);
 
-        ProductSupplierVoucherCouponMapping GetEntityById(int id);
+        Task<ProductSupplierVoucherCouponMapping> GetEntityByIdAsync(int id);
 
 
-        List<ProductSupplierVoucherCouponMapping> GetEntitiesByIds(int[] entityIds);
+        Task<IList<ProductSupplierVoucherCouponMapping>> GetEntitiesByIdsAsync(int[] entityIds);
 
-        IPagedList<ProductSupplierVoucherCouponMapping> GetEntities(
+        Task<IPagedList<ProductSupplierVoucherCouponMapping>> GetEntitiesAsync(
             int productId=0,
             int? productAttributeValueId=0,
             int supplierVoucherCouponId=0,

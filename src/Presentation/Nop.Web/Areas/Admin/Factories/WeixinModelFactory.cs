@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -194,7 +195,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="product">User</param>
         /// <param name="excludeProperties">Whether to exclude populating of some properties of model</param>
         /// <returns>Product model</returns>
-        public virtual UserModel PrepareUserModel(UserModel model, WUser user, bool excludeProperties = false)
+        public virtual Task<UserModel> PrepareUserModelAsync(UserModel model, WUser user, bool excludeProperties = false)
         {
             if (user != null)
             {
@@ -269,7 +270,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 
             }
 
-            return model;
+            return Task.FromResult(model);
         }
 
         /// <summary>
@@ -277,7 +278,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// </summary>
         /// <param name="searchModel">User search model</param>
         /// <returns>User search model</returns>
-        public virtual UserSearchModel PrepareUserSearchModel(UserSearchModel searchModel)
+        public virtual Task<UserSearchModel> PrepareUserSearchModelAsync(UserSearchModel searchModel)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -285,7 +286,7 @@ namespace Nop.Web.Areas.Admin.Factories
             //prepare page parameters
             searchModel.SetGridPageSize();
 
-            return searchModel;
+            return Task.FromResult(searchModel);
         }
 
         /// <summary>
@@ -293,7 +294,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// </summary>
         /// <param name="searchModel">User search model</param>
         /// <returns>User list model</returns>
-        public virtual UserListModel PrepareUserListModel(UserSearchModel searchModel)
+        public virtual Task<UserListModel> PrepareUserListModelAsync(UserSearchModel searchModel)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));

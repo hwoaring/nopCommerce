@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Suppliers;
 
@@ -9,21 +10,21 @@ namespace Nop.Services.Suppliers
     /// </summary>
     public partial interface ISupplierImageService
     {
-        void InsertEntity(SupplierImage entity);
+        Task InsertEntityAsync(SupplierImage entity);
 
-        void DeleteEntity(SupplierImage entity, bool delete = false);
+        Task DeleteEntityAsync(SupplierImage entity, bool delete = false);
 
-        void DeleteEntities(IList<SupplierImage> entities, bool deleted = false);
+        Task DeleteEntitiesAsync(IList<SupplierImage> entities, bool deleted = false);
 
-        void UpdateEntity(SupplierImage entity);
+        Task UpdateEntityAsync(SupplierImage entity);
 
-        void UpdateEntities(IList<SupplierImage> entities);
+        Task UpdateEntitiesAsync(IList<SupplierImage> entities);
 
-        SupplierImage GetEntityById(int id);
+        Task<SupplierImage> GetEntityByIdAsync(int id);
 
-        List<SupplierImage> GetEntitiesByIds(int[] entityIds);
+        Task<IList<SupplierImage>> GetEntitiesByIdsAsync(int[] entityIds);
 
-        IPagedList<SupplierImage> GetEntities(
+        Task<IPagedList<SupplierImage>> GetEntitiesAsync(
             int supplierShopId = 0,
             int supplierImageTypeId = 0,
             bool? published = null,

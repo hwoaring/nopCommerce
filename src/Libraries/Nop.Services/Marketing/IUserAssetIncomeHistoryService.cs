@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Domain.Marketing;
@@ -12,32 +13,32 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IUserAssetIncomeHistoryService
     {
-        void InsertEntity(UserAssetIncomeHistory entity);
+        Task InsertEntityAsync(UserAssetIncomeHistory entity);
 
-        void InsertEntityBysupplierVoucherCouponParams(SupplierVoucherCoupon supplierVoucherCoupon, int ownerUserId, int orderItemId = 0, AssetConsumType? assetConsumType = null, WSceneType? sceneType = null);
+        Task InsertEntityBysupplierVoucherCouponParamsAsync(SupplierVoucherCoupon supplierVoucherCoupon, int ownerUserId, int orderItemId = 0, AssetConsumType? assetConsumType = null, WSceneType? sceneType = null);
 
-        void DeleteEntity(UserAssetIncomeHistory entity, bool delete = false);
+        Task DeleteEntityAsync(UserAssetIncomeHistory entity);
 
-        void DeleteEntities(IList<UserAssetIncomeHistory> entities, bool deleted = false);
+        Task DeleteEntitiesAsync(IList<UserAssetIncomeHistory> entities);
 
-        void UpdateEntity(UserAssetIncomeHistory entity);
+        Task UpdateEntityAsync(UserAssetIncomeHistory entity);
 
-        void UpdateEntities(IList<UserAssetIncomeHistory> entities);
+        Task UpdateEntitiesAsync(IList<UserAssetIncomeHistory> entities);
         /// <summary>
         /// 没有激活的卡券进行激活操作
         /// </summary>
         /// <param name="entity"></param>
-        void ActiveEntity(int userAssetIncomeHistoryId);
+        Task ActiveEntityAsync(int userAssetIncomeHistoryId);
 
-        UserAssetIncomeHistory GetEntityById(int id);
+        Task<UserAssetIncomeHistory> GetEntityByIdAsync(int id);
 
-        List<UserAssetIncomeHistory> GetEntitiesByUserId(int wuserId);
+        Task<IList<UserAssetIncomeHistory>> GetEntitiesByUserIdAsync(int wuserId);
 
-        List<UserAssetIncomeHistory> GetEntitiesBySupplierId(int wuserId, int supplierId, int? supplierShopId = null, bool? onlyUsable = null);
+        Task<IList<UserAssetIncomeHistory>> GetEntitiesBySupplierIdAsync(int wuserId, int supplierId, int? supplierShopId = null, bool? onlyUsable = null);
 
-        List<UserAssetIncomeHistory> GetEntitiesBySupplierVoucherCouponId(int wuserId, int supplierVoucherCouponId, bool? onlyUsable = null);
+        Task<IList<UserAssetIncomeHistory>> GetEntitiesBySupplierVoucherCouponIdAsync(int wuserId, int supplierVoucherCouponId, bool? onlyUsable = null);
 
-        IPagedList<UserAssetIncomeHistory> GetEntities(
+        Task<IPagedList<UserAssetIncomeHistory>> GetEntitiesAsync(
             int ownerUserId = 0,
             int supplierId = 0,
             int supplierShopId = 0,

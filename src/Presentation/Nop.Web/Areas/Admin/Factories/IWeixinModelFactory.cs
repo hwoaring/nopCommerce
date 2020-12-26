@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core.Domain.Weixin;
 using Nop.Web.Areas.Admin.Models.Weixin;
@@ -17,21 +18,21 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="product">User</param>
         /// <param name="excludeProperties">Whether to exclude populating of some properties of model</param>
         /// <returns>Product model</returns>
-        UserModel PrepareUserModel(UserModel model, WUser user, bool excludeProperties = false);
+        Task<UserModel> PrepareUserModelAsync(UserModel model, WUser user, bool excludeProperties = false);
 
         /// <summary>
         /// Prepare User search model
         /// </summary>
         /// <param name="searchModel">User search model</param>
         /// <returns>User search model</returns>
-        UserSearchModel PrepareUserSearchModel(UserSearchModel searchModel);
+        Task<UserSearchModel> PrepareUserSearchModelAsync(UserSearchModel searchModel);
 
         /// <summary>
         /// Prepare paged User list model
         /// </summary>
         /// <param name="searchModel">User search model</param>
         /// <returns>User list model</returns>
-        UserListModel PrepareUserListModel(UserSearchModel searchModel);
+         Task<UserListModel> PrepareUserListModelAsync(UserSearchModel searchModel);
 
         /// <summary>
         /// Prepare QrCodeLimit model
@@ -40,37 +41,37 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="QrCodeLimit">QrCodeLimit</param>
         /// <param name="excludeProperties">Whether to exclude populating of some properties of model</param>
         /// <returns>Product model</returns>
-        QrCodeLimitModel PrepareQrCodeLimitModel(QrCodeLimitModel model, WQrCodeLimit qrCodeLimit, bool excludeProperties = false);
+         Task<QrCodeLimitModel> PrepareQrCodeLimitModelAsync(QrCodeLimitModel model, WQrCodeLimit qrCodeLimit, bool excludeProperties = false);
 
         /// <summary>
         /// Prepare QrCodeLimit search model
         /// </summary>
         /// <param name="searchModel">QrCodeLimit search model</param>
         /// <returns>QrCodeLimit search model</returns>
-        QrCodeLimitSearchModel PrepareQrCodeLimitSearchModel(QrCodeLimitSearchModel searchModel);
+         Task<QrCodeLimitSearchModel> PrepareQrCodeLimitSearchModelAsync(QrCodeLimitSearchModel searchModel);
 
         /// <summary>
         /// Prepare paged QrCodeLimit list model
         /// </summary>
         /// <param name="searchModel">QrCodeLimit search model</param>
         /// <returns>User list model</returns>
-        QrCodeLimitListModel PrepareQrCodeLimitListModel(QrCodeLimitSearchModel searchModel);
+         Task<QrCodeLimitListModel> PrepareQrCodeLimitListModelAsync(QrCodeLimitSearchModel searchModel);
 
-        QrCodeLimitUserListModel PrepareQrCodeLimitUserListModel(QrCodeLimitUserSearchModel searchModel, WQrCodeLimit qrCodeLimit);
+         Task<QrCodeLimitUserListModel> PrepareQrCodeLimitUserListModelAsync(QrCodeLimitUserSearchModel searchModel, WQrCodeLimit qrCodeLimit);
 
-        AddUserRelatedSearchModel PrepareAddUserRelatedSearchModel(AddUserRelatedSearchModel searchModel);
+         Task<AddUserRelatedSearchModel> PrepareAddUserRelatedSearchModelAsync(AddUserRelatedSearchModel searchModel);
 
-        AddUserRelatedUserListModel PrepareAddUserRelatedUserListModel(AddUserRelatedSearchModel searchModel);
+         Task<AddUserRelatedUserListModel> PrepareAddUserRelatedUserListModelAsync(AddUserRelatedSearchModel searchModel);
 
-        QrCodeLimitUserModel PrepareQrCodeLimitUserModel(QrCodeLimitUserModel model, WQrCodeLimitUserMapping qrCodeLimitUser, bool excludeProperties = false);
+         Task<QrCodeLimitUserModel> PrepareQrCodeLimitUserModelAsync(QrCodeLimitUserModel model, WQrCodeLimitUserMapping qrCodeLimitUser, bool excludeProperties = false);
 
 
         #region Menu Model
 
-        MenuSearchModel PrepareMenuSearchModel(MenuSearchModel searchModel);
-        MenuListModel PrepareMenuListModel(MenuSearchModel searchModel);
-        MenuModel PrepareMenuModel(MenuModel model, WMenu menu, bool excludeProperties = false);
-        MenuButtonListModel PrepareMenuButtonListModel(MenuButtonSearchModel searchModel, WMenu menu);
+         Task<MenuSearchModel> PrepareMenuSearchModelAsync(MenuSearchModel searchModel);
+         Task<MenuListModel> PrepareMenuListModelAsync(MenuSearchModel searchModel);
+         Task<MenuModel> PrepareMenuModelAsync(MenuModel model, WMenu menu, bool excludeProperties = false);
+         Task<MenuButtonListModel> PrepareMenuButtonListModelAsync(MenuButtonSearchModel searchModel, WMenu menu);
 
 
         #endregion

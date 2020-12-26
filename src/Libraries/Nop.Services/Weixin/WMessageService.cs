@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Vendors;
@@ -34,87 +35,42 @@ namespace Nop.Services.Weixin
 
         #region Methods
 
-        public virtual void InsertWMessage(WMessage wMessage)
+        public virtual async Task InsertWMessageAsync(WMessage wMessage)
         {
-            _wMessageRepository.Insert(wMessage);
+            await _wMessageRepository.InsertAsync(wMessage);
         }
 
-        public virtual void DeleteWMessage(WMessage wMessage, bool delete = false)
+        public virtual async Task DeleteWMessageAsync(WMessage wMessage)
         {
-            if (wMessage == null)
-                throw new ArgumentNullException(nameof(wMessage));
-
-            if(delete)
-            {
-                _wMessageRepository.Delete(wMessage);
-            }
-            else
-            {
-                wMessage.Deleted = true;
-                _wMessageRepository.Update(wMessage);
-            }
+            await _wMessageRepository.DeleteAsync(wMessage);
         }
 
-        public virtual void DeleteWMessages(IList<WMessage> wMessages, bool deleted = false)
+        public virtual async Task DeleteWMessagesAsync(IList<WMessage> wMessages)
         {
-            if (wMessages == null)
-                throw new ArgumentNullException(nameof(wMessages));
-
-            if(deleted)
-            {
-                _wMessageRepository.Delete(wMessages);
-            }
-            else
-            {
-                foreach (var wMessage in wMessages)
-                {
-                    wMessage.Deleted = true;
-                }
-                _wMessageRepository.Update(wMessages);
-            }
+            await _wMessageRepository.DeleteAsync(wMessages);
         }
 
-        public virtual void UpdateWMessage(WMessage wMessage)
+        public virtual async Task UpdateWMessageAsync(WMessage wMessage)
         {
-            _wMessageRepository.Update(wMessage);
+            await _wMessageRepository.UpdateAsync(wMessage);
         }
 
-        public virtual void UpdateWMessages(IList<WMessage> wMessages)
+        public virtual async Task UpdateWMessagesAsync(IList<WMessage> wMessages)
         {
-            _wMessageRepository.Update(wMessages);
+            await _wMessageRepository.UpdateAsync(wMessages);
         }
 
-        public virtual WMessage GetWMessageById(int id)
+        public virtual async Task<WMessage> GetWMessageByIdAsync(int id)
         {
-            return _wMessageRepository.GetById(id, cache => default);
+            return await _wMessageRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual List<WMessage> GetWMessagesByIds(int[] wMessageIds)
+        public virtual async Task<IList<WMessage>> GetWMessagesByIdsAsync(int[] wMessageIds)
         {
-            if (wMessageIds is null || wMessageIds.Length == 0)
-                return new List<WMessage>();
-
-            var query = from t in _wMessageRepository.Table
-                        where wMessageIds.Contains(t.Id) &&
-                        !t.Deleted &&
-                        t.Published
-                        select t;
-
-            var messages = query.ToList();
-
-            //sort by passed identifiers
-            var sortedMessages = new List<WMessage>();
-            foreach (var id in wMessageIds)
-            {
-                var message = messages.Find(x => x.Id == id);
-                if (message != null)
-                    sortedMessages.Add(message);
-            }
-
-            return sortedMessages;
+            return await _wMessageRepository.GetByIdsAsync(wMessageIds, cache => default);
         }
 
-        public virtual IPagedList<WMessage> GetWMessages(
+        public virtual async Task<IPagedList<WMessage>> GetWMessagesAsync(
             string title = "", 
             bool? published = null,
             bool? deleted = null, 
@@ -131,7 +87,7 @@ namespace Nop.Services.Weixin
 
             query = query.OrderBy(v => v.CreatTime).ThenBy(v => v.Id);
 
-            return new PagedList<WMessage>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
         #endregion

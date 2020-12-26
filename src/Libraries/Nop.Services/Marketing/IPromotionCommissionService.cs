@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,23 +11,23 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IPromotionCommissionService
     {
-        void InsertEntity(PromotionCommission entity);
+        Task InsertEntityAsync(PromotionCommission entity);
 
-        void DeleteEntity(PromotionCommission entity, bool delete = false);
+        Task DeleteEntityAsync(PromotionCommission entity, bool delete = false);
 
-        void DeleteEntities(IList<PromotionCommission> entities, bool deleted = false);
+        Task DeleteEntitiesAsync(IList<PromotionCommission> entities, bool deleted = false);
 
-        void UpdateEntity(PromotionCommission entity);
+        Task UpdateEntityAsync(PromotionCommission entity);
 
-        void UpdateEntities(IList<PromotionCommission> entities);
+        Task UpdateEntitiesAsync(IList<PromotionCommission> entities);
 
-        PromotionCommission GetEntityById(int id);
+        Task<PromotionCommission> GetEntityByIdAsync(int id);
 
-        PromotionCommission GetEntitiesByProductId(int productId, int productAttributeValueId = 0);
+        Task<PromotionCommission> GetEntitiesByProductIdAsync(int productId, int productAttributeValueId = 0);
 
-        List<PromotionCommission> GetEntitiesByIds(int[] entityIds);
+        Task<IList<PromotionCommission>> GetEntitiesByIdsAsync(int[] entityIds);
 
-        IPagedList<PromotionCommission> GetEntities(
+        Task<IPagedList<PromotionCommission>> GetEntitiesAsync(
             int productId = 0,
             int productAttributeValueId = 0,
             bool? usePercentage = null,

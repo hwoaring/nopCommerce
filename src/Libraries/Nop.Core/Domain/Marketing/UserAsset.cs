@@ -1,11 +1,12 @@
 ﻿using System;
+using Nop.Core.Domain.Common;
 
 namespace Nop.Core.Domain.Marketing
 {
     /// <summary>
     /// Represents an UserAsset
     /// </summary>
-    public partial class UserAsset : BaseEntity
+    public partial class UserAsset : BaseEntity, ISoftDeletedEntity
     {
         /// <summary>
         /// OwnerUserId【WUser.Id】

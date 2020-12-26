@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Marketing;
@@ -33,81 +34,43 @@ namespace Nop.Services.Marketing
 
         #region Methods
 
-        public virtual void InsertEntity(ProductAdvertImage productAdvertImage)
+        public virtual async Task InsertEntityAsync(ProductAdvertImage productAdvertImage)
         {
-            if (productAdvertImage == null)
-                throw new ArgumentNullException(nameof(productAdvertImage));
-
-            _productAdvertImageRepository.Insert(productAdvertImage);
+            await _productAdvertImageRepository.InsertAsync(productAdvertImage);
 
         }
 
-        public virtual void DeleteEntity(ProductAdvertImage productAdvertImage, bool delete = false)
+        public virtual async Task DeleteEntityAsync(ProductAdvertImage productAdvertImage)
         {
-            if (productAdvertImage == null)
-                throw new ArgumentNullException(nameof(productAdvertImage));
-
-            if (delete)
-            {
-                _productAdvertImageRepository.Delete(productAdvertImage);
-            }
-            else
-            {
-                productAdvertImage.Deleted = true;
-                _productAdvertImageRepository.Update(productAdvertImage);
-            }
+            await _productAdvertImageRepository.DeleteAsync(productAdvertImage);
         }
 
-        public virtual void DeleteEntities(IList<ProductAdvertImage> productAdvertImages, bool deleted = false)
+        public virtual async Task DeleteEntitiesAsync(IList<ProductAdvertImage> productAdvertImages)
         {
-            if (productAdvertImages == null)
-                throw new ArgumentNullException(nameof(productAdvertImages));
-
-            if (deleted)
-            {
-                _productAdvertImageRepository.Delete(productAdvertImages);
-            }
-            else
-            {
-                foreach (var productAdvertImage in productAdvertImages)
-                {
-                    productAdvertImage.Deleted = true;
-                }
-                _productAdvertImageRepository.Update(productAdvertImages);
-            }
+            await _productAdvertImageRepository.DeleteAsync(productAdvertImages);
         }
 
-        public virtual void UpdateEntity(ProductAdvertImage productAdvertImage)
+        public virtual async Task UpdateEntityAsync(ProductAdvertImage productAdvertImage)
         {
-            _productAdvertImageRepository.Update(productAdvertImage);
+            await _productAdvertImageRepository.UpdateAsync(productAdvertImage);
         }
 
-        public virtual void UpdateEntities(IList<ProductAdvertImage> productAdvertImages)
+        public virtual async Task UpdateEntitiesAsync(IList<ProductAdvertImage> productAdvertImages)
         {
-            //update
-            _productAdvertImageRepository.Update(productAdvertImages);
+            await _productAdvertImageRepository.UpdateAsync(productAdvertImages);
         }
 
-        public virtual ProductAdvertImage GetEntityById(int id)
+        public virtual async Task<ProductAdvertImage> GetEntityByIdAsync(int id)
         {
-            return _productAdvertImageRepository.GetById(id, cache => default);
+            return await _productAdvertImageRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual List<ProductAdvertImage> GetEntitiesByIds(int[] entityIds)
+        public virtual async Task<IList<ProductAdvertImage>> GetEntitiesByIdsAsync(int[] entityIds)
         {
-            if (entityIds is null)
-                return new List<ProductAdvertImage>();
-
-            var query = from t in _productAdvertImageRepository.Table
-                        where entityIds.Contains(t.Id) &&
-                        !t.Deleted &&
-                        t.Published
-                        select t;
-
-            return query.ToList();
+            return await _productAdvertImageRepository.GetByIdsAsync(entityIds, cache => default);
         }
 
-        public virtual List<ProductAdvertImage> GetEntitiesByProductId(int productId, int top = 1, bool asc = true)
+        public virtual async Task<IList<ProductAdvertImage>> GetEntitiesByProductIdAsync(int productId, int top = 1, bool asc = true)
         {
             if (productId <= 0)
                 return new List<ProductAdvertImage>();
@@ -124,10 +87,10 @@ namespace Nop.Services.Marketing
             else
                 query = query.OrderByDescending(q => q.DisplayOrder);
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual List<ProductAdvertImage> GetEntitiesBySupplierVoucherCouponId(int supplierVoucherCouponId, int top = 1, bool asc = true)
+        public virtual async Task<IList<ProductAdvertImage>> GetEntitiesBySupplierVoucherCouponIdAsync(int supplierVoucherCouponId, int top = 1, bool asc = true)
         {
             if (supplierVoucherCouponId <= 0)
                 return new List<ProductAdvertImage>();
@@ -144,11 +107,11 @@ namespace Nop.Services.Marketing
             else
                 query = query.OrderByDescending(q => q.DisplayOrder);
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
 
-        public virtual IPagedList<ProductAdvertImage> GetEntities(
+        public virtual async Task<IPagedList<ProductAdvertImage>> GetEntitiesAsync(
             string title = "",
             int productId = 0,
             bool? isDiscountAdver = null,
@@ -169,7 +132,7 @@ namespace Nop.Services.Marketing
             if (deleted.HasValue)
                 query = query.Where(q => q.Deleted == deleted);
 
-            return new PagedList<ProductAdvertImage>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
 

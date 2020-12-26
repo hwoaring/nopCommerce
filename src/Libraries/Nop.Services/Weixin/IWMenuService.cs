@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Weixin;
 
@@ -10,21 +11,21 @@ namespace Nop.Services.Weixin
     public partial interface IWMenuService
     {
 
-        void InsertMenu(WMenu menu);
+        Task InsertMenuAsync(WMenu menu);
 
-        void DeleteMenu(WMenu menu, bool delete = false);
+        Task DeleteMenuAsync(WMenu menu);
 
-        void DeleteMenus(IList<WMenu> menus, bool deleted = false);
+        Task DeleteMenusAsync(IList<WMenu> menus);
 
-        void UpdateMenu(WMenu menu);
+        Task UpdateMenuAsync(WMenu menu);
 
-        void UpdateMenus(IList<WMenu> menus);
+        Task UpdateMenusAsync(IList<WMenu> menus);
 
-        WMenu GetMenuById(int id);
+        Task<WMenu> GetMenuByIdAsync(int id);
 
-        WMenu GetMenuByMenuId(long menuId);
+        Task<WMenu> GetMenuByMenuIdAsync(long menuId);
 
-        IPagedList<WMenu> GetAllMenus(string systemName = "", bool? personal = null, int pageIndex = 0, int pageSize = int.MaxValue, bool showDeleted = false);
+        Task<IPagedList<WMenu>> GetAllMenusAsync(string systemName = "", bool? personal = null, int pageIndex = 0, int pageSize = int.MaxValue, bool showDeleted = false);
 
     }
 }

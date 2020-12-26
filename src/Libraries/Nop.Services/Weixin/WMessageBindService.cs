@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Vendors;
@@ -34,49 +35,42 @@ namespace Nop.Services.Weixin
 
         #region Methods
 
-        public virtual void InsertEntity(WMessageBindMapping messageBind)
+        public virtual async Task InsertEntityAsync(WMessageBindMapping messageBind)
         {
-            _wMessageBindRepository.Insert(messageBind);
+            await _wMessageBindRepository.InsertAsync(messageBind);
         }
 
-        public virtual void DeleteEntity(WMessageBindMapping messageBind)
+        public virtual async Task DeleteEntityAsync(WMessageBindMapping messageBind)
         {
-            _wMessageBindRepository.Delete(messageBind);
+            await _wMessageBindRepository.DeleteAsync(messageBind);
         }
 
-        public virtual void DeleteEntities(IList<WMessageBindMapping> messageBinds)
+        public virtual async Task DeleteEntitiesAsync(IList<WMessageBindMapping> messageBinds)
         {
-            _wMessageBindRepository.Delete(messageBinds);
+            await _wMessageBindRepository.DeleteAsync(messageBinds);
         }
 
-        public virtual void UpdateEntity(WMessageBindMapping messageBind)
+        public virtual async Task UpdateEntityAsync(WMessageBindMapping messageBind)
         {
-            _wMessageBindRepository.Update(messageBind);
+            await _wMessageBindRepository.UpdateAsync(messageBind);
         }
 
-        public virtual void UpdateEntities(IList<WMessageBindMapping> messageBinds)
+        public virtual async Task UpdateEntitiesAsync(IList<WMessageBindMapping> messageBinds)
         {
-            _wMessageBindRepository.Update(messageBinds);
+            await _wMessageBindRepository.UpdateAsync(messageBinds);
         }
 
-        public virtual WMessageBindMapping GetEntityById(int id)
+        public virtual async Task<WMessageBindMapping> GetEntityByIdAsync(int id)
         {
-            return _wMessageBindRepository.GetById(id, cache => default);
+            return await _wMessageBindRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual List<WMessageBindMapping> GetEntitiesByIds(int[] messageBindIds)
+        public virtual async Task<IList<WMessageBindMapping>> GetEntitiesByIdsAsync(int[] messageBindIds)
         {
-            if (messageBindIds is null)
-                return new List<WMessageBindMapping>();
-
-            var query = from t in _wMessageBindRepository.Table
-                        where messageBindIds.Contains(t.Id)
-                        select t;
-
-            return query.ToList();
+            return await _wMessageBindRepository.GetByIdsAsync(messageBindIds, cache => default);
         }
 
-        public virtual List<int> GetMessageBindIds(int bindSceneId, WMessageBindSceneType messageBindSceneType)
+        public virtual async Task<IList<int>> GetMessageBindIdsAsync(int bindSceneId, WMessageBindSceneType messageBindSceneType)
         {
             if (bindSceneId <= 0)
                 return new List<int>();
@@ -88,7 +82,7 @@ namespace Nop.Services.Weixin
                         orderby t.DisplayOrder
                         select t;
 
-            var messageBinds = query.ToList();
+            var messageBinds = await query.ToListAsync();
 
             //sort by passed identifiers
             var sortedIds = new List<int>();
@@ -100,7 +94,7 @@ namespace Nop.Services.Weixin
             return sortedIds;
         }
 
-        public virtual List<WMessageBindMapping> GetEntities(
+        public virtual async Task<IList<WMessageBindMapping>> GetEntitiesAsync(
             int messageId = 0,
             int bindSceneId = 0,
             WMessageBindSceneType? messageBindSceneType = null,
@@ -119,10 +113,10 @@ namespace Nop.Services.Weixin
 
             query = query.OrderBy(v => v.DisplayOrder);
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IPagedList<WMessageBindMapping> GetEntities(
+        public virtual async Task<IPagedList<WMessageBindMapping>> GetEntitiesAsync(
             int messageId = 0, 
             int bindSceneId = 0, 
             WMessageBindSceneType? messageBindSceneType = null,
@@ -142,7 +136,7 @@ namespace Nop.Services.Weixin
 
             query = query.OrderBy(v => v.DisplayOrder);
 
-            return new PagedList<WMessageBindMapping>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
         #endregion

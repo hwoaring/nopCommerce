@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,28 +11,28 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IDivisionsCodeChinaService
     {
-        void InsertEntity(DivisionsCodeChina entity);
+        Task InsertEntityAsync(DivisionsCodeChina entity);
 
-        void DeleteEntity(DivisionsCodeChina entity);
+        Task DeleteEntityAsync(DivisionsCodeChina entity);
 
-        void DeleteEntities(IList<DivisionsCodeChina> entities);
+        Task DeleteEntitiesAsync(IList<DivisionsCodeChina> entities);
 
-        void UpdateEntity(DivisionsCodeChina entity);
+        Task UpdateEntityAsync(DivisionsCodeChina entity);
 
-        void UpdateEntities(IList<DivisionsCodeChina> entities);
+        Task UpdateEntitiesAsync(IList<DivisionsCodeChina> entities);
 
-        DivisionsCodeChina GetEntityById(int id);
+        Task<DivisionsCodeChina> GetEntityByIdAsync(int id);
 
-        DivisionsCodeChina GetEntityByAreaCode(string areaCode);
+        Task<DivisionsCodeChina> GetEntityByAreaCodeAsync(string areaCode);
 
-        List<DivisionsCodeChina> GetEntitiesByAreaCode(string areaCode, int areaLevel); //通过areaLevel，切分不同长度的areaCode进行contain查找
+        Task<IList<DivisionsCodeChina>> GetEntitiesByAreaCodeAsync(string areaCode, int areaLevel); //通过areaLevel，切分不同长度的areaCode进行contain查找
 
-        List<DivisionsCodeChina> GetEntitiesByProductId(int productId, int top = 1, bool asc = true);
+        Task<List<DivisionsCodeChina>> GetEntitiesByProductIdAsync(int productId, int top = 1, bool asc = true);
 
-        List<DivisionsCodeChina> GetEntitiesBySupplierVoucherCouponId(int supplierVoucherCouponId, int top = 1, bool asc = true);
+        Task<IList<DivisionsCodeChina>> GetEntitiesBySupplierVoucherCouponIdAsync(int supplierVoucherCouponId, int top = 1, bool asc = true);
 
-        
-        IPagedList<DivisionsCodeChina> GetEntities(
+
+        Task<IPagedList<DivisionsCodeChina>> GetEntitiesAsync(
             string areaCode = "",
             string areaName = "",
             int areaLevel = 0,

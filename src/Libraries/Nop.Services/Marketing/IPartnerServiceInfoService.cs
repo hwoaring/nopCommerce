@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,23 +11,23 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IPartnerServiceInfoService
     {
-        void InsertEntity(PartnerServiceInfo entity);
+        Task InsertEntityAsync(PartnerServiceInfo entity);
 
-        void DeleteEntity(PartnerServiceInfo entity, bool delete = false);
+        Task DeleteEntityAsync(PartnerServiceInfo entity, bool delete = false);
 
-        void DeleteEntities(IList<PartnerServiceInfo> entities, bool deleted = false);
+        Task DeleteEntitiesAsync(IList<PartnerServiceInfo> entities, bool deleted = false);
 
-        void UpdateEntity(PartnerServiceInfo entity);
+        Task UpdateEntityAsync(PartnerServiceInfo entity);
 
-        void UpdateEntities(IList<PartnerServiceInfo> entities);
+        Task UpdateEntitiesAsync(IList<PartnerServiceInfo> entities);
 
-        PartnerServiceInfo GetEntityById(int id);
+        Task<PartnerServiceInfo> GetEntityByIdAsync(int id);
 
-        PartnerServiceInfo GetEntityByUserId(int wuserId);
+        Task<PartnerServiceInfo> GetEntityByUserIdAsync(int wuserId);
 
-        List<PartnerServiceInfo> GetEntitiesByIds(int[] entityIds);
-     
-        IPagedList<PartnerServiceInfo> GetEntities(
+        Task<IList<PartnerServiceInfo>> GetEntitiesByIdsAsync(int[] entityIds);
+
+        Task<IPagedList<PartnerServiceInfo>> GetEntitiesAsync(
             int userId = 0,
             bool? published = null,
             bool? deleted = null,

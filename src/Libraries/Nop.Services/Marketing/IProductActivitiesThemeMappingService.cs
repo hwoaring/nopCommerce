@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,26 +11,25 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IProductAdvertImageService
     {
-        void InsertEntity(ProductAdvertImage entity);
+        Task InsertEntityAsync(ProductAdvertImage entity);
 
-        void DeleteEntity(ProductAdvertImage entity, bool delete = false);
+        Task DeleteEntityAsync(ProductAdvertImage entity);
 
-        void DeleteEntities(IList<ProductAdvertImage> entities, bool deleted = false);
+        Task DeleteEntitiesAsync(IList<ProductAdvertImage> entities);
 
-        void UpdateEntity(ProductAdvertImage entity);
+        Task UpdateEntityAsync(ProductAdvertImage entity);
 
-        void UpdateEntities(IList<ProductAdvertImage> entities);
+        Task UpdateEntitiesAsync(IList<ProductAdvertImage> entities);
 
-        ProductAdvertImage GetEntityById(int id);
+        Task<ProductAdvertImage> GetEntityByIdAsync(int id);
 
-        List<ProductAdvertImage> GetEntitiesByIds(int[] entityIds);
+        Task<IList<ProductAdvertImage>> GetEntitiesByIdsAsync(int[] entityIds);
 
-        List<ProductAdvertImage> GetEntitiesByProductId(int productId, int top = 1, bool asc = true);
+        Task<IList<ProductAdvertImage>> GetEntitiesByProductIdAsync(int productId, int top = 1, bool asc = true);
 
-        List<ProductAdvertImage> GetEntitiesBySupplierVoucherCouponId(int supplierVoucherCouponId, int top = 1, bool asc = true);
+        Task<IList<ProductAdvertImage>> GetEntitiesBySupplierVoucherCouponIdAsync(int supplierVoucherCouponId, int top = 1, bool asc = true);
 
-        
-        IPagedList<ProductAdvertImage> GetEntities(
+        Task<IPagedList<ProductAdvertImage>> GetEntitiesAsync(
             string title = "",
             int productId = 0,
             bool? isDiscountAdver = null,

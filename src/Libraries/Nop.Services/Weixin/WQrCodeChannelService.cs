@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Vendors;
@@ -34,27 +35,27 @@ namespace Nop.Services.Weixin
 
         #region Methods
 
-        public virtual void InsertEntity(WQrCodeChannel entity)
+        public virtual async Task InsertEntityAsync(WQrCodeChannel entity)
         {
-            _wQrCodeChannelRepository.Insert(entity);
+            await _wQrCodeChannelRepository.InsertAsync(entity);
         }
 
-        public virtual void UpdateEntity(WQrCodeChannel entity)
+        public virtual async Task UpdateEntityAsync(WQrCodeChannel entity)
         {
-            _wQrCodeChannelRepository.Update(entity);
+            await _wQrCodeChannelRepository.UpdateAsync(entity);
         }
 
-        public virtual void UpdateEntities(IList<WQrCodeChannel> entities)
+        public virtual async Task UpdateEntitiesAsync(IList<WQrCodeChannel> entities)
         {
-            _wQrCodeChannelRepository.Update(entities);
+            await _wQrCodeChannelRepository.UpdateAsync(entities);
         }
 
-        public virtual WQrCodeChannel GetEntityById(int id)
+        public virtual async Task<WQrCodeChannel> GetEntityByIdAsync(int id)
         {
-            return _wQrCodeChannelRepository.GetById(id, cache => default);
+            return await _wQrCodeChannelRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual List<WQrCodeChannel> GetEntitiesByParentId(int parentId)
+        public virtual async Task<IList<WQrCodeChannel>> GetEntitiesByParentIdAsync(int parentId)
         {
             if (parentId == 0)
                 return null;
@@ -64,27 +65,27 @@ namespace Nop.Services.Weixin
                         !t.Deleted
                         select t;
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IList<WQrCodeChannel> GetAllEntities()
+        public virtual async Task<IList<WQrCodeChannel>> GetAllEntitiesAsync()
         {
             var query = from pt in _wQrCodeChannelRepository.Table
                         where !pt.Deleted
                         orderby pt.Id
                         select pt;
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IPagedList<WQrCodeChannel> GetEntities(bool showDeleted = false, int pageIndex = 0, int pageSize = int.MaxValue)
+        public virtual async Task<IPagedList<WQrCodeChannel>> GetEntitiesAsync(bool showDeleted = false, int pageIndex = 0, int pageSize = int.MaxValue)
         {
             var query = _wQrCodeChannelRepository.Table;
 
             if (!showDeleted)
                 query = query.Where(v => !v.Deleted);
 
-            return new PagedList<WQrCodeChannel>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
 

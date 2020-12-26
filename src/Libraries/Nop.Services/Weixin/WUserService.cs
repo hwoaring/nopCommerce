@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Vendors;
@@ -38,9 +39,9 @@ namespace Nop.Services.Weixin
         /// 添加新用户
         /// </summary>
         /// <param name="wuser"></param>
-        public virtual void InsertWUser(WUser wuser)
+        public virtual async Task InsertWUserAsync(WUser wuser)
         {
-            _wUserRepository.Insert(wuser);
+            await _wUserRepository.InsertAsync(wuser);
         }
 
         /// <summary>
@@ -48,13 +49,9 @@ namespace Nop.Services.Weixin
         /// </summary>
         /// <param name="wUser"></param>
         /// <param name="delete">是否真删除，否则只更改删除标志</param>
-        public virtual void DeleteWUser(WUser wUser, bool delete = false)
+        public virtual async Task DeleteWUserAsync(WUser wUser)
         {
-            if (wUser == null)
-                throw new ArgumentNullException(nameof(wUser));
-
-            wUser.Deleted = true;
-            _wUserRepository.Update(wUser);
+            await _wUserRepository.DeleteAsync(wUser);
         }
 
         /// <summary>
@@ -62,35 +59,27 @@ namespace Nop.Services.Weixin
         /// </summary>
         /// <param name="wUsers"></param>
         /// <param name="deleted">是否真删除，否则只更改删除标志</param>
-        public virtual void DeleteWUsers(IList<WUser> wUsers, bool deleted = false)
+        public virtual async Task DeleteWUsersAsync(IList<WUser> wUsers)
         {
-            if (wUsers == null)
-                throw new ArgumentNullException(nameof(wUsers));
-
-            foreach (var wuser in wUsers)
-            {
-                wuser.Deleted = true;
-            }
-
-            _wUserRepository.Update(wUsers);
+            await _wUserRepository.DeleteAsync(wUsers);
         }
 
         /// <summary>
         /// 更新用户信息
         /// </summary>
         /// <param name="wuser"></param>
-        public virtual void UpdateWUser(WUser wuser)
+        public virtual async Task UpdateWUserAsync(WUser wuser)
         {
-            _wUserRepository.Update(wuser);
+            await _wUserRepository.UpdateAsync(wuser);
         }
 
         /// <summary>
         /// 更新用户信息
         /// </summary>
         /// <param name="wuser"></param>
-        public virtual void UpdateWUsers(IList<WUser> wUsers)
+        public virtual async Task UpdateWUsersAsync(IList<WUser> wUsers)
         {
-            _wUserRepository.Update(wUsers);
+            await _wUserRepository.UpdateAsync(wUsers);
         }
 
         /// <summary>
@@ -98,9 +87,9 @@ namespace Nop.Services.Weixin
         /// </summary>
         /// <param name="wUserId"></param>
         /// <returns></returns>
-        public virtual WUser GetWUserById(int id)
+        public virtual async Task<WUser> GetWUserByIdAsync(int id)
         {
-            return _wUserRepository.GetById(id, cache => default);
+            return await _wUserRepository.GetByIdAsync(id, cache => default);
         }
 
         /// <summary>
@@ -108,7 +97,7 @@ namespace Nop.Services.Weixin
         /// </summary>
         /// <param name="openId"></param>
         /// <returns></returns>
-        public virtual WUser GetWUserByOpenId(string openId)
+        public virtual async Task<WUser> GetWUserByOpenIdAsync(string openId)
         {
             if (string.IsNullOrEmpty(openId))
                 return null;
@@ -120,7 +109,7 @@ namespace Nop.Services.Weixin
                         orderby t.Id
                         select t;
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -128,7 +117,7 @@ namespace Nop.Services.Weixin
         /// </summary>
         /// <param name="openIdHash"></param>
         /// <returns></returns>
-        public virtual WUser GetWUserByOpenIdHash(long openIdHash)
+        public virtual async Task<WUser> GetWUserByOpenIdHashAsync(long openIdHash)
         {
             if (openIdHash == 0)
                 return null;
@@ -139,7 +128,7 @@ namespace Nop.Services.Weixin
                         user.OpenIdHash == openIdHash
                         select user;
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -147,17 +136,9 @@ namespace Nop.Services.Weixin
         /// </summary>
         /// <param name="wUserIds"></param>
         /// <returns></returns>
-        public virtual List<WUser> GetWUsersByIds(int[] wUserIds)
+        public virtual async Task<IList<WUser>> GetWUsersByIdsAsync(int[] wUserIds)
         {
-            if (wUserIds is null)
-                return new List<WUser>();
-
-            var query = from user in _wUserRepository.Table
-                        where wUserIds.Contains(user.Id) &&
-                        !user.Deleted
-                        select user;
-
-            return query.ToList();
+            return await _wUserRepository.GetByIdsAsync(wUserIds, cache => default);
         }
 
         /// <summary>
@@ -165,7 +146,7 @@ namespace Nop.Services.Weixin
         /// </summary>
         /// <param name="openId"></param>
         /// <returns></returns>
-        public virtual WUserBaseInfo GetWUserBaseInfo(string openId, bool containAllOpenid = false)
+        public virtual async Task<WUserBaseInfo> GetWUserBaseInfoAsync(string openId, bool containAllOpenid = false)
         {
             WUserBaseInfo wuserBaseInfo = null;
 
@@ -180,7 +161,7 @@ namespace Nop.Services.Weixin
                         orderby t.Id
                         select t;
 
-            var wuser = query.FirstOrDefault();
+            var wuser = await query.FirstOrDefaultAsync();
 
             if (wuser != null)
             {
@@ -216,9 +197,9 @@ namespace Nop.Services.Weixin
         /// </summary>
         /// <param name="openIds"></param>
         /// <returns></returns>
-        public virtual List<WUserBaseInfo> GetWUserBaseInfoByOpenIds(string[] openIds, bool containAllOpenid = false)
+        public virtual async Task<IList<WUserBaseInfo>> GetWUserBaseInfoByOpenIdsAsync(string[] openIds, bool containAllOpenid = false)
         {
-            List<WUserBaseInfo> wuserBaseInfos = new List<WUserBaseInfo>();
+            IList<WUserBaseInfo> wuserBaseInfos = new List<WUserBaseInfo>();
 
             if (openIds is null)
                 return wuserBaseInfos;
@@ -228,7 +209,7 @@ namespace Nop.Services.Weixin
                         !t.Deleted
                         select t;
 
-            var wusers = query.ToList();
+            var wusers = await query.ToListAsync();
 
             foreach (var openId in openIds)
             {
@@ -272,7 +253,7 @@ namespace Nop.Services.Weixin
         /// <param name="pageSize"></param>
         /// <param name="showDeleted"></param>
         /// <returns></returns>
-        public virtual IPagedList<WUser> GetAllUsers(
+        public virtual async Task<IPagedList<WUser>> GetAllUsersAsync(
             string nickName = null,
             string remark = null,
             int pageIndex = 0,
@@ -291,7 +272,7 @@ namespace Nop.Services.Weixin
 
             query = query.OrderBy(v => v.CreatTime).ThenBy(v => v.Id);
 
-            return new PagedList<WUser>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
         /// <summary>
@@ -303,13 +284,13 @@ namespace Nop.Services.Weixin
         /// <param name="pageSize"></param>
         /// <param name="showDeleted"></param>
         /// <returns></returns>
-        public virtual IPagedList<WUser> GetRefereeUsers(int refereeId, int wConfigId = 0, int pageIndex = 0, int pageSize = int.MaxValue, bool showDeleted = false)
+        public virtual async Task<IPagedList<WUser>> GetRefereeUsersAsync(int refereeId, int wConfigId = 0, int pageIndex = 0, int pageSize = int.MaxValue, bool showDeleted = false)
         {
             var query = _wUserRepository.Table;
             query = query.Where(user => user.RefereeId == refereeId);
             query = query.OrderBy(v => v.CreatTime).ThenBy(v => v.Id);
 
-            return new PagedList<WUser>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
         #endregion

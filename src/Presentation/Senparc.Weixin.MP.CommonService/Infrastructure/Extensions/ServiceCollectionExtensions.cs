@@ -60,7 +60,7 @@ namespace Senparc.Weixin.MP.CommonService.Infrastructure.Extensions
         /// <param name="services">Collection of service descriptors</param>
         public static void AddWeixin(this IServiceCollection services, IConfiguration configuration)
         {
-            if (!DataSettingsManager.DatabaseIsInstalled)
+            if (!DataSettingsManager.IsDatabaseInstalled())
                 return;
 
             services.AddSenparcWeixinServices(configuration); //Senparc.Weixin 注册（必须）
@@ -72,7 +72,7 @@ namespace Senparc.Weixin.MP.CommonService.Infrastructure.Extensions
         /// <param name="services">Collection of service descriptors</param>
         public static void AddWebSocket(this IServiceCollection services)
         {
-            if (!DataSettingsManager.DatabaseIsInstalled)
+            if (!DataSettingsManager.IsDatabaseInstalled())
                 return;
 
             //Senparc.WebSocket 注册（按需）

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,19 +11,19 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IProductVisitorMappingService
     {
-        void InsertEntity(ProductVisitorMapping entity);
+        Task InsertEntityAsync(ProductVisitorMapping entity);
 
-        void DeleteEntity(ProductVisitorMapping entity);
+        Task DeleteEntityAsync(ProductVisitorMapping entity);
 
-        void DeleteEntities(IList<ProductVisitorMapping> entities);
+        Task DeleteEntitiesAsync(IList<ProductVisitorMapping> entities);
 
-        void UpdateEntity(ProductVisitorMapping entity);
+        Task UpdateEntityAsync(ProductVisitorMapping entity);
 
-        void UpdateEntities(IList<ProductVisitorMapping> entities);
+        Task UpdateEntitiesAsync(IList<ProductVisitorMapping> entities);
 
-        ProductVisitorMapping GetEntitiesByProductId(int productId);
+        Task<ProductVisitorMapping> GetEntitiesByProductIdAsync(int productId);
 
-        List<int> GetVisitorIdsByProductId(int productId);
+        Task<IList<int>> GetVisitorIdsByProductIdAsync(int productId);
 
     }
 }

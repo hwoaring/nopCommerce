@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Linq;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
@@ -35,49 +36,42 @@ namespace Nop.Services.Suppliers
 
         #region Methods
 
-        public virtual void InsertEntity(QrCodeSupplierVoucherCouponMapping entity)
+        public virtual async Task InsertEntityAsync(QrCodeSupplierVoucherCouponMapping entity)
         {
-            _qrCodeSupplierVoucherCouponMappingRepository.Insert(entity);
+            await _qrCodeSupplierVoucherCouponMappingRepository.InsertAsync(entity);
         }
 
-        public virtual void DeleteEntity(QrCodeSupplierVoucherCouponMapping entity)
+        public virtual async Task DeleteEntityAsync(QrCodeSupplierVoucherCouponMapping entity)
         {
-            _qrCodeSupplierVoucherCouponMappingRepository.Delete(entity);
+            await _qrCodeSupplierVoucherCouponMappingRepository.DeleteAsync(entity);
         }
 
-        public virtual void DeleteEntities(IList<QrCodeSupplierVoucherCouponMapping> entities)
+        public virtual async Task DeleteEntitiesAsync(IList<QrCodeSupplierVoucherCouponMapping> entities)
         {
-            _qrCodeSupplierVoucherCouponMappingRepository.Delete(entities);
+            await _qrCodeSupplierVoucherCouponMappingRepository.DeleteAsync(entities);
         }
 
-        public virtual void UpdateEntity(QrCodeSupplierVoucherCouponMapping entity)
+        public virtual async Task UpdateEntityAsync(QrCodeSupplierVoucherCouponMapping entity)
         {
-            _qrCodeSupplierVoucherCouponMappingRepository.Update(entity);
+            await _qrCodeSupplierVoucherCouponMappingRepository.UpdateAsync(entity);
         }
 
-        public virtual void UpdateEntities(IList<QrCodeSupplierVoucherCouponMapping> entities)
+        public virtual async Task UpdateEntitiesAsync(IList<QrCodeSupplierVoucherCouponMapping> entities)
         {
-            _qrCodeSupplierVoucherCouponMappingRepository.Update(entities);
+            await _qrCodeSupplierVoucherCouponMappingRepository.UpdateAsync(entities);
         }
 
-        public virtual QrCodeSupplierVoucherCouponMapping GetEntityById(int id)
+        public virtual async Task<QrCodeSupplierVoucherCouponMapping> GetEntityByIdAsync(int id)
         {
-            return _qrCodeSupplierVoucherCouponMappingRepository.GetById(id, cache => default);
+            return await _qrCodeSupplierVoucherCouponMappingRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual List<QrCodeSupplierVoucherCouponMapping> GetEntitiesByIds(int[] entityIds)
+        public virtual async Task<IList<QrCodeSupplierVoucherCouponMapping>> GetEntitiesByIdsAsync(int[] entityIds)
         {
-            if (entityIds is null)
-                return new List<QrCodeSupplierVoucherCouponMapping>();
-
-            var query = from t in _qrCodeSupplierVoucherCouponMappingRepository.Table
-                        where entityIds.Contains(t.Id)
-                        select t;
-
-            return query.ToList();
+            return await _qrCodeSupplierVoucherCouponMappingRepository.GetByIdsAsync(entityIds, cache => default);
         }
 
-        public virtual List<QrCodeSupplierVoucherCouponMapping> GetEntitiesByQrCodeId(int qrCodeId, bool qrcodeLimitId = true, bool showAll = false)
+        public virtual async Task<IList<QrCodeSupplierVoucherCouponMapping>> GetEntitiesByQrCodeIdAsync(int qrCodeId, bool qrcodeLimitId = true, bool showAll = false)
         {
             if (qrCodeId == 0)
                 return new List<QrCodeSupplierVoucherCouponMapping>();
@@ -93,10 +87,10 @@ namespace Nop.Services.Suppliers
                 query = query.Where(q => q.EndDateTime.HasValue && q.EndDateTime >= DateTime.Now);
             }
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IPagedList<QrCodeSupplierVoucherCouponMapping> GetEntities(
+        public virtual async Task<IPagedList<QrCodeSupplierVoucherCouponMapping>> GetEntitiesAsync(
             int qrCodeId = 0,
             int supplierVoucherCouponId = 0,
             bool? qrcodeLimit = null,
@@ -120,7 +114,7 @@ namespace Nop.Services.Suppliers
             if (endDateTime.HasValue)
                 query = query.Where(q => q.EndDateTime <= endDateTime);
 
-            return new PagedList<QrCodeSupplierVoucherCouponMapping>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,19 +11,19 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IActivitiesThemeService
     {
-        void InsertEntity(ActivitiesTheme entity);
+        Task InsertEntityAsync(ActivitiesTheme entity);
 
-        void DeleteEntity(ActivitiesTheme entity, bool delete = false);
+        Task DeleteEntityAsync(ActivitiesTheme entity, bool delete = false);
 
-        void DeleteEntities(IList<ActivitiesTheme> entities, bool delete = false);
+        Task DeleteEntitiesAsync(IList<ActivitiesTheme> entities, bool delete = false);
 
-        void UpdateEntity(ActivitiesTheme entity);
+        Task UpdateEntityAsync(ActivitiesTheme entity);
 
-        void UpdateEntities(IList<ActivitiesTheme> entities);
+        Task UpdateEntitiesAsync(IList<ActivitiesTheme> entities);
 
-        ActivitiesTheme GetEntityById(int id);
+        Task<ActivitiesTheme> GetEntityByIdAsync(int id);
 
-        IPagedList<ActivitiesTheme> GetEntities(
+        Task<IPagedList<ActivitiesTheme>> GetEntitiesAsync(
             string title = "",
             int customerRoleId = 0,
             int storeId = 0,

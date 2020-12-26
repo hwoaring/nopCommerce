@@ -258,7 +258,7 @@ namespace Nop.Web.Framework
                     var customerSession = _httpContextAccessor.HttpContext.Session.Get<OauthSession>(NopWeixinDefaults.WeixinOauthSession);
                     if (customerSession != null && !string.IsNullOrEmpty(customerSession.OpenId))
                     {
-                        var customerBySession = _customerService.GetCustomerByOpenId(customerSession.OpenId);
+                        var customerBySession = await _customerService.GetCustomerByOpenIdAsync(customerSession.OpenId);
                         if (customerBySession != null)
                             customer = customerBySession;
                     }
@@ -288,20 +288,20 @@ namespace Nop.Web.Framework
                     {
                         customer.OpenId = customerSession.OpenId;
                         customer.AdminComment = "Weixin Auto Registered.";
-                        customer.RegisteredInStoreId = _storeContext.CurrentStore.Id;
+                        customer.RegisteredInStoreId = (await _storeContext.GetCurrentStoreAsync()).Id;
 
                         //update customer
-                        _customerService.UpdateCustomer(customer);
+                        await _customerService.UpdateCustomerAsync(customer);
 
                         //set registered Role.
-                        var registeredRole = _customerService.GetCustomerRoleBySystemName(NopCustomerDefaults.RegisteredRoleName);
+                        var registeredRole = await _customerService.GetCustomerRoleBySystemNameAsync(NopCustomerDefaults.RegisteredRoleName);
                         if (registeredRole != null)
                         {
-                            var guestRole = _customerService.GetCustomerRoleBySystemName(NopCustomerDefaults.GuestsRoleName);
+                            var guestRole = await _customerService.GetCustomerRoleBySystemNameAsync(NopCustomerDefaults.GuestsRoleName);
                             if (guestRole != null)
-                                _customerService.RemoveCustomerRoleMapping(customer, guestRole);
+                                await _customerService.RemoveCustomerRoleMappingAsync(customer, guestRole);
 
-                            _customerService.AddCustomerRoleMapping(new CustomerCustomerRoleMapping { CustomerRoleId = registeredRole.Id, CustomerId = customer.Id });
+                            await _customerService.AddCustomerRoleMappingAsync(new CustomerCustomerRoleMapping { CustomerRoleId = registeredRole.Id, CustomerId = customer.Id });
                         }
                     }
                 }

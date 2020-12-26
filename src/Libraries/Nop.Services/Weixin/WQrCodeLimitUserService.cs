@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Vendors;
@@ -40,37 +41,37 @@ namespace Nop.Services.Weixin
 
         #region Methods
 
-        public virtual void InsertEntity(WQrCodeLimitUserMapping entity)
+        public virtual async Task InsertEntityAsync(WQrCodeLimitUserMapping entity)
         {
-            _wQrCodeLimitUserMappingRepository.Insert(entity);
+            await _wQrCodeLimitUserMappingRepository.InsertAsync(entity);
         }
 
-        public virtual void DeleteEntity(WQrCodeLimitUserMapping entity)
+        public virtual async Task DeleteEntityAsync(WQrCodeLimitUserMapping entity)
         {
-            _wQrCodeLimitUserMappingRepository.Delete(entity);
+            await _wQrCodeLimitUserMappingRepository.DeleteAsync(entity);
         }
 
-        public virtual void DeleteEntities(IList<WQrCodeLimitUserMapping> entities)
+        public virtual async Task DeleteEntitiesAsync(IList<WQrCodeLimitUserMapping> entities)
         {
-            _wQrCodeLimitUserMappingRepository.Delete(entities);
+            await _wQrCodeLimitUserMappingRepository.DeleteAsync(entities);
         }
 
-        public virtual void UpdateEntity(WQrCodeLimitUserMapping entity)
+        public virtual async Task UpdateEntityAsync(WQrCodeLimitUserMapping entity)
         {
-            _wQrCodeLimitUserMappingRepository.Update(entity);
+            await _wQrCodeLimitUserMappingRepository.UpdateAsync(entity);
         }
 
-        public virtual void UpdateEntities(IList<WQrCodeLimitUserMapping> entities)
+        public virtual async Task UpdateEntitiesAsync(IList<WQrCodeLimitUserMapping> entities)
         {
-            _wQrCodeLimitUserMappingRepository.Update(entities);
+            await _wQrCodeLimitUserMappingRepository.UpdateAsync(entities);
         }
 
-        public virtual WQrCodeLimitUserMapping GetEntityById(int id)
+        public virtual async Task<WQrCodeLimitUserMapping> GetEntityByIdAsync(int id)
         {
-            return _wQrCodeLimitUserMappingRepository.GetById(id, cache => default);
+            return await _wQrCodeLimitUserMappingRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual WQrCodeLimitUserMapping GetActiveEntityByQrCodeLimitIdOrUserId(int qrCodeLimitId, int userId)
+        public virtual async Task<WQrCodeLimitUserMapping> GetActiveEntityByQrCodeLimitIdOrUserIdAsync(int qrCodeLimitId, int userId)
         {
             if (qrCodeLimitId == 0 && userId == 0)
                 return null;
@@ -87,10 +88,10 @@ namespace Nop.Services.Weixin
                 query = query.Where(t => t.UserId == userId);
             }
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
-        public virtual WQrCodeLimitUserMapping GetEntityByQrCodeLimitIdAndUserId(int qrCodeLimitId, int userId)
+        public virtual async Task<WQrCodeLimitUserMapping> GetEntityByQrCodeLimitIdAndUserIdAsync(int qrCodeLimitId, int userId)
         {
             if (qrCodeLimitId == 0 || userId == 0)
                 return null;
@@ -100,10 +101,10 @@ namespace Nop.Services.Weixin
                         t.UserId == userId
                         select t;
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
-        public virtual List<WQrCodeLimitUserMapping> GetEntitiesByQrcodeLimitId(int qrCodeLimitId)
+        public virtual async Task<IList<WQrCodeLimitUserMapping>> GetEntitiesByQrcodeLimitIdAsync(int qrCodeLimitId)
         {
             if (qrCodeLimitId == 0)
                 return new List<WQrCodeLimitUserMapping>();
@@ -112,10 +113,10 @@ namespace Nop.Services.Weixin
                         where t.QrCodeLimitId == qrCodeLimitId
                         select t;
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual List<WQrCodeLimitUserMapping> GetEntitiesByUserId(int userId)
+        public virtual async Task<IList<WQrCodeLimitUserMapping>> GetEntitiesByUserIdAsync(int userId)
         {
             if (userId == 0)
                 return new List<WQrCodeLimitUserMapping>();
@@ -124,10 +125,10 @@ namespace Nop.Services.Weixin
                         where t.UserId== userId
                         select t;
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual List<WQrCodeLimitUserMapping> GetEntitiesByIds(int[] wEntityIds)
+        public virtual async Task<IList<WQrCodeLimitUserMapping>> GetEntitiesByIdsAsync(int[] wEntityIds)
         {
             if (wEntityIds is null)
                 return new List<WQrCodeLimitUserMapping>();
@@ -136,10 +137,10 @@ namespace Nop.Services.Weixin
                         where wEntityIds.Contains(t.Id)
                         select t;
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IPagedList<WQrCodeLimitUserMapping> GetEntities(
+        public virtual async Task<IPagedList<WQrCodeLimitUserMapping>> GetEntitiesAsync(
             int userId = 0,
             int qrCodeLimitId = 0,
             DateTime? expireTime = null,
@@ -161,7 +162,7 @@ namespace Nop.Services.Weixin
 
             query = query.OrderBy(v => v.Id);
 
-            return new PagedList<WQrCodeLimitUserMapping>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
 

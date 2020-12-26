@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Suppliers;
 
@@ -9,23 +10,23 @@ namespace Nop.Services.Suppliers
     /// </summary>
     public partial interface ISupplierSelfGroupService
     {
-        void InsertEntity(SupplierSelfGroup entity);
+        Task InsertEntityAsync(SupplierSelfGroup entity);
 
-        void DeleteEntity(SupplierSelfGroup entity, bool delete = false);
+        Task DeleteEntityAsync(SupplierSelfGroup entity, bool delete = false);
 
-        void DeleteEntities(IList<SupplierSelfGroup> entities, bool deleted = false);
+        Task DeleteEntitiesAsync(IList<SupplierSelfGroup> entities, bool deleted = false);
 
-        void UpdateEntity(SupplierSelfGroup entity);
+        Task UpdateEntityAsync(SupplierSelfGroup entity);
 
-        void UpdateEntities(IList<SupplierSelfGroup> entities);
+        Task UpdateEntitiesAsync(IList<SupplierSelfGroup> entities);
 
-        SupplierSelfGroup GetEntityById(int id);
+        Task<SupplierSelfGroup> GetEntityByIdAsync(int id);
 
-        List<SupplierSelfGroup> GetEntitiesBySupplierId(int supplierId);
+        Task<IList<SupplierSelfGroup>> GetEntitiesBySupplierIdAsync(int supplierId);
 
-        List<SupplierSelfGroup> GetEntitiesByIds(int[] entityIds);
+        Task<IList<SupplierSelfGroup>> GetEntitiesByIdsAsync(int[] entityIds);
 
-        IPagedList<SupplierSelfGroup> GetEntities(
+        Task<IPagedList<SupplierSelfGroup>> GetEntitiesAsync(
             int supplierId = 0,
             bool? published = null,
             bool? deleted = null,

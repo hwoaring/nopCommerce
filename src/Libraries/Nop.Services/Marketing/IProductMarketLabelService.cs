@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,21 +11,21 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IProductMarketLabelService
     {
-        void InsertEntity(ProductMarketLabel entity);
+        Task InsertEntityAsync(ProductMarketLabel entity);
 
-        void DeleteEntity(ProductMarketLabel entity, bool delete = false);
+        Task DeleteEntityAsync(ProductMarketLabel entity, bool delete = false);
 
-        void DeleteEntities(IList<ProductMarketLabel> entities, bool deleted = false);
+        Task DeleteEntitiesAsync(IList<ProductMarketLabel> entities, bool deleted = false);
 
-        void UpdateEntity(ProductMarketLabel entity);
+        Task UpdateEntityAsync(ProductMarketLabel entity);
 
-        void UpdateEntities(IList<ProductMarketLabel> entities);
+        Task UpdateEntitiesAsync(IList<ProductMarketLabel> entities);
 
-        ProductMarketLabel GetEntityById(int id);
+        Task<ProductMarketLabel> GetEntityByIdAsync(int id);
 
-        List<ProductMarketLabel> GetEntitiesByIds(int[] entityIds);
+        Task<IList<ProductMarketLabel>> GetEntitiesByIdsAsync(int[] entityIds);
 
-        IPagedList<ProductMarketLabel> GetEntities(
+        Task<IPagedList<ProductMarketLabel>> GetEntitiesAsync(
             bool? published = null,
             bool? deleted = null,
             int pageIndex = 0, int pageSize = int.MaxValue);

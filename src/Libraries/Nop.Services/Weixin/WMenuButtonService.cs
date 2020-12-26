@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Vendors;
@@ -34,53 +35,57 @@ namespace Nop.Services.Weixin
 
         #region Methods
 
-        public virtual void InsertMenuButton(WMenuButton menuButton)
+        public virtual async Task InsertMenuButtonAsync(WMenuButton menuButton)
         {
-            _wMenuButtonRepository.Insert(menuButton);
+            await _wMenuButtonRepository.InsertAsync(menuButton);
         }
 
-        public virtual void DeleteMenuButton(WMenuButton menuButton)
+        public virtual async Task DeleteMenuButtonAsync(WMenuButton menuButton)
         {
-            _wMenuButtonRepository.Delete(menuButton);
+            await _wMenuButtonRepository.DeleteAsync(menuButton);
         }
 
-        public virtual void DeleteMenuButtons(IList<WMenuButton> menuButtons)
+        public virtual async Task DeleteMenuButtonsAsync(IList<WMenuButton> menuButtons)
         {
-            _wMenuButtonRepository.Delete(menuButtons);
+            if (menuButtons == null)
+                throw new ArgumentNullException(nameof(menuButtons));
+
+            foreach (var menuButton in menuButtons)
+                await DeleteMenuButtonAsync(menuButton);
         }
 
-        public virtual void UpdateMenuButton(WMenuButton menuButton)
+        public virtual async Task UpdateMenuButtonAsync(WMenuButton menuButton)
         {
-            _wMenuButtonRepository.Update(menuButton);
+            await _wMenuButtonRepository.UpdateAsync(menuButton);
         }
 
-        public virtual void UpdateMenuButtons(IList<WMenuButton> menuButtons)
+        public virtual async Task UpdateMenuButtonsAsync(IList<WMenuButton> menuButtons)
         {
-            _wMenuButtonRepository.Update(menuButtons);
+            await _wMenuButtonRepository.UpdateAsync(menuButtons);
         }
 
-        public virtual WMenuButton GetMenuButtonById(int id)
+        public virtual async Task<WMenuButton> GetMenuButtonByIdAsync(int id)
         {
-            return _wMenuButtonRepository.GetById(id, cache => default);
+            return await _wMenuButtonRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual IList<int> GetChildMenuButtonIds(int parentId)
+        public virtual async Task<IList<int>> GetChildMenuButtonIdsAsync(int parentId, int storeId = 0, bool showHidden = false)
         {
             //little hack for performance optimization
             //there's no need to invoke "GetAllCategoriesByParentCategoryId" multiple times (extra SQL commands) to load childs
             //so we load all categories at once (we know they are cached) and process them server-side
             var menuButtonIds = new List<int>();
-            var menuButtons = GetAllMenuButtons()
+            var menuButtons = (await GetAllMenuButtonsAsync())
                 .Where(c => c.ParentId == parentId)
                 .Select(c => c.Id)
                 .ToList();
             menuButtonIds.AddRange(menuButtons);
-            menuButtonIds.AddRange(menuButtons.SelectMany(cId => GetChildMenuButtonIds(cId)));
+            menuButtonIds.AddRange(await menuButtons.SelectManyAwait(async cId => await GetChildMenuButtonIdsAsync(cId, storeId, showHidden)).ToListAsync());
 
             return menuButtonIds;
         }
 
-        public virtual IList<WMenuButton> GetMenuButtonsByMenuId(int menuId)
+        public virtual async Task<IList<WMenuButton>> GetMenuButtonsByMenuIdAsync(int menuId)
         {
             if (menuId == 0)
                 return new List<WMenuButton>();
@@ -90,10 +95,10 @@ namespace Nop.Services.Weixin
                         orderby t.DisplayOrder, t.Id
                         select t;
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IList<WMenuButton> GetMenuButtonsByParentId(int parentId)
+        public virtual async Task<IList<WMenuButton>> GetMenuButtonsByParentIdAsync(int parentId)
         {
             if (parentId == 0)
                 return new List<WMenuButton>();
@@ -103,19 +108,19 @@ namespace Nop.Services.Weixin
                         orderby t.DisplayOrder, t.Id
                         select t;
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IList<WMenuButton> GetAllMenuButtons()
+        public virtual async Task<IList<WMenuButton>> GetAllMenuButtonsAsync()
         {
             var query = from t in _wMenuButtonRepository.Table
                         orderby t.DisplayOrder, t.Id
                         select t;
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IPagedList<WMenuButton> GetAllMenuButtons(string name = "", int menuId = 0, int parentId = 0, bool? published = null, int pageIndex = 0, int pageSize = int.MaxValue)
+        public virtual async Task<IPagedList<WMenuButton>> GetAllMenuButtonsAsync(string name = "", int menuId = 0, int parentId = 0, bool? published = null, int pageIndex = 0, int pageSize = int.MaxValue)
         {
             var query = _wMenuButtonRepository.Table;
 
@@ -131,7 +136,7 @@ namespace Nop.Services.Weixin
             if (published.HasValue)
                 query = query.Where(v => v.Published);
 
-            return new PagedList<WMenuButton>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
         #endregion

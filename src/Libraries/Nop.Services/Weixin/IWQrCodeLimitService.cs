@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Weixin;
 
@@ -9,19 +10,19 @@ namespace Nop.Services.Weixin
     /// </summary>
     public partial interface IWQrCodeLimitService
     {
-        void InsertWQrCodeLimit(WQrCodeLimit wQrCodeLimit);
+        Task InsertWQrCodeLimitAsync(WQrCodeLimit wQrCodeLimit);
 
-        void UpdateWQrCodeLimit(WQrCodeLimit wQrCodeLimit);
+        Task UpdateWQrCodeLimitAsync(WQrCodeLimit wQrCodeLimit);
 
-        void UpdateWQrCodeLimits(IList<WQrCodeLimit> wQrCodeLimits);
+        Task UpdateWQrCodeLimitsAsync(IList<WQrCodeLimit> wQrCodeLimits);
 
-        WQrCodeLimit GetWQrCodeLimitById(int id);
+        Task<WQrCodeLimit> GetWQrCodeLimitByIdAsync(int id);
 
-        WQrCodeLimit GetWQrCodeLimitByQrCodeId(int qrCodeId);
+        Task<WQrCodeLimit> GetWQrCodeLimitByQrCodeIdAsync(int qrCodeId);
 
-        List<WQrCodeLimit> GetWUsersByIds(int[] wQrCodeLimitIds);
+        Task<IList<WQrCodeLimit>> GetWUsersByIdsAsync(int[] wQrCodeLimitIds);
 
-        IPagedList<WQrCodeLimit> GetWQrCodeLimits(string sysName="", int? wConfigId = null, int? wQrCodeCategoryId = null, int? wQrCodeChannelId = null, bool? fixedUse = null, bool? hasCreated = null, int pageIndex = 0, int pageSize = int.MaxValue);
+        Task<IPagedList<WQrCodeLimit>> GetWQrCodeLimitsAsync(string sysName="", int? wConfigId = null, int? wQrCodeCategoryId = null, int? wQrCodeChannelId = null, bool? fixedUse = null, bool? hasCreated = null, int pageIndex = 0, int pageSize = int.MaxValue);
 
     }
 }

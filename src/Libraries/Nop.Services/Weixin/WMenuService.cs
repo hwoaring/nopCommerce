@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Vendors;
@@ -34,49 +35,37 @@ namespace Nop.Services.Weixin
 
         #region Methods
 
-        public virtual void InsertMenu(WMenu menu)
+        public virtual async Task InsertMenuAsync(WMenu menu)
         {
-            _wMenuRepository.Insert(menu);
+            await _wMenuRepository.InsertAsync(menu);
         }
 
-        public virtual void DeleteMenu(WMenu menu, bool delete = false)
+        public virtual async Task DeleteMenuAsync(WMenu menu)
         {
-            if (menu == null)
-                throw new ArgumentNullException(nameof(menu));
-
-            menu.Deleted = true;
-            _wMenuRepository.Update(menu);
+            await _wMenuRepository.DeleteAsync(menu);
         }
 
-        public virtual void DeleteMenus(IList<WMenu> menus, bool deleted = false)
+        public virtual async Task DeleteMenusAsync(IList<WMenu> menus)
         {
-            if (menus == null)
-                throw new ArgumentNullException(nameof(menus));
-
-            foreach (var menu in menus)
-            {
-                menu.Deleted = true;
-            }
-
-            _wMenuRepository.Update(menus);
+            await _wMenuRepository.DeleteAsync(menus);
         }
 
-        public virtual void UpdateMenu(WMenu menu)
+        public virtual async Task UpdateMenuAsync(WMenu menu)
         {
-            _wMenuRepository.Update(menu);
+            await _wMenuRepository.UpdateAsync(menu);
         }
 
-        public virtual void UpdateMenus(IList<WMenu> menus)
+        public virtual async Task UpdateMenusAsync(IList<WMenu> menus)
         {
-            _wMenuRepository.Update(menus);
+            await _wMenuRepository.UpdateAsync(menus);
         }
 
-        public virtual WMenu GetMenuById(int id)
+        public virtual async Task<WMenu> GetMenuByIdAsync(int id)
         {
-            return _wMenuRepository.GetById(id, cache => default);
+            return await _wMenuRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual WMenu GetMenuByMenuId(long menuId)
+        public virtual async Task<WMenu> GetMenuByMenuIdAsync(long menuId)
         {
             if (menuId == 0)
                 return null;
@@ -86,10 +75,10 @@ namespace Nop.Services.Weixin
                         orderby t.Id
                         select t;
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
-        public virtual IPagedList<WMenu> GetAllMenus(string systemName = "", bool? personal = null, int pageIndex = 0, int pageSize = int.MaxValue, bool showDeleted = false)
+        public virtual async Task<IPagedList<WMenu>> GetAllMenusAsync(string systemName = "", bool? personal = null, int pageIndex = 0, int pageSize = int.MaxValue, bool showDeleted = false)
         {
             var query = _wMenuRepository.Table;
 
@@ -102,7 +91,7 @@ namespace Nop.Services.Weixin
             if (!showDeleted)
                 query = query.Where(v => !v.Deleted);
 
-            return new PagedList<WMenu>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
         #endregion

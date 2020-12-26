@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Vendors;
@@ -35,62 +36,37 @@ namespace Nop.Services.Weixin
 
         #region Methods
 
-        public virtual void InsertWConfig(WConfig wConfig)
+        public virtual async Task InsertWConfigAsync(WConfig wConfig)
         {
-            _wConfigRepository.Insert(wConfig);
+            await _wConfigRepository.InsertAsync(wConfig);
         }
 
-        public virtual void DeleteWConfig(WConfig wConfig, bool delete = false)
+        public virtual async Task DeleteWConfigAsync(WConfig wConfig)
         {
-            if (wConfig == null)
-                throw new ArgumentNullException(nameof(wConfig));
-
-            if(delete)
-            {
-                _wConfigRepository.Delete(wConfig);
-            }
-            else
-            {
-                wConfig.Deleted = true;
-                _wConfigRepository.Update(wConfig);
-            }
+            await _wConfigRepository.DeleteAsync(wConfig);
         }
 
-        public virtual void DeleteWConfigs(IList<WConfig> wConfigs, bool deleted = false)
+        public virtual async Task DeleteWConfigsAsync(IList<WConfig> wConfigs)
         {
-            if (wConfigs == null)
-                throw new ArgumentNullException(nameof(wConfigs));
-
-            if(deleted)
-            {
-                _wConfigRepository.Delete(wConfigs);
-            }
-            else
-            {
-                foreach (var wConfig in wConfigs)
-                {
-                    wConfig.Deleted = true;
-                }
-                _wConfigRepository.Update(wConfigs);
-            }
+            await _wConfigRepository.DeleteAsync(wConfigs);
         }
 
-        public virtual void UpdateWConfig(WConfig wConfig)
+        public virtual async Task UpdateWConfigAsync(WConfig wConfig)
         {
-            _wConfigRepository.Update(wConfig);
+            await _wConfigRepository.UpdateAsync(wConfig);
         }
 
-        public virtual void UpdateWConfigs(IList<WConfig> wConfigs)
+        public virtual async Task UpdateWConfigsAsync(IList<WConfig> wConfigs)
         {
-            _wConfigRepository.Update(wConfigs);
+            await _wConfigRepository.UpdateAsync(wConfigs);
         }
 
-        public virtual WConfig GetWConfigById(int id)
+        public virtual async Task<WConfig> GetWConfigByIdAsync(int id)
         {
-            return _wConfigRepository.GetById(id, cache => default);
+            return await _wConfigRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual WConfig GetWUserByOriginalId(string originalId)
+        public virtual async Task<WConfig> GetWConfigByOriginalIdAsync(string originalId)
         {
             if (string.IsNullOrEmpty(originalId))
                 return null;
@@ -103,10 +79,10 @@ namespace Nop.Services.Weixin
                         !t.Deleted
                         select t;
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
-        public virtual WConfig GetWConfigByStoreId(int storeId)
+        public virtual async Task<WConfig> GetWConfigByStoreIdAsync(int storeId)
         {
             if (storeId == 0)
                 return null;
@@ -117,24 +93,15 @@ namespace Nop.Services.Weixin
                         !t.Deleted
                         select t;
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
-        public virtual List<WConfig> GetWConfigsByIds(int[] wConfigIds)
+        public virtual async Task<IList<WConfig>> GetWConfigsByIdsAsync(int[] wConfigIds)
         {
-            if (wConfigIds is null)
-                return new List<WConfig>();
-
-            var query = from t in _wConfigRepository.Table
-                        where wConfigIds.Contains(t.Id) &&
-                        !t.Deleted &&
-                        t.Published
-                        select t;
-
-            return query.ToList();
+            return await _wConfigRepository.GetByIdsAsync(wConfigIds, cache => default);
         }
 
-        public virtual IPagedList<WConfig> GetUsers(bool showDeleted = false, int pageIndex = 0, int pageSize = int.MaxValue)
+        public virtual async Task<IPagedList<WConfig>> GetWConfigsAsync(bool showDeleted = false, int pageIndex = 0, int pageSize = int.MaxValue)
         {
             var query = _wConfigRepository.Table;
 
@@ -143,7 +110,7 @@ namespace Nop.Services.Weixin
 
             query = query.OrderBy(v => v.Id);
 
-            return new PagedList<WConfig>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
         #endregion

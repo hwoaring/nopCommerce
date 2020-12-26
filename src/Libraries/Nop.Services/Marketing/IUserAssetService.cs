@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,19 +11,19 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IUserAssetService
     {
-        void InsertEntity(UserAsset entity);
+        Task InsertEntityAsync(UserAsset entity);
 
-        void DeleteEntity(UserAsset entity, bool delete = false);
+        Task DeleteEntityAsync(UserAsset entity);
 
-        void DeleteEntities(IList<UserAsset> entities, bool deleted = false);
+        Task DeleteEntitiesAsync(IList<UserAsset> entities);
 
-        void UpdateEntity(UserAsset entity);
+        Task UpdateEntityAsync(UserAsset entity);
 
-        void UpdateEntities(IList<UserAsset> entities);
+        Task UpdateEntitiesAsync(IList<UserAsset> entities);
 
-        UserAsset GetEntityById(int id);
+        Task<UserAsset> GetEntityByIdAsync(int id);
 
-        UserAsset GetEntityByUserId(int wuserId);
+        Task<UserAsset> GetEntityByUserIdAsync(int wuserId);
 
     }
 }

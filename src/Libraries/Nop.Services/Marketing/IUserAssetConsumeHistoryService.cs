@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,23 +11,23 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IUserAssetConsumeHistoryService
     {
-        void InsertEntity(UserAssetConsumeHistory entity);
+        Task InsertEntityAsync(UserAssetConsumeHistory entity);
 
-        void DeleteEntity(UserAssetConsumeHistory entity, bool delete = false);
+        Task DeleteEntityAsync(UserAssetConsumeHistory entity);
 
-        void DeleteEntities(IList<UserAssetConsumeHistory> entities, bool deleted = false);
+        Task DeleteEntitiesAsync(IList<UserAssetConsumeHistory> entities);
 
-        void UpdateEntity(UserAssetConsumeHistory entity);
+        Task UpdateEntityAsync(UserAssetConsumeHistory entity);
 
-        void UpdateEntities(IList<UserAssetConsumeHistory> entities);
+        Task UpdateEntitiesAsync(IList<UserAssetConsumeHistory> entities);
 
-        UserAssetConsumeHistory GetEntityById(int id);
+        Task<UserAssetConsumeHistory> GetEntityByIdAsync(int id);
 
-        List<UserAssetConsumeHistory> GetEntitiesByUserId(int userId, bool completed, bool isInvalid);
+        Task<IList<UserAssetConsumeHistory>> GetEntitiesByUserIdAsync(int userId, bool completed, bool isInvalid);
 
-        List<UserAssetConsumeHistory> GetEntitiesByUserAssetIncomeHistoryId(int userAssetIncomeHistoryId, bool completed, bool isInvalid);
+        Task<IList<UserAssetConsumeHistory>> GetEntitiesByUserAssetIncomeHistoryIdAsync(int userAssetIncomeHistoryId, bool completed, bool isInvalid);
 
-        IPagedList<UserAssetConsumeHistory> GetEntities(
+        Task<IPagedList<UserAssetConsumeHistory>> GetEntitiesAsync(
             int ownerUserId = 0,
             int? userAssetIncomeHistoryId = 0,
             AssetConsumType? assetConsumType = null,

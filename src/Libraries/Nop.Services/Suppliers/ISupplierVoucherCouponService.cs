@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Suppliers;
 using Nop.Core.Domain.Marketing;
@@ -11,23 +12,23 @@ namespace Nop.Services.Suppliers
     /// </summary>
     public partial interface ISupplierVoucherCouponService
     {
-        void InsertEntity(SupplierVoucherCoupon entity);
+        Task InsertEntityAsync(SupplierVoucherCoupon entity);
 
-        void DeleteEntity(SupplierVoucherCoupon entity, bool delete = false);
+        Task DeleteEntityAsync(SupplierVoucherCoupon entity);
 
-        void DeleteEntities(IList<SupplierVoucherCoupon> entities, bool deleted = false);
+        Task DeleteEntitiesAsync(IList<SupplierVoucherCoupon> entities);
 
-        void UpdateEntity(SupplierVoucherCoupon entity);
+        Task UpdateEntityAsync(SupplierVoucherCoupon entity);
 
-        void UpdateEntities(IList<SupplierVoucherCoupon> entities);
+        Task UpdateEntitiesAsync(IList<SupplierVoucherCoupon> entities);
 
-        SupplierVoucherCoupon GetEntityById(int id);
+        Task<SupplierVoucherCoupon> GetEntityByIdAsync(int id);
 
-        List<SupplierVoucherCoupon> GetEntitiesByIds(int[] entityIds);
+        Task<IList<SupplierVoucherCoupon>> GetEntitiesByIdsAsync(int[] entityIds);
 
-        List<SupplierVoucherCoupon> GetEntitiesBySupplier(int supplierId, int supplierShopId = 0);
+        Task<IList<SupplierVoucherCoupon>> GetEntitiesBySupplierAsync(int supplierId, int supplierShopId = 0);
 
-        IPagedList<SupplierVoucherCoupon> GetEntities(
+        Task<IPagedList<SupplierVoucherCoupon>> GetEntitiesAsync(
             string name = "",
             int supplierId = 0,
             int? supplierShopId = 0,

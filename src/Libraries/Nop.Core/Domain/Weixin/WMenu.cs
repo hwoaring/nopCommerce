@@ -1,9 +1,11 @@
-﻿namespace Nop.Core.Domain.Weixin
+﻿using Nop.Core.Domain.Common;
+
+namespace Nop.Core.Domain.Weixin
 {
     /// <summary>
     /// Represents an WMenu
     /// </summary>
-    public partial class WMenu : BaseEntity
+    public partial class WMenu : BaseEntity, ISoftDeletedEntity
     {
         /// <summary>
         /// 正确时微信系统返回的JSON数据包，如"menuid":"208379533"

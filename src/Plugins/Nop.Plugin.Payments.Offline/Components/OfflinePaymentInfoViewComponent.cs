@@ -6,7 +6,7 @@ using Nop.Web.Framework.Components;
 
 namespace Nop.Plugin.Payments.Offline.Components
 {
-    [ViewComponent(Name = "Offline")]
+    [ViewComponent(Name = "PaymentOffline")]
     public class OfflineViewComponent : NopViewComponent
     {
         private readonly OfflinePaymentSettings _offlinePaymentSettings;
@@ -27,18 +27,9 @@ namespace Nop.Plugin.Payments.Offline.Components
 
         public IViewComponentResult Invoke()
         {
-            var model = new PaymentInfoModel
-            {
-                DescriptionText = _localizationService.GetLocalizedSetting(_offlinePaymentSettings,
-                    x => x.DescriptionText, _workContext.WorkingLanguage.Id, _storeContext.CurrentStore.Id),
-                WechatPaymentInfo = _localizationService.GetLocalizedSetting(_offlinePaymentSettings,
-                    x => x.WechatPaymentInfo, _workContext.WorkingLanguage.Id, _storeContext.CurrentStore.Id),
-                AlipayPaymentInfo = _localizationService.GetLocalizedSetting(_offlinePaymentSettings,
-                    x => x.AlipayPaymentInfo, _workContext.WorkingLanguage.Id, _storeContext.CurrentStore.Id),
-                BankCardPaymentInfo = _localizationService.GetLocalizedSetting(_offlinePaymentSettings,
-                    x => x.BankCardPaymentInfo, _workContext.WorkingLanguage.Id, _storeContext.CurrentStore.Id)
-            };
+            var model = new PaymentInfoModel() { 
 
+            };
             return View("~/Plugins/Payments.Offline/Views/PaymentInfo.cshtml", model);
         }
     }

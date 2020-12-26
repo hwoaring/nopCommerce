@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Vendors;
@@ -34,40 +35,40 @@ namespace Nop.Services.Weixin
 
         #region Methods
 
-        public virtual void InsertEntity(QrCodeLimitBindingSource entity)
+        public virtual async Task InsertEntityAsync(QrCodeLimitBindingSource entity)
         {
-            _qrCodeLimitBindingSourceRepository.Insert(entity);
+            await _qrCodeLimitBindingSourceRepository.InsertAsync(entity);
         }
 
-        public virtual void DeleteEntity(QrCodeLimitBindingSource entity)
+        public virtual async Task DeleteEntityAsync(QrCodeLimitBindingSource entity)
         {
-            _qrCodeLimitBindingSourceRepository.Delete(entity);
+            await _qrCodeLimitBindingSourceRepository.DeleteAsync(entity);
         }
 
-        public virtual void DeleteEntities(IList<QrCodeLimitBindingSource> entities)
+        public virtual async Task DeleteEntitiesAsync(IList<QrCodeLimitBindingSource> entities)
         {
-            _qrCodeLimitBindingSourceRepository.Delete(entities);
+            await _qrCodeLimitBindingSourceRepository.DeleteAsync(entities);
         }
 
-        public virtual void UpdateEntity(QrCodeLimitBindingSource entity)
+        public virtual async Task UpdateEntityAsync(QrCodeLimitBindingSource entity)
         {
-            _qrCodeLimitBindingSourceRepository.Update(entity);
+            await _qrCodeLimitBindingSourceRepository.UpdateAsync(entity);
         }
 
-        public virtual void UpdateEntities(IList<QrCodeLimitBindingSource> entities)
+        public virtual async Task UpdateEntitiesAsync(IList<QrCodeLimitBindingSource> entities)
         {
-            _qrCodeLimitBindingSourceRepository.Update(entities);
+            await _qrCodeLimitBindingSourceRepository.UpdateAsync(entities);
         }
 
-        public virtual QrCodeLimitBindingSource GetEntityById(int id)
+        public virtual async Task<QrCodeLimitBindingSource> GetEntityByIdAsync(int id)
         {
             if (id == 0)
                 return null;
 
-            return _qrCodeLimitBindingSourceRepository.GetById(id, cache => default);
+            return await _qrCodeLimitBindingSourceRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual QrCodeLimitBindingSource GetEntityByQrcodeLimitId(int qrCodeLimitId)
+        public virtual async Task<QrCodeLimitBindingSource> GetEntityByQrcodeLimitIdAsync(int qrCodeLimitId)
         {
             if (qrCodeLimitId == 0)
                 return null;
@@ -76,23 +77,15 @@ namespace Nop.Services.Weixin
                         where t.QrCodeLimitId == qrCodeLimitId
                         select t;
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
-        public virtual List<QrCodeLimitBindingSource> GetEntitiesByIds(int[] wEntityIds)
+        public virtual async Task<IList<QrCodeLimitBindingSource>> GetEntitiesByIdsAsync(int[] wEntityIds)
         {
-            if (wEntityIds is null)
-                return new List<QrCodeLimitBindingSource>();
-
-            var query = from t in _qrCodeLimitBindingSourceRepository.Table
-                        where wEntityIds.Contains(t.Id) &&
-                        t.Published
-                        select t;
-
-            return query.ToList();
+            return await _qrCodeLimitBindingSourceRepository.GetByIdsAsync(wEntityIds, cache => default);
         }
 
-        public virtual IPagedList<QrCodeLimitBindingSource> GetEntities(
+        public virtual async Task<IPagedList<QrCodeLimitBindingSource>> GetEntitiesAsync(
             int qrCodeLimitId = 0, 
             int supplierId = 0, 
             int supplierShopId = 0, 
@@ -116,7 +109,7 @@ namespace Nop.Services.Weixin
 
             query = query.OrderBy(v => v.Id);
 
-            return new PagedList<QrCodeLimitBindingSource>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
         #endregion

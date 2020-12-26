@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,20 +11,20 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IProductProductMarketLabelMappingService
     {
-        void InsertEntity(ProductProductMarketLabelMapping entity);
+        Task InsertEntityAsync(ProductProductMarketLabelMapping entity);
 
-        void DeleteEntity(ProductProductMarketLabelMapping entity);
+        Task DeleteEntityAsync(ProductProductMarketLabelMapping entity);
 
-        void DeleteEntities(IList<ProductProductMarketLabelMapping> entities);
+        Task DeleteEntitiesAsync(IList<ProductProductMarketLabelMapping> entities);
 
-        void UpdateEntity(ProductProductMarketLabelMapping entity);
+        Task UpdateEntityAsync(ProductProductMarketLabelMapping entity);
 
-        void UpdateEntities(IList<ProductProductMarketLabelMapping> entities);
+        Task UpdateEntitiesAsync(IList<ProductProductMarketLabelMapping> entities);
 
-        ProductProductMarketLabelMapping GetEntityById(int productMarketLabelId, int productId);
+        Task<ProductProductMarketLabelMapping> GetEntityByIdAsync(int productMarketLabelId, int productId);
 
-        List<ProductProductMarketLabelMapping> GetEntitiesByProductMarketLabelId(int productMarketLabelId);
+        Task<IList<ProductProductMarketLabelMapping>> GetEntitiesByProductMarketLabelIdAsync(int productMarketLabelId);
 
-        List<ProductProductMarketLabelMapping> GetEntitiesByProductId(int productId);
+        Task<IList<ProductProductMarketLabelMapping>> GetEntitiesByProductIdAsync(int productId);
     }
 }

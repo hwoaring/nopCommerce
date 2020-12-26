@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Suppliers;
 
@@ -10,23 +11,23 @@ namespace Nop.Services.Suppliers
     /// </summary>
     public partial interface ISupplierService
     {
-        void InsertEntity(Supplier entity);
+        Task InsertEntityAsync(Supplier entity);
 
-        void DeleteEntity(Supplier entity, bool delete = false);
+        Task DeleteEntityAsync(Supplier entity, bool delete = false);
 
-        void DeleteEntities(IList<Supplier> entities, bool deleted = false);
+        Task DeleteEntitiesAsync(IList<Supplier> entities, bool deleted = false);
 
-        void UpdateEntity(Supplier entity);
+        Task UpdateEntityAsync(Supplier entity);
 
-        void UpdateEntities(IList<Supplier> entities);
+        Task UpdateEntitiesAsync(IList<Supplier> entities);
 
-        Supplier GetEntityById(int id);
+        Task<Supplier> GetEntityByIdAsync(int id);
 
-        List<Supplier> GetEntitiesByIds(int[] entityIds);
+        Task<IList<Supplier>> GetEntitiesByIdsAsync(int[] entityIds);
 
-        List<Supplier> GetEntitiesByStoreId(int stroeId);
+        Task<IList<Supplier>> GetEntitiesByStoreIdAsync(int stroeId);
 
-        IPagedList<Supplier> GetEntities(
+        Task<IPagedList<Supplier>> GetEntitiesAsync(
             string name = "",
             int storeId = 0,
             DateTime? startDateTimeUtc = null,

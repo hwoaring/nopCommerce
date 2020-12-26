@@ -36,6 +36,8 @@ namespace Senparc.Weixin.MP.CommonService
     /// </summary>
     public class EventService
     {
+        #region DPBMARK MP
+
         /// <summary>
         /// 微信MessageHandler事件处理，此代码的简化MessageHandler方法已由/CustomerMessageHandler/CustomerMessageHandler_Event.cs完成，
         /// 此方法不再更新
@@ -93,6 +95,9 @@ namespace Senparc.Weixin.MP.CommonService
             return responseMessage;
         }
 
+        #endregion DPBMARK_END
+
+
         public async Task ConfigOnWeixinExceptionFunc(WeixinException ex)
         {
             Senparc.Weixin.WeixinTrace.SendCustomLog("进入 ConfigOnWeixinExceptionFunc() 方法", ex.Message);
@@ -100,13 +105,13 @@ namespace Senparc.Weixin.MP.CommonService
             {
                 var appId = Config.SenparcWeixinSetting.WeixinAppId;
 
-                string openId = "olPjZjsXuQPJoV0HlruZkNzKc91E";//收到通知的管理员OpenId
+                var openId = "olPjZjsXuQPJoV0HlruZkNzKc91E";//收到通知的管理员OpenId
                 var host = "A1 / AccessTokenOrAppId：" + (ex.AccessTokenOrAppId ?? "null");
                 string service = null;
-                string message = ex.Message;
+                var message = ex.Message;
                 var status = ex.GetType().Name;
                 var remark = "\r\n这是一条通过OnWeixinExceptionFunc事件发送的异步模板消息";
-                string url = "https://github.com/JeffreySu/WeiXinMPSDK/blob/master/Samples/netcore3.0-mvc/Senparc.Weixin.Sample.NetCore3/Startup.cs#L410";//需要点击打开的URL
+                var url = "https://github.com/JeffreySu/WeiXinMPSDK/blob/master/Samples/netcore3.0-mvc/Senparc.Weixin.Sample.NetCore3/Startup.cs#L410";//需要点击打开的URL
 
                 var sendTemplateMessage = true;
 
@@ -119,21 +124,21 @@ namespace Senparc.Weixin.MP.CommonService
                     //需要忽略的类型
                     var ignoreErrorCodes = new[]
                     {
-                        ReturnCode.获取access_token时AppSecret错误或者access_token无效,
-                        ReturnCode.access_token超时,
-                        ReturnCode.template_id不正确,
-                        ReturnCode.调用接口的IP地址不在白名单中,//比较容易出现，需要注意！
-                        ReturnCode.缺少access_token参数,
-                        ReturnCode.回复时间超过限制,
-                        ReturnCode.api功能未授权,
-                        ReturnCode.用户未授权该api,
-                        ReturnCode.参数错误invalid_parameter,
-                        ReturnCode.接口调用超过限制,
-                        ReturnCode.需要接收者关注,//43004
-                        ReturnCode.超出响应数量限制,//43004 - out of response count limit，一般只允许连续接收20条客服消息
-                        
-                        //其他更多可能的情况
-                    };
+                                ReturnCode.获取access_token时AppSecret错误或者access_token无效,
+                                ReturnCode.access_token超时,
+                                ReturnCode.template_id不正确,
+                                ReturnCode.调用接口的IP地址不在白名单中,//比较容易出现，需要注意！
+                                ReturnCode.缺少access_token参数,
+                                ReturnCode.回复时间超过限制,
+                                ReturnCode.api功能未授权,
+                                ReturnCode.用户未授权该api,
+                                ReturnCode.参数错误invalid_parameter,
+                                ReturnCode.接口调用超过限制,
+                                ReturnCode.需要接收者关注,//43004
+                                ReturnCode.超出响应数量限制,//43004 - out of response count limit，一般只允许连续接收20条客服消息
+
+                                //其他更多可能的情况
+                            };
                     if (ignoreErrorCodes.Contains(jsonEx.JsonResult.errcode))
                     {
                         if (jsonEx.JsonResult.errcode == ReturnCode.调用接口的IP地址不在白名单中)

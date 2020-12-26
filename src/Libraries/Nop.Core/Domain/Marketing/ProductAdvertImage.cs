@@ -1,4 +1,5 @@
 ﻿using Humanizer;
+using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Weixin;
 
 namespace Nop.Core.Domain.Marketing
@@ -6,7 +7,7 @@ namespace Nop.Core.Domain.Marketing
     /// <summary>
     /// 产品广告图
     /// </summary>
-    public partial class ProductAdvertImage : BaseEntity
+    public partial class ProductAdvertImage : BaseEntity, ISoftDeletedEntity
     {
         /// <summary>
         /// 标题（不为空）

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Weixin;
 
@@ -9,25 +10,25 @@ namespace Nop.Services.Weixin
     /// </summary>
     public partial interface IWMessageBindService
     {
-        void InsertEntity(WMessageBindMapping messageBind);
+        Task InsertEntityAsync(WMessageBindMapping messageBind);
 
-        void DeleteEntity(WMessageBindMapping messageBind);
+        Task DeleteEntityAsync(WMessageBindMapping messageBind);
 
-        void DeleteEntities(IList<WMessageBindMapping> messageBinds);
+        Task DeleteEntitiesAsync(IList<WMessageBindMapping> messageBinds);
 
-        void UpdateEntity(WMessageBindMapping messageBind);
+        Task UpdateEntityAsync(WMessageBindMapping messageBind);
 
-        void UpdateEntities(IList<WMessageBindMapping> messageBinds);
+        Task UpdateEntitiesAsync(IList<WMessageBindMapping> messageBinds);
 
-        WMessageBindMapping GetEntityById(int id);
+        Task<WMessageBindMapping> GetEntityByIdAsync(int id);
 
-        List<WMessageBindMapping> GetEntitiesByIds(int[] messageBindIds);
+        Task<IList<WMessageBindMapping>> GetEntitiesByIdsAsync(int[] messageBindIds);
 
-        List<int> GetMessageBindIds(int bindSceneId, WMessageBindSceneType messageBindSceneType);
+        Task<IList<int>> GetMessageBindIdsAsync(int bindSceneId, WMessageBindSceneType messageBindSceneType);
 
-        List<WMessageBindMapping> GetEntities(int messageId = 0, int bindSceneId = 0, WMessageBindSceneType? messageBindSceneType = null, bool? published = null);
+        Task<IList<WMessageBindMapping>> GetEntitiesAsync(int messageId = 0, int bindSceneId = 0, WMessageBindSceneType? messageBindSceneType = null, bool? published = null);
 
-        IPagedList<WMessageBindMapping> GetEntities(int messageId = 0, int bindSceneId = 0, WMessageBindSceneType? messageBindSceneType = null, bool? published = null, int pageIndex = 0, int pageSize = int.MaxValue);
+        Task<IPagedList<WMessageBindMapping>> GetEntitiesAsync(int messageId = 0, int bindSceneId = 0, WMessageBindSceneType? messageBindSceneType = null, bool? published = null, int pageIndex = 0, int pageSize = int.MaxValue);
 
     }
 }

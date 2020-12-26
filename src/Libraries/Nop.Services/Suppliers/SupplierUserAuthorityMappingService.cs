@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Linq;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
@@ -35,62 +36,37 @@ namespace Nop.Services.Suppliers
 
         #region Methods
 
-        public virtual void InsertEntity(SupplierUserAuthorityMapping entity)
+        public virtual async Task InsertEntityAsync(SupplierUserAuthorityMapping entity)
         {
-            _supplierUserAuthorityMappingRepository.Insert(entity);
+            await _supplierUserAuthorityMappingRepository.InsertAsync(entity);
         }
 
-        public virtual void DeleteEntity(SupplierUserAuthorityMapping entity, bool delete = false)
+        public virtual async Task DeleteEntityAsync(SupplierUserAuthorityMapping entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            if (delete)
-            {
-                _supplierUserAuthorityMappingRepository.Delete(entity);
-            }
-            else
-            {
-                entity.Deleted = true;
-                _supplierUserAuthorityMappingRepository.Update(entity);
-            }
+            await _supplierUserAuthorityMappingRepository.DeleteAsync(entity);
         }
 
-        public virtual void DeleteEntities(IList<SupplierUserAuthorityMapping> entities, bool deleted = false)
+        public virtual async Task DeleteEntitiesAsync(IList<SupplierUserAuthorityMapping> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            if (deleted)
-            {
-                _supplierUserAuthorityMappingRepository.Delete(entities);
-            }
-            else
-            {
-                foreach (var entity in entities)
-                {
-                    entity.Deleted = true;
-                }
-                _supplierUserAuthorityMappingRepository.Update(entities);
-            }
+            await _supplierUserAuthorityMappingRepository.DeleteAsync(entities);
         }
 
-        public virtual void UpdateEntity(SupplierUserAuthorityMapping entity)
+        public virtual async Task UpdateEntityAsync(SupplierUserAuthorityMapping entity)
         {
-            _supplierUserAuthorityMappingRepository.Update(entity);
+            await _supplierUserAuthorityMappingRepository.UpdateAsync(entity);
         }
 
-        public virtual void UpdateEntities(IList<SupplierUserAuthorityMapping> entities)
+        public virtual async Task UpdateEntitiesAsync(IList<SupplierUserAuthorityMapping> entities)
         {
-            _supplierUserAuthorityMappingRepository.Update(entities);
+            await _supplierUserAuthorityMappingRepository.UpdateAsync(entities);
         }
 
-        public virtual SupplierUserAuthorityMapping GetEntityById(int id)
+        public virtual async Task<SupplierUserAuthorityMapping> GetEntityByIdAsync(int id)
         {
-            return _supplierUserAuthorityMappingRepository.GetById(id, cache => default);
+            return await _supplierUserAuthorityMappingRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual SupplierUserAuthorityMapping GetEntityByUserId(int userId)
+        public virtual async Task<SupplierUserAuthorityMapping> GetEntityByUserIdAsync(int userId)
         {
             if (userId == 0)
                 return null;
@@ -101,24 +77,15 @@ namespace Nop.Services.Suppliers
                         t.Published
                         select t;
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
-        public virtual List<SupplierUserAuthorityMapping> GetEntitiesByIds(int[] entityIds)
+        public virtual async Task<IList<SupplierUserAuthorityMapping>> GetEntitiesByIdsAsync(int[] entityIds)
         {
-            if (entityIds is null)
-                return new List<SupplierUserAuthorityMapping>();
-
-            var query = from t in _supplierUserAuthorityMappingRepository.Table
-                        where entityIds.Contains(t.Id) &&
-                        !t.Deleted &&
-                        t.Published
-                        select t;
-
-            return query.ToList();
+            return await _supplierUserAuthorityMappingRepository.GetByIdsAsync(entityIds, cache => default);
         }
 
-        public virtual List<SupplierUserAuthorityMapping> GetEntitiesBySupplierId(int supplierId, int supplierShopId = 0)
+        public virtual async Task<IList<SupplierUserAuthorityMapping>> GetEntitiesBySupplierIdAsync(int supplierId, int supplierShopId = 0)
         {
             if (supplierId == 0)
                 return new List<SupplierUserAuthorityMapping>();
@@ -131,10 +98,10 @@ namespace Nop.Services.Suppliers
 
             query = query.Where(q => !q.Deleted);
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IPagedList<SupplierUserAuthorityMapping> GetEntities(
+        public virtual async Task<IPagedList<SupplierUserAuthorityMapping>> GetEntitiesAsync(
             int supplierId = 0,
             int supplierShopId = 0,
             bool? financialManager = null,
@@ -164,7 +131,7 @@ namespace Nop.Services.Suppliers
             if (deleted.HasValue)
                 query = query.Where(q => q.Deleted == deleted);
 
-            return new PagedList<SupplierUserAuthorityMapping>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
         #endregion

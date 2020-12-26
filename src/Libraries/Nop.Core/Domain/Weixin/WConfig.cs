@@ -1,9 +1,11 @@
-﻿namespace Nop.Core.Domain.Weixin
+﻿using Nop.Core.Domain.Common;
+
+namespace Nop.Core.Domain.Weixin
 {
     /// <summary>
     /// Represents an WConfig
     /// </summary>
-    public partial class WConfig : BaseEntity
+    public partial class WConfig : BaseEntity, ISoftDeletedEntity
     {
         /// <summary>
         /// 微信公众号原始ID，用于区分不同平台用户

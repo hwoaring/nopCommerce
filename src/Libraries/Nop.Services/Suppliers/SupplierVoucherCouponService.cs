@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Vendors;
@@ -35,79 +36,42 @@ namespace Nop.Services.Suppliers
 
         #region Methods
 
-        public virtual void InsertEntity(SupplierVoucherCoupon entity)
+        public virtual async Task InsertEntityAsync(SupplierVoucherCoupon entity)
         {
-            _supplierVoucherCouponRepository.Insert(entity);
+            await _supplierVoucherCouponRepository.InsertAsync(entity);
         }
 
-        public virtual void DeleteEntity(SupplierVoucherCoupon entity, bool delete = false)
+        public virtual async Task DeleteEntityAsync(SupplierVoucherCoupon entity)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            if (delete)
-            {
-                _supplierVoucherCouponRepository.Delete(entity);
-            }
-            else
-            {
-                entity.Deleted = true;
-                _supplierVoucherCouponRepository.Update(entity);
-            }
+            await _supplierVoucherCouponRepository.DeleteAsync(entity);
         }
 
-        public virtual void DeleteEntities(IList<SupplierVoucherCoupon> entities, bool deleted = false)
+        public virtual async Task DeleteEntitiesAsync(IList<SupplierVoucherCoupon> entities)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            if (deleted)
-            {
-                _supplierVoucherCouponRepository.Delete(entities);
-            }
-            else
-            {
-                foreach (var entity in entities)
-                {
-                    entity.Deleted = true;
-                }
-                _supplierVoucherCouponRepository.Update(entities);
-            }
+            await _supplierVoucherCouponRepository.DeleteAsync(entities);
         }
 
-        public virtual void UpdateEntity(SupplierVoucherCoupon entity)
+        public virtual async Task UpdateEntityAsync(SupplierVoucherCoupon entity)
         {
-            _supplierVoucherCouponRepository.Update(entity);
+            await _supplierVoucherCouponRepository.UpdateAsync(entity);
         }
 
-        public virtual void UpdateEntities(IList<SupplierVoucherCoupon> entities)
+        public virtual async Task UpdateEntitiesAsync(IList<SupplierVoucherCoupon> entities)
         {
-            _supplierVoucherCouponRepository.Update(entities);
+           await  _supplierVoucherCouponRepository.UpdateAsync(entities);
         }
 
-        public virtual SupplierVoucherCoupon GetEntityById(int id)
+        public virtual async Task<SupplierVoucherCoupon> GetEntityByIdAsync(int id)
         {
-            return _supplierVoucherCouponRepository.GetById(id, cache => default);
+            return await _supplierVoucherCouponRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual List<SupplierVoucherCoupon> GetEntitiesByIds(int[] entityIds)
+        public virtual async Task<IList<SupplierVoucherCoupon>> GetEntitiesByIdsAsync(int[] entityIds)
         {
-            if (entityIds is null)
-                return new List<SupplierVoucherCoupon>();
-
-            var query = from t in _supplierVoucherCouponRepository.Table
-                        where entityIds.Contains(t.Id) &&
-                        t.StartDateTimeUtc < DateTime.UtcNow &&
-                        t.EndDateTimeUtc >= DateTime.UtcNow &&
-                        !t.Deleted &&
-                        !t.Locked &&
-                        t.Published
-                        select t;
-
-            return query.ToList();
+            return await _supplierVoucherCouponRepository.GetByIdsAsync(entityIds, cache => default);
         }
 
-        public virtual List<SupplierVoucherCoupon> GetEntitiesBySupplier(int supplierId, int supplierShopId = 0)
+        public virtual async Task<IList<SupplierVoucherCoupon>> GetEntitiesBySupplierAsync(int supplierId, int supplierShopId = 0)
         {
             if (supplierId == 0)
                 return new List<SupplierVoucherCoupon>();
@@ -120,10 +84,10 @@ namespace Nop.Services.Suppliers
 
             query = query.Where(q => !q.Deleted);
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IPagedList<SupplierVoucherCoupon> GetEntities(
+        public virtual async Task<IPagedList<SupplierVoucherCoupon>> GetEntitiesAsync(
             string name = "",
             int supplierId = 0,
             int? supplierShopId = 0,
@@ -160,7 +124,7 @@ namespace Nop.Services.Suppliers
             if (deleted.HasValue)
                 query = query.Where(q => q.Deleted == deleted);
 
-            return new PagedList<SupplierVoucherCoupon>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
         #endregion

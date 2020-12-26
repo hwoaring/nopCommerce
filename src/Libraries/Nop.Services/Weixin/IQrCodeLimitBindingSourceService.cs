@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Weixin;
 
@@ -11,23 +12,23 @@ namespace Nop.Services.Weixin
     {
         #region QrCodeLimitBindingSource
 
-        void InsertEntity(QrCodeLimitBindingSource entity);
+        Task InsertEntityAsync(QrCodeLimitBindingSource entity);
 
-        void DeleteEntity(QrCodeLimitBindingSource entity);
+        Task DeleteEntityAsync(QrCodeLimitBindingSource entity);
 
-        void DeleteEntities(IList<QrCodeLimitBindingSource> entities);
+        Task DeleteEntitiesAsync(IList<QrCodeLimitBindingSource> entities);
 
-        void UpdateEntity(QrCodeLimitBindingSource entity);
+        Task UpdateEntityAsync(QrCodeLimitBindingSource entity);
 
-        void UpdateEntities(IList<QrCodeLimitBindingSource> entities);
+        Task UpdateEntitiesAsync(IList<QrCodeLimitBindingSource> entities);
 
-        QrCodeLimitBindingSource GetEntityById(int id);
+        Task<QrCodeLimitBindingSource> GetEntityByIdAsync(int id);
 
-        QrCodeLimitBindingSource GetEntityByQrcodeLimitId(int qrCodeLimitId);
+        Task<QrCodeLimitBindingSource> GetEntityByQrcodeLimitIdAsync(int qrCodeLimitId);
 
-        List<QrCodeLimitBindingSource> GetEntitiesByIds(int[] wEntityIds);
+        Task<IList<QrCodeLimitBindingSource>> GetEntitiesByIdsAsync(int[] wEntityIds);
 
-        IPagedList<QrCodeLimitBindingSource> GetEntities(int qrCodeLimitId = 0, int supplierId = 0, int supplierShopId = 0, int productId = 0, bool? published = null, int pageIndex = 0, int pageSize = int.MaxValue);
+        Task<IPagedList<QrCodeLimitBindingSource>> GetEntitiesAsync(int qrCodeLimitId = 0, int supplierId = 0, int supplierShopId = 0, int productId = 0, bool? published = null, int pageIndex = 0, int pageSize = int.MaxValue);
 
         #endregion
     }

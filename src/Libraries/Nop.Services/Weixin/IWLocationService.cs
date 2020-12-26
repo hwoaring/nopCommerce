@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Weixin;
 
@@ -9,19 +10,19 @@ namespace Nop.Services.Weixin
     /// </summary>
     public partial interface IWLocationService
     {
-        void InsertLocation(WLocation wlocation);
+        Task InsertLocationAsync(WLocation wlocation);
 
-        void DeleteLocation(WLocation wlocation);
+        Task DeleteLocationAsync(WLocation wlocation);
 
-        void DeleteLocations(IList<WLocation> wlocations);
+        Task DeleteLocationsAsync(IList<WLocation> wlocations);
 
-        void UpdateLocation(WLocation wlocation);
+        Task UpdateLocationAsync(WLocation wlocation);
 
-        WLocation GetLocationById(int id);
+        Task<WLocation> GetLocationByIdAsync(int id);
 
-        WLocation GetLocationByUserId(int userId);
+        Task<WLocation> GetLocationByUserIdAsync(int userId);
 
-        IPagedList<WLocation> GetLocations(int pageIndex = 0, int pageSize = int.MaxValue);
+        Task<IPagedList<WLocation>> GetLocationsAsync(int pageIndex = 0, int pageSize = int.MaxValue);
 
     }
 }

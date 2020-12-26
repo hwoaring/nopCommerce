@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Weixin;
 
@@ -13,74 +14,72 @@ namespace Nop.Services.Weixin
         /// 添加新用户
         /// </summary>
         /// <param name="wuser"></param>
-        void InsertWUser(WUser wuser);
+        Task InsertWUserAsync(WUser wuser);
 
         /// <summary>
         /// 删除用户
         /// </summary>
         /// <param name="wUser"></param>
-        /// <param name="delete">是否真删除，否则只更改删除标志</param>
-        void DeleteWUser(WUser wUser, bool delete = false);
+        Task DeleteWUserAsync(WUser wUser);
         /// <summary>
         /// 
         /// </summary>
         /// <param name="wUsers"></param>
-        /// <param name="deleted">是否真删除，否则只更改删除标志</param>
-        void DeleteWUsers(IList<WUser> wUsers, bool deleted = false);
+        Task DeleteWUsersAsync(IList<WUser> wUsers);
 
         /// <summary>
         /// 更新用户信息
         /// </summary>
         /// <param name="wuser"></param>
-        void UpdateWUser(WUser wuser);
+        Task UpdateWUserAsync(WUser wuser);
 
         /// <summary>
         /// 更新用户信息
         /// </summary>
         /// <param name="wuser"></param>
-        void UpdateWUsers(IList<WUser> wUsers);
+        Task UpdateWUsersAsync(IList<WUser> wUsers);
 
         /// <summary>
         /// 获取用户信息
         /// </summary>
         /// <param name="wUserId"></param>
         /// <returns></returns>
-        WUser GetWUserById(int id);
+        Task<WUser> GetWUserByIdAsync(int id);
 
         /// <summary>
         /// 获取用户信息
         /// </summary>
         /// <param name="openId"></param>
         /// <returns></returns>
-        WUser GetWUserByOpenId(string openId);
+        Task<WUser> GetWUserByOpenIdAsync(string openId);
 
         /// <summary>
         /// 获取用户信息
         /// </summary>
         /// <param name="openIdHash"></param>
         /// <returns></returns>
-        WUser GetWUserByOpenIdHash(long openIdHash);
+        Task<WUser> GetWUserByOpenIdHashAsync(long openIdHash);
 
         /// <summary>
         /// 获取用户信息
         /// </summary>
         /// <param name="wUserIds"></param>
         /// <returns></returns>
-        List<WUser> GetWUsersByIds(int[] wUserIds);
+        Task<IList<WUser>> GetWUsersByIdsAsync(int[] wUserIds);
 
         /// <summary>
         /// 获取用户基本信息
         /// </summary>
         /// <param name="openId"></param>
         /// <returns></returns>
-        WUserBaseInfo GetWUserBaseInfo(string openId, bool containAllOpenid = false);
+        Task<WUserBaseInfo> GetWUserBaseInfoAsync(string openId, bool containAllOpenid = false);
 
         /// <summary>
         /// 获取用户基本信息
         /// </summary>
         /// <param name="openIds"></param>
         /// <returns></returns>
-        List<WUserBaseInfo> GetWUserBaseInfoByOpenIds(string[] openIds, bool containAllOpenid = false);
+        Task<IList<WUserBaseInfo>> GetWUserBaseInfoByOpenIdsAsync(string[] openIds, bool containAllOpenid = false);
 
         /// <summary>
         /// 获取全部用户
@@ -89,7 +88,7 @@ namespace Nop.Services.Weixin
         /// <param name="pageSize"></param>
         /// <param name="showDeleted"></param>
         /// <returns></returns>
-        IPagedList<WUser> GetAllUsers(string nickName = null, string remark = null, int pageIndex = 0, int pageSize = int.MaxValue, bool showDeleted = false);
+        Task<IPagedList<WUser>> GetAllUsersAsync(string nickName = null, string remark = null, int pageIndex = 0, int pageSize = int.MaxValue, bool showDeleted = false);
 
         /// <summary>
         /// 获取自己推荐的用户列表信息
@@ -100,7 +99,7 @@ namespace Nop.Services.Weixin
         /// <param name="pageSize"></param>
         /// <param name="showDeleted"></param>
         /// <returns></returns>
-        IPagedList<WUser> GetRefereeUsers(int refereeId, int wConfigId = 0, int pageIndex = 0, int pageSize = int.MaxValue, bool showDeleted = false);
+        Task<IPagedList<WUser>> GetRefereeUsersAsync(int refereeId, int wConfigId = 0, int pageIndex = 0, int pageSize = int.MaxValue, bool showDeleted = false);
 
     }
 }

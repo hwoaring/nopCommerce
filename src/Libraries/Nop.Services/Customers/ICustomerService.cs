@@ -124,7 +124,7 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="openId"></param>
         /// <returns></returns>
-        Customer GetCustomerByOpenId(string openId);
+        Task<Customer> GetCustomerByOpenIdAsync(string openId);
 
         /// <summary>
         /// Get customer by email

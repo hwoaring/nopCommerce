@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,23 +11,23 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IMarketingAdvertWayService
     {
-        void InsertEntity(MarketingAdvertWay entity);
+        Task InsertEntityAsync(MarketingAdvertWay entity);
 
-        void DeleteEntity(MarketingAdvertWay entity, bool delete = false);
+        Task DeleteEntityAsync(MarketingAdvertWay entity, bool delete = false);
 
-        void DeleteEntities(IList<MarketingAdvertWay> entities, bool deleted = false);
+        Task DeleteEntitiesAsync(IList<MarketingAdvertWay> entities, bool deleted = false);
 
-        void UpdateEntity(MarketingAdvertWay entity);
+        Task UpdateEntityAsync(MarketingAdvertWay entity);
 
-        void UpdateEntities(IList<MarketingAdvertWay> entities);
+        Task UpdateEntitiesAsync(IList<MarketingAdvertWay> entities);
 
-        MarketingAdvertWay GetEntityById(int id);
+        Task<MarketingAdvertWay> GetEntityByIdAsync(int id);
 
-        string GetEntinyNameById(int id);
+        Task<string> GetEntinyNameByIdAsync(int id);
 
-        List<MarketingAdvertWay> GetEntitiesByIds(int[] entityIds);
-        
-        IPagedList<MarketingAdvertWay> GetEntities(
+        Task<IList<MarketingAdvertWay>> GetEntitiesByIdsAsync(int[] entityIds);
+
+        Task<IPagedList<MarketingAdvertWay>> GetEntitiesAsync(
             string name = "",
             bool? deleted = null,
             int pageIndex = 0, int pageSize = int.MaxValue);

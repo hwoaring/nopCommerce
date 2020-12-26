@@ -1,9 +1,11 @@
-﻿namespace Nop.Core.Domain.Weixin
+﻿using Nop.Core.Domain.Common;
+
+namespace Nop.Core.Domain.Weixin
 {
     /// <summary>
     /// Represents an WMessage
     /// </summary>
-    public partial class WMessage : BaseEntity
+    public partial class WMessage : BaseEntity, ISoftDeletedEntity
     {
         /// <summary>
         /// 是否显示封面
@@ -40,7 +42,7 @@
         /// <summary>
         /// 回复方式：被动方式 passive，客服方式 custom
         /// </summary>
-        public WResponseType ResponseType 
+        public WResponseType ResponseType
         {
             get => (WResponseType)ResponseTypeId;
             set => ResponseTypeId = (byte)value;
@@ -52,7 +54,7 @@
         /// <summary>
         /// 消息类型
         /// </summary>
-        public WMessageType MessageType 
+        public WMessageType MessageType
         {
             get => (WMessageType)MessageTypeId;
             set => MessageTypeId = (byte)value;

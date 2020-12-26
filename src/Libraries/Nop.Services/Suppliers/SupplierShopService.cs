@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Linq;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
@@ -35,76 +36,42 @@ namespace Nop.Services.Suppliers
 
         #region Methods
 
-        public virtual void InsertEntity(SupplierShop supplierShop)
+        public virtual async Task InsertEntityAsync(SupplierShop supplierShop)
         {
-            _supplierShopRepository.Insert(supplierShop);
+            await _supplierShopRepository.InsertAsync(supplierShop);
         }
 
-        public virtual void DeleteEntity(SupplierShop supplierShop, bool delete = false)
+        public virtual async Task DeleteEntityAsync(SupplierShop supplierShop)
         {
-            if (supplierShop == null)
-                throw new ArgumentNullException(nameof(supplierShop));
-
-            if (delete)
-            {
-                _supplierShopRepository.Delete(supplierShop);
-            }
-            else
-            {
-                supplierShop.Deleted = true;
-                _supplierShopRepository.Update(supplierShop);
-            }
+            await _supplierShopRepository.DeleteAsync(supplierShop);
         }
 
-        public virtual void DeleteEntities(IList<SupplierShop> supplierShops, bool deleted = false)
+        public virtual async Task DeleteEntitiesAsync(IList<SupplierShop> supplierShops)
         {
-            if (supplierShops == null)
-                throw new ArgumentNullException(nameof(supplierShops));
-
-            if (deleted)
-            {
-                _supplierShopRepository.Delete(supplierShops);
-            }
-            else
-            {
-                foreach (var supplierShop in supplierShops)
-                {
-                    supplierShop.Deleted = true;
-                }
-                _supplierShopRepository.Update(supplierShops);
-            }
+            await _supplierShopRepository.DeleteAsync(supplierShops);
         }
 
-        public virtual void UpdateEntity(SupplierShop supplierShop)
+        public virtual async Task UpdateEntityAsync(SupplierShop supplierShop)
         {
-            _supplierShopRepository.Update(supplierShop);
+            await _supplierShopRepository.UpdateAsync(supplierShop);
         }
 
-        public virtual void UpdateEntities(IList<SupplierShop> supplierShops)
+        public virtual async Task UpdateEntitiesAsync(IList<SupplierShop> supplierShops)
         {
-            _supplierShopRepository.Update(supplierShops);
+            await _supplierShopRepository.UpdateAsync(supplierShops);
         }
 
-        public virtual SupplierShop GetEntityById(int id)
+        public virtual async Task<SupplierShop> GetEntityByIdAsync(int id)
         {
-            return _supplierShopRepository.GetById(id, cache => default);
+            return await _supplierShopRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual List<SupplierShop> GetEntitiesByIds(int[] entityIds)
+        public virtual async Task<IList<SupplierShop>> GetEntitiesByIdsAsync(int[] entityIds)
         {
-            if (entityIds is null)
-                return new List<SupplierShop>();
-
-            var query = from t in _supplierShopRepository.Table
-                        where entityIds.Contains(t.Id) &&
-                        !t.Deleted &&
-                        t.Published
-                        select t;
-
-            return query.ToList();
+            return await _supplierShopRepository.GetByIdsAsync(entityIds, cache => default);
         }
 
-        public virtual List<SupplierShop> GetEntitiesBySupplierId(int supplierId)
+        public virtual async Task<IList<SupplierShop>> GetEntitiesBySupplierIdAsync(int supplierId)
         {
             if (supplierId <= 0)
                 return new List<SupplierShop>();
@@ -115,10 +82,10 @@ namespace Nop.Services.Suppliers
                         t.Published
                         select t;
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IPagedList<SupplierShop> GetEntities(
+        public virtual async Task<IPagedList<SupplierShop>> GetEntitiesAsync(
             int supplierId = 0,
             string name = "",
             bool? published = null,
@@ -136,7 +103,7 @@ namespace Nop.Services.Suppliers
             if (deleted.HasValue)
                 query = query.Where(q => q.Deleted == deleted);
 
-            return new PagedList<SupplierShop>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
         #endregion

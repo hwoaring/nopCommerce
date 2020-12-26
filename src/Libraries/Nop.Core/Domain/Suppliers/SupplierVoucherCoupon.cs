@@ -1,4 +1,5 @@
 ﻿using System;
+using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Marketing;
 using Humanizer;
 
@@ -7,12 +8,12 @@ namespace Nop.Core.Domain.Suppliers
     /// <summary>
     /// 供应商创建的卡片或券类
     /// </summary>
-    public partial class SupplierVoucherCoupon : BaseEntity
+    public partial class SupplierVoucherCoupon : BaseEntity, ISoftDeletedEntity
     {
         /// <summary>
         /// 系统名称（全名，用于识别相似卡券）
         /// </summary>
-        public string SystemName { get; set; }  
+        public string SystemName { get; set; }
         /// <summary>
         /// 名称（用于在前台和用户卡券列表显示）
         /// </summary>
@@ -67,7 +68,7 @@ namespace Nop.Core.Domain.Suppliers
         /// <summary>
         /// 每人最大限制领取总数日期范围。X天以内限制领取总数。0=全部日期范围内。
         /// </summary>
-        public int LimitReceiveNumberDays{ get; set; }
+        public int LimitReceiveNumberDays { get; set; }
         /// <summary>
         /// 每人最大限制领取总数，包括已经消费或过期的（主要用于免费领取的卡券类，购买获得的卡片类看实际情况使用该值）
         /// </summary>

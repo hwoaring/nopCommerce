@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Weixin;
 
@@ -9,22 +10,22 @@ namespace Nop.Services.Weixin
     /// </summary>
     public partial interface IWUserTagService
     {
-        void InsertWUserTag(WUserTag userTag);
+        Task InsertWUserTagAsync(WUserTag userTag);
 
-        void DeleteWUserTag(WUserTag userTag, bool delete = false);
+        Task DeleteWUserTagAsync(WUserTag userTag);
 
-        void DeleteWUserTags(IList<WUserTag> userTags, bool deleted = false);
+        Task DeleteWUserTagsAsync(IList<WUserTag> userTags);
 
-        void UpdateWUserTag(WUserTag userTag);
+        Task UpdateWUserTagAsync(WUserTag userTag);
 
-        void UpdateWUserTags(IList<WUserTag> userTags);
+        Task UpdateWUserTagsAsync(IList<WUserTag> userTags);
 
-        WUserTag GetWUserTagById(int id);
+        Task<WUserTag> GetWUserTagByIdAsync(int id);
 
-        WUserTag GetWUserTagByOfficialId(int officialId, int? configId = null);
+        Task<WUserTag> GetWUserTagByOfficialIdAsync(int officialId, int? configId = null);
 
-        List<WUserTag> GetWUserTagsByOfficialIds(int[] officialIds, int? configId = null);
+        Task<IList<WUserTag>> GetWUserTagsByOfficialIdsAsync(int[] officialIds, int? configId = null);
 
-        IPagedList<WUserTag> GetWUserTags(int? configId = null, int pageIndex = 0, int pageSize = int.MaxValue, bool showDeleted = false);
+        Task<IPagedList<WUserTag>> GetWUserTagsAsync(int? configId = null, int pageIndex = 0, int pageSize = int.MaxValue, bool showDeleted = false);
     }
 }

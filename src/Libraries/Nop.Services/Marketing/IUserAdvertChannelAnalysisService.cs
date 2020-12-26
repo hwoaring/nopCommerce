@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,26 +11,26 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IUserAdvertChannelAnalysisService
     {
-        void InsertEntity(UserAdvertChannelAnalysis entity);
+        Task InsertEntityAsync(UserAdvertChannelAnalysis entity);
 
-        void DeleteEntity(UserAdvertChannelAnalysis entity);
+        Task DeleteEntityAsync(UserAdvertChannelAnalysis entity);
 
-        void DeleteEntities(IList<UserAdvertChannelAnalysis> entities);
+        Task DeleteEntitiesAsync(IList<UserAdvertChannelAnalysis> entities);
 
-        void UpdateEntity(UserAdvertChannelAnalysis entity);
+        Task UpdateEntityAsync(UserAdvertChannelAnalysis entity);
 
-        void UpdateEntities(IList<UserAdvertChannelAnalysis> entities);
+        Task UpdateEntitiesAsync(IList<UserAdvertChannelAnalysis> entities);
 
-        UserAdvertChannelAnalysis GetEntityById(int id);
+        Task<UserAdvertChannelAnalysis> GetEntityByIdAsync(int id);
 
-        UserAdvertChannelAnalysis GetEntitiesByUserId(int wuserId);
+        Task<UserAdvertChannelAnalysis> GetEntitiesByUserIdAsync(int wuserId);
 
-        List<UserAdvertChannelAnalysis> GetEntitiesByProductId(int productId);
+        Task<IList<UserAdvertChannelAnalysis>> GetEntitiesByProductIdAsync(int productId);
 
-        List<UserAdvertChannelAnalysis> GetEntitiesBySupplierId(int supplierId, int supplierShopId);
+        Task<IList<UserAdvertChannelAnalysis>> GetEntitiesBySupplierIdAsync(int supplierId, int supplierShopId);
 
-        
-        IPagedList<UserAdvertChannelAnalysis> GetEntities(
+
+        Task<IPagedList<UserAdvertChannelAnalysis>> GetEntitiesAsync(
             int userId = 0,
             int supplierId = 0,
             int supplierShopId = 0,

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,23 +11,23 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IPartnerApplicationFormService
     {
-        void InsertEntity(PartnerApplicationForm entity);
+        Task InsertEntityAsync(PartnerApplicationForm entity);
 
-        void DeleteEntity(PartnerApplicationForm entity, bool delete = false);
+        Task DeleteEntityAsync(PartnerApplicationForm entity, bool delete = false);
 
-        void DeleteEntities(IList<PartnerApplicationForm> entities, bool deleted = false);
+        Task DeleteEntitiesAsync(IList<PartnerApplicationForm> entities, bool deleted = false);
 
-        void UpdateEntity(PartnerApplicationForm entity);
+        Task UpdateEntityAsync(PartnerApplicationForm entity);
 
-        void UpdateEntities(IList<PartnerApplicationForm> entities);
+        Task UpdateEntitiesAsync(IList<PartnerApplicationForm> entities);
 
-        PartnerApplicationForm GetEntityById(int id);
+        Task<PartnerApplicationForm> GetEntityByIdAsync(int id);
 
-        PartnerApplicationForm GetEntityByUserId(int wuserId);
+        Task<PartnerApplicationForm> GetEntityByUserIdAsync(int wuserId);
 
-        List<PartnerApplicationForm> GetEntitiesByIds(int[] entityIds);
+        Task<IList<PartnerApplicationForm>> GetEntitiesByIdsAsync(int[] entityIds);
 
-        IPagedList<PartnerApplicationForm> GetEntities(
+        Task<IPagedList<PartnerApplicationForm>> GetEntitiesAsync(
             string telephoneNumber = "",
             int wUserId = 0,
             DateTime? endDateTimeUtc = null,

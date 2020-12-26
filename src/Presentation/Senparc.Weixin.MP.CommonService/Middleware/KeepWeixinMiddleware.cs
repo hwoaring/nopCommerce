@@ -38,7 +38,7 @@ namespace Senparc.Weixin.MP.CommonService.Middleware
         public async Task Invoke(HttpContext context, IWebHelper webHelper, IWorkContext workContext)
         {
             //whether database is installed
-            if (DataSettingsManager.DatabaseIsInstalled)
+            if (await DataSettingsManager.IsDatabaseInstalledAsync())
             {
                 var adminUrl = $"{webHelper.GetStoreLocation()}Admin";//排除Admin路径
                 var weixinUrl = $"{webHelper.GetStoreLocation()}Weixin";//排除路径weixin消息接收路径

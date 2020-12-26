@@ -1,12 +1,13 @@
 ﻿using System;
 using Humanizer;
+using Nop.Core.Domain.Common;
 
 namespace Nop.Core.Domain.Marketing
 {
     /// <summary>
     /// 资产收入表
     /// </summary>
-    public partial class UserAssetIncomeHistory : BaseEntity
+    public partial class UserAssetIncomeHistory : BaseEntity, ISoftDeletedEntity
     {
         /// <summary>
         /// 名称

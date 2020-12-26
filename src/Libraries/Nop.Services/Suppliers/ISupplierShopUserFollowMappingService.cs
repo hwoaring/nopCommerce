@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Suppliers;
 
@@ -9,13 +10,13 @@ namespace Nop.Services.Suppliers
     /// </summary>
     public partial interface ISupplierShopUserFollowMappingService
     {
-        void InsertEntity(SupplierShopUserFollowMapping entity);
+        Task InsertEntityAsync(SupplierShopUserFollowMapping entity);
 
-        void DeleteEntity(SupplierShopUserFollowMapping entity);
+        Task DeleteEntityAsync(SupplierShopUserFollowMapping entity);
 
-        void DeleteEntities(IList<SupplierShopUserFollowMapping> entities);
+        Task DeleteEntitiesAsync(IList<SupplierShopUserFollowMapping> entities);
 
-        void UpdateEntity(SupplierShopUserFollowMapping entity);
+        Task UpdateEntityAsync(SupplierShopUserFollowMapping entity);
 
     }
 }

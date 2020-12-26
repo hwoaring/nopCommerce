@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Nop.Core.Infrastructure;
 using Nop.Core.Domain.Weixin;
 using Nop.Services.Weixin;
@@ -17,12 +18,12 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
 {
     public partial class CustomMessageHandler
     {
-        public IResponseMessageBase GetResponseMessagesByIds(List<int> messageIds, WResponseType? wResponseType = null)
+        protected async Task<IResponseMessageBase> GetResponseMessagesByIdsAsync(List<int> messageIds, WResponseType? wResponseType = null)
         {
             IResponseMessageBase responseMessage = null;
 
             var wmessageService = EngineContext.Current.Resolve<IWMessageService>();
-            var wmessages = wmessageService.GetWMessagesByIds(messageIds.ToArray());
+            var wmessages = await wmessageService.GetWMessagesByIdsAsync(messageIds.ToArray());
 
             if (wmessages != null && wmessages.Count > 0)
             {
@@ -88,7 +89,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                                     {
                                         message.MediaId = uploadResult.media_id;
                                         message.CreatTime = (int)uploadResult.created_at;
-                                        messageService.UpdateWMessage(message);
+                                        messageService.UpdateWMessageAsync(message);
                                     }
                                 }
                             }
@@ -233,7 +234,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                                     {
                                         message.MediaId = uploadResult.media_id;
                                         message.CreatTime = (int)uploadResult.created_at;
-                                        messageService.UpdateWMessage(message);
+                                        messageService.UpdateWMessageAsync(message);
                                     }
                                 }
                             }
@@ -271,7 +272,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                                     {
                                         message.MediaId = uploadResult.media_id;
                                         message.CreatTime = (int)uploadResult.created_at;
-                                        messageService.UpdateWMessage(message);
+                                        messageService.UpdateWMessageAsync(message);
                                     }
                                 }
                             }
@@ -325,7 +326,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                                     //更新
                                     if (string.IsNullOrEmpty(uploadResultMediaId.errmsg))
                                     {
-                                        messageService.UpdateWMessage(message);
+                                        messageService.UpdateWMessageAsync(message);
                                     }
                                 }
                             }
@@ -365,7 +366,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                                         message.MediaId = uploadResult.media_id;
                                         message.ThumbMediaId = uploadResult.media_id;
                                         message.CreatTime = (int)uploadResult.created_at;
-                                        messageService.UpdateWMessage(message);
+                                        messageService.UpdateWMessageAsync(message);
                                     }
                                 }
                             }
@@ -429,7 +430,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
         }
 
 
-        public IResponseMessageBase GetQrCodeLimitPassiveResponseMessage(QrCodeLimitBindingSource source)
+        protected async Task<IResponseMessageBase> GetQrCodeLimitPassiveResponseMessageAsync(QrCodeLimitBindingSource source)
         {
             IResponseMessageBase responseMessage = null;
 
@@ -450,7 +451,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         if (source.ProductId > 0)
                         {
                             var productService = EngineContext.Current.Resolve<IProductService>();
-                            var product = productService.GetProductById(source.ProductId);
+                            var product = await productService.GetProductByIdAsync(source.ProductId);
                             if (product != null)
                             {
                                 title = product.Name;
@@ -464,7 +465,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                             {
                                 //获取产品绑定的首张图片
                                 var productAdvertImageService = EngineContext.Current.Resolve<IProductAdvertImageService>();
-                                var productAdvertImages = productAdvertImageService.GetEntitiesByProductId(product.Id, 1);
+                                var productAdvertImages = await productAdvertImageService.GetEntitiesByProductIdAsync(product.Id, 1);
                                 if (productAdvertImages.Count > 0)
                                 {
                                     adverImageUrl = productAdvertImages[0].ImageUrl;
@@ -484,7 +485,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         if (source.ProductId > 0)
                         {
                             var productService = EngineContext.Current.Resolve<IProductService>();
-                            var product = productService.GetProductById(source.ProductId);
+                            var product = await productService.GetProductByIdAsync(source.ProductId);
                             if (product != null)
                             {
                                 title = product.Name;
@@ -498,7 +499,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                             {
                                 //获取产品绑定的首张图片
                                 var productAdvertImageService = EngineContext.Current.Resolve<IProductAdvertImageService>();
-                                var productAdvertImages = productAdvertImageService.GetEntitiesByProductId(product.Id, 1);
+                                var productAdvertImages = await productAdvertImageService.GetEntitiesByProductIdAsync(product.Id, 1);
                                 if (productAdvertImages.Count > 0)
                                 {
                                     adverImageUrl = productAdvertImages[0].ImageUrl;
@@ -512,7 +513,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         if (source.SupplierId > 0 && source.SupplierShopId > 0)
                         {
                             var supplierShopService = EngineContext.Current.Resolve<ISupplierShopService>();
-                            var supplierShop = supplierShopService.GetEntityById(source.SupplierShopId);
+                            var supplierShop = await supplierShopService.GetEntityByIdAsync(source.SupplierShopId);
                             if (supplierShop != null)
                             {
                                 title = supplierShop.Name;
@@ -630,7 +631,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
             return responseMessage;
         }
 
-        public IResponseMessageBase GetQrCodeTempPassiveResponseMessage(Nop.Services.Weixin.QrCodeSceneString.QrCodeSceneParam source)
+        protected async Task<IResponseMessageBase> GetQrCodeTempPassiveResponseMessageAsync(Nop.Services.Weixin.QrCodeSceneString.QrCodeSceneParam source)
         {
             IResponseMessageBase responseMessage = null;
 
@@ -644,7 +645,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         {
                             //获取广告图片
                             var productAdvertImageService = EngineContext.Current.Resolve<IProductAdvertImageService>();
-                            var productAdvertImages = productAdvertImageService.GetEntityById(adverId);
+                            var productAdvertImages = await productAdvertImageService.GetEntityByIdAsync(adverId);
                             if (productAdvertImages != null)
                             {
                                 if (!string.IsNullOrEmpty(productAdvertImages.ImageUrl))
@@ -682,7 +683,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         if (productId > 0)
                         {
                             var productService = EngineContext.Current.Resolve<IProductService>();
-                            var product = productService.GetProductById(productId);
+                            var product = await productService.GetProductByIdAsync(productId);
                             if (product != null)
                             {
                                 var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
@@ -716,7 +717,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         if (supplierId > 0 && supplierShopId > 0)
                         {
                             var supplierShopService = EngineContext.Current.Resolve<ISupplierShopService>();
-                            var supplierShop = supplierShopService.GetEntityById(supplierShopId);
+                            var supplierShop = await supplierShopService.GetEntityByIdAsync(supplierShopId);
                             if (supplierShop != null)
                             {
                                 var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
@@ -785,7 +786,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
             return responseMessage;
         }
 
-        public IResponseMessageBase GetAndSetSupplierVoucherCouponPassiveResponseMessage(List<int> cardIds, Nop.Services.Weixin.QrCodeSceneString.QrCodeSceneParam qrCodeSceneParam, string currentOpenId)
+        protected async Task<IResponseMessageBase> GetAndSetSupplierVoucherCouponPassiveResponseMessageAsync(List<int> cardIds, Nop.Services.Weixin.QrCodeSceneString.QrCodeSceneParam qrCodeSceneParam, string currentOpenId)
         {
             IResponseMessageBase responseMessage = null;
             var receiveNumber = 0; //本次领取总数
@@ -794,14 +795,14 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
             var wuserService = EngineContext.Current.Resolve<IWUserService>();
             var supplierVoucherCouponService = EngineContext.Current.Resolve<ISupplierVoucherCouponService>();
 
-            var wuser = wuserService.GetWUserByOpenId(currentOpenId);
+            var wuser = await wuserService.GetWUserByOpenIdAsync(currentOpenId);
             if (wuser == null)
                 return null;
 
             //当前用户Id赋值
            var wuserId = wuser.Id;
 
-            var supplierVoucherCoupons = supplierVoucherCouponService.GetEntitiesByIds(cardIds.ToArray());
+            var supplierVoucherCoupons = await supplierVoucherCouponService.GetEntitiesByIdsAsync(cardIds.ToArray());
 
             //循环给扫码用户赠送卡券到账户（判断领取条件和是否重复）
 
@@ -809,19 +810,19 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
             {
                 if (item.LimitUsableNumber > 0)
                 {
-                    var userAssetIncomeHistory = userAssetIncomeHistoryService.GetEntitiesBySupplierVoucherCouponId(wuserId, item.Id, true);
+                    var userAssetIncomeHistory =await userAssetIncomeHistoryService.GetEntitiesBySupplierVoucherCouponIdAsync(wuserId, item.Id, true);
                     if (userAssetIncomeHistory.Count >= item.LimitUsableNumber)
                         continue;
                 }
                 if (item.LimitReceiveNumber > 0)
                 {
-                    var userAssetIncomeHistory = userAssetIncomeHistoryService.GetEntitiesBySupplierVoucherCouponId(wuserId, item.Id);
+                    var userAssetIncomeHistory =await userAssetIncomeHistoryService.GetEntitiesBySupplierVoucherCouponIdAsync(wuserId, item.Id);
                     if (userAssetIncomeHistory.Count >= item.LimitUsableNumber)
                         continue;
                 }
 
                 //为当前用户添加卡券资产
-                userAssetIncomeHistoryService.InsertEntityBysupplierVoucherCouponParams(item, wuserId, 0, null, qrCodeSceneParam.SceneType);
+                await userAssetIncomeHistoryService.InsertEntityBysupplierVoucherCouponParamsAsync(item, wuserId, 0, null, qrCodeSceneParam.SceneType);
 
                 receiveNumber++; //成功领取计数
             }

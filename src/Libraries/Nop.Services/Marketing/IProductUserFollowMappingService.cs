@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Humanizer;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
@@ -11,31 +12,31 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IProductUserFollowMappingService
     {
-        void InsertEntity(ProductUserFollowMapping entity);
+        Task InsertEntityAsync(ProductUserFollowMapping entity);
 
-        void DeleteEntity(ProductUserFollowMapping entity);
+        Task DeleteEntityAsync(ProductUserFollowMapping entity);
 
-        void DeleteEntities(IList<ProductUserFollowMapping> entities);
+        Task DeleteEntitiesAsync(IList<ProductUserFollowMapping> entities);
 
-        void UpdateEntity(ProductUserFollowMapping entity);
+        Task UpdateEntityAsync(ProductUserFollowMapping entity);
 
-        void UpdateEntities(IList<ProductUserFollowMapping> entities);
+        Task UpdateEntitiesAsync(IList<ProductUserFollowMapping> entities);
 
-        ProductUserFollowMapping GetEntityById(int id);
+        Task<ProductUserFollowMapping> GetEntityByIdAsync(int id);
 
-        List<ProductUserFollowMapping> GetEntitiesByIds(int[] entityIds);
+        Task<IList<ProductUserFollowMapping>> GetEntitiesByIdsAsync(int[] entityIds);
 
-        List<ProductUserFollowMapping> GetEntitiesByProductId(int productId);
+        Task<IList<ProductUserFollowMapping>> GetEntitiesByProductIdAsync(int productId);
 
-        List<ProductUserFollowMapping> GetEntitiesByUserId(int userId);
+        Task<IList<ProductUserFollowMapping>> GetEntitiesByUserIdAsync(int userId);
 
-        int GetUserFollowCount(int productId);
+        Task<int> GetUserFollowCountAsync(int productId);
 
-        List<int> GetFollowUserIdByProductId(int productId);
+        Task<IList<int>> GetFollowUserIdByProductIdAsync(int productId);
 
-        List<int> GetFollowProductIdByUserId(int wuserId);
+        Task<IList<int>> GetFollowProductIdByUserIdAsync(int wuserId);
 
-        IPagedList<ProductUserFollowMapping> GetEntities(
+        Task<IPagedList<ProductUserFollowMapping>> GetEntitiesAsync(
             int productId = 0,
             int userId = 0,
             bool? subscribe = null,

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Vendors;
@@ -35,27 +36,27 @@ namespace Nop.Services.Weixin
 
         #region Methods
 
-        public virtual void InsertEntity(WQrCodeCategory entity)
+        public virtual async Task InsertEntityAsync(WQrCodeCategory entity)
         {
-            _wQrCodeCategoryRepository.Insert(entity);
+            await _wQrCodeCategoryRepository.InsertAsync(entity);
         }
 
-        public virtual void UpdateEntity(WQrCodeCategory entity)
+        public virtual async Task UpdateEntityAsync(WQrCodeCategory entity)
         {
-            _wQrCodeCategoryRepository.Update(entity);
+            await _wQrCodeCategoryRepository.UpdateAsync(entity);
         }
 
-        public virtual void UpdateEntities(IList<WQrCodeCategory> entities)
+        public virtual async Task UpdateEntitiesAsync(IList<WQrCodeCategory> entities)
         {
-            _wQrCodeCategoryRepository.Update(entities);
+            await _wQrCodeCategoryRepository.UpdateAsync(entities);
         }
 
-        public virtual WQrCodeCategory GetEntityById(int id)
+        public virtual async Task<WQrCodeCategory> GetEntityByIdAsync(int id)
         {
-            return _wQrCodeCategoryRepository.GetById(id, cache => default);
+            return await _wQrCodeCategoryRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual List<WQrCodeCategory> GetEntitiesByParentId(int parentId)
+        public virtual async Task<IList<WQrCodeCategory>> GetEntitiesByParentIdAsync(int parentId)
         {
             if (parentId == 0)
                 return null;
@@ -65,27 +66,27 @@ namespace Nop.Services.Weixin
                         !t.Deleted
                         select t;
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IList<WQrCodeCategory> GetAllEntities()
+        public virtual async Task<IList<WQrCodeCategory>> GetAllEntitiesAsync()
         {
             var query = from pt in _wQrCodeCategoryRepository.Table
                         where !pt.Deleted
                         orderby pt.Id
                         select pt;
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IPagedList<WQrCodeCategory> GetEntities(bool showDeleted = false, int pageIndex = 0, int pageSize = int.MaxValue)
+        public virtual async Task<IPagedList<WQrCodeCategory>> GetEntitiesAsync(bool showDeleted = false, int pageIndex = 0, int pageSize = int.MaxValue)
         {
             var query = _wQrCodeCategoryRepository.Table;
 
             if (!showDeleted)
                 query = query.Where(v => !v.Deleted);
 
-            return new PagedList<WQrCodeCategory>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
 

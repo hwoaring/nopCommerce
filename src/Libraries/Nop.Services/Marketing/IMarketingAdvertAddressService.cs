@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Marketing;
 
@@ -10,23 +11,23 @@ namespace Nop.Services.Marketing
     /// </summary>
     public partial interface IMarketingAdvertAddressService
     {
-        void InsertEntity(MarketingAdvertAddress entity);
+        Task InsertEntityAsync(MarketingAdvertAddress entity);
 
-        void DeleteEntity(MarketingAdvertAddress entity, bool delete = false);
+        Task DeleteEntityAsync(MarketingAdvertAddress entity, bool delete = false);
 
-        void DeleteEntities(IList<MarketingAdvertAddress> entities, bool deleted = false);
+        Task DeleteEntitiesAsync(IList<MarketingAdvertAddress> entities, bool deleted = false);
 
-        void UpdateEntity(MarketingAdvertAddress entity);
+        Task UpdateEntityAsync(MarketingAdvertAddress entity);
 
-        void UpdateEntities(IList<MarketingAdvertAddress> entities);
+        Task UpdateEntitiesAsync(IList<MarketingAdvertAddress> entities);
 
-        MarketingAdvertAddress GetEntityById(int id);
+        Task<MarketingAdvertAddress> GetEntityByIdAsync(int id);
 
-        MarketingAdvertAddress GetEntityByAddress(string address);
+        Task<MarketingAdvertAddress> GetEntityByAddressAsync(string address);
 
-        string GetAddressById(int id);
+        Task<string> GetAddressByIdAsync(int id);
 
-        IPagedList<MarketingAdvertAddress> GetEntities(
+        Task<IPagedList<MarketingAdvertAddress>> GetEntitiesAsync(
             bool? deleted = null,
             int pageIndex = 0, int pageSize = int.MaxValue);
     }

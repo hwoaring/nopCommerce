@@ -1,12 +1,13 @@
 ﻿using System;
 using Humanizer;
+using Nop.Core.Domain.Common;
 
 namespace Nop.Core.Domain.Suppliers
 {
     /// <summary>
     /// 店铺基本信息
     /// </summary>
-    public partial class SupplierShop : BaseEntity
+    public partial class SupplierShop : BaseEntity, ISoftDeletedEntity
     {
         /// <summary>
         /// 【Supplier.Id】供应商ID

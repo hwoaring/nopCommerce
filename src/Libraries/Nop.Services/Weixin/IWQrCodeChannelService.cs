@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Weixin;
 
@@ -9,19 +10,19 @@ namespace Nop.Services.Weixin
     /// </summary>
     public partial interface IWQrCodeChannelService
     {
-        void InsertEntity(WQrCodeChannel entity);
+        Task InsertEntityAsync(WQrCodeChannel entity);
 
-        void UpdateEntity(WQrCodeChannel entity);
+        Task UpdateEntityAsync(WQrCodeChannel entity);
 
-        void UpdateEntities(IList<WQrCodeChannel> entities);
+        Task UpdateEntitiesAsync(IList<WQrCodeChannel> entities);
 
-        WQrCodeChannel GetEntityById(int id);
+        Task<WQrCodeChannel> GetEntityByIdAsync(int id);
 
-        List<WQrCodeChannel> GetEntitiesByParentId(int parentId);
+        Task<IList<WQrCodeChannel>> GetEntitiesByParentIdAsync(int parentId);
 
-        IList<WQrCodeChannel> GetAllEntities();
+        Task<IList<WQrCodeChannel>> GetAllEntitiesAsync();
 
-        IPagedList<WQrCodeChannel> GetEntities(bool showDeleted = false, int pageIndex = 0, int pageSize = int.MaxValue);
+        Task<IPagedList<WQrCodeChannel>> GetEntitiesAsync(bool showDeleted = false, int pageIndex = 0, int pageSize = int.MaxValue);
 
     }
 }

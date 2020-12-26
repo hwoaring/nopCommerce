@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Weixin;
 
@@ -10,27 +11,27 @@ namespace Nop.Services.Weixin
     public partial interface IWMenuButtonService
     {
 
-        void InsertMenuButton(WMenuButton menuButton);
+        Task InsertMenuButtonAsync(WMenuButton menuButton);
 
-        void DeleteMenuButton(WMenuButton menuButton);
+        Task DeleteMenuButtonAsync(WMenuButton menuButton);
 
-        void DeleteMenuButtons(IList<WMenuButton> menuButtons);
+        Task DeleteMenuButtonsAsync(IList<WMenuButton> menuButtons);
 
-        void UpdateMenuButton(WMenuButton menuButton);
+        Task UpdateMenuButtonAsync(WMenuButton menuButton);
 
-        void UpdateMenuButtons(IList<WMenuButton> menuButtons);
+        Task UpdateMenuButtonsAsync(IList<WMenuButton> menuButtons);
 
-        WMenuButton GetMenuButtonById(int id);
+        Task<WMenuButton> GetMenuButtonByIdAsync(int id);
 
-        IList<int> GetChildMenuButtonIds(int parentId);
+        Task<IList<int>> GetChildMenuButtonIdsAsync(int parentId, int storeId = 0, bool showHidden = false);
 
-        IList<WMenuButton> GetMenuButtonsByMenuId(int menuId);
+        Task<IList<WMenuButton>> GetMenuButtonsByMenuIdAsync(int menuId);
 
-        IList<WMenuButton> GetMenuButtonsByParentId(int parentId);
+        Task<IList<WMenuButton>> GetMenuButtonsByParentIdAsync(int parentId);
 
-        IList<WMenuButton> GetAllMenuButtons();
+        Task<IList<WMenuButton>> GetAllMenuButtonsAsync();
 
-        IPagedList<WMenuButton> GetAllMenuButtons(string name = "", int menuId = 0, int parentId = 0, bool? published = null, int pageIndex = 0, int pageSize = int.MaxValue);
+        Task<IPagedList<WMenuButton>> GetAllMenuButtonsAsync(string name = "", int menuId = 0, int parentId = 0, bool? published = null, int pageIndex = 0, int pageSize = int.MaxValue);
 
     }
 }

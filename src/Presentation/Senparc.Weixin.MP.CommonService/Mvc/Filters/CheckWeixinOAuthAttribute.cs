@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -22,12 +23,6 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
     /// </summary>
     public sealed class CheckWeixinOAuthAttribute : TypeFilterAttribute
     {
-        #region Fields
-
-        private readonly bool _ignoreFilter;
-
-        #endregion
-
         #region Ctor
 
         /// <summary>
@@ -36,7 +31,7 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
         /// <param name="ignore">Whether to ignore the execution of filter actions</param>
         public CheckWeixinOAuthAttribute(bool ignore = false, string oauthRouteName = "", OAuthScope oauthScope = OAuthScope.snsapi_userinfo) : base(typeof(CheckWeixinOAuthFilter))
         {
-            _ignoreFilter = ignore;
+            IgnoreFilter = ignore;
             Arguments = new object[] { ignore, oauthRouteName, oauthScope };
         }
 
@@ -47,7 +42,7 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
         /// <summary>
         /// Gets a value indicating whether to ignore the execution of filter actions
         /// </summary>
-        public bool IgnoreFilter => _ignoreFilter;
+        public bool IgnoreFilter { get; }
 
         #endregion
 
@@ -56,7 +51,7 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
         /// <summary>
         /// Represents a filter that confirms access to public store
         /// </summary>
-        private class CheckWeixinOAuthFilter : IAuthorizationFilter
+        private class CheckWeixinOAuthFilter : IAsyncAuthorizationFilter
         {
             #region Fields
 
@@ -95,27 +90,29 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
 
             #endregion
 
-            #region Methods
+            #region Utilities
 
             /// <summary>
             /// Called early in the filter pipeline to confirm request is authorized
             /// </summary>
             /// <param name="filterContext">Authorization filter context</param>
-            public void OnAuthorization(AuthorizationFilterContext filterContext)
+            public async Task AuthorizeWeixinOauthAsync(AuthorizationFilterContext context)
             {
-                if (filterContext == null)
-                    throw new ArgumentNullException(nameof(filterContext));
+                if (context == null)
+                    throw new ArgumentNullException(nameof(context));
 
                 //check whether this filter has been overridden for the Action
-                var actionFilter = filterContext.ActionDescriptor.FilterDescriptors
+                var actionFilter = context.ActionDescriptor.FilterDescriptors
                     .Where(filterDescriptor => filterDescriptor.Scope == FilterScope.Action)
-                    .Select(filterDescriptor => filterDescriptor.Filter).OfType<CheckWeixinOAuthAttribute>().FirstOrDefault();
+                    .Select(filterDescriptor => filterDescriptor.Filter)
+                    .OfType<CheckWeixinOAuthAttribute>()
+                    .FirstOrDefault();
 
                 //ignore filter (the action is available even if navigation is not allowed)
                 if (actionFilter?.IgnoreFilter ?? _ignoreFilter)
                     return;
 
-                if (!DataSettingsManager.DatabaseIsInstalled)
+                if (!await DataSettingsManager.IsDatabaseInstalledAsync())
                     return;
 
                 //whether Oauth is enabled
@@ -123,13 +120,13 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
                     return;
 
                 //whether check webbroswer before
-                if (_weixinSettings.CheckWebBrowser && !Utilities.WeixinBrowserUtility.SideInWeixinBrowser(filterContext.HttpContext))
+                if (_weixinSettings.CheckWebBrowser && !Utilities.WeixinBrowserUtility.SideInWeixinBrowser(context.HttpContext))
                 {
-                    var wechatBrowserControlerUrl = _urlHelperFactory.GetUrlHelper(filterContext).RouteUrl(NopWeixinDefaults.WechatBrowserControler);
-                    filterContext.Result = new RedirectResult(wechatBrowserControlerUrl);
+                    var wechatBrowserControlerUrl = _urlHelperFactory.GetUrlHelper(context).RouteUrl(NopWeixinDefaults.WechatBrowserControler);
+                    context.Result = new RedirectResult(wechatBrowserControlerUrl);
                 }
 
-                var session = filterContext.HttpContext.Session.Get<OauthSession>(NopWeixinDefaults.WeixinOauthSession);
+                var session = context.HttpContext.Session.Get<OauthSession>(NopWeixinDefaults.WeixinOauthSession);
                 if (session != null && (session.CreatTime + 2160000) > Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now))  //RefreshToken30天有效期，在25天内刷新有效
                 {
                     //oauth accesstoken 过期
@@ -144,7 +141,7 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
                                 session.CreatTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now);
                                 session.RefreshToken = refreshResult.refresh_token;
 
-                                filterContext.HttpContext.Session.Set(NopWeixinDefaults.WeixinOauthSession, session);
+                                context.HttpContext.Session.Set(NopWeixinDefaults.WeixinOauthSession, session);
 
                                 return;
                             }
@@ -164,7 +161,7 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
                 var oauthStateString = ((_oauthScope == OAuthScope.snsapi_userinfo) ? "userinfo" : "base") + SystemTime.Now.Ticks.ToString();
 
                 //check request query parameters
-                var request = filterContext.HttpContext.Request;
+                var request = context.HttpContext.Request;
                 if (request?.Query == null || !request.Query.Any())
                 {
                     //do nothing
@@ -188,18 +185,27 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
                 }
 
                 //保存state
-                filterContext.HttpContext.Session.SetString(NopWeixinDefaults.WeixinOauthStateString, oauthStateString);
+                context.HttpContext.Session.SetString(NopWeixinDefaults.WeixinOauthStateString, oauthStateString);
 
                 //TODO 仅前端页面才判断是用snapapibase还是userinfo
 
                 //redirect callback url
-                var oauthCallbackUrl = _webHelper.GetStoreLocation().TrimEnd('/') + _urlHelperFactory.GetUrlHelper(filterContext).RouteUrl(string.IsNullOrEmpty(_oauthRouteName) ? NopWeixinDefaults.WeixinOauthCallbackControler : _oauthRouteName);
+                var oauthCallbackUrl = _webHelper.GetStoreLocation().TrimEnd('/') + _urlHelperFactory.GetUrlHelper(context).RouteUrl(string.IsNullOrEmpty(_oauthRouteName) ? NopWeixinDefaults.WeixinOauthCallbackControler : _oauthRouteName);
 
                 oauthCallbackUrl += "?returnUrl=" + _webHelper.GetThisPageUrl(true).UrlEncode();
 
                 var url = OAuthApi.GetAuthorizeUrl(_senparcWeixinSetting.WeixinAppId, oauthCallbackUrl, oauthStateString, _oauthScope);
-                
-                filterContext.Result = new RedirectResult(url);
+
+                context.Result = new RedirectResult(url);
+            }
+
+            #endregion
+
+            #region Methods
+
+            public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
+            {
+                await AuthorizeWeixinOauthAsync(context);
             }
 
             #endregion

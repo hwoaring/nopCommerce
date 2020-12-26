@@ -45,9 +45,10 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
         /// 微信后台验证地址
         /// </summary>
         [HttpGet]
-        public IActionResult Index(PostModel postModel, string echostr)
+        [ActionName("Index")]
+        public IActionResult Get(PostModel postModel, string echostr)
         {
-            if (!DataSettingsManager.DatabaseIsInstalled)
+            if (!DataSettingsManager.IsDatabaseInstalled())
                 return Content("System not installed.");
 
             if (CheckSignature.Check(postModel.Signature, postModel.Timestamp, postModel.Nonce, _senparcWeixinSetting.Token))
@@ -66,9 +67,10 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
         /// 最简化的处理流程
         /// </summary>
         [HttpPost]
-        public virtual async Task<IActionResult> Index(PostModel postModel)
+        [ActionName("Index")]
+        public virtual async Task<IActionResult> PostAsync(PostModel postModel)
         {
-            if (!DataSettingsManager.DatabaseIsInstalled)
+            if (!await DataSettingsManager.IsDatabaseInstalledAsync())
                 return Content("System not installed.");
 
             if (!CheckSignature.Check(postModel.Signature, postModel.Timestamp, postModel.Nonce, _senparcWeixinSetting.Token))

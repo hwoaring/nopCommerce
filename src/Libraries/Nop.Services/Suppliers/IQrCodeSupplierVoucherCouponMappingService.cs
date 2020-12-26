@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Suppliers;
 
@@ -10,23 +11,23 @@ namespace Nop.Services.Suppliers
     /// </summary>
     public partial interface IQrCodeSupplierVoucherCouponMappingService
     {
-        void InsertEntity(QrCodeSupplierVoucherCouponMapping entity);
+        Task InsertEntityAsync(QrCodeSupplierVoucherCouponMapping entity);
 
-        void DeleteEntity(QrCodeSupplierVoucherCouponMapping entity);
+        Task DeleteEntityAsync(QrCodeSupplierVoucherCouponMapping entity);
 
-        void DeleteEntities(IList<QrCodeSupplierVoucherCouponMapping> entities);
+        Task DeleteEntitiesAsync(IList<QrCodeSupplierVoucherCouponMapping> entities);
 
-        void UpdateEntity(QrCodeSupplierVoucherCouponMapping entity);
+        Task UpdateEntityAsync(QrCodeSupplierVoucherCouponMapping entity);
 
-        void UpdateEntities(IList<QrCodeSupplierVoucherCouponMapping> entities);
+        Task UpdateEntitiesAsync(IList<QrCodeSupplierVoucherCouponMapping> entities);
 
-        QrCodeSupplierVoucherCouponMapping GetEntityById(int id);
+        Task<QrCodeSupplierVoucherCouponMapping> GetEntityByIdAsync(int id);
 
-        List<QrCodeSupplierVoucherCouponMapping> GetEntitiesByIds(int[] entityIds);
+        Task<IList<QrCodeSupplierVoucherCouponMapping>> GetEntitiesByIdsAsync(int[] entityIds);
 
-        List<QrCodeSupplierVoucherCouponMapping> GetEntitiesByQrCodeId(int qrCodeId, bool qrcodeLimitId = true, bool showAll = false);
+        Task<IList<QrCodeSupplierVoucherCouponMapping>> GetEntitiesByQrCodeIdAsync(int qrCodeId, bool qrcodeLimitId = true, bool showAll = false);
 
-        IPagedList<QrCodeSupplierVoucherCouponMapping> GetEntities(
+        Task<IPagedList<QrCodeSupplierVoucherCouponMapping>> GetEntitiesAsync(
             int qrCodeId = 0,
             int supplierVoucherCouponId = 0,
             bool? qrcodeLimit = null,

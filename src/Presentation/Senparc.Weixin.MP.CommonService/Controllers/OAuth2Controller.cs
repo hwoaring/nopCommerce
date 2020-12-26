@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Senparc.Weixin.MP.AdvancedAPIs;
@@ -54,7 +55,7 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
         /// <param name="state"></param>
         /// <param name="returnUrl">用户尝试进入的需要登录的页面</param>
         /// <returns></returns>
-        public IActionResult Index(string code, string state, string returnUrl)
+        public async Task<IActionResult> Index(string code, string state, string returnUrl)
         {
             if (string.IsNullOrEmpty(code))
             {
@@ -79,7 +80,7 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
             //通过，用code换取access_token
             try
             {
-                accessTokenResult = OAuthApi.GetAccessToken(_senparcWeixinSetting.WeixinAppId, _senparcWeixinSetting.WeixinAppSecret, code);
+                accessTokenResult = await OAuthApi.GetAccessTokenAsync(_senparcWeixinSetting.WeixinAppId, _senparcWeixinSetting.WeixinAppSecret, code);
                 if (accessTokenResult == null || accessTokenResult.errcode != ReturnCode.请求成功)
                 {
                     return Content("错误：" + accessTokenResult.errmsg);
@@ -107,7 +108,7 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
             #region 初始化用户数据库基础信息
             var insertCurrentUser = false;
             var needUpdateCurrentUser = false;
-            var currentUser = _wUserService.GetWUserByOpenId(accessTokenResult.openid);
+            var currentUser = await _wUserService.GetWUserByOpenIdAsync(accessTokenResult.openid);
             if (currentUser == null)
             {
                 insertCurrentUser = true; //需要插入
@@ -147,20 +148,20 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
                     long.TryParse(stateParams[1], out var refereeOpenIdHash);
                     if (refereeOpenIdHash > 0)
                     {
-                        var refereeUser = _wUserService.GetWUserByOpenIdHash(refereeOpenIdHash);
+                        var refereeUser = await _wUserService.GetWUserByOpenIdHashAsync(refereeOpenIdHash);
                         if (refereeUser != null)
                             currentUser.RefereeId = refereeUser.Id;
                     }
                     else
                     {
-                        var refereeUser = _wUserService.GetWUserByOpenId(stateParams[1]);
+                        var refereeUser = await _wUserService.GetWUserByOpenIdAsync(stateParams[1]);
                         if (refereeUser != null)
                             currentUser.RefereeId = refereeUser.Id;
                     }
                 }
 
                 //获取SupplierShopId
-                var supplierUserAuthorityMapping = _supplierUserAuthorityMappingService.GetEntityByUserId(currentUser.RefereeId);
+                var supplierUserAuthorityMapping = await _supplierUserAuthorityMappingService.GetEntityByUserIdAsync(currentUser.RefereeId);
                 if (supplierUserAuthorityMapping != null)
                     currentUser.SupplierShopId = supplierUserAuthorityMapping.SupplierShopId ?? 0;
             }
@@ -211,7 +212,7 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
                 #region 使用SnapUserInfo获取用户基础信息
                 if (!userInfoGetSuccess && isUserInfoOauthType)
                 {
-                    var userBaseInfo = OAuthApi.GetUserInfo(accessTokenResult.access_token, accessTokenResult.openid);
+                    var userBaseInfo = await OAuthApi.GetUserInfoAsync(accessTokenResult.access_token, accessTokenResult.openid);
                     if (userBaseInfo != null && !string.IsNullOrEmpty(userBaseInfo.nickname))
                     {
                         needUpdateCurrentUser = true;// 需要更新
@@ -252,9 +253,9 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
             //用户基础信息插入/更新
             #region 用户基础信息插入/更新
             if (insertCurrentUser)
-                _wUserService.InsertWUser(currentUser);
+                await _wUserService.InsertWUserAsync(currentUser);
             else if (needUpdateCurrentUser)
-                _wUserService.UpdateWUser(currentUser);
+                await _wUserService.UpdateWUserAsync(currentUser);
 
             #endregion
 

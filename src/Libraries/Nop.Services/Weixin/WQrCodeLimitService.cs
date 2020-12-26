@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Vendors;
@@ -34,27 +35,27 @@ namespace Nop.Services.Weixin
 
         #region Methods
 
-        public virtual void InsertWQrCodeLimit(WQrCodeLimit wQrCodeLimit)
+        public virtual async Task InsertWQrCodeLimitAsync(WQrCodeLimit wQrCodeLimit)
         {
-            _wQrCodeLimitRepository.Insert(wQrCodeLimit);
+            await _wQrCodeLimitRepository.InsertAsync(wQrCodeLimit);
         }
 
-        public virtual void UpdateWQrCodeLimit(WQrCodeLimit wQrCodeLimit)
+        public virtual async Task UpdateWQrCodeLimitAsync(WQrCodeLimit wQrCodeLimit)
         {
-            _wQrCodeLimitRepository.Update(wQrCodeLimit);
+            await _wQrCodeLimitRepository.UpdateAsync(wQrCodeLimit);
         }
 
-        public virtual void UpdateWQrCodeLimits(IList<WQrCodeLimit> wQrCodeLimits)
+        public virtual async Task UpdateWQrCodeLimitsAsync(IList<WQrCodeLimit> wQrCodeLimits)
         {
-            _wQrCodeLimitRepository.Update(wQrCodeLimits);
+            await _wQrCodeLimitRepository.UpdateAsync(wQrCodeLimits);
         }
 
-        public virtual WQrCodeLimit GetWQrCodeLimitById(int id)
+        public virtual async Task<WQrCodeLimit> GetWQrCodeLimitByIdAsync(int id)
         {
-            return _wQrCodeLimitRepository.GetById(id, cache => default);
+            return await _wQrCodeLimitRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual WQrCodeLimit GetWQrCodeLimitByQrCodeId(int qrCodeId)
+        public virtual async Task<WQrCodeLimit> GetWQrCodeLimitByQrCodeIdAsync(int qrCodeId)
         {
             if (qrCodeId == 0)
                 return null;
@@ -64,10 +65,10 @@ namespace Nop.Services.Weixin
                         where t.QrCodeId == qrCodeId
                         select t;
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
-        public virtual List<WQrCodeLimit> GetWUsersByIds(int[] wQrCodeLimitIds)
+        public virtual async Task<IList<WQrCodeLimit>> GetWUsersByIdsAsync(int[] wQrCodeLimitIds)
         {
             if (wQrCodeLimitIds is null)
                 return new List<WQrCodeLimit>();
@@ -76,10 +77,10 @@ namespace Nop.Services.Weixin
                         where wQrCodeLimitIds.Contains(t.Id)
                         select t;
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public virtual IPagedList<WQrCodeLimit> GetWQrCodeLimits(
+        public virtual async Task<IPagedList<WQrCodeLimit>> GetWQrCodeLimitsAsync(
             string sysName="",
             int? wConfigId = null, 
             int? wQrCodeCategoryId = null, 
@@ -115,7 +116,7 @@ namespace Nop.Services.Weixin
 
             query = query.OrderBy(v => v.Id);
 
-            return new PagedList<WQrCodeLimit>(query, pageIndex, pageSize);
+            return await query.ToPagedListAsync(pageIndex, pageSize);
         }
 
 
