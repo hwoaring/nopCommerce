@@ -1117,19 +1117,19 @@ namespace Nop.Services.Seo
             return returnChar;
         }
 
-        #endregion
-        
-        #region Methods
-
         /// <summary>
-        /// Deletes an URL record
+        /// Updates the URL record
         /// </summary>
         /// <param name="urlRecord">URL record</param>
-        public virtual async Task DeleteUrlRecordAsync(UrlRecord urlRecord)
+        protected virtual async Task UpdateUrlRecordAsync(UrlRecord urlRecord)
         {
-            await _urlRecordRepository.DeleteAsync(urlRecord);
+            await _urlRecordRepository.UpdateAsync(urlRecord);
         }
 
+        #endregion
+
+        #region Methods
+        
         /// <summary>
         /// Deletes an URL records
         /// </summary>
@@ -1150,31 +1150,12 @@ namespace Nop.Services.Seo
         }
 
         /// <summary>
-        /// Gets an URL record
-        /// </summary>
-        /// <param name="urlRecordId">URL record identifier</param>
-        /// <returns>URL record</returns>
-        public virtual async Task<UrlRecord> GetUrlRecordByIdAsync(int urlRecordId)
-        {
-            return await _urlRecordRepository.GetByIdAsync(urlRecordId, cache => default);
-        }
-
-        /// <summary>
         /// Inserts an URL record
         /// </summary>
         /// <param name="urlRecord">URL record</param>
         public virtual async Task InsertUrlRecordAsync(UrlRecord urlRecord)
         {
             await _urlRecordRepository.InsertAsync(urlRecord);
-        }
-
-        /// <summary>
-        /// Updates the URL record
-        /// </summary>
-        /// <param name="urlRecord">URL record</param>
-        public virtual async Task UpdateUrlRecordAsync(UrlRecord urlRecord)
-        {
-            await _urlRecordRepository.UpdateAsync(urlRecord);
         }
 
         /// <summary>

@@ -38,17 +38,21 @@ namespace Nop.Services.Helpers
 
         #endregion
 
-        #region Methods
+        #region Utilities
 
         /// <summary>
         /// Retrieves a System.TimeZoneInfo object from the registry based on its identifier.
         /// </summary>
         /// <param name="id">The time zone identifier, which corresponds to the System.TimeZoneInfo.Id property.</param>
         /// <returns>A System.TimeZoneInfo object whose identifier is the value of the id parameter.</returns>
-        public virtual TimeZoneInfo FindTimeZoneById(string id)
+        protected virtual TimeZoneInfo FindTimeZoneById(string id)
         {
             return TimeZoneInfo.FindSystemTimeZoneById(id);
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Returns a sorted collection of all the time zones
@@ -83,18 +87,6 @@ namespace Nop.Services.Helpers
 
             var currentUserTimeZoneInfo = await GetCurrentTimeZoneAsync();
             return TimeZoneInfo.ConvertTime(dt, currentUserTimeZoneInfo);
-        }
-
-        /// <summary>
-        /// Converts the date and time to current user date and time
-        /// </summary>
-        /// <param name="dt">The date and time to convert.</param>
-        /// <param name="sourceTimeZone">The time zone of dateTime.</param>
-        /// <returns>A DateTime value that represents time that corresponds to the dateTime parameter in customer time zone.</returns>
-        public virtual async Task<DateTime> ConvertToUserTimeAsync(DateTime dt, TimeZoneInfo sourceTimeZone)
-        {
-            var currentUserTimeZoneInfo = await GetCurrentTimeZoneAsync();
-            return ConvertToUserTime(dt, sourceTimeZone, currentUserTimeZoneInfo);
         }
 
         /// <summary>
@@ -211,18 +203,6 @@ namespace Nop.Services.Helpers
                 }
 
                 return timeZoneInfo ?? TimeZoneInfo.Local;
-            }
-
-            set
-            {
-                var defaultTimeZoneId = string.Empty;
-                if (value != null)
-                {
-                    defaultTimeZoneId = value.Id;
-                }
-
-                _dateTimeSettings.DefaultStoreTimeZoneId = defaultTimeZoneId;
-                _settingService.SaveSettingAsync(_dateTimeSettings).Wait();
             }
         }
 

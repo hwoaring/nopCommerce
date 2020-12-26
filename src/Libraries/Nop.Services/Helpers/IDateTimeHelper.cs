@@ -10,14 +10,6 @@ namespace Nop.Services.Helpers
     /// </summary>
     public partial interface IDateTimeHelper
     {
-        //TODO: may be deleted from interface
-        /// <summary>
-        /// Retrieves a System.TimeZoneInfo object from the registry based on its identifier.
-        /// </summary>
-        /// <param name="id">The time zone identifier, which corresponds to the System.TimeZoneInfo.Id property.</param>
-        /// <returns>A System.TimeZoneInfo object whose identifier is the value of the id parameter.</returns>
-        TimeZoneInfo FindTimeZoneById(string id);
-
         /// <summary>
         /// Returns a sorted collection of all the time zones
         /// </summary>
@@ -38,15 +30,6 @@ namespace Nop.Services.Helpers
         /// <param name="sourceDateTimeKind">The source datetimekind</param>
         /// <returns>A DateTime value that represents time that corresponds to the dateTime parameter in customer time zone.</returns>
         Task<DateTime> ConvertToUserTimeAsync(DateTime dt, DateTimeKind sourceDateTimeKind);
-
-        //TODO: may be deleted
-        /// <summary>
-        /// Converts the date and time to current user date and time
-        /// </summary>
-        /// <param name="dt">The date and time to convert.</param>
-        /// <param name="sourceTimeZone">The time zone of dateTime.</param>
-        /// <returns>A DateTime value that represents time that corresponds to the dateTime parameter in customer time zone.</returns>
-        Task<DateTime> ConvertToUserTimeAsync(DateTime dt, TimeZoneInfo sourceTimeZone);
 
         /// <summary>
         /// Converts the date and time to current user date and time
@@ -99,8 +82,6 @@ namespace Nop.Services.Helpers
         TimeZoneInfo DefaultStoreTimeZone 
         { 
             get;
-            //TODO: may be deleted
-            set;
         }
     }
 }

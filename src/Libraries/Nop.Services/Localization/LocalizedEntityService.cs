@@ -75,28 +75,36 @@ namespace Nop.Services.Localization
             }, cache => default);
         }
 
-        #endregion
-        
-        #region Methods
-
         /// <summary>
         /// Deletes a localized property
         /// </summary>
         /// <param name="localizedProperty">Localized property</param>
-        public virtual async Task DeleteLocalizedPropertyAsync(LocalizedProperty localizedProperty)
+        protected virtual async Task DeleteLocalizedPropertyAsync(LocalizedProperty localizedProperty)
         {
             await _localizedPropertyRepository.DeleteAsync(localizedProperty);
         }
 
         /// <summary>
-        /// Gets a localized property
+        /// Inserts a localized property
         /// </summary>
-        /// <param name="localizedPropertyId">Localized property identifier</param>
-        /// <returns>Localized property</returns>
-        public virtual async Task<LocalizedProperty> GetLocalizedPropertyByIdAsync(int localizedPropertyId)
+        /// <param name="localizedProperty">Localized property</param>
+        protected virtual async Task InsertLocalizedPropertyAsync(LocalizedProperty localizedProperty)
         {
-            return await _localizedPropertyRepository.GetByIdAsync(localizedPropertyId);
+            await _localizedPropertyRepository.InsertAsync(localizedProperty);
         }
+
+        /// <summary>
+        /// Updates the localized property
+        /// </summary>
+        /// <param name="localizedProperty">Localized property</param>
+        protected virtual async Task UpdateLocalizedPropertyAsync(LocalizedProperty localizedProperty)
+        {
+            await _localizedPropertyRepository.UpdateAsync(localizedProperty);
+        }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Find localized value
@@ -131,24 +139,6 @@ namespace Nop.Services.Localization
 
                 return localeValue;
             });
-        }
-
-        /// <summary>
-        /// Inserts a localized property
-        /// </summary>
-        /// <param name="localizedProperty">Localized property</param>
-        public virtual async Task InsertLocalizedPropertyAsync(LocalizedProperty localizedProperty)
-        {
-            await _localizedPropertyRepository.InsertAsync(localizedProperty);
-        }
-
-        /// <summary>
-        /// Updates the localized property
-        /// </summary>
-        /// <param name="localizedProperty">Localized property</param>
-        public virtual async Task UpdateLocalizedPropertyAsync(LocalizedProperty localizedProperty)
-        {
-            await _localizedPropertyRepository.UpdateAsync(localizedProperty);
         }
 
         /// <summary>
