@@ -11,21 +11,6 @@ namespace Nop.Services.Localization
     /// </summary>
     public partial interface ILocalizedEntityService
     {
-        //TODO: may be deleted from interface
-        /// <summary>
-        /// Deletes a localized property
-        /// </summary>
-        /// <param name="localizedProperty">Localized property</param>
-        Task DeleteLocalizedPropertyAsync(LocalizedProperty localizedProperty);
-
-        //TODO: may be deleted
-        /// <summary>
-        /// Gets a localized property
-        /// </summary>
-        /// <param name="localizedPropertyId">Localized property identifier</param>
-        /// <returns>Localized property</returns>
-        Task<LocalizedProperty> GetLocalizedPropertyByIdAsync(int localizedPropertyId);
-
         /// <summary>
         /// Find localized value
         /// </summary>
@@ -35,20 +20,6 @@ namespace Nop.Services.Localization
         /// <param name="localeKey">Locale key</param>
         /// <returns>Found localized value</returns>
         Task<string> GetLocalizedValueAsync(int languageId, int entityId, string localeKeyGroup, string localeKey);
-
-        //TODO: may be deleted from interface
-        /// <summary>
-        /// Inserts a localized property
-        /// </summary>
-        /// <param name="localizedProperty">Localized property</param>
-        Task InsertLocalizedPropertyAsync(LocalizedProperty localizedProperty);
-
-        //TODO: may be deleted from interface
-        /// <summary>
-        /// Updates the localized property
-        /// </summary>
-        /// <param name="localizedProperty">Localized property</param>
-        Task UpdateLocalizedPropertyAsync(LocalizedProperty localizedProperty);
 
         /// <summary>
         /// Save localized value

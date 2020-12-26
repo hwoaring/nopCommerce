@@ -47,18 +47,7 @@ namespace Nop.Services.Catalog
         #endregion
 
         #region Utilities
-
-        //TODO: may be deleted
-        /// <summary>
-        /// Gets currency string
-        /// </summary>
-        /// <param name="amount">Amount</param>
-        /// <returns>Currency string without exchange rate</returns>
-        protected virtual async Task<string> GetCurrencyStringAsync(decimal amount)
-        {
-            return GetCurrencyString(amount, true, await _workContext.GetWorkingCurrencyAsync());
-        }
-
+        
         /// <summary>
         /// Gets currency string
         /// </summary>
@@ -94,6 +83,39 @@ namespace Nop.Services.Catalog
             if (showCurrency && _currencySettings.DisplayCurrencyLabel)
                 result = $"{result} ({targetCurrency.CurrencyCode})";
             return result;
+        }
+        
+        /// <summary>
+        /// Formats the shipping price
+        /// </summary>
+        /// <param name="price">Price</param>
+        /// <param name="showCurrency">A value indicating whether to show a currency</param>
+        /// <param name="targetCurrency">Target currency</param>
+        /// <param name="languageId">Language</param>
+        /// <param name="priceIncludesTax">A value indicating whether price includes tax</param>
+        /// <param name="showTax">A value indicating whether to show tax suffix</param>
+        /// <returns>Price</returns>
+        protected virtual async Task<string> FormatShippingPriceAsync(decimal price, bool showCurrency,
+            Currency targetCurrency, int languageId, bool priceIncludesTax, bool showTax)
+        {
+            return await FormatPriceAsync(price, showCurrency, targetCurrency, languageId, priceIncludesTax, showTax);
+        }
+
+        /// <summary>
+        /// Formats the payment method additional fee
+        /// </summary>
+        /// <param name="price">Price</param>
+        /// <param name="showCurrency">A value indicating whether to show a currency</param>
+        /// <param name="targetCurrency">Target currency</param>
+        /// <param name="languageId">Language</param>
+        /// <param name="priceIncludesTax">A value indicating whether price includes tax</param>
+        /// <param name="showTax">A value indicating whether to show tax suffix</param>
+        /// <returns>Price</returns>
+        protected virtual async Task<string> FormatPaymentMethodAdditionalFeeAsync(decimal price, bool showCurrency,
+            Currency targetCurrency, int languageId, bool priceIncludesTax, bool showTax)
+        {
+            return await FormatPriceAsync(price, showCurrency, targetCurrency, languageId,
+                priceIncludesTax, showTax);
         }
 
         #endregion
@@ -292,22 +314,6 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="price">Price</param>
         /// <param name="showCurrency">A value indicating whether to show a currency</param>
-        /// <param name="targetCurrency">Target currency</param>
-        /// <param name="languageId">Language</param>
-        /// <param name="priceIncludesTax">A value indicating whether price includes tax</param>
-        /// <param name="showTax">A value indicating whether to show tax suffix</param>
-        /// <returns>Price</returns>
-        public virtual async Task<string> FormatShippingPriceAsync(decimal price, bool showCurrency,
-            Currency targetCurrency, int languageId, bool priceIncludesTax, bool showTax)
-        {
-            return await FormatPriceAsync(price, showCurrency, targetCurrency, languageId, priceIncludesTax, showTax);
-        }
-
-        /// <summary>
-        /// Formats the shipping price
-        /// </summary>
-        /// <param name="price">Price</param>
-        /// <param name="showCurrency">A value indicating whether to show a currency</param>
         /// <param name="currencyCode">Currency code</param>
         /// <param name="languageId">Language</param>
         /// <param name="priceIncludesTax">A value indicating whether price includes tax</param>
@@ -352,24 +358,7 @@ namespace Nop.Services.Catalog
             var showTax = _taxSettings.PaymentMethodAdditionalFeeIsTaxable && _taxSettings.DisplayTaxSuffix;
             return await FormatPaymentMethodAdditionalFeeAsync(price, showCurrency, targetCurrency, languageId, priceIncludesTax, showTax);
         }
-
-        /// <summary>
-        /// Formats the payment method additional fee
-        /// </summary>
-        /// <param name="price">Price</param>
-        /// <param name="showCurrency">A value indicating whether to show a currency</param>
-        /// <param name="targetCurrency">Target currency</param>
-        /// <param name="languageId">Language</param>
-        /// <param name="priceIncludesTax">A value indicating whether price includes tax</param>
-        /// <param name="showTax">A value indicating whether to show tax suffix</param>
-        /// <returns>Price</returns>
-        public virtual async Task<string> FormatPaymentMethodAdditionalFeeAsync(decimal price, bool showCurrency,
-            Currency targetCurrency, int languageId, bool priceIncludesTax, bool showTax)
-        {
-            return await FormatPriceAsync(price, showCurrency, targetCurrency, languageId,
-                priceIncludesTax, showTax);
-        }
-
+        
         /// <summary>
         /// Formats the payment method additional fee
         /// </summary>

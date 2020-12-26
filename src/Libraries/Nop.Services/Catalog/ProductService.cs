@@ -347,6 +347,139 @@ namespace Nop.Services.Catalog
 
             return query;
         }
+        
+        /// <summary>
+        /// Reserve the given quantity in the warehouses.
+        /// </summary>
+        /// <param name="product">Product</param>
+        /// <param name="quantity">Quantity, must be negative</param>
+        protected virtual async Task ReserveInventoryAsync(Product product, int quantity)
+        {
+            if (product == null)
+                throw new ArgumentNullException(nameof(product));
+
+            if (quantity >= 0)
+                throw new ArgumentException("Value must be negative.", nameof(quantity));
+
+            var qty = -quantity;
+
+            var productInventory = _productWarehouseInventoryRepository.Table.Where(pwi => pwi.ProductId == product.Id)
+                .OrderByDescending(pwi => pwi.StockQuantity - pwi.ReservedQuantity)
+                .ToList();
+
+            if (productInventory.Count <= 0)
+                return;
+
+            // 1st pass: Applying reserved
+            foreach (var item in productInventory)
+            {
+                var selectQty = Math.Min(Math.Max(0, item.StockQuantity - item.ReservedQuantity), qty);
+                item.ReservedQuantity += selectQty;
+                qty -= selectQty;
+
+                if (qty <= 0)
+                    break;
+            }
+
+            if (qty > 0)
+            {
+                // 2rd pass: Booking negative stock!
+                var pwi = productInventory[0];
+                pwi.ReservedQuantity += qty;
+            }
+
+            await UpdateProductWarehouseInventoryAsync(productInventory);
+        }
+
+        /// <summary>
+        /// Unblocks the given quantity reserved items in the warehouses
+        /// </summary>
+        /// <param name="product">Product</param>
+        /// <param name="quantity">Quantity, must be positive</param>
+        protected virtual async Task UnblockReservedInventoryAsync(Product product, int quantity)
+        {
+            if (product == null)
+                throw new ArgumentNullException(nameof(product));
+
+            if (quantity < 0)
+                throw new ArgumentException("Value must be positive.", nameof(quantity));
+
+            var productInventory = await _productWarehouseInventoryRepository.Table.Where(pwi => pwi.ProductId == product.Id)
+                .OrderByDescending(pwi => pwi.ReservedQuantity)
+                .ThenByDescending(pwi => pwi.StockQuantity)
+                .ToListAsync();
+
+            if (!productInventory.Any())
+                return;
+
+            var qty = quantity;
+
+            foreach (var item in productInventory)
+            {
+                var selectQty = Math.Min(item.ReservedQuantity, qty);
+                item.ReservedQuantity -= selectQty;
+                qty -= selectQty;
+
+                if (qty <= 0)
+                    break;
+            }
+
+            if (qty > 0)
+            {
+                var pwi = productInventory[0];
+                pwi.StockQuantity += qty;
+            }
+
+            await UpdateProductWarehouseInventoryAsync(productInventory);
+        }
+
+        /// <summary>
+        /// Gets cross-sell products by product identifier
+        /// </summary>
+        /// <param name="productIds">The first product identifiers</param>
+        /// <param name="showHidden">A value indicating whether to show hidden records</param>
+        /// <returns>Cross-sell products</returns>
+        protected virtual async Task<IList<CrossSellProduct>> GetCrossSellProductsByProductIdsAsync(int[] productIds, bool showHidden = false)
+        {
+            if (productIds == null || productIds.Length == 0)
+                return new List<CrossSellProduct>();
+
+            var query = from csp in _crossSellProductRepository.Table
+                join p in _productRepository.Table on csp.ProductId2 equals p.Id
+                where productIds.Contains(csp.ProductId1) &&
+                      !p.Deleted &&
+                      (showHidden || p.Published)
+                orderby csp.Id
+                select csp;
+            var crossSellProducts = await query.ToListAsync();
+
+            return crossSellProducts;
+        }
+
+        /// <summary>
+        /// Gets ratio of useful and not useful product reviews 
+        /// </summary>
+        /// <param name="productReview">Product review</param>
+        /// <returns>Result</returns>
+        protected virtual async Task<(int usefulCount, int notUsefulCount)> GetHelpfulnessCountsAsync(ProductReview productReview)
+        {
+            if (productReview is null)
+                throw new ArgumentNullException(nameof(productReview));
+
+            var productReviewHelpfulness = _productReviewHelpfulnessRepository.Table.Where(prh => prh.ProductReviewId == productReview.Id);
+
+            return (await productReviewHelpfulness.CountAsync(prh => prh.WasHelpful),
+                await productReviewHelpfulness.CountAsync(prh => !prh.WasHelpful));
+        }
+
+        /// <summary>
+        /// Inserts a product review helpfulness record
+        /// </summary>
+        /// <param name="productReviewHelpfulness">Product review helpfulness record</param>
+        protected virtual async Task InsertProductReviewHelpfulnessAsync(ProductReviewHelpfulness productReviewHelpfulness)
+        {
+            await _productReviewHelpfulnessRepository.InsertAsync(productReviewHelpfulness);
+        }
 
         #endregion
 
@@ -428,16 +561,7 @@ namespace Nop.Services.Catalog
         {
             await _productRepository.UpdateAsync(product);
         }
-
-        /// <summary>
-        /// Update products
-        /// </summary>
-        /// <param name="products">Products</param>
-        public virtual async Task UpdateProductsAsync(IList<Product> products)
-        {
-            await _productRepository.UpdateAsync(products);
-        }
-
+        
         /// <summary>
         /// Gets featured products by a category identifier
         /// </summary>
@@ -1544,92 +1668,7 @@ namespace Nop.Services.Catalog
                 }
             }
         }
-
-        /// <summary>
-        /// Reserve the given quantity in the warehouses.
-        /// </summary>
-        /// <param name="product">Product</param>
-        /// <param name="quantity">Quantity, must be negative</param>
-        public virtual async Task ReserveInventoryAsync(Product product, int quantity)
-        {
-            if (product == null)
-                throw new ArgumentNullException(nameof(product));
-
-            if (quantity >= 0)
-                throw new ArgumentException("Value must be negative.", nameof(quantity));
-
-            var qty = -quantity;
-
-            var productInventory = _productWarehouseInventoryRepository.Table.Where(pwi => pwi.ProductId == product.Id)
-                .OrderByDescending(pwi => pwi.StockQuantity - pwi.ReservedQuantity)
-                .ToList();
-
-            if (productInventory.Count <= 0)
-                return;
-
-            // 1st pass: Applying reserved
-            foreach (var item in productInventory)
-            {
-                var selectQty = Math.Min(Math.Max(0, item.StockQuantity - item.ReservedQuantity), qty);
-                item.ReservedQuantity += selectQty;
-                qty -= selectQty;
-
-                if (qty <= 0)
-                    break;
-            }
-
-            if (qty > 0)
-            {
-                // 2rd pass: Booking negative stock!
-                var pwi = productInventory[0];
-                pwi.ReservedQuantity += qty;
-            }
-
-            await UpdateProductWarehouseInventoryAsync(productInventory);
-        }
-
-        /// <summary>
-        /// Unblocks the given quantity reserved items in the warehouses
-        /// </summary>
-        /// <param name="product">Product</param>
-        /// <param name="quantity">Quantity, must be positive</param>
-        public virtual async Task UnblockReservedInventoryAsync(Product product, int quantity)
-        {
-            if (product == null)
-                throw new ArgumentNullException(nameof(product));
-
-            if (quantity < 0)
-                throw new ArgumentException("Value must be positive.", nameof(quantity));
-
-            var productInventory = await _productWarehouseInventoryRepository.Table.Where(pwi => pwi.ProductId == product.Id)
-                .OrderByDescending(pwi => pwi.ReservedQuantity)
-                .ThenByDescending(pwi => pwi.StockQuantity)
-                .ToListAsync();
-
-            if (!productInventory.Any())
-                return;
-
-            var qty = quantity;
-
-            foreach (var item in productInventory)
-            {
-                var selectQty = Math.Min(item.ReservedQuantity, qty);
-                item.ReservedQuantity -= selectQty;
-                qty -= selectQty;
-
-                if (qty <= 0)
-                    break;
-            }
-
-            if (qty > 0)
-            {
-                var pwi = productInventory[0];
-                pwi.StockQuantity += qty;
-            }
-
-            await UpdateProductWarehouseInventoryAsync(productInventory);
-        }
-
+        
         /// <summary>
         /// Book the reserved quantity
         /// </summary>
@@ -1810,29 +1849,6 @@ namespace Nop.Services.Catalog
         }
 
         /// <summary>
-        /// Gets cross-sell products by product identifier
-        /// </summary>
-        /// <param name="productIds">The first product identifiers</param>
-        /// <param name="showHidden">A value indicating whether to show hidden records</param>
-        /// <returns>Cross-sell products</returns>
-        public virtual async Task<IList<CrossSellProduct>> GetCrossSellProductsByProductIdsAsync(int[] productIds, bool showHidden = false)
-        {
-            if (productIds == null || productIds.Length == 0)
-                return new List<CrossSellProduct>();
-
-            var query = from csp in _crossSellProductRepository.Table
-                        join p in _productRepository.Table on csp.ProductId2 equals p.Id
-                        where productIds.Contains(csp.ProductId1) &&
-                              !p.Deleted &&
-                              (showHidden || p.Published)
-                        orderby csp.Id
-                        select csp;
-            var crossSellProducts = await query.ToListAsync();
-
-            return crossSellProducts;
-        }
-
-        /// <summary>
         /// Gets a cross-sell product
         /// </summary>
         /// <param name="crossSellProductId">Cross-sell product identifier</param>
@@ -1850,16 +1866,7 @@ namespace Nop.Services.Catalog
         {
             await _crossSellProductRepository.InsertAsync(crossSellProduct);
         }
-
-        /// <summary>
-        /// Updates a cross-sell product
-        /// </summary>
-        /// <param name="crossSellProduct">Cross-sell product</param>
-        public virtual async Task UpdateCrossSellProductAsync(CrossSellProduct crossSellProduct)
-        {
-            await _crossSellProductRepository.UpdateAsync(crossSellProduct);
-        }
-
+        
         /// <summary>
         /// Gets a cross-sells
         /// </summary>
@@ -2236,16 +2243,7 @@ namespace Nop.Services.Catalog
         {
             await _productReviewRepository.DeleteAsync(productReviews);
         }
-
-        /// <summary>
-        /// Inserts a product review helpfulness record
-        /// </summary>
-        /// <param name="productReviewHelpfulness">Product review helpfulness record</param>
-        public virtual async Task InsertProductReviewHelpfulnessAsync(ProductReviewHelpfulness productReviewHelpfulness)
-        {
-            await _productReviewHelpfulnessRepository.InsertAsync(productReviewHelpfulness);
-        }
-
+        
         /// <summary>
         /// Sets or create a product review helpfulness record
         /// </summary>
@@ -2279,23 +2277,7 @@ namespace Nop.Services.Catalog
                 await _productReviewHelpfulnessRepository.UpdateAsync(prh);
             }
         }
-
-        /// <summary>
-        /// Gets ratio of useful and not useful product reviews 
-        /// </summary>
-        /// <param name="productReview">Product review</param>
-        /// <returns>Result</returns>
-        public virtual async Task<(int usefulCount, int notUsefulCount)> GetHelpfulnessCountsAsync(ProductReview productReview)
-        {
-            if (productReview is null)
-                throw new ArgumentNullException(nameof(productReview));
-
-            var productReviewHelpfulness = _productReviewHelpfulnessRepository.Table.Where(prh => prh.ProductReviewId == productReview.Id);
-
-            return (await productReviewHelpfulness.CountAsync(prh => prh.WasHelpful),
-                await productReviewHelpfulness.CountAsync(prh => !prh.WasHelpful));
-        }
-
+        
         /// <summary>
         /// Updates a product review
         /// </summary>
@@ -2355,19 +2337,6 @@ namespace Nop.Services.Catalog
         public virtual async Task<Warehouse> GetWarehousesByIdAsync(int warehouseId)
         {
             return await _warehouseRepository.GetByIdAsync(warehouseId, cache => default);
-        }
-
-        /// <summary>
-        /// Gets a warehouses by product identifier
-        /// </summary>
-        /// <param name="productId">The product identifier</param>
-        /// <returns>List of warehouses</returns>
-        public virtual async Task<IList<Warehouse>> GetWarehousesByProductIdAsync(int productId)
-        {
-            return await (from w in _warehouseRepository.Table
-                          join pwi in _productWarehouseInventoryRepository.Table on w.Id equals pwi.WarehouseId
-                          where pwi.ProductId == productId
-                          select w).ToListAsync();
         }
 
         /// <summary>

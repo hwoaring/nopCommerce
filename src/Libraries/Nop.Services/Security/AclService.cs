@@ -45,6 +45,19 @@ namespace Nop.Services.Security
 
         #endregion
 
+        #region Utilities
+
+        /// <summary>
+        /// Inserts an ACL record
+        /// </summary>
+        /// <param name="aclRecord">ACL record</param>
+        protected virtual async Task InsertAclRecordAsync(AclRecord aclRecord)
+        {
+            await _aclRecordRepository.InsertAsync(aclRecord);
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -69,16 +82,6 @@ namespace Nop.Services.Security
         public virtual async Task DeleteAclRecordAsync(AclRecord aclRecord)
         {
             await _aclRecordRepository.DeleteAsync(aclRecord);
-        }
-
-        /// <summary>
-        /// Gets an ACL record
-        /// </summary>
-        /// <param name="aclRecordId">ACL record identifier</param>
-        /// <returns>ACL record</returns>
-        public virtual async Task<AclRecord> GetAclRecordByIdAsync(int aclRecordId)
-        {
-            return await _aclRecordRepository.GetByIdAsync(aclRecordId, cache => default);
         }
 
         /// <summary>
@@ -107,15 +110,6 @@ namespace Nop.Services.Security
         /// <summary>
         /// Inserts an ACL record
         /// </summary>
-        /// <param name="aclRecord">ACL record</param>
-        public virtual async Task InsertAclRecordAsync(AclRecord aclRecord)
-        {
-            await _aclRecordRepository.InsertAsync(aclRecord);
-        }
-
-        /// <summary>
-        /// Inserts an ACL record
-        /// </summary>
         /// <typeparam name="TEntity">Type of entity that supports the ACL</typeparam>
         /// <param name="entity">Entity</param>
         /// <param name="customerRoleId">Customer role id</param>
@@ -138,15 +132,6 @@ namespace Nop.Services.Security
             };
 
             await InsertAclRecordAsync(aclRecord);
-        }
-
-        /// <summary>
-        /// Updates the ACL record
-        /// </summary>
-        /// <param name="aclRecord">ACL record</param>
-        public virtual async Task UpdateAclRecordAsync(AclRecord aclRecord)
-        {
-            await _aclRecordRepository.UpdateAsync(aclRecord);
         }
 
         /// <summary>

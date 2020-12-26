@@ -68,15 +68,11 @@ namespace Nop.Services.Security
             return await _staticCacheManager.GetAsync(key, async ()=> await query.ToListAsync());
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Delete a permission
         /// </summary>
         /// <param name="permission">Permission</param>
-        public virtual async Task DeletePermissionRecordAsync(PermissionRecord permission)
+        protected virtual async Task DeletePermissionRecordAsync(PermissionRecord permission)
         {
             await _permissionRecordRepository.DeleteAsync(permission);
         }
@@ -84,31 +80,34 @@ namespace Nop.Services.Security
         /// <summary>
         /// Gets a permission
         /// </summary>
-        /// <param name="permissionId">Permission identifier</param>
-        /// <returns>Permission</returns>
-        public virtual async Task<PermissionRecord> GetPermissionRecordByIdAsync(int permissionId)
-        {
-            return await _permissionRecordRepository.GetByIdAsync(permissionId, cache => default);
-        }
-
-        /// <summary>
-        /// Gets a permission
-        /// </summary>
         /// <param name="systemName">Permission system name</param>
         /// <returns>Permission</returns>
-        public virtual async Task<PermissionRecord> GetPermissionRecordBySystemNameAsync(string systemName)
+        protected virtual async Task<PermissionRecord> GetPermissionRecordBySystemNameAsync(string systemName)
         {
             if (string.IsNullOrWhiteSpace(systemName))
                 return null;
 
             var query = from pr in _permissionRecordRepository.Table
-                        where pr.SystemName == systemName
-                        orderby pr.Id
-                        select pr;
+                where pr.SystemName == systemName
+                orderby pr.Id
+                select pr;
 
             var permissionRecord = await query.FirstOrDefaultAsync();
             return permissionRecord;
         }
+
+        /// <summary>
+        /// Inserts a permission
+        /// </summary>
+        /// <param name="permission">Permission</param>
+        protected virtual async Task InsertPermissionRecordAsync(PermissionRecord permission)
+        {
+            await _permissionRecordRepository.InsertAsync(permission);
+        }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Gets all permissions
@@ -125,16 +124,7 @@ namespace Nop.Services.Security
 
             return permissions;
         }
-
-        /// <summary>
-        /// Inserts a permission
-        /// </summary>
-        /// <param name="permission">Permission</param>
-        public virtual async Task InsertPermissionRecordAsync(PermissionRecord permission)
-        {
-            await _permissionRecordRepository.InsertAsync(permission);
-        }
-
+        
         /// <summary>
         /// Updates the permission
         /// </summary>
@@ -197,26 +187,6 @@ namespace Nop.Services.Security
 
                 //save localization
                 await _localizationService.SaveLocalizedPermissionNameAsync(permission1);
-            }
-        }
-
-        /// <summary>
-        /// Uninstall permissions
-        /// </summary>
-        /// <param name="permissionProvider">Permission provider</param>
-        public virtual async Task UninstallPermissionsAsync(IPermissionProvider permissionProvider)
-        {
-            var permissions = permissionProvider.GetPermissions();
-            foreach (var permission in permissions)
-            {
-                var permission1 = await GetPermissionRecordBySystemNameAsync(permission.SystemName);
-                if (permission1 == null)
-                    continue;
-
-                await DeletePermissionRecordAsync(permission1);
-
-                //delete permission locales
-                await _localizationService.DeleteLocalizedPermissionNameAsync(permission1);
             }
         }
 

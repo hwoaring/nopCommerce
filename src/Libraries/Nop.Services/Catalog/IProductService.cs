@@ -84,13 +84,6 @@ namespace Nop.Services.Catalog
         /// <param name="product">Product</param>
         Task UpdateProductAsync(Product product);
 
-        //TODO: may be deleted
-        /// <summary>
-        /// Updates the products
-        /// </summary>
-        /// <param name="products">Product</param>
-        Task UpdateProductsAsync(IList<Product> products);
-
         /// <summary>
         /// Get number of product (published and visible) in certain category
         /// </summary>
@@ -433,22 +426,6 @@ namespace Nop.Services.Catalog
         /// <param name="message">Message for the stock quantity history</param>
         Task AdjustInventoryAsync(Product product, int quantityToChange, string attributesXml = "", string message = "");
 
-        //TODO: may be deleted from interface
-        /// <summary>
-        /// Reserve the given quantity in the warehouses.
-        /// </summary>
-        /// <param name="product">Product</param>
-        /// <param name="quantity">Quantity, must be negative</param>
-        Task ReserveInventoryAsync(Product product, int quantity);
-
-        //TODO: may be deleted from interface
-        /// <summary>
-        /// Unblocks the given quantity reserved items in the warehouses
-        /// </summary>
-        /// <param name="product">Product</param>
-        /// <param name="quantity">Quantity, must be positive</param>
-        Task UnblockReservedInventoryAsync(Product product, int quantity);
-
         /// <summary>
         /// Book the reserved quantity
         /// </summary>
@@ -532,15 +509,6 @@ namespace Nop.Services.Catalog
         /// <returns>Cross-sell products</returns>
         Task<IList<CrossSellProduct>> GetCrossSellProductsByProductId1Async(int productId1, bool showHidden = false);
 
-        //TODO: may be deleted from interface
-        /// <summary>
-        /// Gets cross-sell products by product identifier
-        /// </summary>
-        /// <param name="productIds">The first product identifiers</param>
-        /// <param name="showHidden">A value indicating whether to show hidden records</param>
-        /// <returns>Cross-sell products</returns>
-        Task<IList<CrossSellProduct>> GetCrossSellProductsByProductIdsAsync(int[] productIds, bool showHidden = false);
-
         /// <summary>
         /// Gets a cross-sell product
         /// </summary>
@@ -553,13 +521,6 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="crossSellProduct">Cross-sell product</param>
         Task InsertCrossSellProductAsync(CrossSellProduct crossSellProduct);
-
-        //TODO: may be deleted
-        /// <summary>
-        /// Updates a cross-sell product
-        /// </summary>
-        /// <param name="crossSellProduct">Cross-sell product</param>
-        Task UpdateCrossSellProductAsync(CrossSellProduct crossSellProduct);
 
         /// <summary>
         /// Gets a cross-sells
@@ -742,21 +703,6 @@ namespace Nop.Services.Catalog
         /// <param name="productReviews">Product reviews</param>
         Task DeleteProductReviewsAsync(IList<ProductReview> productReviews);
 
-        //TODO: may be deleted from interface
-        /// <summary>
-        /// Gets ratio of useful and not useful product review 
-        /// </summary>
-        /// <param name="productReview">Product review</param>
-        /// <returns>Result</returns>
-        Task<(int usefulCount, int notUsefulCount)> GetHelpfulnessCountsAsync(ProductReview productReview);
-
-        //TODO: may be deleted from interface
-        /// <summary>
-        /// Inserts a product review helpfulness record
-        /// </summary>
-        /// <param name="productReviewHelpfulness">Product review helpfulness record</param>
-        Task InsertProductReviewHelpfulnessAsync(ProductReviewHelpfulness productReviewHelpfulness);
-
         /// <summary>
         /// Sets or create a product review helpfulness record
         /// </summary>
@@ -801,14 +747,6 @@ namespace Nop.Services.Catalog
         /// <param name="warehouseId">Warehouse identifier</param>
         /// <returns>Result</returns>
         Task<Warehouse> GetWarehousesByIdAsync(int warehouseId);
-
-        //TODO: may be deleted
-        /// <summary>
-        /// Gets a warehouses by product identifier
-        /// </summary>
-        /// <param name="productId">The product identifier</param>
-        /// <returns>List of warehouses</returns>
-        Task<IList<Warehouse>> GetWarehousesByProductIdAsync(int productId);
 
         /// <summary>
         /// Deletes a ProductWarehouseInventory
