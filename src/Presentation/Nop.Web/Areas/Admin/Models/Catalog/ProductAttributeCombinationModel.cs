@@ -9,7 +9,7 @@ namespace Nop.Web.Areas.Admin.Models.Catalog
     /// <summary>
     /// Represents a product attribute combination model
     /// </summary>
-    public partial class ProductAttributeCombinationModel : BaseNopEntityModel
+    public partial record ProductAttributeCombinationModel : BaseNopEntityModel
     {
         #region Ctor
 
@@ -82,7 +82,7 @@ namespace Nop.Web.Areas.Admin.Models.Catalog
 
         #region Nested classes
 
-        public partial class ProductAttributeModel : BaseNopEntityModel
+        public partial record ProductAttributeModel : BaseNopEntityModel
         {
             public ProductAttributeModel()
             {
@@ -102,7 +102,7 @@ namespace Nop.Web.Areas.Admin.Models.Catalog
             public IList<ProductAttributeValueModel> Values { get; set; }
         }
 
-        public partial class ProductAttributeValueModel : BaseNopEntityModel
+        public partial record ProductAttributeValueModel : BaseNopEntityModel
         {
             public string Name { get; set; }
 

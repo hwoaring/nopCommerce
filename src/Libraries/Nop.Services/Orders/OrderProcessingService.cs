@@ -694,7 +694,7 @@ namespace Nop.Services.Orders
                 details.PickupInStore = details.InitialOrder.PickupInStore;
                 if (!details.PickupInStore)
                 {
-                    if (!details.InitialOrder.ShippingAddressId.HasValue || !(await _addressService.GetAddressByIdAsync(details.InitialOrder.ShippingAddressId.Value) is Address shippingAddress))
+                    if (!details.InitialOrder.ShippingAddressId.HasValue || await _addressService.GetAddressByIdAsync(details.InitialOrder.ShippingAddressId.Value) is not Address shippingAddress)
                         throw new NopException("Shipping address is not available");
 
                     //clone shipping address
@@ -837,10 +837,11 @@ namespace Nop.Services.Orders
             if (details.RedeemedRewardPointsAmount <= decimal.Zero)
                 return order;
 
-            await _rewardPointService.AddRewardPointsHistoryEntryAsync(details.Customer, -details.RedeemedRewardPoints, order.StoreId,
+            order.RedeemedRewardPointsEntryId = await _rewardPointService.AddRewardPointsHistoryEntryAsync(details.Customer, -details.RedeemedRewardPoints, order.StoreId,
                 string.Format(await _localizationService.GetResourceAsync("RewardPoints.Message.RedeemedForOrder", order.CustomerLanguageId), order.CustomOrderNumber),
                 order, details.RedeemedRewardPointsAmount);
             await _customerService.UpdateCustomerAsync(details.Customer);
+            await _orderService.UpdateOrderAsync(order);
 
             return order;
         }
@@ -1397,17 +1398,13 @@ namespace Nop.Services.Orders
                 if (details.IsRecurringShoppingCart)
                 {
                     //recurring cart
-                    switch (await _paymentService.GetRecurringPaymentTypeAsync(processPaymentRequest.PaymentMethodSystemName))
+                    processPaymentResult = (await _paymentService.GetRecurringPaymentTypeAsync(processPaymentRequest.PaymentMethodSystemName)) switch
                     {
-                        case RecurringPaymentType.NotSupported:
-                            throw new NopException("Recurring payments are not supported by selected payment method");
-                        case RecurringPaymentType.Manual:
-                        case RecurringPaymentType.Automatic:
-                            processPaymentResult = await _paymentService.ProcessRecurringPaymentAsync(processPaymentRequest);
-                            break;
-                        default:
-                            throw new NopException("Not supported recurring payment type");
-                    }
+                        RecurringPaymentType.NotSupported => throw new NopException("Recurring payments are not supported by selected payment method"),
+                        RecurringPaymentType.Manual or 
+                        RecurringPaymentType.Automatic => await _paymentService.ProcessRecurringPaymentAsync(processPaymentRequest),
+                        _ => throw new NopException("Not supported recurring payment type"),
+                    };
                 }
                 else
                     //standard cart
