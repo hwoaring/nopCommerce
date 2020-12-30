@@ -8,7 +8,7 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
     /// <summary>
     /// Represents a user search model
     /// </summary>
-    public partial class QrCodeLimitSearchModel : BaseSearchModel
+    public partial record QrCodeLimitSearchModel : BaseSearchModel
     {
         #region Ctor
 

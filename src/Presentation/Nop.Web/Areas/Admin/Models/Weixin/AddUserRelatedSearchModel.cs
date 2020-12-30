@@ -8,7 +8,7 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
     /// <summary>
     /// Represents a AddUserRelatedSearchModel
     /// </summary>
-    public partial class AddUserRelatedSearchModel : BaseSearchModel
+    public partial record AddUserRelatedSearchModel : BaseSearchModel
     {
         #region Ctor
 

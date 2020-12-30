@@ -5,10 +5,10 @@
 
 @{
     const string hideInfoBlockAttributeName = "MenuPage.HideInfoBlock";
-    var hideInfoBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideInfoBlockAttributeName);
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
 
     const string hideMenuButtonBlockAttributeName = "MenuPage.HideMenuButtonBlock";
-    var hideMenuButtonBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideMenuButtonBlockAttributeName);
+    var hideMenuButtonBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideMenuButtonBlockAttributeName);
 }
 
 <div class="content">

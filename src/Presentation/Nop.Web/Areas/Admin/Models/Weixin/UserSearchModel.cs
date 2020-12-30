@@ -8,7 +8,7 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
     /// <summary>
     /// Represents a user search model
     /// </summary>
-    public partial class UserSearchModel : BaseSearchModel
+    public partial record UserSearchModel : BaseSearchModel
     {
         #region Ctor
 

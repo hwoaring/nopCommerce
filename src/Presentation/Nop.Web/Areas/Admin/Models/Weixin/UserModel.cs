@@ -9,7 +9,7 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
     /// <summary>
     /// Represents a user model
     /// </summary>
-    public partial class UserModel : BaseNopEntityModel
+    public partial record UserModel : BaseNopEntityModel
     {
         #region Properties
 

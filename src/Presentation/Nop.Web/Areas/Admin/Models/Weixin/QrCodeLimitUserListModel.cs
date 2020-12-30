@@ -5,7 +5,7 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
     /// <summary>
     /// Represents a QrCodeLimitUserListModel
     /// </summary>
-    public partial class QrCodeLimitUserListModel : BasePagedListModel<QrCodeLimitUserModel>
+    public partial record QrCodeLimitUserListModel : BasePagedListModel<QrCodeLimitUserModel>
     {
     }
 }

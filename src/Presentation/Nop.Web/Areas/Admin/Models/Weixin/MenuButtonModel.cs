@@ -11,7 +11,7 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
     /// <summary>
     /// Represents a Menu Button Model
     /// </summary>
-    public partial class MenuButtonModel : BaseNopEntityModel
+    public partial record MenuButtonModel : BaseNopEntityModel
     {
         public MenuButtonModel()
         {

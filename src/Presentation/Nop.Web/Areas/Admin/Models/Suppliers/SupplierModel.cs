@@ -9,7 +9,7 @@ namespace Nop.Web.Areas.Admin.Models.Suppliers
     /// <summary>
     /// Represents a Supplier Model
     /// </summary>
-    public partial class SupplierModel : BaseNopEntityModel
+    public partial record SupplierModel : BaseNopEntityModel
     {
         #region Properties
 

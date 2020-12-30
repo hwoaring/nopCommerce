@@ -2,7 +2,7 @@
 
 namespace Nop.Plugin.Payments.Offline.Models
 {
-    public class PaymentInfoModel : BaseNopModel
+    public record PaymentInfoModel : BaseNopModel
     {
         public string DescriptionText { get; set; }
         public string WechatPaymentInfo { get; set; }

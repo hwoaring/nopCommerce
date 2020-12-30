@@ -11,7 +11,7 @@ namespace Nop.Web.Areas.Admin.Models.Suppliers
     /// <summary>
     /// Represents a SupplierVoucherCouponModel
     /// </summary>
-    public partial class SupplierVoucherCouponModel : BaseNopEntityModel
+    public partial record SupplierVoucherCouponModel : BaseNopEntityModel
     {
         public SupplierVoucherCouponModel()
         {

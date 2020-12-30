@@ -9,7 +9,7 @@ namespace Nop.Web.Areas.Admin.Models.Suppliers
     /// <summary>
     /// Represents a AddSupplierVoucherCouponRelatedCouponModel
     /// </summary>
-    public partial class AddSupplierVoucherCouponRelatedCouponModel : BaseNopEntityModel
+    public partial record AddSupplierVoucherCouponRelatedCouponModel : BaseNopEntityModel
     {
         #region Properties
 

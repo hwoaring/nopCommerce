@@ -8,7 +8,7 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
     /// <summary>
     /// Represents a Supplier Search Model
     /// </summary>
-    public partial class SupplierSearchModel : BaseSearchModel
+    public partial record SupplierSearchModel : BaseSearchModel
     {
 
         #region Properties

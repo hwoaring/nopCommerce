@@ -8,7 +8,7 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
     /// <summary>
     /// Represents a Menu Button Search Model
     /// </summary>
-    public partial class MenuButtonSearchModel : BaseSearchModel
+    public partial record MenuButtonSearchModel : BaseSearchModel
     {
 
         #region Properties

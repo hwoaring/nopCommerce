@@ -29,7 +29,7 @@ using Nop.Services.Media.RoxyFileman;
 using Nop.Services.Plugins;
 using Nop.Web.Framework.Globalization;
 using Nop.Web.Framework.Mvc.Routing;
-using WebMarkupMin.AspNetCore3;
+using WebMarkupMin.AspNetCore5;
 
 using Senparc.CO2NET;
 using Senparc.CO2NET.AspNet;

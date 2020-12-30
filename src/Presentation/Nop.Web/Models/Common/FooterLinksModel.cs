@@ -2,7 +2,7 @@
 
 namespace Nop.Web.Models.Common
 {
-    public partial class FooterLinksModel : BaseNopModel
+    public partial record FooterLinksModel : BaseNopModel
     {
         public bool IsAuthenticated { get; set; }
         public string CustomerName { get; set; }

@@ -6,7 +6,7 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
     /// <summary>
     /// Represents a AddUserRelatedModel
     /// </summary>
-    public partial class AddUserRelatedModel : BaseNopModel
+    public partial record AddUserRelatedModel : BaseNopModel
     {
         #region Ctor
 

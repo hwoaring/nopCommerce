@@ -2,7 +2,7 @@
 
 namespace Nop.Web.Models.Checkout
 {
-    public partial class OnePagePaymentModel : BaseNopModel
+    public partial record OnePagePaymentModel : BaseNopModel
     {
         /// <summary>
         /// 是否需要邮寄

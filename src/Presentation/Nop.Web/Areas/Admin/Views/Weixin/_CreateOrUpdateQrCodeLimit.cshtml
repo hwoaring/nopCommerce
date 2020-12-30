@@ -5,16 +5,16 @@
 
 @{
     const string hideInfoBlockAttributeName = "QrCodeLimitPage.HideInfoBlock";
-    var hideInfoBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideInfoBlockAttributeName);
+    var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
 
     const string hideBindsourceBlockAttributeName = "QrCodeLimitPage.HideBindsourceBlock";
-    var hideBindsourceBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideBindsourceBlockAttributeName);
+    var hideBindsourceBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideBindsourceBlockAttributeName);
 
     const string hideUserBlockAttributeName = "QrCodeLimitPage.HideUserBlock";
-    var hideUserBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideUserBlockAttributeName);
+    var hideUserBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideUserBlockAttributeName);
 
     const string hideCouponBlockAttributeName = "QrCodeLimitPage.HideCouponBlock";
-    var hideCouponBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideCouponBlockAttributeName);
+    var hideCouponBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideCouponBlockAttributeName);
 }
 
 <div class="content">

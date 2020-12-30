@@ -9,7 +9,7 @@ namespace Nop.Web.Areas.Admin.Models.Suppliers
     /// <summary>
     /// Represents a QrCodeSupplierVoucherCouponModel
     /// </summary>
-    public partial class QrCodeSupplierVoucherCouponModel : BaseNopEntityModel
+    public partial record QrCodeSupplierVoucherCouponModel : BaseNopEntityModel
     {
         #region Properties
 

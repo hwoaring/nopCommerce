@@ -12,7 +12,7 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
     /// <summary>
     /// Represents a QrCodeLimitModel
     /// </summary>
-    public partial class QrCodeLimitModel : BaseNopEntityModel
+    public partial record QrCodeLimitModel : BaseNopEntityModel
     {
         public QrCodeLimitModel()
         {

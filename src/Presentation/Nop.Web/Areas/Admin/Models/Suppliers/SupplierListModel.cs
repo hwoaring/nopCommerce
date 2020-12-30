@@ -5,7 +5,7 @@ namespace Nop.Web.Areas.Admin.Models.Suppliers
     /// <summary>
     /// Represents a Supplier List Model
     /// </summary>
-    public partial class SupplierListModel : BasePagedListModel<SupplierModel>
+    public partial record SupplierListModel : BasePagedListModel<SupplierModel>
     {
     }
 }

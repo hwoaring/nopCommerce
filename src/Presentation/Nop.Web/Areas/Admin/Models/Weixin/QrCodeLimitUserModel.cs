@@ -9,7 +9,7 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
     /// <summary>
     /// Represents a QrCodeLimitUserModel
     /// </summary>
-    public partial class QrCodeLimitUserModel : BaseNopEntityModel
+    public partial record QrCodeLimitUserModel : BaseNopEntityModel
     {
         #region Properties
 

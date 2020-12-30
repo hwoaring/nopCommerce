@@ -8,7 +8,7 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
     /// <summary>
     /// Represents a Supplier Voucher Coupon Search Model
     /// </summary>
-    public partial class SupplierVoucherCouponSearchModel : BaseSearchModel
+    public partial record SupplierVoucherCouponSearchModel : BaseSearchModel
     {
         #region Ctor
 

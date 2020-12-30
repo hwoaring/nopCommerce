@@ -7,7 +7,7 @@ namespace Nop.Web.Areas.Admin.Models.Settings
     /// <summary>
     /// Represents a general and common settings model
     /// </summary>
-    public partial class WeixinSettingsModel : BaseNopModel, ISettingsModel
+    public partial record WeixinSettingsModel : BaseNopModel, ISettingsModel
     {
         #region Properties
         public int ActiveStoreScopeConfiguration { get; set; }

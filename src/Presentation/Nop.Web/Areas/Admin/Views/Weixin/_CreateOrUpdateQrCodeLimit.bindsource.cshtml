@@ -73,7 +73,7 @@
                 <nop-label asp-for="BindingSource.WSceneTypeId" />
             </div>
             <div class="col-md-9">
-                <nop-select asp-for="BindingSource.WSceneTypeId" asp-items="@(((WSceneType)Model.BindingSource.WSceneTypeId).ToSelectList())" />
+                <nop-select asp-for="BindingSource.WSceneTypeId" asp-items="@await (((WSceneType)Model.BindingSource.WSceneTypeId).ToSelectListAsync())" />
             </div>
         </div>
         <div class="form-group">
@@ -81,7 +81,7 @@
                 <nop-label asp-for="BindingSource.MessageTypeId" />
             </div>
             <div class="col-md-9">
-                <nop-select asp-for="BindingSource.MessageTypeId" asp-items="@(((WMessageType)Model.BindingSource.MessageTypeId).ToSelectList())" />
+                <nop-select asp-for="BindingSource.MessageTypeId" asp-items="@await (((WMessageType)Model.BindingSource.MessageTypeId).ToSelectListAsync())" />
             </div>
         </div>
         <div class="form-group">
