@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -196,7 +197,7 @@ namespace Nop.Web.Areas.Admin.Factories
 
         #region SupplierVoucherCouponModel
 
-        public virtual QrCodeSupplierVoucherCouponListModel PrepareQrCodeSupplierVoucherCouponListModel(QrCodeSupplierVoucherCouponSearchModel searchModel, WQrCodeLimit qrCodeLimit)
+        public virtual async Task<QrCodeSupplierVoucherCouponListModel> PrepareQrCodeSupplierVoucherCouponListModelAsync(QrCodeSupplierVoucherCouponSearchModel searchModel, WQrCodeLimit qrCodeLimit)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -204,15 +205,15 @@ namespace Nop.Web.Areas.Admin.Factories
             if (qrCodeLimit == null)
                 throw new ArgumentNullException(nameof(qrCodeLimit));
 
-            var qrCodeSupplierVoucherCoupons = _qrCodeSupplierVoucherCouponMappingService.GetEntities(
+            var qrCodeSupplierVoucherCoupons = await _qrCodeSupplierVoucherCouponMappingService.GetEntitiesAsync(
                 qrCodeId: qrCodeLimit.Id,
                 qrcodeLimit: searchModel.QrcodeLimit,
                 pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
             //prepare grid model
-            var model = new QrCodeSupplierVoucherCouponListModel().PrepareToGrid(searchModel, qrCodeSupplierVoucherCoupons, () =>
+            var model = await new QrCodeSupplierVoucherCouponListModel().PrepareToGridAsync(searchModel, qrCodeSupplierVoucherCoupons, () =>
             {
-                return qrCodeSupplierVoucherCoupons.Select(qrCodeSupplierVoucherCoupon =>
+                return qrCodeSupplierVoucherCoupons.SelectAwait(async qrCodeSupplierVoucherCoupon =>
                 {
                     //fill in model values from the entity
                     var qrCodeSupplierVoucherCouponModel = qrCodeSupplierVoucherCoupon.ToModel<QrCodeSupplierVoucherCouponModel>();
@@ -224,7 +225,7 @@ namespace Nop.Web.Areas.Admin.Factories
             return model;
         }
 
-        public virtual AddSupplierVoucherCouponRelatedSearchModel PrepareAddSupplierVoucherCouponRelatedSearchModel(AddSupplierVoucherCouponRelatedSearchModel searchModel)
+        public virtual Task<AddSupplierVoucherCouponRelatedSearchModel> PrepareAddSupplierVoucherCouponRelatedSearchModelAsync(AddSupplierVoucherCouponRelatedSearchModel searchModel)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -232,10 +233,10 @@ namespace Nop.Web.Areas.Admin.Factories
             //prepare page parameters
             searchModel.SetPopupGridPageSize();
 
-            return searchModel;
+            return Task.FromResult(searchModel);
         }
 
-        public virtual AddSupplierVoucherCouponRelatedCouponListModel PrepareAddSupplierVoucherCouponRelatedCouponListModel(AddSupplierVoucherCouponRelatedSearchModel searchModel)
+        public virtual async Task<AddSupplierVoucherCouponRelatedCouponListModel> PrepareAddSupplierVoucherCouponRelatedCouponListModelAsync(AddSupplierVoucherCouponRelatedSearchModel searchModel)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -246,7 +247,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 outassetType = (AssetType)overrideAssetType;
 
             //get users
-            var supplierVoucherCoupons = _supplierVoucherCouponService.GetEntities(
+            var supplierVoucherCoupons = await _supplierVoucherCouponService.GetEntitiesAsync(
                 name: searchModel.SearchSystemName,
                 supplierId: searchModel.SupplierId,
                 supplierShopId: searchModel.SupplierShopId,
@@ -254,9 +255,9 @@ namespace Nop.Web.Areas.Admin.Factories
                 pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
             //prepare grid model
-            var model = new AddSupplierVoucherCouponRelatedCouponListModel().PrepareToGrid(searchModel, supplierVoucherCoupons, () =>
+            var model = await new AddSupplierVoucherCouponRelatedCouponListModel().PrepareToGridAsync(searchModel, supplierVoucherCoupons, () =>
             {
-                return supplierVoucherCoupons.Select(supplierVoucherCoupon =>
+                return supplierVoucherCoupons.SelectAwait(async supplierVoucherCoupon =>
                 {
                     var supplierVoucherCouponModel = supplierVoucherCoupon.ToModel<AddSupplierVoucherCouponRelatedCouponModel>();
 

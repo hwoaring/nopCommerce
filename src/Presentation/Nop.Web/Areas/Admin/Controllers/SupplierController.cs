@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -147,96 +148,96 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region QrCode-Coupons
 
         [HttpPost]
-        public virtual IActionResult QrCodeSupplierVoucherCouponList(QrCodeSupplierVoucherCouponSearchModel searchModel)
+        public virtual async Task<IActionResult> QrCodeSupplierVoucherCouponList(QrCodeSupplierVoucherCouponSearchModel searchModel)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSuppliers))
-                return AccessDeniedDataTablesJson();
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSuppliers))
+                return await AccessDeniedDataTablesJson();
 
             //try to get a Entity with the specified id
-            var qrCodeLimit = _wQrCodeLimitService.GetWQrCodeLimitById(searchModel.QrCodeId)
+            var qrCodeLimit = await _wQrCodeLimitService.GetWQrCodeLimitByIdAsync(searchModel.QrCodeId)
                 ?? throw new ArgumentException("No QrCodeLimit found with the specified id");
 
             //prepare model
-            var model = _supplierModelFactory.PrepareQrCodeSupplierVoucherCouponListModel(searchModel, qrCodeLimit);
+            var model = await _supplierModelFactory.PrepareQrCodeSupplierVoucherCouponListModelAsync(searchModel, qrCodeLimit);
 
             return Json(model);
         }
 
         [HttpPost]
-        public virtual IActionResult QrCodeSupplierVoucherCouponDelete(int id)
+        public virtual async Task<IActionResult> QrCodeSupplierVoucherCouponDelete(int id)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSuppliers))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSuppliers))
                 return AccessDeniedView();
 
             //try to get a qrCodeLimitUser
-            var qrCodeSupplierVoucherCoupon = _qrCodeSupplierVoucherCouponMappingService.GetEntityById(id)
+            var qrCodeSupplierVoucherCoupon = await _qrCodeSupplierVoucherCouponMappingService.GetEntityByIdAsync(id)
                 ?? throw new ArgumentException("No QrCodeSupplierVoucherCoupon found with the specified id");
 
-            _qrCodeSupplierVoucherCouponMappingService.DeleteEntity(qrCodeSupplierVoucherCoupon);
+            await _qrCodeSupplierVoucherCouponMappingService.DeleteEntityAsync(qrCodeSupplierVoucherCoupon);
 
             return new NullJsonResult();
         }
 
         [HttpPost]
-        public virtual IActionResult QrCodeSupplierVoucherCouponUpdate(QrCodeSupplierVoucherCouponModel model)
+        public virtual async Task<IActionResult> QrCodeSupplierVoucherCouponUpdate(QrCodeSupplierVoucherCouponModel model)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSuppliers))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSuppliers))
                 return AccessDeniedView();
 
             //try to get a Entity with the specified id
-            var qrCodeSupplierVoucherCoupon = _qrCodeSupplierVoucherCouponMappingService.GetEntityById(model.Id)
+            var qrCodeSupplierVoucherCoupon = await _qrCodeSupplierVoucherCouponMappingService.GetEntityByIdAsync(model.Id)
                 ?? throw new ArgumentException("No QrCodeSupplierVoucherCouponMapping found with the specified id");
 
             qrCodeSupplierVoucherCoupon.Published = model.Published;
             qrCodeSupplierVoucherCoupon.StartDateTime = model.StartDateTime;
             qrCodeSupplierVoucherCoupon.EndDateTime = model.EndDateTime;
 
-            _qrCodeSupplierVoucherCouponMappingService.UpdateEntity(qrCodeSupplierVoucherCoupon);
+            await _qrCodeSupplierVoucherCouponMappingService.UpdateEntityAsync(qrCodeSupplierVoucherCoupon);
 
             return new NullJsonResult();
         }
 
-        public virtual IActionResult QrCodeSupplierVoucherCouponAddPopup(int qrCodeLimitId)
+        public virtual async Task<IActionResult> QrCodeSupplierVoucherCouponAddPopup(int qrCodeLimitId)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSuppliers))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSuppliers))
                 return AccessDeniedView();
 
             //prepare model
-            var model = _supplierModelFactory.PrepareAddSupplierVoucherCouponRelatedSearchModel(new AddSupplierVoucherCouponRelatedSearchModel());
+            var model = await _supplierModelFactory.PrepareAddSupplierVoucherCouponRelatedSearchModelAsync(new AddSupplierVoucherCouponRelatedSearchModel());
 
             return View(model);
         }
 
         [HttpPost]
-        public virtual IActionResult QrCodeSupplierVoucherCouponAddPopupList(AddSupplierVoucherCouponRelatedSearchModel searchModel)
+        public virtual async Task<IActionResult> QrCodeSupplierVoucherCouponAddPopupList(AddSupplierVoucherCouponRelatedSearchModel searchModel)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSuppliers))
-                return AccessDeniedDataTablesJson();
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSuppliers))
+                return await AccessDeniedDataTablesJson();
 
             //prepare model
-            var model = _supplierModelFactory.PrepareAddSupplierVoucherCouponRelatedCouponListModel(searchModel);
+            var model = await _supplierModelFactory.PrepareAddSupplierVoucherCouponRelatedCouponListModelAsync(searchModel);
 
             return Json(model);
         }
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual IActionResult QrCodeSupplierVoucherCouponAddPopup(AddSupplierVoucherCouponRelatedModel model)
+        public virtual async Task<IActionResult> QrCodeSupplierVoucherCouponAddPopup(AddSupplierVoucherCouponRelatedModel model)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSuppliers))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSuppliers))
                 return AccessDeniedView();
 
-            var selectedSupplierVoucherCoupons = _supplierVoucherCouponService.GetEntitiesByIds(model.SelectedSupplierVoucherCouponIds.ToArray());
+            var selectedSupplierVoucherCoupons = await _supplierVoucherCouponService.GetEntitiesByIdsAsync(model.SelectedSupplierVoucherCouponIds.ToArray());
 
             if (selectedSupplierVoucherCoupons.Any())
             {
-                var existingRelatedCoupons =_qrCodeSupplierVoucherCouponMappingService.GetEntitiesByQrCodeId(model.RelatedId);
+                var existingRelatedCoupons = await _qrCodeSupplierVoucherCouponMappingService.GetEntitiesByQrCodeIdAsync(model.RelatedId);
                 foreach (var supplierVoucherCoupon in selectedSupplierVoucherCoupons)
                 {
-                    if (supplierVoucherCoupon.Deleted || existingRelatedCoupons.Exists(t => t.SupplierVoucherCouponId == supplierVoucherCoupon.Id))
+                    if (supplierVoucherCoupon.Deleted || existingRelatedCoupons.Any(t => t.SupplierVoucherCouponId == supplierVoucherCoupon.Id))
                         continue;
 
-                    _qrCodeSupplierVoucherCouponMappingService.InsertEntity(new QrCodeSupplierVoucherCouponMapping
+                    await _qrCodeSupplierVoucherCouponMappingService.InsertEntityAsync(new QrCodeSupplierVoucherCouponMapping
                     {
                         QrCodeId = model.RelatedId,
                         SupplierVoucherCouponId = supplierVoucherCoupon.Id,

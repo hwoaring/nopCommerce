@@ -237,9 +237,9 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="defaultItemText">Default item text; pass null to use default value of the default item text</param>
         Task PrepareTopicTemplatesAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null);
 
-        void PrepareQrCodeCategorys(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null);
+        Task PrepareQrCodeCategorysAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null);
 
-        void PrepareQrCodeChannels(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null);
+        Task PrepareQrCodeChannelsAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null);
 
         /// <summary>
         /// Prepare available warehouses

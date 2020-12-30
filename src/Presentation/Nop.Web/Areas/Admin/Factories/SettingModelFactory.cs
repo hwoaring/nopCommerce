@@ -1226,8 +1226,8 @@ namespace Nop.Web.Areas.Admin.Factories
                 model.TermsOfServiceOnOrderConfirmPage_OverrideForStore = await _settingService.SettingExistsAsync(orderSettings, x => x.TermsOfServiceOnOrderConfirmPage, storeId);
                 model.OnePageCheckoutEnabled_OverrideForStore = await _settingService.SettingExistsAsync(orderSettings, x => x.OnePageCheckoutEnabled, storeId);
                 model.OnePageCheckoutDisplayOrderTotalsOnPaymentInfoTab_OverrideForStore = await _settingService.SettingExistsAsync(orderSettings, x => x.OnePageCheckoutDisplayOrderTotalsOnPaymentInfoTab, storeId);
-                model.OnePagePaymentEnabled_OverrideForStore = _settingService.SettingExistsAsync(orderSettings, x => x.OnePagePaymentEnabled, storeId);
-                model.OneClickPaymentEnabled_OverrideForStore = _settingService.SettingExistsAsync(orderSettings, x => x.OneClickPaymentEnabled, storeId);
+                model.OnePagePaymentEnabled_OverrideForStore = await _settingService.SettingExistsAsync(orderSettings, x => x.OnePagePaymentEnabled, storeId);
+                model.OneClickPaymentEnabled_OverrideForStore = await _settingService.SettingExistsAsync(orderSettings, x => x.OneClickPaymentEnabled, storeId);
                 model.DisableBillingAddressCheckoutStep_OverrideForStore = await _settingService.SettingExistsAsync(orderSettings, x => x.DisableBillingAddressCheckoutStep, storeId);
                 model.DisableOrderCompletedPage_OverrideForStore = await _settingService.SettingExistsAsync(orderSettings, x => x.DisableOrderCompletedPage, storeId);
                 model.DisplayPickupInStoreOnShippingMethodPage_OverrideForStore = await _settingService.SettingExistsAsync(orderSettings, x => x.DisplayPickupInStoreOnShippingMethodPage, storeId);
@@ -1468,11 +1468,11 @@ namespace Nop.Web.Areas.Admin.Factories
         /// Prepare forum settings model
         /// </summary>
         /// <returns>Forum settings model</returns>
-        public virtual WeixinSettingsModel PrepareWeixinSettingsModel()
+        public virtual async Task<WeixinSettingsModel> PrepareWeixinSettingsModelAsync()
         {
             //load settings for a chosen store scope
-            var storeId = _storeContext.ActiveStoreScopeConfiguration;
-            var weixinSettings = _settingService.LoadSetting<WeixinSettings>(storeId);
+            var storeId = await _storeContext.GetActiveStoreScopeConfigurationAsync();
+            var weixinSettings = await _settingService.LoadSettingAsync<WeixinSettings>(storeId);
 
             //fill in model values from the entity
             var model = weixinSettings.ToSettingsModel<WeixinSettingsModel>();
@@ -1484,13 +1484,13 @@ namespace Nop.Web.Areas.Admin.Factories
                 return model;
 
             //fill in overridden values
-            model.ForcedAccessWeChatBrowser_OverrideForStore = _settingService.SettingExists(weixinSettings, x => x.ForcedAccessWeChatBrowser, storeId);
-            model.CheckWebBrowser_OverrideForStore = _settingService.SettingExists(weixinSettings, x => x.CheckWebBrowser, storeId);
-            model.UseSnsapiBase_OverrideForStore = _settingService.SettingExists(weixinSettings, x => x.UseSnsapiBase, storeId);
-            model.Debug_OverrideForStore = _settingService.SettingExists(weixinSettings, x => x.Debug, storeId);
-            model.TraceLog_OverrideForStore = _settingService.SettingExists(weixinSettings, x => x.TraceLog, storeId);
-            model.JSSDKDebug_OverrideForStore = _settingService.SettingExists(weixinSettings, x => x.JSSDKDebug, storeId);
-            model.JsApiList_OverrideForStore = _settingService.SettingExists(weixinSettings, x => x.JsApiList, storeId);
+            model.ForcedAccessWeChatBrowser_OverrideForStore = await _settingService.SettingExistsAsync(weixinSettings, x => x.ForcedAccessWeChatBrowser, storeId);
+            model.CheckWebBrowser_OverrideForStore = await _settingService.SettingExistsAsync(weixinSettings, x => x.CheckWebBrowser, storeId);
+            model.UseSnsapiBase_OverrideForStore = await _settingService.SettingExistsAsync(weixinSettings, x => x.UseSnsapiBase, storeId);
+            model.Debug_OverrideForStore = await _settingService.SettingExistsAsync(weixinSettings, x => x.Debug, storeId);
+            model.TraceLog_OverrideForStore = await _settingService.SettingExistsAsync(weixinSettings, x => x.TraceLog, storeId);
+            model.JSSDKDebug_OverrideForStore = await _settingService.SettingExistsAsync(weixinSettings, x => x.JSSDKDebug, storeId);
+            model.JsApiList_OverrideForStore = await _settingService.SettingExistsAsync(weixinSettings, x => x.JsApiList, storeId);
 
             return model;
         }

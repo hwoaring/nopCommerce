@@ -294,21 +294,22 @@ namespace Nop.Web.Areas.Admin.Factories
         /// </summary>
         /// <param name="searchModel">User search model</param>
         /// <returns>User list model</returns>
-        public virtual Task<UserListModel> PrepareUserListModelAsync(UserSearchModel searchModel)
+        public virtual async Task<UserListModel> PrepareUserListModelAsync(UserSearchModel searchModel)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
 
             //get users
-            var users = _wUserService.GetAllUsers(
+            var users = await _wUserService.GetAllUsersAsync(
                 nickName: searchModel.SearchUserNickName,
                 remark: searchModel.SearchUserRemark,
-                pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize) ;
+                pageIndex: searchModel.Page - 1, 
+                pageSize: searchModel.PageSize);
 
             //prepare list model
-            var model = new UserListModel().PrepareToGrid(searchModel, users, () =>
+            var model = await new UserListModel().PrepareToGridAsync(searchModel, users, () =>
             {
-                return users.Select(user =>
+                return users.SelectAwait(async user =>
                 {
                     //fill in model values from the entity
                     var userModel = user.ToModel<UserModel>();
@@ -317,7 +318,7 @@ namespace Nop.Web.Areas.Admin.Factories
                         userModel.HeadImgUrl = Senparc.Weixin.MP.CommonService.Utilities.HeadImageUrlHelper.GetHeadImageUrl(user.HeadImgUrl);
 
                     //convert dates to the user time
-                    if(user.SubscribeTime>0)
+                    if (user.SubscribeTime > 0)
                         userModel.SubscribeTime = Nop.Core.Weixin.Helpers.DateTimeHelper.GetDateTimeFromXml(user.SubscribeTime);
                     if (user.UnSubscribeTime > 0)
                         userModel.UnSubscribeTime = Nop.Core.Weixin.Helpers.DateTimeHelper.GetDateTimeFromXml(user.UnSubscribeTime);
@@ -344,7 +345,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="QrCodeLimit">QrCodeLimit</param>
         /// <param name="excludeProperties">Whether to exclude populating of some properties of model</param>
         /// <returns>Product model</returns>
-        public virtual QrCodeLimitModel PrepareQrCodeLimitModel(QrCodeLimitModel model, WQrCodeLimit qrCodeLimit, bool excludeProperties = false)
+        public virtual async Task<QrCodeLimitModel> PrepareQrCodeLimitModelAsync(QrCodeLimitModel model, WQrCodeLimit qrCodeLimit, bool excludeProperties = false)
         {
             if (qrCodeLimit != null)
             {
@@ -373,7 +374,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     if (!string.IsNullOrEmpty(model.Ticket))
                         model.QrCodeImageUrl = Senparc.Weixin.MP.AdvancedAPIs.QrCodeApi.GetShowQrCodeUrl(model.Ticket);
 
-                    var qrCodeLimitBindingSource = _qrCodeLimitBindingSourceService.GetEntityByQrcodeLimitId(qrCodeLimit.Id);
+                    var qrCodeLimitBindingSource = await _qrCodeLimitBindingSourceService.GetEntityByQrcodeLimitIdAsync(qrCodeLimit.Id);
                     if (qrCodeLimitBindingSource != null)
                     {
                         var qrCodeLimitBindingSourceModel = qrCodeLimitBindingSource.ToModel<QrCodeLimitBindingSourceModel>();
@@ -382,16 +383,16 @@ namespace Nop.Web.Areas.Admin.Factories
                 }
 
                 //prepare nested search model
-                PrepareQrCodeLimitUserSearchModel(model.QrCodeLimitUserSearchModel, qrCodeLimit);
-                PrepareQrCodeSupplierVoucherCouponSearchModel(model.QrCodeSupplierVoucherCouponSearchModel, qrCodeLimit);
+                await PrepareQrCodeLimitUserSearchModelAsync(model.QrCodeLimitUserSearchModel, qrCodeLimit);
+                await PrepareQrCodeSupplierVoucherCouponSearchModelAsync(model.QrCodeSupplierVoucherCouponSearchModel, qrCodeLimit);
             }
             else
             {
 
             }
 
-            _baseAdminModelFactory.PrepareQrCodeCategorys(model.AvailableWQrCodeCategorys, false);
-            _baseAdminModelFactory.PrepareQrCodeChannels(model.AvailableWQrCodeChannels, false);
+            await _baseAdminModelFactory.PrepareQrCodeCategorysAsync(model.AvailableWQrCodeCategorys, false);
+            await _baseAdminModelFactory.PrepareQrCodeChannelsAsync(model.AvailableWQrCodeChannels, false);
 
             //set default values for the new model
             if (qrCodeLimit == null)
@@ -407,14 +408,14 @@ namespace Nop.Web.Areas.Admin.Factories
         /// </summary>
         /// <param name="searchModel">QrCodeLimit search model</param>
         /// <returns>QrCodeLimit search model</returns>
-        public virtual QrCodeLimitSearchModel PrepareQrCodeLimitSearchModel(QrCodeLimitSearchModel searchModel)
+        public virtual async Task<QrCodeLimitSearchModel> PrepareQrCodeLimitSearchModelAsync(QrCodeLimitSearchModel searchModel)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
 
-            _baseAdminModelFactory.PrepareQrCodeCategorys(searchModel.AvailableCategories);
+            await _baseAdminModelFactory.PrepareQrCodeCategorysAsync(searchModel.AvailableCategories);
 
-            _baseAdminModelFactory.PrepareQrCodeChannels(searchModel.AvailableChannels);
+            await _baseAdminModelFactory.PrepareQrCodeChannelsAsync(searchModel.AvailableChannels);
 
             searchModel.AvailableFixedUseOptions.Add(new SelectListItem
             {
@@ -459,7 +460,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// </summary>
         /// <param name="searchModel">QrCodeLimit search model</param>
         /// <returns>QrCodeLimit list model</returns>
-        public virtual QrCodeLimitListModel PrepareQrCodeLimitListModel(QrCodeLimitSearchModel searchModel)
+        public virtual async Task<QrCodeLimitListModel> PrepareQrCodeLimitListModelAsync(QrCodeLimitSearchModel searchModel)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -468,7 +469,7 @@ namespace Nop.Web.Areas.Admin.Factories
             var overrideCreated = searchModel.SearchHasCreated == 0 ? null : (bool?)(searchModel.SearchHasCreated == 1);
 
             //get users
-            var qrCodeLimits =  _wQrCodeLimitService.GetWQrCodeLimits(
+            var qrCodeLimits = await _wQrCodeLimitService.GetWQrCodeLimitsAsync(
                 wConfigId: searchModel.WConfigId,
                 wQrCodeCategoryId:searchModel.WQrCodeCategoryId,
                 wQrCodeChannelId:searchModel.WQrCodeChannelId,
@@ -477,9 +478,9 @@ namespace Nop.Web.Areas.Admin.Factories
                 pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
             //prepare list model
-            var model = new QrCodeLimitListModel().PrepareToGrid(searchModel, qrCodeLimits, () =>
+            var model = await new QrCodeLimitListModel().PrepareToGridAsync(searchModel, qrCodeLimits, () =>
             {
-                return qrCodeLimits.Select(qrCodeLimit =>
+                return qrCodeLimits.SelectAwait(async qrCodeLimit =>
                 {
                     //fill in model values from the entity
                     var qrCodeLimitModel = qrCodeLimit.ToModel<QrCodeLimitModel>();
@@ -494,7 +495,7 @@ namespace Nop.Web.Areas.Admin.Factories
             return model;
         }
 
-        public virtual QrCodeLimitUserListModel PrepareQrCodeLimitUserListModel(QrCodeLimitUserSearchModel searchModel, WQrCodeLimit qrCodeLimit)
+        public virtual async Task<QrCodeLimitUserListModel> PrepareQrCodeLimitUserListModelAsync(QrCodeLimitUserSearchModel searchModel, WQrCodeLimit qrCodeLimit)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -502,20 +503,20 @@ namespace Nop.Web.Areas.Admin.Factories
             if (qrCodeLimit == null)
                 throw new ArgumentNullException(nameof(qrCodeLimit));
 
-            var qrCodeLimitUsers = _wQrCodeLimitUserService.GetEntities(
+            var qrCodeLimitUsers = await _wQrCodeLimitUserService.GetEntitiesAsync(
                 userId: searchModel.UserId,
                 qrCodeLimitId: qrCodeLimit.Id,
                 pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
             //prepare grid model
-            var model = new QrCodeLimitUserListModel().PrepareToGrid(searchModel, qrCodeLimitUsers, () =>
+            var model = await new QrCodeLimitUserListModel().PrepareToGridAsync(searchModel, qrCodeLimitUsers, () =>
             {
-                return qrCodeLimitUsers.Select(qrCodeLimitUser =>
+                return qrCodeLimitUsers.SelectAwait(async qrCodeLimitUser =>
                 {
                     //fill in model values from the entity
                     var qrCodeLimitUserModel = qrCodeLimitUser.ToModel<QrCodeLimitUserModel>();
 
-                    var user = _wUserService.GetWUserById(qrCodeLimitUser.UserId);
+                    var user = await _wUserService.GetWUserByIdAsync(qrCodeLimitUser.UserId);
                     if (user != null)
                     {
                         if (string.IsNullOrWhiteSpace(qrCodeLimitUserModel.UserName))
@@ -531,7 +532,7 @@ namespace Nop.Web.Areas.Admin.Factories
             return model;
         }
 
-        public virtual AddUserRelatedSearchModel PrepareAddUserRelatedSearchModel(AddUserRelatedSearchModel searchModel)
+        public virtual Task<AddUserRelatedSearchModel> PrepareAddUserRelatedSearchModelAsync(AddUserRelatedSearchModel searchModel)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -539,7 +540,7 @@ namespace Nop.Web.Areas.Admin.Factories
             //prepare page parameters
             searchModel.SetPopupGridPageSize();
 
-            return searchModel;
+            return Task.FromResult(searchModel);
         }
 
         /// <summary>
@@ -547,21 +548,21 @@ namespace Nop.Web.Areas.Admin.Factories
         /// </summary>
         /// <param name="searchModel">Related product search model to add to the product</param>
         /// <returns>Related product list model to add to the product</returns>
-        public virtual AddUserRelatedUserListModel PrepareAddUserRelatedUserListModel(AddUserRelatedSearchModel searchModel)
+        public virtual async Task<AddUserRelatedUserListModel> PrepareAddUserRelatedUserListModelAsync(AddUserRelatedSearchModel searchModel)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
 
             //get users
-            var users = _wUserService.GetAllUsers(
+            var users = await _wUserService.GetAllUsersAsync(
                 nickName: searchModel.SearchUserNickName,
                 remark: searchModel.SearchUserRemark,
                 pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
             //prepare grid model
-            var model = new AddUserRelatedUserListModel().PrepareToGrid(searchModel, users, () =>
+            var model = await new AddUserRelatedUserListModel().PrepareToGridAsync(searchModel, users, () =>
             {
-                return users.Select(user =>
+                return users.SelectAwait(async user =>
                 {
                     var userModel = user.ToModel<AddUserRelatedUserModel>();
 
@@ -574,7 +575,7 @@ namespace Nop.Web.Areas.Admin.Factories
             return model;
         }
 
-        protected virtual QrCodeLimitUserSearchModel PrepareQrCodeLimitUserSearchModel(QrCodeLimitUserSearchModel searchModel, WQrCodeLimit qrCodeLimit)
+        protected virtual Task<QrCodeLimitUserSearchModel> PrepareQrCodeLimitUserSearchModelAsync(QrCodeLimitUserSearchModel searchModel, WQrCodeLimit qrCodeLimit)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -587,10 +588,10 @@ namespace Nop.Web.Areas.Admin.Factories
             //prepare page parameters
             searchModel.SetGridPageSize();
 
-            return searchModel;
+            return Task.FromResult(searchModel);
         }
 
-        protected virtual QrCodeSupplierVoucherCouponSearchModel PrepareQrCodeSupplierVoucherCouponSearchModel(QrCodeSupplierVoucherCouponSearchModel searchModel, WQrCodeLimit qrCodeLimit)
+        protected virtual Task<QrCodeSupplierVoucherCouponSearchModel> PrepareQrCodeSupplierVoucherCouponSearchModelAsync(QrCodeSupplierVoucherCouponSearchModel searchModel, WQrCodeLimit qrCodeLimit)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -604,10 +605,10 @@ namespace Nop.Web.Areas.Admin.Factories
             //prepare page parameters
             searchModel.SetGridPageSize();
 
-            return searchModel;
+            return Task.FromResult(searchModel);
         }
 
-        public virtual QrCodeLimitUserModel PrepareQrCodeLimitUserModel(QrCodeLimitUserModel model, WQrCodeLimitUserMapping qrCodeLimitUser, bool excludeProperties = false)
+        public virtual async Task<QrCodeLimitUserModel> PrepareQrCodeLimitUserModelAsync(QrCodeLimitUserModel model, WQrCodeLimitUserMapping qrCodeLimitUser, bool excludeProperties = false)
         {
             if (qrCodeLimitUser != null)
             {
@@ -628,7 +629,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     model.ExpireTime = qrCodeLimitUser.ExpireTime;
                     model.Published = qrCodeLimitUser.Published;
 
-                    var user = _wUserService.GetWUserById(model.UserId);
+                    var user = await _wUserService.GetWUserByIdAsync(model.UserId);
                     if (user != null)
                     {
                         if (string.IsNullOrEmpty(model.UserName))
@@ -653,16 +654,12 @@ namespace Nop.Web.Areas.Admin.Factories
             return model;
         }
 
-
-
-
-
         #endregion
 
 
         #region Menu Model
 
-        public virtual MenuSearchModel PrepareMenuSearchModel(MenuSearchModel searchModel)
+        public virtual Task<MenuSearchModel> PrepareMenuSearchModelAsync(MenuSearchModel searchModel)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -686,25 +683,25 @@ namespace Nop.Web.Areas.Admin.Factories
             //prepare page parameters
             searchModel.SetGridPageSize();
 
-            return searchModel;
+            return Task.FromResult(searchModel);
         }
 
-        public virtual MenuListModel PrepareMenuListModel(MenuSearchModel searchModel)
+        public virtual async Task<MenuListModel> PrepareMenuListModelAsync(MenuSearchModel searchModel)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
 
             var overridePersonal = searchModel.SeletedPersonalId == 0 ? null : (bool?)(searchModel.SeletedPersonalId == 1);
             //get users
-            var menus = _wMenuService.GetAllMenus(
+            var menus = await _wMenuService.GetAllMenusAsync(
                 systemName: searchModel.SearchSystemName,
                 personal: overridePersonal,
                 pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
             //prepare list model
-            var model = new MenuListModel().PrepareToGrid(searchModel, menus, () =>
+            var model = await new MenuListModel().PrepareToGridAsync(searchModel, menus, () =>
             {
-                return menus.Select(menu =>
+                return menus.SelectAwait(async menu =>
                 {
                     //fill in model values from the entity
                     var menuModel = menu.ToModel<MenuModel>();
@@ -716,7 +713,7 @@ namespace Nop.Web.Areas.Admin.Factories
             return model;
         }
 
-        public virtual MenuModel PrepareMenuModel(MenuModel model, WMenu menu, bool excludeProperties = false)
+        public virtual async Task<MenuModel> PrepareMenuModelAsync(MenuModel model, WMenu menu, bool excludeProperties = false)
         {
             if (menu != null)
             {
@@ -750,7 +747,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 }
 
                 //prepare nested search model
-                PrepareMenuButtonSearchModel(model.MenuButtonSearchModel, menu);
+                await PrepareMenuButtonSearchModelAsync(model.MenuButtonSearchModel, menu);
 
             }
             else
@@ -767,7 +764,7 @@ namespace Nop.Web.Areas.Admin.Factories
             return model;
         }
 
-        protected virtual MenuButtonSearchModel PrepareMenuButtonSearchModel(MenuButtonSearchModel searchModel, WMenu menu)
+        protected virtual Task<MenuButtonSearchModel> PrepareMenuButtonSearchModelAsync(MenuButtonSearchModel searchModel, WMenu menu)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -780,10 +777,10 @@ namespace Nop.Web.Areas.Admin.Factories
             //prepare page parameters
             searchModel.SetGridPageSize();
 
-            return searchModel;
+            return Task.FromResult(searchModel);
         }
 
-        public virtual MenuButtonListModel PrepareMenuButtonListModel(MenuButtonSearchModel searchModel, WMenu menu)
+        public virtual async Task<MenuButtonListModel> PrepareMenuButtonListModelAsync(MenuButtonSearchModel searchModel, WMenu menu)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -791,12 +788,12 @@ namespace Nop.Web.Areas.Admin.Factories
             if (menu == null)
                 throw new ArgumentNullException(nameof(menu));
 
-            var menuButtons = _wMenuButtonService.GetMenuButtonsByMenuId(menu.Id).ToPagedList(searchModel);
+            var menuButtons = (await _wMenuButtonService.GetMenuButtonsByMenuIdAsync(menu.Id)).ToPagedList(searchModel);
 
             //prepare grid model
-            var model = new MenuButtonListModel().PrepareToGrid(searchModel, menuButtons, () =>
+            var model = await new MenuButtonListModel().PrepareToGridAsync(searchModel, menuButtons, () =>
             {
-                return menuButtons.Select(menuButton =>
+                return menuButtons.SelectAwait(async menuButton =>
                 {
                     //fill in model values from the entity
                     var menuButtonModel = menuButton.ToModel<MenuButtonModel>();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core.Domain.Weixin;
 using Nop.Web.Areas.Admin.Models.Weixin;
@@ -12,10 +13,10 @@ namespace Nop.Web.Areas.Admin.Factories
     /// </summary>
     public partial interface ISupplierModelFactory
     {
-        QrCodeSupplierVoucherCouponListModel PrepareQrCodeSupplierVoucherCouponListModel(QrCodeSupplierVoucherCouponSearchModel searchModel, WQrCodeLimit qrCodeLimit);
+        Task<QrCodeSupplierVoucherCouponListModel> PrepareQrCodeSupplierVoucherCouponListModelAsync(QrCodeSupplierVoucherCouponSearchModel searchModel, WQrCodeLimit qrCodeLimit);
 
-        AddSupplierVoucherCouponRelatedSearchModel PrepareAddSupplierVoucherCouponRelatedSearchModel(AddSupplierVoucherCouponRelatedSearchModel searchModel);
+        Task<AddSupplierVoucherCouponRelatedSearchModel> PrepareAddSupplierVoucherCouponRelatedSearchModelAsync(AddSupplierVoucherCouponRelatedSearchModel searchModel);
 
-        AddSupplierVoucherCouponRelatedCouponListModel PrepareAddSupplierVoucherCouponRelatedCouponListModel(AddSupplierVoucherCouponRelatedSearchModel searchModel);
+        Task<AddSupplierVoucherCouponRelatedCouponListModel> PrepareAddSupplierVoucherCouponRelatedCouponListModelAsync(AddSupplierVoucherCouponRelatedSearchModel searchModel);
     }
 }

@@ -857,36 +857,36 @@ namespace Nop.Web.Areas.Admin.Factories
             await PrepareDefaultItemAsync(items, withSpecialDefaultItem, defaultItemText);
         }
 
-        public virtual void PrepareQrCodeCategorys(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null)
+        public virtual async Task PrepareQrCodeCategorysAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null)
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
             //prepare available items
-            var availableItems = _wQrCodeCategoryService.GetAllEntities();
+            var availableItems = await _wQrCodeCategoryService.GetAllEntitiesAsync();
             foreach (var item in availableItems)
             {
                 items.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.Title });
             }
 
             //insert special item for the default value
-            PrepareDefaultItem(items, withSpecialDefaultItem, defaultItemText);
+            await PrepareDefaultItemAsync(items, withSpecialDefaultItem, defaultItemText);
         }
 
-        public virtual void PrepareQrCodeChannels(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null)
+        public virtual async Task PrepareQrCodeChannelsAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null)
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
             //prepare available items
-            var availableItems = _wQrCodeChannelService.GetAllEntities();
+            var availableItems = await _wQrCodeChannelService.GetAllEntitiesAsync();
             foreach (var item in availableItems)
             {
                 items.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.Title });
             }
 
             //insert special item for the default value
-            PrepareDefaultItem(items, withSpecialDefaultItem, defaultItemText);
+            await PrepareDefaultItemAsync(items, withSpecialDefaultItem, defaultItemText);
         }
 
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -150,56 +151,56 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region WUser list / create / edit
 
-        public virtual IActionResult UserList()
+        public virtual async Task<IActionResult> UserList()
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //prepare model
-            var model = _weixinModelFactory.PrepareUserSearchModel(new UserSearchModel());
+            var model = await _weixinModelFactory.PrepareUserSearchModelAsync(new UserSearchModel());
 
             return View(model);
         }
 
         [HttpPost]
-        public virtual IActionResult UserList(UserSearchModel searchModel)
+        public virtual async Task<IActionResult> UserList(UserSearchModel searchModel)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
-                return AccessDeniedDataTablesJson();
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
+                return await AccessDeniedDataTablesJson();
 
             //prepare model
-            var model = _weixinModelFactory.PrepareUserListModel(searchModel);
+            var model = await _weixinModelFactory.PrepareUserListModelAsync(searchModel);
 
             return Json(model);
         }
 
-        public virtual IActionResult UserEdit(int id)
+        public virtual async Task<IActionResult> UserEdit(int id)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //try to get a weixin customer with the specified id
-            var user = _wUserService.GetWUserById(id);
+            var user = await _wUserService.GetWUserByIdAsync(id);
             if (user == null || user.Deleted)
                 return RedirectToAction("UserList");
 
             //判断是否关注，是否需要同步用户数据到本地
 
             //prepare model
-            var model = _weixinModelFactory.PrepareUserModel(null, user);
+            var model = await _weixinModelFactory.PrepareUserModelAsync(null, user);
 
             return View(model);
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult UserEdit(UserModel model, bool continueEditing, IFormCollection form)
+        public virtual async Task<IActionResult> UserEdit(UserModel model, bool continueEditing, IFormCollection form)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //try to get a weixin user with the specified id
-            var user = _wUserService.GetWUserById(model.Id);
+            var user = await _wUserService.GetWUserByIdAsync(model.Id);
             if (user == null || user.Deleted)
                 return RedirectToAction("UserList");
 
@@ -224,13 +225,13 @@ namespace Nop.Web.Areas.Admin.Controllers
                     user.AllowNotice = model.AllowNotice;
                     user.AllowOrderNotice = model.AllowOrderNotice;
 
-                    _wUserService.UpdateWUser(user);
+                    await _wUserService.UpdateWUserAsync(user);
 
                     //activity log
-                    _customerActivityService.InsertActivity("EditUser",
-                        string.Format(_localizationService.GetResource("ActivityLog.EditUser"), user.Id), user);
+                    await _customerActivityService.InsertActivityAsync("EditUser",
+                        string.Format(await _localizationService.GetResourceAsync("ActivityLog.EditUser"), user.Id), user);
 
-                    _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Weixin.Users.Updated"));
+                    _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Weixin.Users.Updated"));
 
                     if (!continueEditing)
                         return RedirectToAction("UserList");
@@ -244,7 +245,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
 
             //prepare model
-            model = _weixinModelFactory.PrepareUserModel(model, user, true);
+            model = await _weixinModelFactory.PrepareUserModelAsync(model, user, true);
 
             //if we got this far, something failed, redisplay form
             return View(model);
@@ -259,45 +260,45 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region QrCodeLimit list
 
-        public virtual IActionResult QrCodeLimitList()
+        public virtual async Task<IActionResult> QrCodeLimitList()
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //prepare model
-            var model = _weixinModelFactory.PrepareQrCodeLimitSearchModel(new QrCodeLimitSearchModel());
+            var model = await _weixinModelFactory.PrepareQrCodeLimitSearchModelAsync(new QrCodeLimitSearchModel());
 
             return View(model);
         }
 
         [HttpPost]
-        public virtual IActionResult QrCodeLimitList(QrCodeLimitSearchModel searchModel)
+        public virtual async Task<IActionResult> QrCodeLimitList(QrCodeLimitSearchModel searchModel)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
-                return AccessDeniedDataTablesJson();
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
+                return await AccessDeniedDataTablesJson();
 
             //prepare model
-            var model = _weixinModelFactory.PrepareQrCodeLimitListModel(searchModel);
+            var model = await _weixinModelFactory.PrepareQrCodeLimitListModelAsync(searchModel);
 
             return Json(model);
         }
 
-        public virtual IActionResult QrCodeLimitCreate()
+        public virtual async Task<IActionResult> QrCodeLimitCreate()
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //prepare model
-            var model = _weixinModelFactory.PrepareQrCodeLimitModel(new QrCodeLimitModel(), null);
+            var model = await _weixinModelFactory.PrepareQrCodeLimitModelAsync(new QrCodeLimitModel(), null);
 
             return View(model);
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult QrCodeLimitCreate(QrCodeLimitModel model, bool continueEditing, IFormCollection form)
+        public virtual async Task<IActionResult> QrCodeLimitCreate(QrCodeLimitModel model, bool continueEditing, IFormCollection form)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             if(string.IsNullOrWhiteSpace(model.SysName))
@@ -310,12 +311,12 @@ namespace Nop.Web.Areas.Admin.Controllers
                 var qrCodeLimit = model.ToEntity<WQrCodeLimit>();
                 qrCodeLimit.QrCodeActionType = WQrCodeActionType.QR_LIMIT_SCENE;
 
-                _wQrCodeLimitService.InsertWQrCodeLimit(qrCodeLimit);
+                await _wQrCodeLimitService.InsertWQrCodeLimitAsync(qrCodeLimit);
 
                 //插入bingdingSource
                 model.BindingSource.QrCodeLimitId = qrCodeLimit.Id;
                 var qrCodeLimitBindingSource = model.BindingSource.ToEntity<QrCodeLimitBindingSource>();
-                _qrCodeLimitBindingSourceService.InsertEntity(qrCodeLimitBindingSource);
+                await _qrCodeLimitBindingSourceService.InsertEntityAsync(qrCodeLimitBindingSource);
 
                 //复制备份当前ID到QrCodeId中
                 qrCodeLimit.QrCodeId = qrCodeLimit.Id;
@@ -331,12 +332,12 @@ namespace Nop.Web.Areas.Admin.Controllers
                     }
                 }
 
-                _wQrCodeLimitService.UpdateWQrCodeLimit(qrCodeLimit);
+                await _wQrCodeLimitService.UpdateWQrCodeLimitAsync(qrCodeLimit);
 
                 //activity log
-                _customerActivityService.InsertActivity("AddNewQrCodeLimit",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewQrCodeLimit"), qrCodeLimit.Id), qrCodeLimit);
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Weixin.QrCodeLimits.Added"));
+                await _customerActivityService.InsertActivityAsync("AddNewQrCodeLimit",
+                    string.Format(await _localizationService.GetResourceAsync("ActivityLog.AddNewQrCodeLimit"), qrCodeLimit.Id), qrCodeLimit);
+                _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Weixin.QrCodeLimits.Added"));
 
                 if (!continueEditing)
                     return RedirectToAction("QrCodeLimitList");
@@ -345,37 +346,37 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
 
             //prepare model
-            model = _weixinModelFactory.PrepareQrCodeLimitModel(model, null, true);
+            model = await _weixinModelFactory.PrepareQrCodeLimitModelAsync(model, null, true);
 
             //if we got this far, something failed, redisplay form
             return View(model);
         }
 
-        public virtual IActionResult QrCodeLimitEdit(int id)
+        public virtual async Task<IActionResult> QrCodeLimitEdit(int id)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //try to get a weixin customer with the specified id
-            var qrcodeLimit = _wQrCodeLimitService.GetWQrCodeLimitById(id);
+            var qrcodeLimit = await _wQrCodeLimitService.GetWQrCodeLimitByIdAsync(id);
             if (qrcodeLimit == null)
                 return RedirectToAction("QrCodeLimitList");
 
             //prepare model
-            var model = _weixinModelFactory.PrepareQrCodeLimitModel(null, qrcodeLimit);
+            var model = await _weixinModelFactory.PrepareQrCodeLimitModelAsync(null, qrcodeLimit);
 
             return View(model);
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult QrCodeLimitEdit(QrCodeLimitModel model, bool continueEditing, IFormCollection form)
+        public virtual async Task<IActionResult> QrCodeLimitEdit(QrCodeLimitModel model, bool continueEditing, IFormCollection form)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //try to get a weixin user with the specified id
-            var qrcodeLimit = _wQrCodeLimitService.GetWQrCodeLimitById(model.Id);
+            var qrcodeLimit = await _wQrCodeLimitService.GetWQrCodeLimitByIdAsync(model.Id);
             if (qrcodeLimit == null)
                 return RedirectToAction("QrCodeLimitList");
 
@@ -401,13 +402,13 @@ namespace Nop.Web.Areas.Admin.Controllers
                         }
                     }
 
-                    _wQrCodeLimitService.UpdateWQrCodeLimit(qrcodeLimit);
+                    await _wQrCodeLimitService.UpdateWQrCodeLimitAsync(qrcodeLimit);
 
                     //更新binding source
-                    var qrCodeLimitBindingSource = _qrCodeLimitBindingSourceService.GetEntityByQrcodeLimitId(qrcodeLimit.Id);
+                    var qrCodeLimitBindingSource = await _qrCodeLimitBindingSourceService.GetEntityByQrcodeLimitIdAsync(qrcodeLimit.Id);
                     if (qrCodeLimitBindingSource == null)
                     {
-                        _qrCodeLimitBindingSourceService.InsertEntity(new QrCodeLimitBindingSource()
+                        await _qrCodeLimitBindingSourceService.InsertEntityAsync(new QrCodeLimitBindingSource()
                         {
                             QrCodeLimitId = qrcodeLimit.Id,
                             SupplierId = model.BindingSource.SupplierId,
@@ -441,14 +442,14 @@ namespace Nop.Web.Areas.Admin.Controllers
                         qrCodeLimitBindingSource.UseBindingMessage = model.BindingSource.UseBindingMessage;
                         qrCodeLimitBindingSource.Published = model.BindingSource.Published;
 
-                        _qrCodeLimitBindingSourceService.UpdateEntity(qrCodeLimitBindingSource);
+                        await _qrCodeLimitBindingSourceService.UpdateEntityAsync(qrCodeLimitBindingSource);
                     }
 
                     //activity log
-                    _customerActivityService.InsertActivity("EditQrCodeLimit",
-                        string.Format(_localizationService.GetResource("ActivityLog.EditQrCodeLimit"), qrcodeLimit.Id), qrcodeLimit);
+                    await _customerActivityService.InsertActivityAsync("EditQrCodeLimit",
+                        string.Format(await _localizationService.GetResourceAsync("ActivityLog.EditQrCodeLimit"), qrcodeLimit.Id), qrcodeLimit);
 
-                    _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Weixin.QrCodeLimits.Updated"));
+                    _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Weixin.QrCodeLimits.Updated"));
 
                     if (!continueEditing)
                         return RedirectToAction("QrCodeLimitList");
@@ -462,84 +463,84 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
 
             //prepare model
-            model = _weixinModelFactory.PrepareQrCodeLimitModel(model, qrcodeLimit, true);
+            model = await _weixinModelFactory.PrepareQrCodeLimitModelAsync(model, qrcodeLimit, true);
 
             //if we got this far, something failed, redisplay form
             return View(model);
         }
 
         [HttpPost]
-        public virtual IActionResult QrCodeLimitUserList(QrCodeLimitUserSearchModel searchModel)
+        public virtual async Task<IActionResult> QrCodeLimitUserList(QrCodeLimitUserSearchModel searchModel)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
-                return AccessDeniedDataTablesJson();
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
+                return await AccessDeniedDataTablesJson();
 
             //try to get a product with the specified id
-            var qrCodeLimit = _wQrCodeLimitService.GetWQrCodeLimitById(searchModel.QrCodeLimitId)
+            var qrCodeLimit = await _wQrCodeLimitService.GetWQrCodeLimitByIdAsync(searchModel.QrCodeLimitId)
                 ?? throw new ArgumentException("No QrCodeLimit found with the specified id");
 
             //prepare model
-            var model = _weixinModelFactory.PrepareQrCodeLimitUserListModel(searchModel, qrCodeLimit);
+            var model = await _weixinModelFactory.PrepareQrCodeLimitUserListModelAsync(searchModel, qrCodeLimit);
 
             return Json(model);
         }
 
         [HttpPost]
-        public virtual IActionResult QrCodeLimitUserDelete(int id)
+        public virtual async Task<IActionResult> QrCodeLimitUserDelete(int id)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //try to get a qrCodeLimitUser
-            var qrCodeLimitUser = _wQrCodeLimitUserService.GetEntityById(id)
+            var qrCodeLimitUser = await _wQrCodeLimitUserService.GetEntityByIdAsync(id)
                 ?? throw new ArgumentException("No QrCodeLimitUser found with the specified id");
 
-            _wQrCodeLimitUserService.DeleteEntity(qrCodeLimitUser);
+            await _wQrCodeLimitUserService.DeleteEntityAsync(qrCodeLimitUser);
 
             return new NullJsonResult();
         }
 
-        public virtual IActionResult QrCodeLimitUserAddPopup(int qrCodeLimitId)
+        public virtual async Task<IActionResult> QrCodeLimitUserAddPopup(int qrCodeLimitId)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //prepare model
-            var model = _weixinModelFactory.PrepareAddUserRelatedSearchModel(new AddUserRelatedSearchModel());
+            var model = await _weixinModelFactory.PrepareAddUserRelatedSearchModelAsync(new AddUserRelatedSearchModel());
 
             return View(model);
         }
 
         [HttpPost]
-        public virtual IActionResult QrCodeLimitUserAddPopupList(AddUserRelatedSearchModel searchModel)
+        public virtual async Task<IActionResult> QrCodeLimitUserAddPopupList(AddUserRelatedSearchModel searchModel)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
-                return AccessDeniedDataTablesJson();
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
+                return await AccessDeniedDataTablesJson();
 
             //prepare model
-            var model = _weixinModelFactory.PrepareAddUserRelatedUserListModel(searchModel);
+            var model = await _weixinModelFactory.PrepareAddUserRelatedUserListModelAsync(searchModel);
 
             return Json(model);
         }
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual IActionResult QrCodeLimitUserAddPopup(AddUserRelatedModel model)
+        public virtual async Task<IActionResult> QrCodeLimitUserAddPopup(AddUserRelatedModel model)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
-            var selectedUsers = _wUserService.GetWUsersByIds(model.SelectedUserIds.ToArray());
+            var selectedUsers = await _wUserService.GetWUsersByIdsAsync(model.SelectedUserIds.ToArray());
 
             if(selectedUsers.Any())
             {
-                var existingRelatedUsers = _wQrCodeLimitUserService.GetEntitiesByQrcodeLimitId(model.RelatedId);
+                var existingRelatedUsers = await _wQrCodeLimitUserService.GetEntitiesByQrcodeLimitIdAsync(model.RelatedId);
                 foreach (var user in selectedUsers)
                 {
-                    if (user.Deleted || !user.AllowReferee || !user.Subscribe || existingRelatedUsers.Exists(t => t.UserId == user.Id))
+                    if (user.Deleted || !user.AllowReferee || !user.Subscribe || existingRelatedUsers.Any(t => t.UserId == user.Id))
                         continue;
 
-                    _wQrCodeLimitUserService.InsertEntity(new WQrCodeLimitUserMapping
+                    await _wQrCodeLimitUserService.InsertEntityAsync(new WQrCodeLimitUserMapping
                     {
                         UserId = user.Id,
                         QrCodeLimitId = model.RelatedId,
@@ -554,30 +555,30 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(new AddUserRelatedSearchModel());
         }
 
-        public virtual IActionResult QrCodeLimitUserEditPopup(int id)
+        public virtual async Task<IActionResult> QrCodeLimitUserEditPopup(int id)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //try to get entity with the specified id
-            var qrcodeLimitUser = _wQrCodeLimitUserService.GetEntityById(id) ?? 
+            var qrcodeLimitUser = await _wQrCodeLimitUserService.GetEntityByIdAsync(id) ?? 
                 throw new ArgumentException("No QrCodeLimitUser found with the specified id");
 
             //prepare model
-            var model = _weixinModelFactory.PrepareQrCodeLimitUserModel(null, qrcodeLimitUser);
+            var model = await _weixinModelFactory.PrepareQrCodeLimitUserModelAsync(null, qrcodeLimitUser);
 
             return View(model);
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult QrCodeLimitUserEditPopup(QrCodeLimitUserModel model, bool continueEditing, IFormCollection form)
+        public virtual async Task<IActionResult> QrCodeLimitUserEditPopup(QrCodeLimitUserModel model, bool continueEditing, IFormCollection form)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //try to get a entity with the specified id
-            var qrcodeLimitUser = _wQrCodeLimitUserService.GetEntityById(model.Id) ??
+            var qrcodeLimitUser = await _wQrCodeLimitUserService.GetEntityByIdAsync(model.Id) ??
                 throw new ArgumentException("No QrCodeLimitUser found with the specified id");
 
             if (ModelState.IsValid)
@@ -591,13 +592,13 @@ namespace Nop.Web.Areas.Admin.Controllers
                     qrcodeLimitUser.ExpireTime = model.ExpireTime;
                     qrcodeLimitUser.Published = model.Published;
 
-                    _wQrCodeLimitUserService.UpdateEntity(qrcodeLimitUser);
+                    await _wQrCodeLimitUserService.UpdateEntityAsync(qrcodeLimitUser);
 
                     //activity log
-                    _customerActivityService.InsertActivity("EditQrCodeLimitUser",
-                        string.Format(_localizationService.GetResource("ActivityLog.EditQrCodeLimitUser"), qrcodeLimitUser.Id), qrcodeLimitUser);
+                    await _customerActivityService.InsertActivityAsync("EditQrCodeLimitUser",
+                        string.Format(await _localizationService.GetResourceAsync("ActivityLog.EditQrCodeLimitUser"), qrcodeLimitUser.Id), qrcodeLimitUser);
 
-                    _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Weixin.QrCodeLimitUsers.Updated"));
+                    _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Weixin.QrCodeLimitUsers.Updated"));
 
                     if (!continueEditing)
                         ViewBag.RefreshPage = true;
@@ -611,7 +612,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
 
             //prepare model
-            model = _weixinModelFactory.PrepareQrCodeLimitUserModel(model, qrcodeLimitUser, true);
+            model = await _weixinModelFactory.PrepareQrCodeLimitUserModelAsync(model, qrcodeLimitUser, true);
 
             //if we got this far, something failed, redisplay form
             return View(model);
@@ -622,45 +623,45 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Menu list/Creat/Edit
 
-        public virtual IActionResult MenuList()
+        public virtual async Task<IActionResult> MenuList()
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //prepare model
-            var model = _weixinModelFactory.PrepareMenuSearchModel(new MenuSearchModel());
+            var model = await _weixinModelFactory.PrepareMenuSearchModelAsync(new MenuSearchModel());
 
             return View(model);
         }
 
         [HttpPost]
-        public virtual IActionResult MenuList(MenuSearchModel searchModel)
+        public virtual async Task<IActionResult> MenuList(MenuSearchModel searchModel)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
-                return AccessDeniedDataTablesJson();
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
+                return await AccessDeniedDataTablesJson();
 
             //prepare model
-            var model = _weixinModelFactory.PrepareMenuListModel(searchModel);
+            var model = await _weixinModelFactory.PrepareMenuListModelAsync(searchModel);
 
             return Json(model);
         }
 
-        public virtual IActionResult MenuCreate()
+        public virtual async Task<IActionResult> MenuCreate()
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //prepare model
-            var model = _weixinModelFactory.PrepareMenuModel(new MenuModel(), null);
+            var model = await _weixinModelFactory.PrepareMenuModelAsync(new MenuModel(), null);
 
             return View(model);
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult MenuCreate(MenuModel model, bool continueEditing, IFormCollection form)
+        public virtual async Task<IActionResult> MenuCreate(MenuModel model, bool continueEditing, IFormCollection form)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             if (string.IsNullOrWhiteSpace(model.SystemName))
@@ -671,12 +672,12 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //fill entity from model
                 var menu = model.ToEntity<WMenu>();
 
-                _wMenuService.InsertMenu(menu);
+                await _wMenuService.InsertMenuAsync(menu);
 
                 //activity log
-                _customerActivityService.InsertActivity("AddNewMenu",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewMenu"), menu.Id), menu);
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Weixin.Menus.Added"));
+                await _customerActivityService.InsertActivityAsync("AddNewMenu",
+                    string.Format(await _localizationService.GetResourceAsync("ActivityLog.AddNewMenu"), menu.Id), menu);
+                _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Weixin.Menus.Added"));
 
                 if (!continueEditing)
                     return RedirectToAction("MenuList");
@@ -685,38 +686,38 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
 
             //prepare model
-            model = _weixinModelFactory.PrepareMenuModel(model, null, true);
+            model = await _weixinModelFactory.PrepareMenuModelAsync(model, null, true);
 
             //if we got this far, something failed, redisplay form
             return View(model);
         }
 
 
-        public virtual IActionResult MenuEdit(int id)
+        public virtual async Task<IActionResult> MenuEdit(int id)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //try to get a entity with the specified id
-            var menu = _wMenuService.GetMenuById(id);
+            var menu = await _wMenuService.GetMenuByIdAsync(id);
             if (menu == null)
                 return RedirectToAction("MenuList");
 
             //prepare model
-            var model = _weixinModelFactory.PrepareMenuModel(null, menu);
+            var model = await _weixinModelFactory.PrepareMenuModelAsync(null, menu);
 
             return View(model);
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult MenuEdit(MenuModel model, bool continueEditing, IFormCollection form)
+        public virtual async Task<IActionResult> MenuEdit(MenuModel model, bool continueEditing, IFormCollection form)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //try to get a entity with the specified id
-            var menu = _wMenuService.GetMenuById(model.Id);
+            var menu = await _wMenuService.GetMenuByIdAsync(model.Id);
             if (menu == null)
                 return RedirectToAction("MenuList");
 
@@ -738,13 +739,13 @@ namespace Nop.Web.Areas.Admin.Controllers
                     menu.Published = model.Published;
                     menu.Personal = model.Personal;
 
-                    _wMenuService.UpdateMenu(menu);
+                    await _wMenuService.UpdateMenuAsync(menu);
 
                     //activity log
-                    _customerActivityService.InsertActivity("EditMenu",
-                        string.Format(_localizationService.GetResource("ActivityLog.EditMenu"), menu.Id), menu);
+                    await _customerActivityService.InsertActivityAsync("EditMenu",
+                        string.Format(await _localizationService.GetResourceAsync("ActivityLog.EditMenu"), menu.Id), menu);
 
-                    _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Weixin.Menus.Updated"));
+                    _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Weixin.Menus.Updated"));
 
                     if (!continueEditing)
                         return RedirectToAction("MenuList");
@@ -758,23 +759,23 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
 
             //prepare model
-            model = _weixinModelFactory.PrepareMenuModel(model, menu, true);
+            model = await _weixinModelFactory.PrepareMenuModelAsync(model, menu, true);
 
             //if we got this far, something failed, redisplay form
             return View(model);
         }
 
-        public virtual IActionResult MenuPublish(int id)
+        public virtual async Task<IActionResult> MenuPublish(int id)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
             //try to get a entity with the specified id
-            var menu = _wMenuService.GetMenuById(id);
+            var menu = await _wMenuService.GetMenuByIdAsync(id);
             if (menu == null)
                 return RedirectToAction("MenuList");
 
-            var menuButtons = _wMenuButtonService.GetMenuButtonsByMenuId(menu.Id);
+            var menuButtons = await _wMenuButtonService.GetMenuButtonsByMenuIdAsync(menu.Id);
             var baseButtons = menuButtons.Where(t => t.RootButton).OrderBy(t => t.DisplayOrder).ToList();
 
             if (baseButtons == null || baseButtons.Count == 0)
@@ -864,7 +865,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                         menu.UnPublishTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now);
                         menu.MenuJsonCode = "";
 
-                        _wMenuService.UpdateMenu(menu);
+                        await _wMenuService.UpdateMenuAsync(menu);
                     }
                 }
 
@@ -888,7 +889,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                         menu.PublishTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now);
                         menu.MenuJsonCode = Json(addConditionalButtonGroup).ToString();
 
-                        _wMenuService.UpdateMenu(menu);
+                        await _wMenuService.UpdateMenuAsync(menu);
                     }
                     else
                     {
@@ -907,7 +908,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                         menu.PublishTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now);
                         menu.MenuJsonCode = Json(buttonGroup).ToString();
 
-                        _wMenuService.UpdateMenu(menu);
+                        await _wMenuService.UpdateMenuAsync(menu);
                     }
                     else
                     {
@@ -919,31 +920,31 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                _notificationService.ErrorNotification(ex);
+                _notificationService.ErrorNotification(ex.ToString());
                 return RedirectToAction("MenuList");
             }
 
             //activity log
-                _customerActivityService.InsertActivity("PublishNewMenu",
-                    string.Format(_localizationService.GetResource("ActivityLog.PublishNewMenu"), menu.Id), menu);
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Weixin.Menus.Published"));
+                await _customerActivityService.InsertActivityAsync("PublishNewMenu",
+                    string.Format(await _localizationService.GetResourceAsync("ActivityLog.PublishNewMenu"), menu.Id), menu);
+                _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Weixin.Menus.Published"));
 
 
             return RedirectToAction("MenuList");
         }
 
         [HttpPost]
-        public virtual IActionResult MenuButtonList(MenuButtonSearchModel searchModel)
+        public virtual async Task<IActionResult> MenuButtonList(MenuButtonSearchModel searchModel)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageWeixin))
-                return AccessDeniedDataTablesJson();
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
+                return await AccessDeniedDataTablesJson();
 
             //try to get a product with the specified id
-            var menu = _wMenuService.GetMenuById(searchModel.MenuId)
+            var menu = await _wMenuService.GetMenuByIdAsync(searchModel.MenuId)
                 ?? throw new ArgumentException("No QrCodeLimit found with the specified id");
 
             //prepare model
-            var model = _weixinModelFactory.PrepareMenuButtonListModel(searchModel, menu);
+            var model = await _weixinModelFactory.PrepareMenuButtonListModelAsync(searchModel, menu);
 
             return Json(model);
         }

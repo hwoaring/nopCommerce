@@ -1109,6 +1109,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             multiFactorAuthenticationSettings = model.MultiFactorAuthenticationSettings.ToSettings(multiFactorAuthenticationSettings);
             await _settingService.SaveSettingAsync(multiFactorAuthenticationSettings);
 
+
             //activity log
             await _customerActivityService.InsertActivityAsync("EditSettings", await _localizationService.GetResourceAsync("ActivityLog.EditSettings"));
 
@@ -1278,48 +1279,49 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Weixin
 
-        public virtual IActionResult Weixin()
+        public virtual async Task<IActionResult> Weixin()
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
 
             //prepare model
 
-            var model = _settingModelFactory.PrepareWeixinSettingsModel();
+            var model = await _settingModelFactory.PrepareWeixinSettingsModelAsync();
 
             return View(model);
         }
 
         [HttpPost]
-        public virtual IActionResult Weixin(WeixinSettingsModel model)
+        public virtual async Task<IActionResult> Weixin(WeixinSettingsModel model)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
 
             //load settings for a chosen store scope
-            var storeScope = _storeContext.ActiveStoreScopeConfiguration;
-            var weixinSettings = _settingService.LoadSetting<WeixinSettings>(storeScope);
+            var storeScope = await _storeContext.GetActiveStoreScopeConfigurationAsync();
+            var weixinSettings = await _settingService.LoadSettingAsync<WeixinSettings>(storeScope);
             weixinSettings = model.ToSettings(weixinSettings);
 
             //we do not clear cache after each setting update.
             //this behavior can increase performance because cached settings will not be cleared 
             //and loaded from database after each update
 
-            _settingService.SaveSettingOverridablePerStore(weixinSettings, x => x.ForcedAccessWeChatBrowser, model.ForcedAccessWeChatBrowser_OverrideForStore, storeScope, false);
-            _settingService.SaveSettingOverridablePerStore(weixinSettings, x => x.CheckWebBrowser, model.CheckWebBrowser_OverrideForStore, storeScope, false);
-            _settingService.SaveSettingOverridablePerStore(weixinSettings, x => x.UseSnsapiBase, model.UseSnsapiBase_OverrideForStore, storeScope, false);
-            _settingService.SaveSettingOverridablePerStore(weixinSettings, x => x.Debug, model.Debug_OverrideForStore, storeScope, false);
-            _settingService.SaveSettingOverridablePerStore(weixinSettings, x => x.TraceLog, model.TraceLog_OverrideForStore, storeScope, false);
-            _settingService.SaveSettingOverridablePerStore(weixinSettings, x => x.JSSDKDebug, model.JSSDKDebug_OverrideForStore, storeScope, false);
-            _settingService.SaveSettingOverridablePerStore(weixinSettings, x => x.JsApiList, model.JsApiList_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync(weixinSettings, x => x.ForcedAccessWeChatBrowser, model.ForcedAccessWeChatBrowser_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync(weixinSettings, x => x.CheckWebBrowser, model.CheckWebBrowser_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync(weixinSettings, x => x.UseSnsapiBase, model.UseSnsapiBase_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync(weixinSettings, x => x.Debug, model.Debug_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync(weixinSettings, x => x.TraceLog, model.TraceLog_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync(weixinSettings, x => x.JSSDKDebug, model.JSSDKDebug_OverrideForStore, storeScope, false);
+            await _settingService.SaveSettingOverridablePerStoreAsync(weixinSettings, x => x.JsApiList, model.JsApiList_OverrideForStore, storeScope, false);
 
             //now clear settings cache
-            _settingService.ClearCache();
+            await _settingService.ClearCacheAsync();
+
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            await _customerActivityService.InsertActivityAsync("EditSettings", await _localizationService.GetResourceAsync("ActivityLog.EditSettings"));
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Configuration.Updated"));
 
             return RedirectToAction("Weixin");
         }
