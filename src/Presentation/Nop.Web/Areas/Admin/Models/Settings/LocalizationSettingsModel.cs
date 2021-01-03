@@ -30,6 +30,9 @@ namespace Nop.Web.Areas.Admin.Models.Settings
         [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.LoadAllUrlRecordsOnStartup")]
         public bool LoadAllUrlRecordsOnStartup { get; set; }
 
+        [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.DisplayShortResourceDisplayName")]
+        public bool DisplayShortResourceDisplayName { get; set; }
+
         #endregion
     }
 }

@@ -594,7 +594,8 @@ namespace Nop.Web.Areas.Admin.Factories
                 AutomaticallyDetectLanguage = localizationSettings.AutomaticallyDetectLanguage,
                 LoadAllLocaleRecordsOnStartup = localizationSettings.LoadAllLocaleRecordsOnStartup,
                 LoadAllLocalizedPropertiesOnStartup = localizationSettings.LoadAllLocalizedPropertiesOnStartup,
-                LoadAllUrlRecordsOnStartup = localizationSettings.LoadAllUrlRecordsOnStartup
+                LoadAllUrlRecordsOnStartup = localizationSettings.LoadAllUrlRecordsOnStartup,
+                DisplayShortResourceDisplayName = localizationSettings.DisplayShortResourceDisplayName
             };
 
             return model;

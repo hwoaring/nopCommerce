@@ -7326,6 +7326,12 @@
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.LoadAllUrlRecordsOnStartup.Hint">
     <Value>When enabled, all slugs (search engine friendly names) will be loaded on application startup. The application start will be slower, but then all pages could be opened much faster. Not recommended to enable when you have a large catalog (several thousand entities).</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.DisplayShortResourceDisplayName">
+    <Value>Display Short Resource DisplayName</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.DisplayShortResourceDisplayName.Hint">
+    <Value>Display Short Resource DisplayName if Resource Key have not fine in NopResource.xml</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.LocalePattern.SuccessUpload">
     <Value>Localization patterns for the current culture loaded successfully.</Value>
   </LocaleResource>
@@ -15021,11 +15027,143 @@
   <LocaleResource Name="Admin.Weixin.Locations">
     <Value>Locations</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.MenuId">
+    <Value>MenuId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.MenuId.Hint">
+    <Value>Menu Id</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.SystemName">
+    <Value>System Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.SystemName.Hint">
+    <Value>System Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.Description">
+    <Value>Description</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.Description.Hint">
+    <Value>Description</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.MenuJsonCode">
+    <Value>Menu Json Code</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.MenuJsonCode.Hint">
+    <Value>Menu Json Code</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.TagId">
+    <Value>TagId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.TagId.Hint">
+    <Value>Tag Id</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.Sex">
+    <Value>Sex</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.Sex.Hint">
+    <Value>Sex</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.ClientPlatformType">
+    <Value>Client Platform Type</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.ClientPlatformType.Hint">
+    <Value>Client Platform Type</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.Country">
+    <Value>Country</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.Country.Hint">
+    <Value>Country</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.Province">
+    <Value>Province</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.Province.Hint">
+    <Value>Province</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.City">
+    <Value>City</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.City.Hint">
+    <Value>City</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.LanguageTypeId">
+    <Value>Language Type Id</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.LanguageTypeId.Hint">
+    <Value>Language Type Id</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.Status">
+    <Value>Status</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.Status.Hint">
+    <Value>Status</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.PublishTime">
+    <Value>Publish Time</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.PublishTime.Hint">
+    <Value>Publish Time</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.UnPublishTime">
+    <Value>UnPublis hTime</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.UnPublishTime.Hint">
+    <Value>UnPublish Time</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.DefaultMenu">
+    <Value>Default Menu</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.DefaultMenu.Hint">
+    <Value>Default Menu</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.IsMenuOpen">
+    <Value>Is Menu Open</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.IsMenuOpen.Hint">
+    <Value>Is Menu Open</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.Published">
+    <Value>Published</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.Published.Hint">
+    <Value>Published</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.Personal">
+    <Value>Personal</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.Fields.Personal.Hint">
+    <Value>Personal</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.List.Personal">
+    <Value>Personal</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.List.Personal.Hint">
+    <Value>Personal</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.List.SearchSystemName">
+    <Value>System Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Menus.List.SearchSystemName.Hint">
+    <Value>Search System Name</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Weixin.Messages">
     <Value>Messages</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Weixin.MessageAutoReply">
     <Value>Message Auto Reply</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Users.List.SearchUserNickName">
+    <Value>NickName</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Users.List.SearchUserNickName.Hint">
+    <Value>Search User Nick Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Users.List.SearchUserRemark">
+    <Value>Remark</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Users.List.SearchUserRemark.Hint">
+    <Value>Search User Remark</Value>
   </LocaleResource>
   <LocaleResource Name="AjaxCart.Failure">
     <Value>Failed to add the product. Please refresh the page and try one more time.</Value>

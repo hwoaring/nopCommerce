@@ -1552,6 +1552,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             localizationSettings.LoadAllLocaleRecordsOnStartup = model.LocalizationSettings.LoadAllLocaleRecordsOnStartup;
             localizationSettings.LoadAllLocalizedPropertiesOnStartup = model.LocalizationSettings.LoadAllLocalizedPropertiesOnStartup;
             localizationSettings.LoadAllUrlRecordsOnStartup = model.LocalizationSettings.LoadAllUrlRecordsOnStartup;
+            localizationSettings.DisplayShortResourceDisplayName = model.LocalizationSettings.DisplayShortResourceDisplayName;
             await _settingService.SaveSettingAsync(localizationSettings);
 
             //display default menu item

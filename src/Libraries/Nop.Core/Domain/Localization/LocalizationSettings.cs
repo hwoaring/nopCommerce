@@ -47,5 +47,10 @@ namespace Nop.Core.Domain.Localization
         /// It's useful for store owners with RTL languages for public store but preferring LTR for admin area
         /// </summary>
         public bool IgnoreRtlPropertyForAdminArea { get; set; }
+
+        /// <summary>
+        /// 新加显示字段没有在Nop Resource.xml 中设置，显示默认最后一个"."分开的单词
+        /// </summary>
+        public bool DisplayShortResourceDisplayName { get; set; }
     }
 }

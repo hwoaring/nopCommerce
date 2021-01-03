@@ -3104,7 +3104,8 @@ namespace Nop.Services.Installation
                 LoadAllLocaleRecordsOnStartup = true,
                 LoadAllLocalizedPropertiesOnStartup = true,
                 LoadAllUrlRecordsOnStartup = false,
-                IgnoreRtlPropertyForAdminArea = false
+                IgnoreRtlPropertyForAdminArea = false,
+                DisplayShortResourceDisplayName = true
             });
 
             await settingService.SaveSettingAsync(new CustomerSettings
