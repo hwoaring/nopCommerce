@@ -288,6 +288,8 @@ namespace Nop.Web.Controllers
         [CheckAccessClosedStore(true)]
         //available even when weixin oauth2
         [CheckWeixinOAuth(true)]
+        //ignore SEO friendly URLs checks
+        [CheckLanguageSeoCode(true)]
         public virtual async Task<IActionResult> SitemapXml(int? id)
         {
             var siteMap = _sitemapXmlSettings.SitemapXmlEnabled
