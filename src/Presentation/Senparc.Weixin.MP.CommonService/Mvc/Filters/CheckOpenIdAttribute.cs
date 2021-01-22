@@ -76,7 +76,7 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
             /// Set the wuser referee openid of current customer
             /// </summary>
             /// <param name="affiliate">Affiliate</param>
-            protected async Task SetCustomerOpenIdAsync(Customer customer, string refereeOpenId, long refereeOpenIdHash)
+            private async Task SetCustomerOpenIdAsync(Customer customer, string refereeOpenId, long refereeOpenIdHash)
             {
                 var update = false;
 
