@@ -710,7 +710,7 @@ namespace Nop.Services.ExportImport
             };
 
             await using var stringWriter = new StringWriter();
-            using var xmlWriter = XmlWriter.Create(stringWriter, settings);
+            await using var xmlWriter = XmlWriter.Create(stringWriter, settings);
 
             await xmlWriter.WriteStartDocumentAsync();
             await xmlWriter.WriteStartElementAsync("Manufacturers");
@@ -812,7 +812,7 @@ namespace Nop.Services.ExportImport
             };
 
             await using var stringWriter = new StringWriter();
-            using var xmlWriter = XmlWriter.Create(stringWriter, settings);
+            await using var xmlWriter = XmlWriter.Create(stringWriter, settings);
 
             await xmlWriter.WriteStartDocumentAsync();
             await xmlWriter.WriteStartElementAsync("Categories");
@@ -882,7 +882,7 @@ namespace Nop.Services.ExportImport
             };
 
             await using var stringWriter = new StringWriter();
-            using var xmlWriter = XmlWriter.Create(stringWriter, settings);
+            await using var xmlWriter = XmlWriter.Create(stringWriter, settings);
 
             await xmlWriter.WriteStartDocumentAsync();
             await xmlWriter.WriteStartElementAsync("Products");
@@ -1399,7 +1399,7 @@ namespace Nop.Services.ExportImport
             };
 
             await using var stringWriter = new StringWriter();
-            using var xmlWriter = XmlWriter.Create(stringWriter, settings);
+            await using var xmlWriter = XmlWriter.Create(stringWriter, settings);
 
             await xmlWriter.WriteStartDocumentAsync();
             await xmlWriter.WriteStartElementAsync("Orders");
@@ -1663,7 +1663,7 @@ namespace Nop.Services.ExportImport
             };
 
             await using var stringWriter = new StringWriter();
-            using var xmlWriter = XmlWriter.Create(stringWriter, settings);
+            await using var xmlWriter = XmlWriter.Create(stringWriter, settings);
 
             await xmlWriter.WriteStartDocumentAsync();
             await xmlWriter.WriteStartElementAsync("Customers");
