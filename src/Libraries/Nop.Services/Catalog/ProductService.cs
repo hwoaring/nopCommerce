@@ -541,7 +541,7 @@ namespace Nop.Services.Catalog
         /// <returns>Products</returns>
         public virtual async Task<IList<Product>> GetProductsByIdsAsync(int[] productIds)
         {
-            return await _productRepository.GetByIdsAsync(productIds, cache => default);
+            return await _productRepository.GetByIdsAsync(productIds, cache => default, false);
         }
 
         /// <summary>
@@ -595,7 +595,7 @@ namespace Nop.Services.Catalog
             });
 
             if (featuredProducts.Count == 0 && featuredProductIds.Count > 0)
-                featuredProducts = await _productRepository.GetByIdsAsync(featuredProductIds, cache => default);
+                featuredProducts = await _productRepository.GetByIdsAsync(featuredProductIds, cache => default, false);
 
             return featuredProducts;
         }
@@ -633,7 +633,7 @@ namespace Nop.Services.Catalog
             });
 
             if (featuredProducts.Count == 0 && featuredProductIds.Count > 0)
-                featuredProducts = await _productRepository.GetByIdsAsync(featuredProductIds, cache => default);
+                featuredProducts = await _productRepository.GetByIdsAsync(featuredProductIds, cache => default, false);
 
             return featuredProducts;
         }
@@ -933,11 +933,15 @@ namespace Nop.Services.Catalog
 
             if (categoryIds?.Count > 0)
             {
+                var productCategoryQuery = 
+                    from pc in _productCategoryRepository.Table
+                    where (!excludeFeaturedProducts || !pc.IsFeaturedProduct) &&
+                        categoryIds.Contains(pc.CategoryId)
+                    select pc;
+
                 productsQuery =
                     from p in productsQuery
-                    join pc in _productCategoryRepository.Table on p.Id equals pc.ProductId
-                    where categoryIds.Contains(pc.CategoryId) &&
-                        (!excludeFeaturedProducts || !pc.IsFeaturedProduct)
+                    where productCategoryQuery.Any(pc => pc.ProductId == p.Id)
                     select p;
             }
 
