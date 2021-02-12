@@ -17,7 +17,6 @@ using Nop.Core.Domain;
 using Nop.Core.Domain.Common;
 using Nop.Core.Http;
 using Nop.Core.Infrastructure;
-using Nop.Core.Redis;
 using Nop.Core.Security;
 using Nop.Data;
 using Nop.Services.Authentication;

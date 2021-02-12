@@ -85,7 +85,7 @@ namespace Nop.Web.Infrastructure
             services.AddScoped<IVendorModelFactory, VendorModelFactory>();
             services.AddScoped<IWidgetModelFactory, WidgetModelFactory>();
 
-            builder.RegisterType<WeixinModelFactory>().As<IWeixinModelFactory>().InstancePerLifetimeScope();
+            services.AddScoped<IWeixinModelFactory, WeixinModelFactory>();
 
             //factories
             services.AddScoped<Factories.IAddressModelFactory, Factories.AddressModelFactory>();
