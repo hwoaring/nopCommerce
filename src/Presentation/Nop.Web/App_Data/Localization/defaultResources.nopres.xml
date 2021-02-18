@@ -4233,6 +4233,12 @@
   <LocaleResource Name="Admin.Common.UploadFile">
     <Value>Please upload a file</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Common.Validation.Decimal.Max">
+    <Value>The value is out of range. Maximum value is {0}.99</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Common.Validation.NotEmpty">
+    <Value>Please provide a {0}</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Common.View">
     <Value>View</Value>
   </LocaleResource>
@@ -4952,6 +4958,9 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.FaviconAndAppIcons.Uploaded">
     <Value>Favicon and app icons have been uploaded</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.LanguagePackProgressMessage">
+    <Value><![CDATA[The localization pack downloaded when installing the store has been translated by {0}%. If you would like to contribute to localization, please visit our <a href="https://www.nopcommerce.com/translations" target="_blank">translations page.</a> page]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Languages">
     <Value>Languages</Value>
@@ -17048,9 +17057,6 @@
   </LocaleResource>
   <LocaleResource Name="Newsletter.UnsubscribeEmailSent">
     <Value>A verification email has been sent. Thank you!</Value>
-  </LocaleResource>
-  <LocaleResource Name="Nop.Web.Framework.Validators.MaxDecimal">
-    <Value>The value is out of range. Maximum value is {0}.99</Value>
   </LocaleResource>
   <LocaleResource Name="Order.BillingAddress">
     <Value>Billing Address</Value>
