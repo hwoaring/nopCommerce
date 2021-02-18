@@ -1114,7 +1114,7 @@ td.k-state-focused.k-state-selected {
     }
 
 .k-multiselect-wrap {
-  min-height: 34px;
+  min-height: 36px;
   border-radius: 0;
 }
 
@@ -1942,14 +1942,14 @@ span.grid-report-item {
 
   .parent-setting.opened + .nested-setting .form-group.parent-setting div[class^="col-md-"] + div[class^="col-md-"]:before {
     position: absolute;
-    height: 46px;
+    height: 36px;
     content: "";
     margin-left: -10px;
     margin-top: -18px;
   }
 
-  .parent-setting.opened + .nested-setting .form-group.parent-setting.opened > div[class^="col-md-"] + div[class^="col-md-"]:after {
-    display: none;
+  .parent-setting.opened + .nested-setting .form-group.parent-setting.opened > div[class^="col-md-"] + div[class^="col-md-"]:before {
+    height: 110%;
   }
 
   .parent-setting.opened + .nested-setting .form-group:last-child {
@@ -1966,13 +1966,17 @@ span.grid-report-item {
     top: 17px;
   }
 
+    .parent-setting.opened + .nested-setting .form-group.parent-setting.opened > div[class^="col-md-"] + div[class^="col-md-"]:after {
+    display: none;
+  }
+
   .parent-setting.opened + .nested-setting .form-group:last-child div[class^="col-md-"] + div[class^="col-md-"] {
     border-left: none;
   }
 
     .parent-setting.opened + .nested-setting .form-group:last-child div[class^="col-md-"] + div[class^="col-md-"]:before {
       position: absolute;
-      height: 17px;
+      height: 18px;
       content: "";
       margin-left: -10px;
     }
@@ -2263,6 +2267,21 @@ div.dataTables_wrapper > div.row.margin-t-5 > div.col-lg-1.col-xs-12 > div > div
   .table-bordered > tbody > tr > th,
   .table-bordered > tfoot > tr > th {
     border: 1px solid #e3e3e3;
+  }
+
+  .table-bordered > thead > tr > th label,
+  .table-bordered > tbody > tr > th label,
+  .table-bordered > tfoot > tr > th label{
+    font-weight: bold !important;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .table-bordered > thead > tr > th label input[type=checkbox],
+  .table-bordered > tbody > tr > th label input[type=checkbox],
+  .table-bordered > tfoot > tr > th label input[type=checkbox]{
+    margin-right: 5px;
   }
 
   .table-bordered > thead > tr > td,
