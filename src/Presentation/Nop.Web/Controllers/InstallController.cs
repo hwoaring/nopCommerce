@@ -207,7 +207,8 @@ namespace Nop.Web.Controllers
 
                 var cultureInfo = new CultureInfo(NopCommonDefaults.DefaultLanguageCulture);
                 var regionInfo = new RegionInfo(NopCommonDefaults.DefaultLanguageCulture);
-                var downloadUrl = string.Empty;
+
+                var languagePackInfo = (DownloadUrl: string.Empty, Progress: 0);
                 if (model.InstallRegionalResources)
                 {
                     //try to get CultureInfo and RegionInfo
@@ -229,7 +230,11 @@ namespace Nop.Web.Controllers
                             var result = JsonConvert.DeserializeAnonymousType(resultString,
                                 new { Message = string.Empty, LanguagePack = new { Culture = string.Empty, Progress = 0, DownloadLink = string.Empty } });
                             if (result.LanguagePack.Progress > NopCommonDefaults.LanguagePackMinTranslationProgressToInstall)
-                                downloadUrl = result.LanguagePack.DownloadLink; //https://downloads.nopcommerce.com/languagepacks/origin/localization_nopCommerce-4.30/lang/zh-CN/language_pack.zh-CN.xml
+                            {
+                                languagePackInfo.DownloadUrl = result.LanguagePack.DownloadLink; //https://downloads.nopcommerce.com/languagepacks/origin/localization_nopCommerce-4.30/lang/zh-CN/language_pack.zh-CN.xml
+                                languagePackInfo.Progress = result.LanguagePack.Progress;
+                            }
+                                
                         }
                         catch { }
                     }
@@ -241,7 +246,7 @@ namespace Nop.Web.Controllers
 
                 //now resolve installation service
                 var installationService = EngineContext.Current.Resolve<IInstallationService>();
-                await installationService.InstallRequiredDataAsync(model.AdminEmail, model.AdminPassword, downloadUrl, regionInfo, cultureInfo);
+                await installationService.InstallRequiredDataAsync(model.AdminEmail, model.AdminPassword, languagePackInfo, regionInfo, cultureInfo);
 
                 if (model.InstallSampleData)
                     await installationService.InstallSampleDataAsync(model.AdminEmail);

@@ -904,7 +904,7 @@ table .btn {
 .k-picker-wrap.k-state-default > .k-select {
   background: #fff;
   border: 1px solid #d2d6de;
-  height: 32px;
+  height: 36px;
   width: 4.5em;
   padding-left: 1px;
   -moz-box-sizing: content-box;
@@ -916,7 +916,7 @@ table .btn {
 
 .k-picker-wrap .k-input,
 .k-numeric-wrap .k-input {
-  height: 26px;
+  height: 30px;
   border-radius: 0;
   border: 1px solid #d2d6de;
   text-indent: 0.7em;
@@ -959,7 +959,7 @@ td.k-state-focused.k-state-selected {
 }
 
 .k-numerictextbox .k-link {
-  height: 16px;
+  height: 18px;
   border: 1px solid #d2d6de;
   border-radius: 0;
 }
@@ -974,7 +974,7 @@ td.k-state-focused.k-state-selected {
 
 .k-numeric-wrap .k-link + .k-link {
   margin-top: -1px;
-  height: 15px;
+  height: 17px;
   border-radius: 0;
 }
 
@@ -983,7 +983,7 @@ td.k-state-focused.k-state-selected {
   border-radius: 0;
   border: none;
   opacity: 1;
-  height: 34px;
+  height: 38px;
 }
 
   .k-numeric-wrap.k-state-disabled .k-input,
@@ -1114,7 +1114,7 @@ td.k-state-focused.k-state-selected {
     }
 
 .k-multiselect-wrap {
-  min-height: 34px;
+  min-height: 36px;
   border-radius: 0;
 }
 
@@ -1282,6 +1282,7 @@ input[type="text"].k-input {
 /* HEADER */
 .main-header {
   max-height: 150px;
+  border-bottom: none;
 }
 
 /* SIDE BAR */
@@ -1474,21 +1475,20 @@ div.dataTables_wrapper {
 
 /* FORM ELEMENTS */
 .form-horizontal .label-wrapper {
-  display: table;
   float: right;
-  min-height: 28px;
+  display: flex;
+  align-items: flex-start;
 }
 
   .form-horizontal .label-wrapper .col-form-label {
-    display: table-cell;
     text-align: right;
   }
 
   .form-horizontal .label-wrapper .ico-help {
-    display: table-cell;
     color: #3c8dbc;
     font-size: 1.17em;
     padding-left: 6px;
+    padding-top: 0.28em;
   }
 
   .form-horizontal .label-wrapper i.fas {
@@ -1522,7 +1522,7 @@ div.dataTables_wrapper {
   }
 
   .form-group input[type=checkbox] {
-    margin-top: 10px;
+    margin-top: 13px;
   }
 
   .form-group .checkbox input[type=checkbox] {
@@ -1540,6 +1540,19 @@ div.dataTables_wrapper {
 
   .form-group .callout {
     padding: 5px 15px;
+  }
+
+  .form-horizontal .input-group {
+    align-items: end;
+  }
+
+  .form-horizontal .form-check {
+    padding-top: 7px;
+    padding-right: 10px;
+  }
+
+  .form-horizontal .form-check .form-check-input {
+    margin-top: .3rem;
   }
 
   .form-group .attributes label {
@@ -1578,7 +1591,7 @@ div.dataTables_wrapper {
 
 .tag-editor {
   border: 1px solid #d2d6de !important;
-  line-height: 26px !important;
+  line-height: 31px !important;
 }
 
 .form-text-row {
@@ -1634,8 +1647,10 @@ div.dataTables_wrapper {
 .input-group.input-group-short .input-group-text {
   margin-right: 10px;
   margin-bottom: 4px;
+  padding-left: 0;
   background-color: transparent;
   border: none;
+  color: initial;
 }
 
 .input-group-required {
@@ -1675,15 +1690,25 @@ input[type=file].form-control {
   }
 
   .editor-settings-modal-dialog .form-group input[type=checkbox] {
-    margin-top: 4px;
+    margin-top: 12px;
+  }
+
+  .editor-settings-modal-dialog .form-group input[type=checkbox].select-all-fields {
+    margin-top: 8px;
   }
 
   .editor-settings-modal-dialog .cards-group {
     margin-bottom: 0;
   }
 
-  .editor-settings-modal-dialog .card-body, .editor-settings-modal-dialog .card-header {
-    padding: 10px 5px;
+  .editor-settings-modal-dialog .card-body {
+    padding: 10px 20px;
+  }
+
+  .editor-settings-modal-dialog .card-header {
+    padding: 12px 20px 2px 20px;
+    font-weight: 700;
+    font-size: 1.3em;
   }
 
   .editor-settings-modal-dialog .col-md-4 {
@@ -1917,14 +1942,14 @@ span.grid-report-item {
 
   .parent-setting.opened + .nested-setting .form-group.parent-setting div[class^="col-md-"] + div[class^="col-md-"]:before {
     position: absolute;
-    height: 46px;
+    height: 36px;
     content: "";
     margin-left: -10px;
     margin-top: -18px;
   }
 
-  .parent-setting.opened + .nested-setting .form-group.parent-setting.opened > div[class^="col-md-"] + div[class^="col-md-"]:after {
-    display: none;
+  .parent-setting.opened + .nested-setting .form-group.parent-setting.opened > div[class^="col-md-"] + div[class^="col-md-"]:before {
+    height: 110%;
   }
 
   .parent-setting.opened + .nested-setting .form-group:last-child {
@@ -1941,13 +1966,17 @@ span.grid-report-item {
     top: 17px;
   }
 
+    .parent-setting.opened + .nested-setting .form-group.parent-setting.opened > div[class^="col-md-"] + div[class^="col-md-"]:after {
+    display: none;
+  }
+
   .parent-setting.opened + .nested-setting .form-group:last-child div[class^="col-md-"] + div[class^="col-md-"] {
     border-left: none;
   }
 
     .parent-setting.opened + .nested-setting .form-group:last-child div[class^="col-md-"] + div[class^="col-md-"]:before {
       position: absolute;
-      height: 17px;
+      height: 18px;
       content: "";
       margin-left: -10px;
     }
@@ -2240,6 +2269,21 @@ div.dataTables_wrapper > div.row.margin-t-5 > div.col-lg-1.col-xs-12 > div > div
     border: 1px solid #e3e3e3;
   }
 
+  .table-bordered > thead > tr > th label,
+  .table-bordered > tbody > tr > th label,
+  .table-bordered > tfoot > tr > th label{
+    font-weight: bold !important;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .table-bordered > thead > tr > th label input[type=checkbox],
+  .table-bordered > tbody > tr > th label input[type=checkbox],
+  .table-bordered > tfoot > tr > th label input[type=checkbox]{
+    margin-right: 5px;
+  }
+
   .table-bordered > thead > tr > td,
   .table-bordered > tbody > tr > td,
   .table-bordered > tfoot > tr > td {
@@ -2317,10 +2361,6 @@ div.dataTables_wrapper div.dataTables_paginate {
 
   .form-horizontal .card-popup .ico-help {
     display: block;
-  }
-
-  .form-horizontal .card-popup .form-group input[type=checkbox] {
-    margin-top: 10px;
   }
 
   .form-control {
@@ -2422,24 +2462,10 @@ div.dataTables_wrapper div.dataTables_paginate {
   /*FORM ELEMENTS*/
   .form-horizontal .label-wrapper {
     float: none;
-    margin-bottom: 3px;
-    margin-top: 5px;
   }
 
   .form-horizontal .card-popup .label-wrapper {
     float: right;
-  }
-
-    .form-horizontal .card-popup .label-wrapper .col-form-label {
-      padding-top: 0;
-    }
-
-  .form-horizontal .card-popup .form-group input[type=checkbox] {
-    margin-top: 10px;
-  }
-
-  .form-group input[type=checkbox] {
-    margin-top: 2px;
   }
 
   .form-group .callout {
@@ -2472,8 +2498,16 @@ div.dataTables_wrapper div.dataTables_paginate {
     float: left;
   }
 
+  .form-horizontal .card-popup .label-wrapper .col-form-label {
+    text-align: left;
+  }
+
   div.dataTables_wrapper div.dataTables_length {
     text-align: center;
+  }
+
+  .form-horizontal .card-popup .ico-help {
+    display: none;
   }
 }
 
