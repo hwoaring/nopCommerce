@@ -174,6 +174,16 @@ namespace Nop.Core.Domain.Topics
         public bool LimitedToStores { get; set; }
 
         /// <summary>
+        /// 开始时间
+        /// </summary>
+        public DateTime StartDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 结束时间
+        /// </summary>
+        public DateTime EndDateTimeUtc { get; set; }
+
+        /// <summary>
         /// Gets or sets the date and time of entity creation
         /// </summary>
         public DateTime CreatedOnUtc { get; set; }
