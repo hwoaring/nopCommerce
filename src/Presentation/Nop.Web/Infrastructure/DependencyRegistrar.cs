@@ -86,6 +86,7 @@ namespace Nop.Web.Infrastructure
             services.AddScoped<IWidgetModelFactory, WidgetModelFactory>();
 
             services.AddScoped<IWeixinModelFactory, WeixinModelFactory>();
+            services.AddScoped<ISupplierModelFactory, SupplierModelFactory>();
 
             //factories
             services.AddScoped<Factories.IAddressModelFactory, Factories.AddressModelFactory>();
