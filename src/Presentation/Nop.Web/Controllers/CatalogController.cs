@@ -51,20 +51,20 @@ namespace Nop.Web.Controllers
         public CatalogController(CatalogSettings catalogSettings,
             IAclService aclService,
             ICatalogModelFactory catalogModelFactory,
-            ICategoryService categoryService, 
+            ICategoryService categoryService,
             ICustomerActivityService customerActivityService,
             IGenericAttributeService genericAttributeService,
             ILocalizationService localizationService,
             IManufacturerService manufacturerService,
-            IPermissionService permissionService, 
+            IPermissionService permissionService,
             IProductModelFactory productModelFactory,
-            IProductService productService, 
+            IProductService productService,
             IProductTagService productTagService,
             IStoreContext storeContext,
             IStoreMappingService storeMappingService,
             IVendorService vendorService,
             IWebHelper webHelper,
-            IWorkContext workContext, 
+            IWorkContext workContext,
             MediaSettings mediaSettings,
             VendorSettings vendorSettings)
         {
@@ -122,6 +122,8 @@ namespace Nop.Web.Controllers
             return View(templateViewPath, model);
         }
 
+        //ignore SEO friendly URLs checks
+        [CheckLanguageSeoCode(true)]
         public virtual async Task<IActionResult> GetCategoryProducts(int categoryId, CatalogProductsCommand command)
         {
             var category = await _categoryService.GetCategoryByIdAsync(categoryId);
@@ -159,7 +161,7 @@ namespace Nop.Web.Controllers
         public virtual async Task<IActionResult> Manufacturer(int manufacturerId, CatalogProductsCommand command)
         {
             var manufacturer = await _manufacturerService.GetManufacturerByIdAsync(manufacturerId);
-            
+
             if (!await CheckManufacturerAvailabilityAsync(manufacturer))
                 return InvokeHttp404();
 
@@ -186,6 +188,8 @@ namespace Nop.Web.Controllers
             return View(templateViewPath, model);
         }
 
+        //ignore SEO friendly URLs checks
+        [CheckLanguageSeoCode(true)]
         public virtual async Task<IActionResult> GetManufacturerProducts(int manufacturerId, CatalogProductsCommand command)
         {
             var manufacturer = await _manufacturerService.GetManufacturerByIdAsync(manufacturerId);
@@ -201,10 +205,10 @@ namespace Nop.Web.Controllers
         public virtual async Task<IActionResult> ManufacturerAll()
         {
             var model = await _catalogModelFactory.PrepareManufacturerAllModelsAsync();
-            
+
             return View(model);
         }
-        
+
         #endregion
 
         #region Vendors
@@ -221,7 +225,7 @@ namespace Nop.Web.Controllers
                 NopCustomerDefaults.LastContinueShoppingPageAttribute,
                 _webHelper.GetThisPageUrl(false),
                 (await _storeContext.GetCurrentStoreAsync()).Id);
-            
+
             //display "edit" (manage) link
             if (await _permissionService.AuthorizeAsync(StandardPermissionProvider.AccessAdminPanel) && await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageVendors))
                 DisplayEditLink(Url.Action("Edit", "Vendor", new { id = vendor.Id, area = AreaNames.Admin }));
@@ -232,6 +236,8 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
+        //ignore SEO friendly URLs checks
+        [CheckLanguageSeoCode(true)]
         public virtual async Task<IActionResult> GetVendorProducts(int vendorId, CatalogProductsCommand command)
         {
             var vendor = await _vendorService.GetVendorByIdAsync(vendorId);
@@ -257,7 +263,7 @@ namespace Nop.Web.Controllers
         #endregion
 
         #region Product tags
-        
+
         public virtual async Task<IActionResult> ProductsByTag(int productTagId, CatalogProductsCommand command)
         {
             var productTag = await _productTagService.GetProductTagByIdAsync(productTagId);
@@ -265,10 +271,12 @@ namespace Nop.Web.Controllers
                 return InvokeHttp404();
 
             var model = await _catalogModelFactory.PrepareProductsByTagModelAsync(productTag, command);
-            
+
             return View(model);
         }
 
+        //ignore SEO friendly URLs checks
+        [CheckLanguageSeoCode(true)]
         public virtual async Task<IActionResult> GetTagProducts(int tagId, CatalogProductsCommand command)
         {
             var productTag = await _productTagService.GetProductTagByIdAsync(tagId);
@@ -283,7 +291,7 @@ namespace Nop.Web.Controllers
         public virtual async Task<IActionResult> ProductTagsAll()
         {
             var model = await _catalogModelFactory.PreparePopularProductTagsModelAsync();
-            
+
             return View(model);
         }
 
@@ -303,7 +311,7 @@ namespace Nop.Web.Controllers
                 model = new SearchModel();
 
             model = await _catalogModelFactory.PrepareSearchModelAsync(model, command);
-           
+
             return View(model);
         }
 
@@ -316,7 +324,7 @@ namespace Nop.Web.Controllers
 
             //products
             var productNumber = _catalogSettings.ProductSearchAutoCompleteNumberOfProducts > 0 ?
-                _catalogSettings.ProductSearchAutoCompleteNumberOfProducts : 10;            
+                _catalogSettings.ProductSearchAutoCompleteNumberOfProducts : 10;
 
             var products = await _productService.SearchProductsAsync(0,
                 storeId: (await _storeContext.GetCurrentStoreAsync()).Id,
@@ -327,19 +335,21 @@ namespace Nop.Web.Controllers
 
             var showLinkToResultSearch = _catalogSettings.ShowLinkToAllResultInSearchAutoComplete && (products.TotalCount > productNumber);
 
-            var models =  (await _productModelFactory.PrepareProductOverviewModelsAsync(products, false, _catalogSettings.ShowProductImagesInSearchAutoComplete, _mediaSettings.AutoCompleteSearchThumbPictureSize)).ToList();
+            var models = (await _productModelFactory.PrepareProductOverviewModelsAsync(products, false, _catalogSettings.ShowProductImagesInSearchAutoComplete, _mediaSettings.AutoCompleteSearchThumbPictureSize)).ToList();
             var result = (from p in models
-                    select new
-                    {
-                        label = p.Name,
-                        producturl = Url.RouteUrl("Product", new {SeName = p.SeName}),
-                        productpictureurl = p.DefaultPictureModel.ImageUrl,
-                        showlinktoresultsearch = showLinkToResultSearch
-                    })
+                          select new
+                          {
+                              label = p.Name,
+                              producturl = Url.RouteUrl("Product", new { SeName = p.SeName }),
+                              productpictureurl = p.DefaultPictureModel.ImageUrl,
+                              showlinktoresultsearch = showLinkToResultSearch
+                          })
                 .ToList();
             return Json(result);
         }
 
+        //ignore SEO friendly URLs checks
+        [CheckLanguageSeoCode(true)]
         public virtual async Task<IActionResult> SearchProducts(SearchModel searchModel, CatalogProductsCommand command)
         {
             if (searchModel == null)

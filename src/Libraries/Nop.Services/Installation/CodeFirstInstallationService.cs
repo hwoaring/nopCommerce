@@ -674,8 +674,9 @@ namespace Nop.Services.Installation
             var pattern = "*.txt";
 
             //we use different scope to prevent creating wrong settings in DI, because the settings data not exists yet
-            using var scope = EngineContext.Current.Resolve<IServiceProvider>().CreateScope();
-            var importManager = scope.ServiceProvider.GetRequiredService<IImportManager>();
+            var serviceScopeFactory = EngineContext.Current.Resolve<IServiceScopeFactory>();
+            using var scope = serviceScopeFactory.CreateScope();
+            var importManager = EngineContext.Current.Resolve<IImportManager>(scope);
             foreach (var filePath in _fileProvider.EnumerateFiles(directoryPath, pattern))
             {
                 await using var stream = new FileStream(filePath, FileMode.Open);
@@ -3324,7 +3325,8 @@ namespace Nop.Services.Installation
                 CompleteOrderWhenDelivered = true,
                 CustomOrderNumberMask = "{ID}",
                 ExportWithProducts = true,
-                AllowAdminsToBuyCallForPriceProducts = true
+                AllowAdminsToBuyCallForPriceProducts = true,
+                DisplayCustomerCurrencyOnOrders = false
             });
 
             await settingService.SaveSettingAsync(new SecuritySettings
