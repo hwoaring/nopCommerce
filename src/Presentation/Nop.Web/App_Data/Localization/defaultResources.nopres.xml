@@ -2082,6 +2082,12 @@
   <LocaleResource Name="Admin.Catalog.Categories.Fields.AllowCustomersToSelectPageSize.Hint">
     <Value>Whether customers are allowed to select the page size from a predefined list of options.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Categories.Fields.AutomaticallyCalculatePriceRange">
+    <Value>Calculate price range automatically</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Categories.Fields.AutomaticallyCalculatePriceRange.Hint">
+    <Value>Check to enable automatically price range calculation.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Categories.Fields.CategoryTemplate">
     <Value>Category template</Value>
   </LocaleResource>
@@ -2184,11 +2190,29 @@
   <LocaleResource Name="Admin.Catalog.Categories.Fields.Picture.Hint">
     <Value>The category picture.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Categories.Fields.PriceRanges">
-    <Value>Price ranges</Value>
+  <LocaleResource Name="Admin.Catalog.Categories.Fields.PriceFrom">
+    <Value>Price 'from'</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Categories.Fields.PriceRanges.Hint">
-    <Value>Define the price ranges for the store price range filter. Separate ranges with a semicolon e.g. '0-199;200-300;301-;' (301- means 301 and over).</Value>
+  <LocaleResource Name="Admin.Catalog.Categories.Fields.PriceFrom.GreaterThanOrEqualZero">
+    <Value>The price 'from' should be greater than or equal '0'.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Categories.Fields.PriceFrom.Hint">
+    <Value>Enter the price 'from'.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Categories.Fields.PriceRangeFiltering">
+    <Value>Price range filtering</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Categories.Fields.PriceRangeFiltering.Hint">
+    <Value>Check to enable the price range filtering.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Categories.Fields.PriceTo">
+    <Value>Price 'to'</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Categories.Fields.PriceTo.GreaterThanZeroOrPriceFrom">
+    <Value>The price 'to' should be greater than '{0}'.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Categories.Fields.PriceTo.Hint">
+    <Value>Enter the price 'to'.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Categories.Fields.Published">
     <Value>Published</Value>
@@ -2304,6 +2328,12 @@
   <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.AllowCustomersToSelectPageSize.Hint">
     <Value>Whether customers are allowed to select the page size from a predefined list of options.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.AutomaticallyCalculatePriceRange">
+    <Value>Calculate price range automatically</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.AutomaticallyCalculatePriceRange.Hint">
+    <Value>Check to enable automatically price range calculation.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Deleted">
     <Value>Deleted</Value>
   </LocaleResource>
@@ -2391,11 +2421,29 @@
   <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Picture.Hint">
     <Value>The manufacturer picture.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PriceRanges">
-    <Value>Price ranges</Value>
+  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PriceFrom">
+    <Value>Price 'from'</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PriceRanges.Hint">
-    <Value>Define the price ranges for the store price range filter. Separate ranges with a semicolon e.g. '0-199;200-300;301-;' (301- means 301 and over).</Value>
+  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PriceFrom.GreaterThanOrEqualZero">
+    <Value>The price 'from' should be greater than or equal '0'.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PriceFrom.Hint">
+    <Value>Enter the price 'from'.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PriceRangeFiltering">
+    <Value>Price range filtering</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PriceRangeFiltering.Hint">
+    <Value>Check to enable the price range filtering.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PriceTo">
+    <Value>Price 'to'</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PriceTo.GreaterThanZeroOrPriceFrom">
+    <Value>The price 'to' should be greater than '{0}'.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.PriceTo.Hint">
+    <Value>Enter the price 'to'.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Manufacturers.Fields.Published">
     <Value>Published</Value>
@@ -3528,6 +3576,12 @@
   <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.ManufacturerPartNumber.Hint">
     <Value>The manufacturer's part number for this attribute combination.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.MinStockQuantity">
+    <Value>Minimum stock qty</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.MinStockQuantity.Hint">
+    <Value>If you have enabled 'Manage stock by attributes' you can perform a number of different actions when the current stock quantity falls below (reaches) your minimum stock quantity (e.g. Low stock report).</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.NotifyAdminForQuantityBelow">
     <Value>Notify admin for quantity below</Value>
   </LocaleResource>
@@ -4379,7 +4433,7 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.AppSettings.Common.SupportPreviousNopcommerceVersions.Hint">
     <Value>Specify a value indicating whether we should support previous nopCommerce versions (it can slightly improve performance).</Value>
-  </LocaleResource>  
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.AppSettings.Common.UserAgentStringsPath">
     <Value>User agent strings path</Value>
   </LocaleResource>
@@ -4393,7 +4447,7 @@
     <Value>Enable this setting to store TempData in the session state. By default the cookie-based TempData provider is used to store TempData in cookies.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.AppSettings.Description">
-      <Value><![CDATA[Configuration in ASP.NET Core is performed using a configuration provider from the external appsettings.json configuration file. These settings are used when the application is launched, so after editing them, the application will be restarted. You can find a detailed description of all configuration parameters in <a href=\"https://docs.nopcommerce.com/developer/tutorials/description-of-settings-from-appsettings-json-file-and-NopConfig-class.html\" target=\"_blank\">our documentation.</a>]]></Value>
+    <Value><![CDATA[Configuration in ASP.NET Core is performed using a configuration provider from the external appsettings.json configuration file. These settings are used when the application is launched, so after editing them, the application will be restarted. You can find a detailed description of all configuration parameters in <a href=\"https://docs.nopcommerce.com/developer/tutorials/description-of-settings-from-appsettings-json-file-and-NopConfig-class.html\" target=\"_blank\">our documentation.</a>]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.AppSettings.DistributedCache">
     <Value>Distributed cache configuration</Value>
@@ -4427,6 +4481,9 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.AppSettings.DistributedCache.TableName.Hint">
     <Value>Specify the table name"</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.AppSettings.EnvironmentVariablesWarning">
+    <Value>Warning! The current setting value is overridden in environment variables</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.AppSettings.Hosting">
     <Value>Hosting configuration</Value>
@@ -5646,6 +5703,18 @@
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.EmailAFriendEnabled.Hint">
     <Value>Check to allow customers to use the 'Email a friend' option in your store.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.EnableManufacturerFiltering">
+    <Value>Enable manufacturer filtering</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.EnableManufacturerFiltering.Hint">
+    <Value>Check to enable the manufacturer filtering on catalog pages.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.EnablePriceRangeFiltering">
+    <Value>Enable price range filtering</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.EnablePriceRangeFiltering.Hint">
+    <Value>Check to enable the price range filtering on catalog pages.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ExportImportAllowDownloadImages">
     <Value>Export/Import products. Allow download images</Value>
   </LocaleResource>
@@ -5826,6 +5895,12 @@
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductsByTagAllowCustomersToSelectPageSize.Hint">
     <Value>Whether customers are allowed to select the 'Products by tag' page size from a predefined list of options.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductsByTagAutomaticallyCalculatePriceRange">
+    <Value>'Products by tag' page. Calculate price range automatically</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductsByTagAutomaticallyCalculatePriceRange.Hint">
+    <Value>Check to enable automatically price range calculation on 'Products by tag' page.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductsByTagPageSize">
     <Value>'Products by tag' page. Products per page</Value>
   </LocaleResource>
@@ -5837,6 +5912,30 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductsByTagPageSizeOptions.Hint">
     <Value>Comma separated list of page size options (e.g. 10, 5, 15, 20). First option is the default page size if none are selected.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductsByTagPriceFrom">
+    <Value>'Products by tag' page. Price 'from'</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductsByTagPriceFrom.GreaterThanOrEqualZero">
+    <Value>The price 'from' should be greater than or equal '0'.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductsByTagPriceFrom.Hint">
+    <Value>Enter the price 'from' on 'Products by tag' page.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductsByTagPriceRangeFiltering">
+    <Value>'Products by tag' page. Price range filtering</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductsByTagPriceRangeFiltering.Hint">
+    <Value>Check to enable the price range filtering on 'Products by tag' page.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductsByTagPriceTo">
+    <Value>'Products by tag' page. Price 'to'</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductsByTagPriceTo.GreaterThanZeroOrPriceFrom">
+    <Value>The price 'to' should be greater than '{0}'.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductsByTagPriceTo.Hint">
+    <Value>Enter the price 'to' on 'Products by tag' page.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductSearchAutoCompleteEnabled">
     <Value>Search autocomplete enabled</Value>
@@ -5886,11 +5985,41 @@
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.SearchPageAllowCustomersToSelectPageSize.Hint">
     <Value>Search page. Check to allow customers to select the page size from a predefined list of options.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.SearchPageAutomaticallyCalculatePriceRange">
+    <Value>Search page. Calculate price range automatically</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.SearchPageAutomaticallyCalculatePriceRange.Hint">
+    <Value>Check to enable automatically price range calculation on 'Search' page.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.SearchPagePageSizeOptions">
     <Value>Search page. Page size options</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.SearchPagePageSizeOptions.Hint">
     <Value>Search page. Comma separated list of page size options (e.g. 10, 5, 15, 20). First option is the default page size if none are selected.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.SearchPagePriceFrom">
+    <Value>Search page. Price 'from'</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.SearchPagePriceFrom.GreaterThanOrEqualZero">
+    <Value>The price 'from' should be greater than or equal '0'.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.SearchPagePriceFrom.Hint">
+    <Value>Enter the price 'from' on 'Search' page.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.SearchPagePriceRangeFiltering">
+    <Value>Search page. Price range filtering</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.SearchPagePriceRangeFiltering.Hint">
+    <Value>Check to enable the price range filtering on 'Search' page.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.SearchPagePriceTo">
+    <Value>Search page. Price 'to'</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.SearchPagePriceTo.GreaterThanZeroOrPriceFrom">
+    <Value>The price 'to' should be greater than '{0}'.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.SearchPagePriceTo.Hint">
+    <Value>Enter the price 'to' on 'Search' page.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.SearchPageProductsPerPage">
     <Value>Search page. Products per page</Value>
@@ -5990,6 +6119,12 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.SortOptions.Name">
     <Value>Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.UseAjaxCatalogProductsLoading">
+    <Value>Use AJAX products loading</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.UseAjaxCatalogProductsLoading.Hint">
+    <Value>Check to load products asynchronously (applicable to 'paging', 'filtering', 'view modes') on catalog pages.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.CustomerSettings.PhoneNumberRegexValidationRule.Error">
     <Value>The regular expression for phone number validation is incorrect</Value>
@@ -6886,7 +7021,7 @@
     <Value>The goal of the canonicalization process is to transform a URL into a canonical URL so it is possible to determine if two syntactically different URLs may be equivalent.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.Captcha.Instructions">
-    <Value><![CDATA[<p>CAPTCHA is a program that can tell whether its user is a human or a computer. You've probably seen them — colorful images with distorted text at the bottom of Web registration forms. CAPTCHAs are used by many websites to prevent abuse from "bots" or automated programs usually written to generate spam. No computer program can read distorted text as well as humans can, so bots cannot navigate sites protected by CAPTCHAs. nopCommerce uses <a href="http://www.google.com/recaptcha" target="_blank">reCAPTCHA</a>.</p>]]></Value>
+    <Value><![CDATA[CAPTCHA is a program that can tell whether it is a human or a computer is trying to access your web site. nopCommerce uses <a href="http://www.google.com/recaptcha" target="_blank">reCAPTCHA</a> by Google. reCAPTCHA is a free service that protects your website from spam and abuse. reCAPTCHA uses an advanced risk analysis engine and adaptive challenges to keep automated software from engaging in abusive activities on your site. It does this while letting your valid users pass through with ease.]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.CaptchaAppropriateKeysNotEnteredError">
     <Value>Captcha is enabled but the appropriate keys are not entered</Value>
@@ -9390,11 +9525,11 @@
   <LocaleResource Name="Admin.ConfigurationSteps.EmailAccountList.EmailAccounts2.Title">
     <Value>Email accounts</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.ConfigurationSteps.NextStep">
-    <Value>Next</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.ConfigurationSteps.NextPage">
     <Value>Next page</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.ConfigurationSteps.NextStep">
+    <Value>Next</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.ConfigurationSteps.PaymentMethods.Activate.Text">
     <Value><![CDATA[To activate a payment method click the <b>Edit</b> button, then tick the <b>Is active</b> checkbox and save the changes.]]></Value>
@@ -11760,6 +11895,165 @@
   <LocaleResource Name="Admin.Dashboard.NumberOfPendingReturnRequests">
     <Value>Pending return requests</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Acl">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/customer-management/access-control-list.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">access control list</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.ActivityLog">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/customer-management/activity-log.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">activity log</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Affiliates">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/promotional-tools/affiliates.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">affiliates</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Blog">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/content-management/blog.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">blog</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Categories">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/catalog/categories.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">categories</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.CheckoutAttributes">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/order-management/checkout-attributes.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">checkout attributes</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.CountriesStates">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/configure-shipping/advanced-configuration/countries-states.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">countries and states</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Currencies">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/configure-payments/advanced-configuration/currencies.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">currencies</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.CustomerRoles">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/customer-management/customer-roles.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">customer roles</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Customers">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/customer-management/managing-customers.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">customers</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.DatesAndRanges">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/configure-shipping/advanced-configuration/dates-and-ranges.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">dates and ranges</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Discounts">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/promotional-tools/discounts.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">discounts</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.EmailAccounts">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/email-accounts.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">email accounts</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.EmailCampaigns">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/promotional-tools/email-campaigns.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">email campaigns</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.ExternalAuthentication">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/advanced-configuration/external-authentication-methods.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">external authentication methods</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Forums">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/content-management/forums.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">forums</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Gdpr">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/advanced-configuration/gdpr-settings.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">GDPR in nopCommerce</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.GiftCards">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/promotional-tools/gift-cards.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">gift cards</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Localization">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/advanced-configuration/localization.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">localization</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Log">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/system-administration/log.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">log</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Maintenance">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/system-administration/maintenance.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">maintenance</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Manufacturers">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/catalog/manufacturers.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">manufacturers</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Measures">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/configure-shipping/advanced-configuration/measures.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">measures</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.MessageQueue">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/system-administration/message-queue.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">message queue</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.MessageTemplates">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/content-management/message-templates.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">message templates</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.MultiStore">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/advanced-configuration/multi-store.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">multi-store</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.News">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/content-management/news.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">news</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.OnlineCustomers">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/customer-management/online-customers.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">online customers</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Orders">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/order-management/orders.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">orders</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.PaymentMethodRestrictions">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/configure-payments/advanced-configuration/payment-method-restrictions.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">payment method restrictions</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.PaymentMethods">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/configure-payments/payment-methods/index.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">payment methods</a>.]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.PickupPoints">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/configure-shipping/advanced-configuration/pickup-points.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">pickup points</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Plugins">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/advanced-configuration/plugins-in-nopcommerce.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">plugins in nopCommerce</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Polls">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/content-management/polls.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">polls</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.ProductAttributes">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/catalog/products/product-attributes.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">product attributes</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.ProductReviews">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/catalog/products/product-reviews.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">product reviews</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Products">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/catalog/products/index.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">products</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.ProductTags">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/catalog/products/product-tags.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">product tags</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.RecurringPayments">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/catalog/products/recurring-products.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">recurring products</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Reports">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/reports.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">reports</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.ReturnRequests">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/order-management/return-requests.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">return requests</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.ScheduleTasks">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/system-administration/schedule-tasks.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">scheduled tasks</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.SeoOptimization">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/search-engine-optimization.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">search engine optimization</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.ShippingManagement">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/order-management/shipping-management.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">shipping management</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.ShippingProviders">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/configure-shipping/shipping-providers/index.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">shipping providers</a>.]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.ShoppingCartsAndWishlists">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/order-management/shopping-carts-and-wishlists.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">shopping carts and wishlists</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.SpecificationAttributes">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/catalog/products/specification-attributes.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">specification attributes</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.TaxManagement">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/configure-taxes/index.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">tax management</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.TaxProviders">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/configure-taxes/tax-providers/index.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">tax providers</a>.]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Templates">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/system-administration/templates.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">templates</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.TopicsPages">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/content-management/topics-pages.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">topics (pages)</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.VendorManagement">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/running-your-store/vendor-management.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">vendor management</a>]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Documentation.Reference.Warehouses">
+    <Value><![CDATA[Learn more about <a target=\"_blank\" href=\"https://docs.nopcommerce.com/en/getting-started/configure-shipping/advanced-configuration/warehouses.html?utm_source=admin-panel&utm_medium=admin-page&utm_campaign=documentation&utm_content=doc-reference\">warehouses</a>]]></Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Download.DownloadUploadedFile">
     <Value>Download uploaded file</Value>
   </LocaleResource>
@@ -11896,7 +12190,7 @@
     <Value>Is recipient notified</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.GiftCards.Fields.IsRecipientNotified.Hint">
-    <Value>Is recipient notified.</Value>
+    <Value>Indicates whether the gift card recipient is notified by email. Click the "Notify recipient" button to send an email notification.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.GiftCards.Fields.IsRecipientNotified.Notify">
     <Value>Notify recipient</Value>
@@ -13737,99 +14031,6 @@
   <LocaleResource Name="Admin.Reports.LowStock.SearchPublished.UnpublishedOnly">
     <Value>Unpublished only</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary">
-    <Value>Sales summary</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.BillingCountry">
-    <Value>Billing country</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.BillingCountry.Hint">
-    <Value>Filter by order billing country.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.Category">
-    <Value>Category</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.Category.Hint">
-    <Value>Search in a specific category.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.EndDate">
-    <Value>End date</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.EndDate.Hint">
-    <Value>The end date for the search.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.Fields.Summary">
-    <Value>Summary</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.Fields.NumberOfOrders">
-    <Value>Number of orders</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.Fields.Profit">
-    <Value>Profit</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.Fields.Shipping">
-    <Value>Shipping</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.Fields.Tax">
-    <Value>Tax</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.Fields.OrderTotal">
-    <Value>OrderTotal</Value>
-  </LocaleResource>  
-  <LocaleResource Name="Admin.Reports.SalesSummary.GroupBy">
-    <Value>Group by</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.GroupBy.Hint">
-    <Value>Grouping by time periods.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Enums.Nop.Services.Orders.GroupByOptions.Day">
-    <Value>Day</Value>
-  </LocaleResource>
-  <LocaleResource Name="Enums.Nop.Services.Orders.GroupByOptions.Week">
-    <Value>Week</Value>
-  </LocaleResource>
-  <LocaleResource Name="Enums.Nop.Services.Orders.GroupByOptions.Month">
-    <Value>Month</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.Manufacturer">
-    <Value>Manufacturer</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.Manufacturer.Hint">
-    <Value>Search in a specific manufacturer.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.OrderStatus">
-    <Value>Order status</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.OrderStatus.Hint">
-    <Value>Search by a specific order status e.g. Complete.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.PaymentStatus">
-    <Value>Payment status</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.PaymentStatus.Hint">
-    <Value>Search by a specific payment status e.g. Paid.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.Product">
-    <Value>Product</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.Product.Hint">
-    <Value>Search by a specific product.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.RunReport">
-    <Value>Run report</Value>
-  </LocaleResource>  
-  <LocaleResource Name="Admin.Reports.SalesSummary.StartDate">
-    <Value>Start date</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.StartDate.Hint">
-    <Value>The start date for the search.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.Store">
-    <Value>Store</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Reports.SalesSummary.Store.Hint">
-    <Value>Filter report by orders placed in a specific store.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Reports.Sales.Bestsellers">
     <Value>Bestsellers</Value>
   </LocaleResource>
@@ -13991,6 +14192,90 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Reports.Sales.NeverSold.StartDate.Hint">
     <Value>The start date for the search.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary">
+    <Value>Sales summary</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.BillingCountry">
+    <Value>Billing country</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.BillingCountry.Hint">
+    <Value>Filter by order billing country.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.Category">
+    <Value>Category</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.Category.Hint">
+    <Value>Search in a specific category.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.EndDate">
+    <Value>End date</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.EndDate.Hint">
+    <Value>The end date for the search.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.Fields.NumberOfOrders">
+    <Value>Number of orders</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.Fields.OrderTotal">
+    <Value>OrderTotal</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.Fields.Profit">
+    <Value>Profit</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.Fields.Shipping">
+    <Value>Shipping</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.Fields.Summary">
+    <Value>Summary</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.Fields.Tax">
+    <Value>Tax</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.GroupBy">
+    <Value>Group by</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.GroupBy.Hint">
+    <Value>Grouping by time periods.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.Manufacturer">
+    <Value>Manufacturer</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.Manufacturer.Hint">
+    <Value>Search in a specific manufacturer.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.OrderStatus">
+    <Value>Order status</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.OrderStatus.Hint">
+    <Value>Search by a specific order status e.g. Complete.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.PaymentStatus">
+    <Value>Payment status</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.PaymentStatus.Hint">
+    <Value>Search by a specific payment status e.g. Paid.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.Product">
+    <Value>Product</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.Product.Hint">
+    <Value>Search by a specific product.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.RunReport">
+    <Value>Run report</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.StartDate">
+    <Value>Start date</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.StartDate.Hint">
+    <Value>The start date for the search.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.Store">
+    <Value>Store</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Reports.SalesSummary.Store.Hint">
+    <Value>Filter report by orders placed in a specific store.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.ReturnRequests">
     <Value>Return requests</Value>
@@ -14272,7 +14557,7 @@
     <Value>End date</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.ShoppingCartType.EndDate.Hint">
-    <Value>The end date for the search.</Value>
+    <Value>The end date for the search (when a product was added to the cart).</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.ShoppingCartType.Product">
     <Value>Product</Value>
@@ -14290,7 +14575,7 @@
     <Value>Start date</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.ShoppingCartType.StartDate.Hint">
-    <Value>The start date for the search.</Value>
+    <Value>The start date for the search (when a product was added to the cart).</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.ShoppingCartType.Store">
     <Value>Store</Value>
@@ -15234,6 +15519,12 @@
   <LocaleResource Name="Admin.Vendors.Fields.AssociatedCustomerEmails.None">
     <Value>No customer account associated to this vendor.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.AutomaticallyCalculatePriceRange">
+    <Value>Calculate price range automatically</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.AutomaticallyCalculatePriceRange.Hint">
+    <Value>Check to enable automatically price range calculation.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.Description">
     <Value>Description</Value>
   </LocaleResource>
@@ -15305,6 +15596,30 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.Picture.Hint">
     <Value>The vendor picture.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.PriceFrom">
+    <Value>Price 'from'</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.PriceFrom.GreaterThanOrEqualZero">
+    <Value>The price 'from' should be greater than or equal '0'.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.PriceFrom.Hint">
+    <Value>Enter the price 'from'.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.PriceRangeFiltering">
+    <Value>Price range filtering</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.PriceRangeFiltering.Hint">
+    <Value>Check to enable the price range filtering.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.PriceTo">
+    <Value>Price 'to'</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.PriceTo.GreaterThanZeroOrPriceFrom">
+    <Value>The price 'to' should be greater than '{0}'.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.PriceTo.Hint">
+    <Value>Enter the price 'to'.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.SeName">
     <Value>Search engine friendly page name</Value>
@@ -16452,6 +16767,15 @@
   <LocaleResource Name="Enums.Nop.Core.Domain.Tax.VatNumberStatus.Valid">
     <Value>Valid</Value>
   </LocaleResource>
+  <LocaleResource Name="Enums.Nop.Services.Orders.GroupByOptions.Day">
+    <Value>Day</Value>
+  </LocaleResource>
+  <LocaleResource Name="Enums.Nop.Services.Orders.GroupByOptions.Month">
+    <Value>Month</Value>
+  </LocaleResource>
+  <LocaleResource Name="Enums.Nop.Services.Orders.GroupByOptions.Week">
+    <Value>Week</Value>
+  </LocaleResource>
   <LocaleResource Name="Enums.Nop.Services.Payments.RecurringPaymentType.Automatic">
     <Value>Automatic</Value>
   </LocaleResource>
@@ -16479,29 +16803,14 @@
   <LocaleResource Name="EUCookieLaw.LearnMore">
     <Value>Learn more</Value>
   </LocaleResource>
+  <LocaleResource Name="Filtering.ManufacturerFilter">
+    <Value>Filter by manufacturer</Value>
+  </LocaleResource>
   <LocaleResource Name="Filtering.PriceRangeFilter">
     <Value>Filter by price</Value>
   </LocaleResource>
-  <LocaleResource Name="Filtering.PriceRangeFilter.Over">
-    <Value>Over {0}</Value>
-  </LocaleResource>
-  <LocaleResource Name="Filtering.PriceRangeFilter.Remove">
-    <Value>Remove Filter</Value>
-  </LocaleResource>
-  <LocaleResource Name="Filtering.PriceRangeFilter.Under">
-    <Value>Under {0}</Value>
-  </LocaleResource>
   <LocaleResource Name="Filtering.SpecificationFilter">
     <Value>Filter by attributes</Value>
-  </LocaleResource>
-  <LocaleResource Name="Filtering.SpecificationFilter.CurrentlyFilteredBy">
-    <Value>Currently shopping by:</Value>
-  </LocaleResource>
-  <LocaleResource Name="Filtering.SpecificationFilter.Remove">
-    <Value>Remove Filter</Value>
-  </LocaleResource>
-  <LocaleResource Name="Filtering.SpecificationFilter.Separator">
-    <Value>or</Value>
   </LocaleResource>
   <LocaleResource Name="Footer.CustomerService">
     <Value>Customer service</Value>
@@ -18449,15 +18758,6 @@
   </LocaleResource>
   <LocaleResource Name="Search.NoResultsText">
     <Value>No products were found that matched your criteria.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Search.PriceRange">
-    <Value>Price range</Value>
-  </LocaleResource>
-  <LocaleResource Name="Search.PriceRange.From">
-    <Value>From</Value>
-  </LocaleResource>
-  <LocaleResource Name="Search.PriceRange.To">
-    <Value>to</Value>
   </LocaleResource>
   <LocaleResource Name="Search.SearchBox.SearchPageLink">
     <Value>View all results...</Value>

@@ -1142,7 +1142,7 @@ td.k-state-focused.k-state-selected {
 .form-horizontal .form-group .k-dropdown {
   cursor: default;
   width: 100% !important;
-  height: 32px;
+  height: 38px;
 }
 
   .form-horizontal .form-group .k-dropdown .k-dropdown-wrap {
@@ -1162,8 +1162,8 @@ td.k-state-focused.k-state-selected {
     }
 
     .form-horizontal .form-group .k-dropdown .k-dropdown-wrap .k-input {
-      height: 32px;
-      line-height: 32px;
+      height: 36px;
+      line-height: 36px;
       display: block;
       padding: 0;
     }
@@ -1454,12 +1454,13 @@ div.dataTables_wrapper {
     color: #0076BB;
     font-weight: normal;
     margin-right: 6px;
+    font-size: 65%;
   }
 
-    .content-header > h1 > small .fa-arrow-circle-left {
-      font-size: 18px;
-      margin-left: 1px;
-    }
+  .content-header > h1 > small i {
+    font-size: 0.8em;
+    padding-right: 2px;
+  }
 
 .content-header .btn {
   margin-bottom: 5px;
@@ -1479,6 +1480,15 @@ div.dataTables_wrapper {
   white-space: nowrap;
 }
 
+.documentation-reference {
+  margin-bottom: 10px;
+}
+
+.documentation-reference i {
+  font-size: 0.9em;
+  color: #4d4d4d;
+}
+
 /* FORM ELEMENTS */
 .form-horizontal .label-wrapper {
   float: left;
@@ -1486,8 +1496,13 @@ div.dataTables_wrapper {
   align-items: flex-start;
 }
 
+.form-horizontal .multi-store-override-option + .label-wrapper {
+  width: 90%;
+}
+
   .form-horizontal .label-wrapper .col-form-label {
     text-align: left;
+    flex-grow: 2;
   }
 
   .form-horizontal .label-wrapper .ico-help {
