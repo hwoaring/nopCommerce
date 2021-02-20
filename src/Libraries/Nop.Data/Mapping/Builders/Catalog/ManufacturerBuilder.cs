@@ -23,7 +23,6 @@ namespace Nop.Data.Mapping.Builders.Catalog
                 .WithColumn(nameof(Manufacturer.MetaImageUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Manufacturer.MetaLinkUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Manufacturer.ShareImageUrl)).AsAnsiString(1024).Nullable()
-                .WithColumn(nameof(Manufacturer.PriceRanges)).AsString(400).Nullable()
                 .WithColumn(nameof(Manufacturer.PageSizeOptions)).AsString(200).Nullable();
         }
 
