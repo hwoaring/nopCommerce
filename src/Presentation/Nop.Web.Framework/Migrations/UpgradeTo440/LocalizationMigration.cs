@@ -156,7 +156,7 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo440
                 "Filtering.PriceRangeFilter.Remove",
                 "Filtering.SpecificationFilter.CurrentlyFilteredBy",
                 "Filtering.SpecificationFilter.Remove",
-                "Filtering.SpecificationFilter.Separator",
+                "Filtering.SpecificationFilter.Separator"
             }).Wait();
 
             localizationService.AddLocaleResourceAsync(new Dictionary<string, string>
@@ -685,6 +685,14 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo440
                 ["Products.ProductAttributes.NotAvailable"] = "Not available",
                 ["Enums.Nop.Core.Domain.Catalog.AttributeValueOutOfStockDisplayType.Disable"] = "Disable",
                 ["Enums.Nop.Core.Domain.Catalog.AttributeValueOutOfStockDisplayType.AlwaysDisplay"] = "Always display",
+
+                ["Checkout.PickupPoints.NullName"] = "Pickup",
+
+                //#5400
+                ["Admin.ContentManagement.Forums.Forum.Fields.Name.Required"] = "Forum name is required.",
+
+                //#5475
+                ["Admin.Orders.Fields.ShippingMethod.Hint"] = "The customers chosen shipping method for this order. You can manage shipping methods from Configuration > Shipping > Shipping providers."
             }).Wait();
 
             // rename locales
@@ -734,7 +742,11 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo440
                 new { Name = "Nop.Web.Framework.Validators.MaxDecimal", NewName = "Admin.Common.Validation.Decimal.Max"},
 
                 //#5321
-                new { Name = "Common.Wait...", NewName = "Common.Wait"}
+                new { Name = "Common.Wait...", NewName = "Common.Wait"},
+
+                //#5429
+                new { Name = "Search.NoResultsText", NewName = "Catalog.Products.NoResult"},
+
             };
 
             var languageService = EngineContext.Current.Resolve<ILanguageService>();
