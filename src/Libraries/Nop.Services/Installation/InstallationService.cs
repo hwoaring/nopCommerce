@@ -55,9 +55,9 @@ using Nop.Services.Seo;
 namespace Nop.Services.Installation
 {
     /// <summary>
-    /// Code first installation service
+    /// Installation service
     /// </summary>
-    public partial class CodeFirstInstallationService : IInstallationService
+    public partial class InstallationService : IInstallationService
     {
         #region Fields
 
@@ -96,7 +96,7 @@ namespace Nop.Services.Installation
 
         #region Ctor
 
-        public CodeFirstInstallationService(INopDataProvider dataProvider,
+        public InstallationService(INopDataProvider dataProvider,
             INopFileProvider fileProvider,
             IRepository<ActivityLogType> activityLogTypeRepository,
             IRepository<Address> addressRepository,
