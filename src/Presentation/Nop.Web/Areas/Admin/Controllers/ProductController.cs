@@ -156,6 +156,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Utilities
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task UpdateLocalesAsync(Product product, ProductModel model)
         {
             foreach (var localized in model.Locales)
@@ -191,6 +192,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task UpdateLocalesAsync(ProductTag productTag, ProductTagModel model)
         {
             foreach (var localized in model.Locales)
@@ -205,6 +207,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task UpdateLocalesAsync(ProductAttributeMapping pam, ProductAttributeMappingModel model)
         {
             foreach (var localized in model.Locales)
@@ -220,6 +223,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task UpdateLocalesAsync(ProductAttributeValue pav, ProductAttributeValueModel model)
         {
             foreach (var localized in model.Locales)
@@ -231,12 +235,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task UpdatePictureSeoNamesAsync(Product product)
         {
             foreach (var pp in await _productService.GetProductPicturesByProductIdAsync(product.Id))
                 await _pictureService.SetSeoFilenameAsync(pp.PictureId, await _pictureService.GetPictureSeNameAsync(product.Name));
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task SaveProductAclAsync(Product product, ProductModel model)
         {
             product.SubjectToAcl = model.SelectedCustomerRoleIds.Any();
@@ -262,6 +268,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task SaveCategoryMappingsAsync(Product product, ProductModel model)
         {
             var existingProductCategories = await _categoryService.GetProductCategoriesByProductIdAsync(product.Id, true);
@@ -291,6 +298,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task SaveManufacturerMappingsAsync(Product product, ProductModel model)
         {
             var existingProductManufacturers = await _manufacturerService.GetProductManufacturersByProductIdAsync(product.Id, true);
@@ -320,6 +328,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task SaveDiscountMappingsAsync(Product product, ProductModel model)
         {
             var allDiscounts = await _discountService.GetAllDiscountsAsync(DiscountType.AssignedToSkus, showHidden: true);
@@ -344,6 +353,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             await _productService.UpdateHasDiscountsAppliedAsync(product);
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task<string> GetAttributesXmlForProductAttributeCombinationAsync(IFormCollection form, List<string> warnings, int productId)
         {
             var attributesXml = string.Empty;
@@ -506,6 +516,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return result.ToArray();
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task SaveProductWarehouseInventoryAsync(Product product, ProductModel model)
         {
             if (product == null)
@@ -604,6 +615,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task SaveConditionAttributesAsync(ProductAttributeMapping productAttributeMapping,
             ProductAttributeConditionModel model, IFormCollection form)
         {
@@ -692,6 +704,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             await _productAttributeService.UpdateProductAttributeMappingAsync(productAttributeMapping);
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task GenerateAttributeCombinationsAsync(Product product, IList<int> allowedAttributeIds = null)
         {
             var allAttributesXml = await _productAttributeParser.GenerateAllCombinationsAsync(product, true, allowedAttributeIds);
@@ -743,6 +756,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("List");
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> List()
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -755,6 +769,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductList(ProductSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -768,6 +783,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("go-to-product-by-sku")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> GoToSku(ProductSearchModel searchModel)
         {
             //try to load a product entity, if not found, then try to load a product attribute combination
@@ -781,6 +797,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return await List();
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> Create(bool showtour = false)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -813,6 +830,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> Create(ProductModel model, bool continueEditing)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -894,6 +912,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> Edit(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -915,6 +934,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> Edit(ProductModel model, bool continueEditing)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1089,6 +1109,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> Delete(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1115,6 +1136,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1130,6 +1152,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> CopyProduct(ProductModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1158,6 +1181,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         //action displaying notification (warning) to a store owner that entered SKU already exists
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> SkuReservedWarning(int productId, string sku)
         {
             string message;
@@ -1189,6 +1213,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Required products
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> LoadProductFriendlyNames(string productIds)
         {
             var result = string.Empty;
@@ -1222,6 +1247,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(new { Text = result });
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> RequiredProductAddPopup()
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1234,6 +1260,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> RequiredProductAddPopupList(AddRequiredProductSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1250,6 +1277,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Related products
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> RelatedProductList(RelatedProductSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1270,6 +1298,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> RelatedProductUpdate(RelatedProductModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1294,6 +1323,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> RelatedProductDelete(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1318,6 +1348,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> RelatedProductAddPopup(int productId)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1330,6 +1361,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> RelatedProductAddPopupList(AddRelatedProductSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1343,6 +1375,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> RelatedProductAddPopup(AddRelatedProductModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1380,6 +1413,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Cross-sell products
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> CrossSellProductList(CrossSellProductSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1400,6 +1434,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> CrossSellProductDelete(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1422,6 +1457,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> CrossSellProductAddPopup(int productId)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1434,6 +1470,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> CrossSellProductAddPopupList(AddCrossSellProductSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1447,6 +1484,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> CrossSellProductAddPopup(AddCrossSellProductModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1483,6 +1521,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Associated products
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> AssociatedProductList(AssociatedProductSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1503,6 +1542,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> AssociatedProductUpdate(AssociatedProductModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1523,6 +1563,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> AssociatedProductDelete(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1542,6 +1583,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> AssociatedProductAddPopup(int productId)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1554,6 +1596,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> AssociatedProductAddPopupList(AddAssociatedProductSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1567,6 +1610,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> AssociatedProductAddPopup(AddAssociatedProductModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1618,6 +1662,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Product pictures
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductPictureAdd(int pictureId, int displayOrder,
             string overrideAltAttribute, string overrideTitleAttribute, int productId, bool isCoverImage, bool published)
         {
@@ -1664,6 +1709,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductPictureList(ProductPictureSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1684,6 +1730,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductPictureUpdate(ProductPictureModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1721,6 +1768,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductPictureDelete(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1755,6 +1803,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Product specification attributes
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductSpecificationAttributeAdd(AddSpecificationAttributeModel model, bool continueEditing)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1830,6 +1879,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductSpecAttrList(ProductSpecificationAttributeSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1850,6 +1900,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductSpecAttrUpdate(AddSpecificationAttributeModel model, bool continueEditing)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1928,6 +1979,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("Edit", new { id = psa.ProductId });
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductSpecAttributeAddOrEdit(int productId, int? specificationId)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1956,6 +2008,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductSpecAttrDelete(AddSpecificationAttributeModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -1990,6 +2043,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Product tags
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductTags()
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProductTags))
@@ -2002,6 +2056,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductTags(ProductTagSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProductTags))
@@ -2014,6 +2069,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductTagDelete(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProductTags))
@@ -2031,6 +2087,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductTagsDelete(ICollection<int> selectedIds)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProductTags))
@@ -2045,6 +2102,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(new { Result = true });
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> EditProductTag(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProductTags))
@@ -2062,6 +2120,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> EditProductTag(ProductTagModel model, bool continueEditing)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProductTags))
@@ -2097,6 +2156,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Purchased with order
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> PurchasedWithOrders(ProductOrderSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2122,6 +2182,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("DownloadCatalogPDF")]
         [FormValueRequired("download-catalog-pdf")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> DownloadCatalogAsPdf(ProductSearchModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2178,6 +2239,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("ExportToXml")]
         [FormValueRequired("exportxml-all")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ExportXmlAll(ProductSearchModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2228,6 +2290,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ExportXmlSelected(string selectedIds)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2262,6 +2325,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("ExportToExcel")]
         [FormValueRequired("exportexcel-all")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ExportExcelAll(ProductSearchModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2313,6 +2377,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ExportExcelSelected(string selectedIds)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2347,6 +2412,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ImportExcel(IFormFile importexcelfile)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2386,6 +2452,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Tier prices
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> TierPriceList(TierPriceSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2405,6 +2472,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> TierPriceCreatePopup(int productId)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2422,6 +2490,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> TierPriceCreatePopup(TierPriceModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2459,6 +2528,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> TierPriceEditPopup(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2484,6 +2554,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> TierPriceEditPopup(TierPriceModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2522,6 +2593,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> TierPriceDelete(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2552,6 +2624,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Product attributes
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeMappingList(ProductAttributeMappingSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2571,6 +2644,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeMappingCreate(int productId)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2594,6 +2668,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeMappingCreate(ProductAttributeMappingModel model, bool continueEditing)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2671,6 +2746,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("ProductAttributeMappingEdit", new { id = productAttributeMapping.Id });
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeMappingEdit(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2698,6 +2774,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeMappingEdit(ProductAttributeMappingModel model, bool continueEditing, IFormCollection form)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2751,6 +2828,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeMappingDelete(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2798,6 +2876,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeValueList(ProductAttributeValueSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2821,6 +2900,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeValueCreatePopup(int productAttributeMappingId)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2845,6 +2925,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeValueCreatePopup(ProductAttributeValueModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2907,6 +2988,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeValueEditPopup(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -2937,6 +3019,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeValueEditPopup(ProductAttributeValueModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -3004,6 +3087,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeValueDelete(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -3030,6 +3114,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> AssociateProductToAttributeValuePopup()
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -3042,6 +3127,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> AssociateProductToAttributeValuePopupList(AssociateProductToAttributeValueSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -3055,6 +3141,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> AssociateProductToAttributeValuePopup([Bind(Prefix = nameof(AssociateProductToAttributeValueModel))] AssociateProductToAttributeValueModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -3077,6 +3164,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         //action displaying notification (warning) to a store owner when associating some product
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> AssociatedProductGetWarnings(int productId)
         {
             var associatedProduct = await _productService.GetProductByIdAsync(productId);
@@ -3112,6 +3200,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Product attribute combinations
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeCombinationList(ProductAttributeCombinationSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -3132,6 +3221,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeCombinationDelete(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -3154,6 +3244,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeCombinationCreatePopup(int productId)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -3175,6 +3266,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeCombinationCreatePopup(int productId, ProductAttributeCombinationModel model, IFormCollection form)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -3232,6 +3324,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeCombinationGeneratePopup(int productId)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -3253,6 +3346,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeCombinationGeneratePopup(IFormCollection form, ProductAttributeCombinationModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -3291,6 +3385,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(new ProductAttributeCombinationModel());
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeCombinationEditPopup(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -3317,6 +3412,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ProductAttributeCombinationEditPopup(ProductAttributeCombinationModel model, IFormCollection form)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -3381,6 +3477,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> GenerateAllAttributeCombinations(int productId)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -3404,6 +3501,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Product editor settings
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> SaveProductEditorSettings(ProductModel model, string returnUrl = "")
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
@@ -3433,6 +3531,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Stock quantity history
 
         [HttpPost]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> StockQuantityHistory(StockQuantityHistorySearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))

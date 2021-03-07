@@ -59,7 +59,10 @@ namespace Nop.Services.Common
         /// <summary>
         /// Check whether the site is available
         /// </summary>
-        /// <returns>The asynchronous task whose result determines that request is completed</returns>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the asynchronous task whose result determines that request is completed
+        /// </returns>
         public virtual async Task PingAsync()
         {
             await _httpClient.GetStringAsync("/");
@@ -68,7 +71,10 @@ namespace Nop.Services.Common
         /// <summary>
         /// Check the current store for the copyright removal key
         /// </summary>
-        /// <returns>The asynchronous task whose result contains the warning text</returns>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the asynchronous task whose result contains the warning text
+        /// </returns>
         public virtual async Task<string> GetCopyrightWarningAsync()
         {
             return null;
@@ -87,7 +93,10 @@ namespace Nop.Services.Common
         /// <summary>
         /// Get official news RSS
         /// </summary>
-        /// <returns>The asynchronous task whose result contains news RSS feed</returns>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the asynchronous task whose result contains news RSS feed
+        /// </returns>
         public virtual async Task<RssFeed> GetNewsRssAsync()
         {
             //prepare URL to request
@@ -110,7 +119,10 @@ namespace Nop.Services.Common
         /// <param name="email">Admin email</param>
         /// <param name="languageCode">Language code</param>
         /// <param name="culture">Culture name</param>
-        /// <returns>The asynchronous task whose result contains the result string</returns>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the asynchronous task whose result contains the result string
+        /// </returns>
         public virtual async Task<string> InstallationCompletedAsync(string email, string languageCode, string culture)
         {
             //prepare URL to request
@@ -132,7 +144,10 @@ namespace Nop.Services.Common
         /// <summary>
         /// Get a response regarding available categories of marketplace extensions
         /// </summary>
-        /// <returns>The asynchronous task whose result contains the result string</returns>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the asynchronous task whose result contains the result string
+        /// </returns>
         public virtual async Task<string> GetExtensionsCategoriesAsync()
         {
             //prepare URL to request
@@ -146,7 +161,10 @@ namespace Nop.Services.Common
         /// <summary>
         /// Get a response regarding available versions of marketplace extensions
         /// </summary>
-        /// <returns>The asynchronous task whose result contains the result string</returns>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the asynchronous task whose result contains the result string
+        /// </returns>
         public virtual async Task<string> GetExtensionsVersionsAsync()
         {
             //prepare URL to request
@@ -166,7 +184,10 @@ namespace Nop.Services.Common
         /// <param name="searchTerm">Search term</param>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
-        /// <returns>The asynchronous task whose result contains the result string</returns>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the asynchronous task whose result contains the result string
+        /// </returns>
         public virtual async Task<string> GetExtensionsAsync(int categoryId = 0,
             int versionId = 0, int price = 0, string searchTerm = null,
             int pageIndex = 0, int pageSize = int.MaxValue)

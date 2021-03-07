@@ -117,6 +117,7 @@ namespace Nop.Web.Controllers
 
         #region Utilities
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task<bool> IsMinimumOrderPlacementIntervalValidAsync(Customer customer)
         {
             //prevent 2 orders being placed within an X seconds time frame
@@ -153,7 +154,10 @@ namespace Nop.Web.Controllers
         /// Parses the pickup option
         /// </summary>
         /// <param name="form">The form</param>
-        /// <returns>The pickup option</returns>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the pickup option
+        /// </returns>
         protected virtual async Task<PickupPoint> ParsePickupOptionAsync(IFormCollection form)
         {
             var pickupPoint = form["pickup-points-id"].ToString().Split(new[] { "___" }, StringSplitOptions.None);
@@ -172,6 +176,7 @@ namespace Nop.Web.Controllers
         /// Saves the pickup option
         /// </summary>
         /// <param name="pickupPoint">The pickup option</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task SavePickupOptionAsync(PickupPoint pickupPoint)
         {
             var name = !string.IsNullOrEmpty(pickupPoint.Name) ?
@@ -194,6 +199,7 @@ namespace Nop.Web.Controllers
 
         #region Methods (common)
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> Index()
         {
             //validation
@@ -270,6 +276,7 @@ namespace Nop.Web.Controllers
         }
 
         [IgnoreAntiforgeryToken]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> Completed(int? orderId)
         {
             //validation
@@ -308,7 +315,10 @@ namespace Nop.Web.Controllers
         /// Get specified Address by addresId
         /// </summary>
         /// <param name="addressId"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the 
+        /// </returns>
         public virtual async Task<IActionResult> GetAddressById(int addressId)
         {
             var address = await _customerService.GetCustomerAddressAsync((await _workContext.GetCurrentCustomerAsync()).Id, addressId);
@@ -331,6 +341,7 @@ namespace Nop.Web.Controllers
         /// <param name="opc"></param>
         /// <returns></returns>
         [IgnoreAntiforgeryToken]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> SaveEditAddress(CheckoutBillingAddressModel model, bool opc = false)
         {
             try
@@ -382,7 +393,10 @@ namespace Nop.Web.Controllers
         /// </summary>
         /// <param name="addressId"></param>
         /// <param name="opc"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the 
+        /// </returns>
         public virtual async Task<IActionResult> DeleteEditAddress(int addressId, bool opc = false)
         {
             var cart = await _shoppingCartService.GetShoppingCartAsync(await _workContext.GetCurrentCustomerAsync(), ShoppingCartType.ShoppingCart, (await _storeContext.GetCurrentStoreAsync()).Id);
@@ -422,6 +436,7 @@ namespace Nop.Web.Controllers
 
         #region Methods (multistep checkout)
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> BillingAddress(IFormCollection form)
         {
             //validation
@@ -464,6 +479,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> SelectBillingAddress(int addressId, bool shipToSameAddress = false)
         {
             //validation
@@ -499,6 +515,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("BillingAddress")]
         [FormValueRequired("nextstep")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> NewBillingAddress(CheckoutBillingAddressModel model, IFormCollection form)
         {
             //validation
@@ -587,6 +604,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ShippingAddress()
         {
             //validation
@@ -617,6 +635,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> SelectShippingAddress(int addressId)
         {
             //validation
@@ -642,6 +661,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("ShippingAddress")]
         [FormValueRequired("nextstep")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> NewShippingAddress(CheckoutShippingAddressModel model, IFormCollection form)
         {
             //validation
@@ -733,6 +753,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ShippingMethod()
         {
             //validation
@@ -790,6 +811,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("ShippingMethod")]
         [FormValueRequired("nextstep")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> SelectShippingMethod(string shippingoption, IFormCollection form)
         {
             //validation
@@ -872,6 +894,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoute("CheckoutPaymentMethod");
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> PaymentMethod()
         {
             //validation
@@ -932,6 +955,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("PaymentMethod")]
         [FormValueRequired("nextstep")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> SelectPaymentMethod(string paymentmethod, CheckoutPaymentMethodModel model)
         {
             //validation
@@ -984,6 +1008,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoute("CheckoutPaymentInfo");
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> PaymentInfo()
         {
             //validation
@@ -1041,6 +1066,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("PaymentInfo")]
         [FormValueRequired("nextstep")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> EnterPaymentInfo(IFormCollection form)
         {
             //validation
@@ -1099,6 +1125,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> Confirm()
         {
             //validation
@@ -1127,6 +1154,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost, ActionName("Confirm")]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ConfirmOrder()
         {
             //validation
@@ -1209,6 +1237,7 @@ namespace Nop.Web.Controllers
 
         #region Methods (one page checkout)
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task<JsonResult> OpcLoadStepAfterShippingAddress(IList<ShoppingCartItem> cart)
         {
             var shippingMethodModel = await _checkoutModelFactory.PrepareShippingMethodModelAsync(cart, await _customerService.GetCustomerShippingAddressAsync(await _workContext.GetCurrentCustomerAsync()));
@@ -1236,6 +1265,7 @@ namespace Nop.Web.Controllers
             });
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task<JsonResult> OpcLoadStepAfterShippingMethod(IList<ShoppingCartItem> cart)
         {
             //Check whether payment workflow is required
@@ -1301,6 +1331,7 @@ namespace Nop.Web.Controllers
             });
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task<JsonResult> OpcLoadStepAfterPaymentMethod(IPaymentMethod paymentMethod, IList<ShoppingCartItem> cart)
         {
             if (paymentMethod.SkipPaymentInfo ||
@@ -1337,6 +1368,7 @@ namespace Nop.Web.Controllers
             });
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> OnePageCheckout()
         {
             //validation
@@ -1359,6 +1391,7 @@ namespace Nop.Web.Controllers
         }
 
         [IgnoreAntiforgeryToken]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> OpcSaveBilling(CheckoutBillingAddressModel model, IFormCollection form)
         {
             try
@@ -1503,6 +1536,7 @@ namespace Nop.Web.Controllers
         }
 
         [IgnoreAntiforgeryToken]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> OpcSaveShipping(CheckoutShippingAddressModel model, IFormCollection form)
         {
             try
@@ -1621,6 +1655,7 @@ namespace Nop.Web.Controllers
         }
 
         [IgnoreAntiforgeryToken]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> OpcSaveShippingMethod(string shippingoption, IFormCollection form)
         {
             try
@@ -1711,6 +1746,7 @@ namespace Nop.Web.Controllers
         }
 
         [IgnoreAntiforgeryToken]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> OpcSavePaymentMethod(string paymentmethod, CheckoutPaymentMethodModel model)
         {
             try
@@ -1786,6 +1822,7 @@ namespace Nop.Web.Controllers
         }
 
         [IgnoreAntiforgeryToken]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> OpcSavePaymentInfo(IFormCollection form)
         {
             try
@@ -1858,6 +1895,7 @@ namespace Nop.Web.Controllers
         }
 
         [IgnoreAntiforgeryToken]
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> OpcConfirmOrder()
         {
             try
@@ -1958,6 +1996,7 @@ namespace Nop.Web.Controllers
             }
         }
 
+        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> OpcCompleteRedirectionPayment()
         {
             try
