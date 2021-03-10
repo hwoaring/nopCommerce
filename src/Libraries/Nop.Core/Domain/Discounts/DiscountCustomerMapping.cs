@@ -12,10 +12,17 @@ namespace Nop.Core.Domain.Discounts
         /// Gets or sets the discount identifier
         /// </summary>
         public int DiscountId { get; set; }
+
+        /// <summary>
+        /// 领取人ID
+        /// </summary>
+        public int CustomerId { get; set; }
+
         /// <summary>
         /// 推荐人ID
         /// </summary>
-        public int CustomerId { get; set; }
+        public int RefereeUserId { get; set; }
+
         /// <summary>
         /// 用户推广用的个人折扣码，查找对应的公用DiscountId
         /// </summary>
@@ -39,12 +46,22 @@ namespace Nop.Core.Domain.Discounts
         /// <summary>
         /// 可指定本场景折扣的有效期
         /// </summary>
+        public DateTime? StartDateUtc { get; set; }
+
+        /// <summary>
+        /// 可指定本场景折扣的有效期
+        /// </summary>
         public DateTime? EndDateUtc { get; set; }
 
         /// <summary>
         /// 创建时间
         /// </summary>
         public DateTime CreatTimeUtc { get; set; }
+
+        /// <summary>
+        /// 是否使用
+        /// </summary>
+        public bool IsUsed { get; set; }
 
         /// <summary>
         /// 是否启用，针对用户特定的折扣码进行锁定/解锁操作
