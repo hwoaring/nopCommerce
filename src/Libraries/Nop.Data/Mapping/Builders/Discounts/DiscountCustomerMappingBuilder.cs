@@ -23,6 +23,7 @@ namespace Nop.Data.Mapping.Builders.Discounts
                 .WithColumn(nameof(DiscountCustomerMapping.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(DiscountCustomerMapping.CouponCode)).AsAnsiString(64).NotNullable()
                 .WithColumn(nameof(DiscountCustomerMapping.SceneDescription)).AsString(512).Nullable()
+                .WithColumn(nameof(DiscountCustomerMapping.StartDateUtc)).AsDateTime2().Nullable()
                 .WithColumn(nameof(DiscountCustomerMapping.EndDateUtc)).AsDateTime2().Nullable()
                 ;
         }
