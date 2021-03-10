@@ -1692,7 +1692,7 @@ namespace Nop.Services.Customers
 
             var key = _staticCacheManager.PrepareKeyForShortTermCache(NopCustomerServicesDefaults.CustomerAddressCacheKey, customerId, addressId);
 
-            return await _staticCacheManager.GetAsync(key, async () => await query.SingleAsync());
+            return await _staticCacheManager.GetAsync(key, async () => await query.FirstOrDefaultAsync());
         }
 
         /// <summary>
