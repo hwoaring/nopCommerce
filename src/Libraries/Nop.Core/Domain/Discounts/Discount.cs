@@ -118,6 +118,11 @@ namespace Nop.Core.Domain.Discounts
         public int LimitationTimes { get; set; }
 
         /// <summary>
+        /// 最大发行数量（可以配合limit user times使用）
+        /// </summary>
+        public int MaximumNumbers { get; set; }
+        
+        /// <summary>
         /// Gets or sets the maximum product quantity which could be discounted
         /// Used with "Assigned to products" or "Assigned to categories" type
         /// </summary>
@@ -133,6 +138,36 @@ namespace Nop.Core.Domain.Discounts
         /// 仅新用户可用
         /// </summary>
         public bool NewUserOnly { get; set; }
+
+        /// <summary>
+        /// 可以使用多少积分兑换，0=不能兑换
+        /// </summary>
+        public int Points { get; set; }
+
+        /// <summary>
+        /// 结束使用时间从领取开始x天内，0=不限制（计算的结束使用时间应小于指定的最晚使用时间）
+        /// </summary>
+        public int EndUseTimeDay { get; set; }
+
+        /// <summary>
+        /// 开始使用时间
+        /// </summary>
+        public DateTime? StartUseTimeUtc { get; set; }
+
+        /// <summary>
+        /// 最晚使用时间
+        /// </summary>
+        public DateTime? EndUseTimeUtc { get; set; }
+
+        /// <summary>
+        /// 更新时间
+        /// </summary>
+        public DateTime UpdatedOnUtc { get; set; }
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreatedOnUtc { get; set; }
 
         /// <summary>
         /// Gets or sets the discount type
@@ -151,5 +186,6 @@ namespace Nop.Core.Domain.Discounts
             get => (DiscountLimitationType)DiscountLimitationId;
             set => DiscountLimitationId = (int)value;
         }
+
     }
 }

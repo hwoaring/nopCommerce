@@ -21,7 +21,11 @@ namespace Nop.Data.Mapping.Builders.Messages
                 .WithColumn(nameof(EmailAccount.Email)).AsString(255).NotNullable()
                 .WithColumn(nameof(EmailAccount.Host)).AsString(255).NotNullable()
                 .WithColumn(nameof(EmailAccount.Username)).AsString(255).NotNullable()
-                .WithColumn(nameof(EmailAccount.Password)).AsString(255).NotNullable();
+                .WithColumn(nameof(EmailAccount.Password)).AsString(255).NotNullable()
+                .WithColumn(nameof(EmailAccount.AccessKeyId)).AsString(255).Nullable()
+                .WithColumn(nameof(EmailAccount.AccessKeySecret)).AsString(255).Nullable()
+                .WithColumn(nameof(EmailAccount.EmailServiceUrl)).AsString(512).Nullable()
+                ;
         }
 
         #endregion

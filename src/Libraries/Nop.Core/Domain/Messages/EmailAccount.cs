@@ -44,5 +44,40 @@
         /// Gets or sets a value that controls whether the default system credentials of the application are sent with requests.
         /// </summary>
         public bool UseDefaultCredentials { get; set; }
+
+        /// <summary>
+        /// 是否使用邮件服务API
+        /// </summary>
+        public bool UseEmailService { get; set; }
+
+        /// <summary>
+        /// 服务类型：腾讯，阿里
+        /// </summary>
+        public int MessageServiceTypeId { get; set; }
+
+        /// <summary>
+        /// 服务类型：腾讯，阿里
+        /// </summary>
+        public MessageServiceType MessageServiceType
+        {
+            get => (MessageServiceType)MessageServiceTypeId;
+            set => MessageServiceTypeId = (int)value;
+        }
+
+        /// <summary>
+        /// 邮件服务地址
+        /// </summary>
+        public string EmailServiceUrl { get; set; }
+
+        /// <summary>
+        /// 邮件服务ID
+        /// </summary>
+        public string AccessKeyId { get; set; }
+
+        /// <summary>
+        /// 邮件服务Secret
+        /// </summary>
+        public string AccessKeySecret { get; set; }
+
     }
 }

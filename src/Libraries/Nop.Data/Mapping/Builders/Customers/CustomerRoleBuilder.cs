@@ -18,6 +18,7 @@ namespace Nop.Data.Mapping.Builders.Customers
         {
             table
                 .WithColumn(nameof(CustomerRole.Name)).AsString(255).NotNullable()
+                .WithColumn(nameof(CustomerRole.UpdatedOnUtc)).AsDateTime2().Nullable()
                 .WithColumn(nameof(CustomerRole.SystemName)).AsString(255).Nullable();
         }
 

@@ -17,8 +17,17 @@ namespace Nop.Data.Mapping.Builders.Topics
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
+                .WithColumn(nameof(Topic.ImageUrl)).AsString(1024).Nullable()
+                .WithColumn(nameof(Topic.VideoUrl)).AsString(1024).Nullable()
+                .WithColumn(nameof(Topic.MetaImageUrl)).AsString(1024).Nullable()
+                .WithColumn(nameof(Topic.MetaLinkUrl)).AsString(1024).Nullable()
+                .WithColumn(nameof(Topic.ShareImageUrl)).AsString(1024).Nullable()
+                .WithColumn(nameof(Topic.Source)).AsString(512).Nullable()
+                .WithColumn(nameof(Topic.Author)).AsString(512).Nullable()
                 .WithColumn(nameof(Topic.StartDateTimeUtc)).AsDateTime2().Nullable()
-                .WithColumn(nameof(Topic.EndDateTimeUtc)).AsDateTime2().Nullable();
+                .WithColumn(nameof(Topic.EndDateTimeUtc)).AsDateTime2().Nullable()
+                .WithColumn(nameof(Topic.UpdateDateTimeUtc)).AsDateTime2().Nullable()
+                ;
         }
 
         #endregion

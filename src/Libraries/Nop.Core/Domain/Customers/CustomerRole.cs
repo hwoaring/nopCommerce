@@ -1,4 +1,6 @@
-﻿namespace Nop.Core.Domain.Customers
+﻿using System;
+
+namespace Nop.Core.Domain.Customers
 {
     /// <summary>
     /// Represents a customer role
@@ -31,6 +33,16 @@
         public bool IsSystemRole { get; set; }
 
         /// <summary>
+        /// 自动升级
+        /// </summary>
+        public bool IsAutoUpdate { get; set; }
+
+        /// <summary>
+        /// 注册默认
+        /// </summary>
+        public bool IsDefaultRole { get; set; }
+        
+        /// <summary>
         /// Gets or sets the customer role system name
         /// </summary>
         public string SystemName { get; set; }
@@ -55,5 +67,35 @@
         /// A customer is added to this customer role once a specified product is purchased.
         /// </summary>
         public int PurchasedWithProductId { get; set; }
+
+        /// <summary>
+        /// 购物折扣
+        /// </summary>
+        public decimal Discount { get; set; }
+
+        /// <summary>
+        /// 预存款
+        /// </summary>
+        public decimal PreDeposits { get; set; }
+
+        /// <summary>
+        /// 最小经验值
+        /// </summary>
+        public int MinExp { get; set; }
+
+        /// <summary>
+        /// 最大经验值
+        /// </summary>
+        public int MaxExp { get; set; }
+
+        /// <summary>
+        /// 更新时间
+        /// </summary>
+        public DateTime? UpdatedOnUtc { get; set; }
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreatedOnUtc { get; set; }
     }
 }

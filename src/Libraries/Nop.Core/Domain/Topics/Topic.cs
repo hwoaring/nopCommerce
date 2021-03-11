@@ -77,6 +77,11 @@ namespace Nop.Core.Domain.Topics
         public string ImageUrl { get; set; }
 
         /// <summary>
+        /// 视频地址
+        /// </summary>
+        public string VideoUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the short text
         /// </summary>
         public string Short { get; set; }
@@ -86,6 +91,19 @@ namespace Nop.Core.Domain.Topics
         /// </summary>
         public string Body { get; set; }
 
+        /// <summary>
+        /// 信息来源
+        /// </summary>
+        public string Source { get; set; }
+
+        /// <summary>
+        /// 作者
+        /// </summary>
+        public string Author { get; set; }
+
+        /// <summary>
+        /// 文章内容图片Lazy加载
+        /// </summary>
         public bool LazyLoadImages { get; set; }
 
         /// <summary>
@@ -154,6 +172,11 @@ namespace Nop.Core.Domain.Topics
         public int QrcodeSize { get; set; }
 
         /// <summary>
+        /// 仅能在微信浏览器中浏览
+        /// </summary>
+        public bool OnlyWechatBrowser { get; set; }
+
+        /// <summary>
         /// 开启二维码分享
         /// </summary>
         public bool ShareQrcodeEnable { get; set; }
@@ -176,12 +199,17 @@ namespace Nop.Core.Domain.Topics
         /// <summary>
         /// 开始时间
         /// </summary>
-        public DateTime StartDateTimeUtc { get; set; }
+        public DateTime? StartDateTimeUtc { get; set; }
 
         /// <summary>
         /// 结束时间
         /// </summary>
-        public DateTime EndDateTimeUtc { get; set; }
+        public DateTime? EndDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 更新时间，可用于自定义展示时间
+        /// </summary>
+        public DateTime? UpdateDateTimeUtc { get; set; }
 
         /// <summary>
         /// Gets or sets the date and time of entity creation

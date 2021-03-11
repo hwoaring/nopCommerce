@@ -17,6 +17,8 @@ namespace Nop.Data.Mapping.Builders.Discounts
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
+                .WithColumn(nameof(Discount.StartUseTimeUtc)).AsDateTime2().Nullable()
+                .WithColumn(nameof(Discount.EndUseTimeUtc)).AsDateTime2().Nullable()
                .WithColumn(nameof(Discount.Name)).AsString(200).NotNullable()
                .WithColumn(nameof(Discount.ShortName)).AsString(64).Nullable()
                .WithColumn(nameof(Discount.CouponCode)).AsString(100).Nullable()
