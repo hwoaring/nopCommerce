@@ -1,7 +1,7 @@
 ﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Marketing;
 using Nop.Core.Domain.Catalog;
-using Nop.Core.Domain.Weixin;
+using Nop.Core.Domain.Customers;
 using Nop.Data.Extensions;
 
 namespace Nop.Data.Mapping.Builders.Marketing
@@ -21,7 +21,7 @@ namespace Nop.Data.Mapping.Builders.Marketing
         {
             table
                 .WithColumn(nameof(ProductUserFollowMapping.ProductId)).AsInt32().ForeignKey<Product>()
-                .WithColumn(nameof(ProductUserFollowMapping.WUserId)).AsInt32().ForeignKey<WUser>()
+                .WithColumn(nameof(ProductUserFollowMapping.CustomerId)).AsInt32().ForeignKey<Customer>()
 
                 ;
         }

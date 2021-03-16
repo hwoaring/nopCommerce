@@ -13,9 +13,9 @@ namespace Nop.Core.Domain.Marketing
         /// </summary>
         public int ProductId { get; set; }
         /// <summary>
-        /// 微信用户ID，关注人ID
+        /// 关注人ID
         /// </summary>
-        public int WUserId { get; set; }
+        public int CustomerId { get; set; }
         /// <summary>
         /// 最后更新时间
         /// </summary>

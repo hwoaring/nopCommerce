@@ -118,6 +118,7 @@
       
       More details here: https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals#concurrent-garbage-collection-->
     <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
+    <UserSecretsId>fa3794fa-ded2-44e5-b9ce-bc44b770158b</UserSecretsId>
   </PropertyGroup>
 
 </Project>

@@ -735,6 +735,11 @@ namespace Nop.Core.Domain.Catalog
         public bool Audited { get; set; }
 
         /// <summary>
+        /// 关注人数（设置关注人数基数）
+        /// </summary>
+        public int FollowCount { get; set; }
+
+        /// <summary>
         /// 浏览次数
         /// </summary>
         public int ViewCount { get; set; }
