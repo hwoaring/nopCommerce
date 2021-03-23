@@ -1,7 +1,7 @@
 ﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Marketing;
 using Nop.Core.Domain.Orders;
-using Nop.Core.Domain.Weixin;
+using Nop.Core.Domain.Customers;
 using Nop.Data.Extensions;
 
 namespace Nop.Data.Mapping.Builders.Marketing
@@ -22,7 +22,7 @@ namespace Nop.Data.Mapping.Builders.Marketing
             table
                 .WithColumn(nameof(CustomTeamOrder.CustomTeamId)).AsInt32().ForeignKey<CustomTeam>()
                 .WithColumn(nameof(CustomTeamOrder.OrderId)).AsInt32().ForeignKey<Order>()
-                .WithColumn(nameof(CustomTeamOrder.WUserId)).AsInt32().ForeignKey<WUser>()
+                .WithColumn(nameof(CustomTeamOrder.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(CustomTeamOrder.Name)).AsString(64).Nullable()
                 .WithColumn(nameof(CustomTeamOrder.ContactNumber)).AsString(64).Nullable()
                 .WithColumn(nameof(CustomTeamOrder.Content)).AsString(2000).Nullable()

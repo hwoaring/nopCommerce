@@ -1,7 +1,7 @@
 ﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Marketing;
 using Nop.Core.Domain.Catalog;
-using Nop.Core.Domain.Weixin;
+using Nop.Core.Domain.Customers;
 using Nop.Data.Extensions;
 using System.Data;
 
@@ -22,8 +22,8 @@ namespace Nop.Data.Mapping.Builders.Marketing
         {
             table
                 .WithColumn(nameof(CustomTeam.ProductId)).AsInt32().ForeignKey<Product>()
+                .WithColumn(nameof(CustomTeam.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(CustomTeam.ProductAttributeValueId)).AsInt32().Nullable().ForeignKey<ProductAttributeValue>().OnDelete(Rule.None)
-                .WithColumn(nameof(CustomTeam.WUserId)).AsInt32().Nullable().ForeignKey<WUser>().OnDelete(Rule.SetNull)
                 .WithColumn(nameof(CustomTeam.GroupCode)).AsAnsiString(6).Nullable()
                 .WithColumn(nameof(CustomTeam.MaxGroupAmount)).AsDecimal(9,2)
                 .WithColumn(nameof(CustomTeam.MinGroupAmount)).AsDecimal(9,2)

@@ -116,6 +116,12 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo440
                 settingService.SaveSettingAsync(catalogSettings).Wait();
             }
 
+            if (!settingService.SettingExistsAsync(catalogSettings, settings => settings.EnableRegionalProduct).Result)
+            {
+                catalogSettings.EnableRegionalProduct = false;
+                settingService.SaveSettingAsync(catalogSettings).Wait();
+            }
+
             if (!settingService.SettingExistsAsync(catalogSettings, settings => settings.SearchPagePriceRangeFiltering).Result)
             {
                 catalogSettings.SearchPagePriceRangeFiltering = true;

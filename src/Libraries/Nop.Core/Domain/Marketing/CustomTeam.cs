@@ -17,9 +17,9 @@ namespace Nop.Core.Domain.Marketing
             /// </summary>
         public int? ProductAttributeValueId { get; set; }
         /// <summary>
-        /// 创建人WUserId
+        /// 创建人Id
         /// </summary>
-        public int? WUserId { get; set; }
+        public int CustomerId { get; set; }
         /// <summary>
         /// 团号（数字英文组合，大写，判断重复）
         /// </summary>

@@ -5769,6 +5769,12 @@
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.EnablePriceRangeFiltering.Hint">
     <Value>Check to enable the price range filtering on catalog pages.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.EnableRegionalProduct">
+    <Value>Enable regional product filtering</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.EnableRegionalProduct.Hint">
+    <Value>Check to enable the regional product filtering on catalog pages.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ExportImportAllowDownloadImages">
     <Value>Export/Import products. Allow download images</Value>
   </LocaleResource>

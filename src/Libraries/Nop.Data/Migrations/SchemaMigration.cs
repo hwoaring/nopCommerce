@@ -88,6 +88,7 @@ namespace Nop.Data.Migrations
             _migrationManager.BuildTable<Product>(Create);
             _migrationManager.BuildTable<ProductTemplate>(Create);
             _migrationManager.BuildTable<ProductComment>(Create);
+            _migrationManager.BuildTable<ProductCommentPicture>(Create);
             _migrationManager.BuildTable<BackInStockSubscription>(Create);
             _migrationManager.BuildTable<RelatedProduct>(Create);
             _migrationManager.BuildTable<ReviewType>(Create);
@@ -224,6 +225,8 @@ namespace Nop.Data.Migrations
 
             //Weixin
             _migrationManager.BuildTable<WConfig>(Create);
+
+            _migrationManager.BuildTable<WApp>(Create);
 
             _migrationManager.BuildTable<WUser>(Create);
             _migrationManager.BuildTable<WUserAddress>(Create);

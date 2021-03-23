@@ -9,9 +9,9 @@ namespace Nop.Core.Domain.Marketing
     public partial class PartnerApplicationForm : BaseEntity
     {
         /// <summary>
-        /// 微信用户ID
+        /// 用户ID
         /// </summary>
-        public int WUserId { get; set; }
+        public int CustomerId { get; set; }
         /// <summary>
         /// 姓名
         /// </summary>

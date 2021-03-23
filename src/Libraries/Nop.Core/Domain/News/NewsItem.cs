@@ -13,7 +13,6 @@ namespace Nop.Core.Domain.News
         /// Gets or sets the language identifier
         /// </summary>
         public int LanguageId { get; set; }
-
         /// <summary>
         /// Gets or sets the news title
         /// </summary>
@@ -153,6 +152,11 @@ namespace Nop.Core.Domain.News
         public string ShareImageUrl { get; set; }
 
         /// <summary>
+        /// 虚拟浏览次数总次数=虚拟+实际
+        /// </summary>
+        public int VirtualViewCount { get; set; }
+
+        /// <summary>
         /// 浏览次数
         /// </summary>
         public int ViewCount { get; set; }
@@ -160,6 +164,10 @@ namespace Nop.Core.Domain.News
         /// 排序
         /// </summary>
         public int DisplayOrder { get; set; }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        public bool Deleted { get; set; }
 
         /// <summary>
         /// 更新时间

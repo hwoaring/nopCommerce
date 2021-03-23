@@ -11,14 +11,22 @@ namespace Nop.Core.Domain.Catalog
         /// Store
         /// </summary>
         public int StoreId { get; set; }
-            /// <summary>
-            /// 用户id
-            /// </summary>
+        /// <summary>
+        /// 用户id
+        /// </summary>
         public int CustomerId { get; set; }
         /// <summary>
         /// 产品id
         /// </summary>
         public int ProductId { get; set; }
+        /// <summary>
+        /// 订单ID
+        /// </summary>
+        public int OrderId { get; set; }
+        /// <summary>
+        /// 订单商品ID
+        /// </summary>
+        public int OrderProductId { get; set; }
         /// <summary>
         /// 服务星级
         /// </summary>
@@ -44,13 +52,21 @@ namespace Nop.Core.Domain.Catalog
         /// </summary>
         public string ReplyContent { get; set; }
         /// <summary>
+        /// 排序
+        /// </summary>
+        public int DisplayOrder { get; set; }
+        /// <summary>
         /// 回复时间
         /// </summary>
         public DateTime? RepliedOnUtc { get; set; }
         /// <summary>
-        /// 是否展现
+        /// 是否图片评论
         /// </summary>
         public bool Published { get; set; }
+        /// <summary>
+        /// 是否展现
+        /// </summary>
+        public bool IsPicture { get; set; }
         /// <summary>
         /// 是否审核通过
         /// </summary>

@@ -531,6 +531,11 @@ namespace Nop.Core.Domain.Catalog
         public bool EnablePriceRangeFiltering { get; set; }
 
         /// <summary>
+        /// 开启区域商品功能（浏览人在区域范围内页面才显示商品，或才能邮寄）
+        /// </summary>
+        public bool EnableRegionalProduct { get; set; }
+
+        /// <summary>
         /// Gets or sets the attribute value display type when out of stock
         /// </summary>
         public AttributeValueOutOfStockDisplayType AttributeValueOutOfStockDisplayType { get; set; }

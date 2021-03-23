@@ -11,6 +11,10 @@ namespace Nop.Core.Domain.Marketing
         /// 国家ID
         /// </summary>
         public int CountryId { get; set; }
+        /// <summary>
+        /// 父级ID
+        /// </summary>
+        public int ParentId { get; set; }
 
         /// <summary>
         /// 国家代码（保留暂不用）

@@ -1,6 +1,6 @@
 ﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Marketing;
-using Nop.Core.Domain.Weixin;
+using Nop.Core.Domain.Customers;
 using Nop.Data.Extensions;
 
 namespace Nop.Data.Mapping.Builders.Marketing
@@ -19,7 +19,7 @@ namespace Nop.Data.Mapping.Builders.Marketing
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(PartnerApplicationForm.WUserId)).AsInt32().ForeignKey<WUser>()
+                .WithColumn(nameof(PartnerApplicationForm.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(PartnerApplicationForm.Name)).AsString(64).NotNullable()
                 .WithColumn(nameof(PartnerApplicationForm.TelephoneNumber)).AsAnsiString(20).NotNullable()
                 .WithColumn(nameof(PartnerApplicationForm.WechatAccount)).AsString(64).Nullable()

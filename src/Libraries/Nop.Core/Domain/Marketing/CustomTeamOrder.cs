@@ -23,7 +23,7 @@ namespace Nop.Core.Domain.Marketing
         /// <summary>
         /// 购买用户ID
         /// </summary>
-        public int WUserId { get; set; }
+        public int CustomerId { get; set; }
         /// <summary>
         /// 联系人
         /// </summary>

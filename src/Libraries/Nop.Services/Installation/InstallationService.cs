@@ -3092,6 +3092,7 @@ namespace Nop.Services.Installation
                 UseAjaxCatalogProductsLoading = true,
                 EnableManufacturerFiltering = true,
                 EnablePriceRangeFiltering = true,
+                EnableRegionalProduct = false,
                 AttributeValueOutOfStockDisplayType = AttributeValueOutOfStockDisplayType.AlwaysDisplay
             });
 

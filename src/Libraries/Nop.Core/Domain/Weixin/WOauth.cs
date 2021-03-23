@@ -1,4 +1,6 @@
-﻿namespace Nop.Core.Domain.Weixin
+﻿using System;
+
+namespace Nop.Core.Domain.Weixin
 {
     /// <summary>
     /// Represents an WOauth
@@ -6,9 +8,25 @@
     public partial class WOauth : BaseEntity
     {
         /// <summary>
+        /// 用户ID
+        /// </summary>
+        public int CustomerId { get; set; }
+        /// <summary>
+        /// StoreId
+        /// </summary>
+        public int StoreId { get; set; }
+        /// <summary>
         /// 用户唯一标识
         /// </summary>
         public string OpenId { get; set; }
+        /// <summary>
+        /// 微信unionID
+        /// </summary>
+        public string UnionId { get; set; }
+        /// <summary>
+        /// 第三方登陆类型(MP-WEIXIN)等
+        /// </summary>
+        public string OauthApiName { get; set; }
         /// <summary>
         /// 网页授权接口调用凭证
         /// </summary>
@@ -26,9 +44,13 @@
         /// </summary>
         public string Scope { get; set; }
         /// <summary>
+        /// 修改时间
+        /// </summary>
+        public int UpdateTimeUtc { get; set; }
+        /// <summary>
         /// 添加时间
         /// </summary>
-        public int CreatTime { get; set; }
+        public int CreatTimeUtc { get; set; }
 
     }
 }
