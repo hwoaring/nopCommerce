@@ -107,7 +107,6 @@ namespace Nop.Web.Controllers
         [CheckAccessClosedStore(true)]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> SetLanguage(int langid, string returnUrl = "")
         {
             var language = await _languageService.GetLanguageByIdAsync(langid);
@@ -140,7 +139,6 @@ namespace Nop.Web.Controllers
 
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> SetCurrency(int customerCurrency, string returnUrl = "")
         {
             var currency = await _currencyService.GetCurrencyByIdAsync(customerCurrency);
@@ -160,7 +158,6 @@ namespace Nop.Web.Controllers
 
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> SetTaxType(int customerTaxType, string returnUrl = "")
         {
             var taxDisplayType = (TaxDisplayType)Enum.ToObject(typeof(TaxDisplayType), customerTaxType);
@@ -180,7 +177,6 @@ namespace Nop.Web.Controllers
         //contact us page
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ContactUs()
         {
             var model = new ContactUsModel();
@@ -193,7 +189,6 @@ namespace Nop.Web.Controllers
         [ValidateCaptcha]
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ContactUsSend(ContactUsModel model, bool captchaValid)
         {
             //validate CAPTCHA
@@ -226,7 +221,6 @@ namespace Nop.Web.Controllers
         }
 
         //contact vendor page
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ContactVendor(int vendorId)
         {
             if (!_vendorSettings.AllowCustomersToContactVendors)
@@ -244,7 +238,6 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("ContactVendor")]        
         [ValidateCaptcha]
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> ContactVendorSend(ContactVendorModel model, bool captchaValid)
         {
             if (!_vendorSettings.AllowCustomersToContactVendors)
@@ -280,7 +273,6 @@ namespace Nop.Web.Controllers
         }
 
         //sitemap page
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> Sitemap(SitemapPageModel pageModel)
         {
             if (!_sitemapSettings.SitemapEnabled)
@@ -298,7 +290,6 @@ namespace Nop.Web.Controllers
         [CheckWeixinOAuth(true)]
         //ignore SEO friendly URLs checks
         [CheckLanguageSeoCode(true)]
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> SitemapXml(int? id)
         {
             var siteMap = _sitemapXmlSettings.SitemapXmlEnabled
@@ -307,7 +298,6 @@ namespace Nop.Web.Controllers
             return Content(siteMap, "text/xml");
         }
 
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> SetStoreTheme(string themeName, string returnUrl = "")
         {
             await _themeContext.SetWorkingThemeNameAsync(themeName);
@@ -331,7 +321,6 @@ namespace Nop.Web.Controllers
         [CheckAccessClosedStore(true)]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> EuCookieLawAccept()
         {
             if (!_storeInformationSettings.DisplayEuCookieLawWarning)
@@ -352,7 +341,6 @@ namespace Nop.Web.Controllers
         [CheckAccessPublicStore(true)]
         //ignore SEO friendly URLs checks
         [CheckLanguageSeoCode(true)]
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> RobotsTextFile()
         {
             var robotsFileContent = await _commonModelFactory.PrepareRobotsTextFileAsync();

@@ -177,7 +177,6 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("List");
         }
 
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> List(bool showtour = false)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTopics))
@@ -201,7 +200,6 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> List(TopicSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTopics))
@@ -217,7 +215,6 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Create / Edit / Delete
 
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> Create()
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTopics))
@@ -230,7 +227,6 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> Create(TopicModel model, bool continueEditing)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTopics))
@@ -277,7 +273,6 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> Edit(int id, bool showtour = false)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTopics))
@@ -306,7 +301,6 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> Edit(TopicModel model, bool continueEditing)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTopics))
@@ -358,7 +352,6 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task<IActionResult> Delete(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageTopics))
