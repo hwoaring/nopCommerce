@@ -38,7 +38,7 @@ namespace Nop.Core.Domain.Marketing
         public string Abbreviation { get; set; }
 
         /// <summary>
-        /// 区划等级：0=国家级，1=省级，2=市级，3=区级，4=街道，5=居委会
+        /// 区划等级：0=国家级，1=省级，2=市级，3=区/县级，4=街道，5=居委会
         /// </summary>
         public byte AreaLevel { get; set; }
 

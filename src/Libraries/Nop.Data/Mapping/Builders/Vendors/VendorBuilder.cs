@@ -19,11 +19,15 @@ namespace Nop.Data.Mapping.Builders.Vendors
             table
                 .WithColumn(nameof(Vendor.Name)).AsString(400).NotNullable()
                 .WithColumn(nameof(Vendor.Email)).AsString(400).Nullable()
+                .WithColumn(nameof(Vendor.ContactNumber)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(Vendor.ContactAddress)).AsString(400).Nullable()
+                .WithColumn(nameof(Vendor.ShoppingMallLink)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Vendor.MetaKeywords)).AsString(400).Nullable()
                 .WithColumn(nameof(Vendor.MetaTitle)).AsString(400).Nullable()
                 .WithColumn(nameof(Vendor.MetaImageUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Vendor.MetaLinkUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Vendor.ShareImageUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Vendor.ShareLinkUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Vendor.PageSizeOptions)).AsString(200).Nullable();
         }
 

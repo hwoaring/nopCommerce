@@ -152,7 +152,7 @@ namespace Nop.Core.Domain.News
         public string ShareImageUrl { get; set; }
 
         /// <summary>
-        /// 虚拟浏览次数总次数=虚拟+实际
+        /// 虚拟浏览次数
         /// </summary>
         public int VirtualViewCount { get; set; }
 

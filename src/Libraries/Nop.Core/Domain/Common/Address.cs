@@ -67,6 +67,21 @@ namespace Nop.Core.Domain.Common
         public string Address2 { get; set; }
 
         /// <summary>
+        /// 经度
+        /// </summary>
+        public string Longitude { get; set; }
+
+        /// <summary>
+        /// 纬度
+        /// </summary>
+        public string Latitude { get; set; }
+
+        /// <summary>
+        /// 缩放等级
+        /// </summary>
+        public int ScaleLevel { get; set; }
+
+        /// <summary>
         /// Gets or sets the zip/postal code
         /// </summary>
         public string ZipPostalCode { get; set; }
@@ -80,6 +95,11 @@ namespace Nop.Core.Domain.Common
         /// Gets or sets the fax number
         /// </summary>
         public string FaxNumber { get; set; }
+
+        /// <summary>
+        /// 强制使用区划码地址
+        /// </summary>
+        public bool UseDivisionsCode { get; set; }
 
         /// <summary>
         /// 电话号码是否短信认证

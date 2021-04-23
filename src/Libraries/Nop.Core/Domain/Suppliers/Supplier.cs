@@ -4,7 +4,7 @@ using Humanizer;
 namespace Nop.Core.Domain.Suppliers
 {
     /// <summary>
-    /// 供应商
+    /// 供应商（门店）
     /// </summary>
     public partial class Supplier : BaseEntity
     {

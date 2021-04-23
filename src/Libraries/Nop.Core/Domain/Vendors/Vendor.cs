@@ -23,11 +23,36 @@ namespace Nop.Core.Domain.Vendors
         /// Gets or sets the description
         /// </summary>
         public string Description { get; set; }
-        
+
+        /// <summary>
+        /// 联系电话
+        /// </summary>
+        public string ContactNumber { get; set; }
+
+        /// <summary>
+        /// 联系地址
+        /// </summary>
+        public string ContactAddress { get; set; }
+
+        /// <summary>
+        /// 商城购买链接（或第三方商城）
+        /// </summary>
+        public string ShoppingMallLink{ get; set; }
+
         /// <summary>
         /// Gets or sets the picture identifier
         /// </summary>
         public int PictureId { get; set; }
+
+        /// <summary>
+        /// 二维码图片ID
+        /// </summary>
+        public int QrCodeId { get; set; }
+
+        /// <summary>
+        /// 提货点环境（门头）照片ID
+        /// </summary>
+        public int StorePictureId { get; set; }
 
         /// <summary>
         /// Gets or sets the address identifier
@@ -38,6 +63,26 @@ namespace Nop.Core.Domain.Vendors
         /// Gets or sets the admin comment
         /// </summary>
         public string AdminComment { get; set; }
+
+        /// <summary>
+        /// 使用AddressId地址信息
+        /// </summary>
+        public bool UseAddressId { get; set; }
+
+        /// <summary>
+        /// 无现货（缺货）
+        /// </summary>
+        public bool OutOfStock { get; set; }
+
+        /// <summary>
+        /// 是否临时供应商
+        /// </summary>
+        public bool IsTemporary { get; set; }
+
+        /// <summary>
+        /// 是否展示
+        /// </summary>
+        public bool Displayed { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the entity is active
@@ -83,6 +128,11 @@ namespace Nop.Core.Domain.Vendors
         /// Gets or sets the share big size image
         /// </summary>
         public string ShareImageUrl { get; set; }
+
+        /// <summary>
+        /// 指定个人分享链接页面，用于自己用该链接生成二维码，与MetaLinkUrl（当前页分享链接）不同
+        /// </summary>
+        public string ShareLinkUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the page size

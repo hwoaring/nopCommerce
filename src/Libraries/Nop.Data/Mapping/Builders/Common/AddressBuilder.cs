@@ -35,6 +35,8 @@ namespace Nop.Data.Mapping.Builders.Common
                 .WithColumn(nameof(Address.PhoneNumber)).AsString(64).Nullable()
                 .WithColumn(nameof(Address.FaxNumber)).AsString(64).Nullable()
                 .WithColumn(nameof(Address.DivisionsCode)).AsAnsiString(15).Nullable()
+                .WithColumn(nameof(Address.Longitude)).AsAnsiString(15).Nullable()
+                .WithColumn(nameof(Address.Latitude)).AsAnsiString(15).Nullable()
                 ;
         }
 

@@ -145,6 +145,11 @@ namespace Nop.Core.Domain.Discounts
         public int Points { get; set; }
 
         /// <summary>
+        /// 开始使用时间0=领取马上可以使用，x=领取后几天开始使用
+        /// </summary>
+        public int StartUseTimeDay { get; set; }
+
+        /// <summary>
         /// 结束使用时间从领取开始x天内，0=不限制（计算的结束使用时间应小于指定的最晚使用时间）
         /// </summary>
         public int EndUseTimeDay { get; set; }
