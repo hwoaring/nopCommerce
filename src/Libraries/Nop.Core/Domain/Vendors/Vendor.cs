@@ -25,6 +25,11 @@ namespace Nop.Core.Domain.Vendors
         public string Description { get; set; }
 
         /// <summary>
+        /// 个人促销信息
+        /// </summary>
+        public string PromotionInfo { get; set; }
+
+        /// <summary>
         /// 联系电话
         /// </summary>
         public string ContactNumber { get; set; }
@@ -80,7 +85,7 @@ namespace Nop.Core.Domain.Vendors
         public bool IsTemporary { get; set; }
 
         /// <summary>
-        /// 是否展示
+        /// 是否前台展示
         /// </summary>
         public bool Displayed { get; set; }
 
