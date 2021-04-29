@@ -45,6 +45,11 @@ namespace Nop.Core.Domain.Vendors
         public string ShoppingMallLink{ get; set; }
 
         /// <summary>
+        /// 营业时间
+        /// </summary>
+        public string OpenHours { get; set; }
+
+        /// <summary>
         /// Gets or sets the picture identifier
         /// </summary>
         public int PictureId { get; set; }
@@ -78,6 +83,11 @@ namespace Nop.Core.Domain.Vendors
         /// 无现货（缺货）
         /// </summary>
         public bool OutOfStock { get; set; }
+
+        /// <summary>
+        /// 是否暂停营业（休假中）
+        /// </summary>
+        public bool Suspended { get; set; }
 
         /// <summary>
         /// 是否临时供应商
