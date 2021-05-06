@@ -209,7 +209,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 {
                     model.OpenId = user.OpenId;
                     model.RefereeId = user.RefereeId;
-                    model.WConfigId = user.WConfigId;
+                    model.OriginalId = user.OriginalId;
                     model.OpenIdHash = user.OpenIdHash;
                     model.UnionId = user.UnionId;
                     model.NickName = user.NickName;
@@ -250,12 +250,8 @@ namespace Nop.Web.Areas.Admin.Factories
                     else
                         model.UnSubscribeTime = Nop.Core.Weixin.Helpers.DateTimeHelper.GetDateTimeFromXml(user.UnSubscribeTime);
 
-                    if (user.UpdateTime == 0)
-                        model.UpdateTime = null;
-                    else
-                        model.UpdateTime = Nop.Core.Weixin.Helpers.DateTimeHelper.GetDateTimeFromXml(user.UpdateTime);
-
-                    model.CreatTime = Nop.Core.Weixin.Helpers.DateTimeHelper.GetDateTimeFromXml(user.CreatTime);
+                    model.UpdateTime = user.UpdateTime;
+                    model.CreatTime = user.CreatTime;
                 }
 
             }
@@ -322,10 +318,9 @@ namespace Nop.Web.Areas.Admin.Factories
                         userModel.SubscribeTime = Nop.Core.Weixin.Helpers.DateTimeHelper.GetDateTimeFromXml(user.SubscribeTime);
                     if (user.UnSubscribeTime > 0)
                         userModel.UnSubscribeTime = Nop.Core.Weixin.Helpers.DateTimeHelper.GetDateTimeFromXml(user.UnSubscribeTime);
-                    if (user.UpdateTime > 0)
-                        userModel.UpdateTime = Nop.Core.Weixin.Helpers.DateTimeHelper.GetDateTimeFromXml(user.UpdateTime);
-                    if (user.CreatTime > 0)
-                        userModel.CreatTime = Nop.Core.Weixin.Helpers.DateTimeHelper.GetDateTimeFromXml(user.CreatTime);
+                    
+                    userModel.UpdateTime = user.UpdateTime;
+                    userModel.CreatTime = user.CreatTime;
 
                     return userModel;
                 });

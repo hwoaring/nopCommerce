@@ -22,7 +22,6 @@ namespace Nop.Data.Mapping.Builders.Marketing
             table
                 .WithColumn(nameof(CustomTeamOrder.CustomTeamId)).AsInt32().ForeignKey<CustomTeam>()
                 .WithColumn(nameof(CustomTeamOrder.OrderId)).AsInt32().ForeignKey<Order>()
-                .WithColumn(nameof(CustomTeamOrder.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(CustomTeamOrder.Name)).AsString(64).Nullable()
                 .WithColumn(nameof(CustomTeamOrder.ContactNumber)).AsString(64).Nullable()
                 .WithColumn(nameof(CustomTeamOrder.Content)).AsString(2000).Nullable()

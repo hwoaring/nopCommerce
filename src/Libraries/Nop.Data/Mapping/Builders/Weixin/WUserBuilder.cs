@@ -17,19 +17,20 @@ namespace Nop.Data.Mapping.Builders.Weixin
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(WUser.OpenId)).AsAnsiString(32).NotNullable()
-                .WithColumn(nameof(WUser.UnionId)).AsAnsiString(32).Nullable()
+                .WithColumn(nameof(WUser.OpenId)).AsAnsiString(64).NotNullable()
+                .WithColumn(nameof(WUser.UnionId)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(WUser.SysName)).AsString(64).Nullable()
+                .WithColumn(nameof(WUser.SysRemark)).AsString(64).Nullable()
+                .WithColumn(nameof(WUser.QrSceneStr)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(WUser.NickName)).AsString(30).Nullable()
                 .WithColumn(nameof(WUser.Province)).AsString(15).Nullable()
                 .WithColumn(nameof(WUser.City)).AsString(15).Nullable()
                 .WithColumn(nameof(WUser.Country)).AsString(15).Nullable()
-                .WithColumn(nameof(WUser.HeadImgUrl)).AsAnsiString(255).Nullable()
                 .WithColumn(nameof(WUser.Remark)).AsString(30).Nullable()
-                .WithColumn(nameof(WUser.SysRemark)).AsString(512).Nullable()
                 .WithColumn(nameof(WUser.GroupId)).AsAnsiString(15).Nullable()
                 .WithColumn(nameof(WUser.TagIdList)).AsAnsiString(255).Nullable()
-                .WithColumn(nameof(WUser.QrScene)).AsInt32().Nullable()
-                .WithColumn(nameof(WUser.QrSceneStr)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(WUser.HeadImgUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(WUser.HeadImgUrlShort)).AsAnsiString(1024).Nullable()
                 ;
         }
 

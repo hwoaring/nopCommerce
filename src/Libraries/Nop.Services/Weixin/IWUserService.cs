@@ -68,20 +68,6 @@ namespace Nop.Services.Weixin
         Task<IList<WUser>> GetWUsersByIdsAsync(int[] wUserIds);
 
         /// <summary>
-        /// 获取用户基本信息
-        /// </summary>
-        /// <param name="openId"></param>
-        /// <returns></returns>
-        Task<WUserBaseInfo> GetWUserBaseInfoAsync(string openId, bool containAllOpenid = false);
-
-        /// <summary>
-        /// 获取用户基本信息
-        /// </summary>
-        /// <param name="openIds"></param>
-        /// <returns></returns>
-        Task<IList<WUserBaseInfo>> GetWUserBaseInfoByOpenIdsAsync(string[] openIds, bool containAllOpenid = false);
-
-        /// <summary>
         /// 获取全部用户
         /// </summary>
         /// <param name="pageIndex"></param>

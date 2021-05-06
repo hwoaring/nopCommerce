@@ -6,8 +6,8 @@
     public enum WSubscribeSceneType : byte
     {
         //返回用户关注的渠道来源
-        //ADD_SCENE_OTHERS 其他
-        ADD_SCENE_OTHERS = 0,
+        //默认=0，未知，需要从微信中提取
+
         //ADD_SCENE_SEARCH 公众号搜索
         ADD_SCENE_SEARCH = 1,
         //ADD_SCENE_ACCOUNT_MIGRATION 公众号迁移
@@ -24,5 +24,8 @@
         ADD_SCENE_PAID = 7,
         //微信广告
         ADD_SCENE_WECHAT_ADVERTISEMENT = 8,
+        //ADD_SCENE_OTHERS 其他
+        ADD_SCENE_OTHERS = 99,
+
     }
 }

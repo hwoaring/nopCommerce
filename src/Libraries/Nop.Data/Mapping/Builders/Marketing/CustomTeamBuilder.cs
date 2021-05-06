@@ -23,7 +23,6 @@ namespace Nop.Data.Mapping.Builders.Marketing
             table
                 .WithColumn(nameof(CustomTeam.ProductId)).AsInt32().ForeignKey<Product>()
                 .WithColumn(nameof(CustomTeam.CustomerId)).AsInt32().ForeignKey<Customer>()
-                .WithColumn(nameof(CustomTeam.ProductAttributeValueId)).AsInt32().Nullable().ForeignKey<ProductAttributeValue>().OnDelete(Rule.None)
                 .WithColumn(nameof(CustomTeam.GroupCode)).AsAnsiString(6).Nullable()
                 .WithColumn(nameof(CustomTeam.MaxGroupAmount)).AsDecimal(9,2)
                 .WithColumn(nameof(CustomTeam.MinGroupAmount)).AsDecimal(9,2)

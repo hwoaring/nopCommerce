@@ -21,8 +21,7 @@ namespace Nop.Data.Mapping.Builders.Catalog
         public override void MapEntity(CreateTableExpressionBuilder table) 
         {
             table
-                .WithColumn(nameof(ProductCommentPicture.CommentId)).AsInt32().ForeignKey<Customer>()
-                .WithColumn(nameof(ProductCommentPicture.StoreId)).AsInt32().ForeignKey<Store>()
+                .WithColumn(nameof(ProductCommentPicture.CommentId)).AsInt32().ForeignKey<ProductComment>()
                 .WithColumn(nameof(ProductCommentPicture.PictureId)).AsInt32().ForeignKey<Picture>()
                 ;
         }

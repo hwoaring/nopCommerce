@@ -39,9 +39,10 @@ namespace Nop.Core.Domain.Customers
         public string OpenId { get; set; }
 
         /// <summary>
-        /// 推荐用户WuserId
+        /// 推荐用户WuserId（最近推荐的ID）
         /// </summary>
         public int RefereeId { get; set; }
+
         /// <summary>
         /// 推荐用户ID最近更新时间（用于多长时间内更新的ID，临时属于另一个推荐人，超出时间属于默认推荐人）
         /// </summary>

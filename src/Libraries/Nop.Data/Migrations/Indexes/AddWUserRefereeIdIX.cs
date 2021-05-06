@@ -13,7 +13,6 @@ namespace Nop.Data.Migrations.Indexes
         {
             Create.Index("IX_WUser_RefereeId").OnTable(nameof(WUser))
                 .OnColumn(nameof(WUser.RefereeId)).Ascending()
-                .OnColumn(nameof(WUser.CreatTime)).Descending()
                 .WithOptions().NonClustered()
                 ;
         }

@@ -472,7 +472,7 @@ namespace Nop.Services.Customers
         /// <returns></returns>
         public virtual async Task<Customer> GetCustomerByOpenIdAsync(string openId)
         {
-            if (string.IsNullOrEmpty(openId))
+            if (string.IsNullOrWhiteSpace(openId))
                 return null;
 
             var query = from c in _customerRepository.Table
@@ -765,7 +765,7 @@ namespace Nop.Services.Customers
                                      order == null && blogComment == null && newsComment == null && productReview == null && productReviewHelpfulness == null &&
                                      pollVotingRecord == null && forumTopic == null && forumPost == null &&
                                      !guest.IsSystemAccount &&
-                                     string.IsNullOrWhiteSpace(guest.OpenId) &&  //有OpenId值的不删除
+                                     string.IsNullOrWhiteSpace(guest.OpenId) &&  //有对应的OpenId时不删除
                                      (createdFromUtc == null || guest.CreatedOnUtc > createdFromUtc) &&
                                      (createdToUtc == null || guest.CreatedOnUtc < createdToUtc)
                                  select new { CustomerId = guest.Id };

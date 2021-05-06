@@ -3,14 +3,14 @@ using Nop.Core.Domain.Customers;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/03/13 09:36:09:9037685")]
-    public class AddCustomerCustomerOpenIdIX : AutoReversingMigration
+    [NopMigration("2020/03/13 09:36:08:9737681")]
+    public class AddCustomerOpenIdIX : AutoReversingMigration
     {
-        #region Methods          
+        #region Methods   
 
         public override void Up()
         {
-            Create.Index("IX_Customer_CustomerOpenId").OnTable(nameof(Customer))
+            Create.Index("IX_Customer_OpenId").OnTable(nameof(Customer))
                 .OnColumn(nameof(Customer.OpenId)).Ascending()
                 .WithOptions().NonClustered();
         }

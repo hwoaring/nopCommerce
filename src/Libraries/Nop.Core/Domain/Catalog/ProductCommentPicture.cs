@@ -11,14 +11,12 @@ namespace Nop.Core.Domain.Catalog
         /// 评论Id
         /// </summary>
         public int CommentId { get; set; }
+
         /// <summary>
         /// 图片id(关联文件记录表)
         /// </summary>
         public int PictureId { get; set; }
-        /// <summary>
-        /// 站点ID
-        /// </summary>
-        public int StoreId { get; set; }
+
         /// <summary>
         /// 创建时间
         /// </summary>

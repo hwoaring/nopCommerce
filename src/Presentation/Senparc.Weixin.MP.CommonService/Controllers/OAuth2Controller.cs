@@ -117,7 +117,7 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
                 {
                     OpenId = accessTokenResult.openid,
                     RefereeId = 0, //从State参数中分离查找
-                    WConfigId = 0,
+                    OriginalId = 0,
                     OpenIdHash = CommonHelper.StringToLong(accessTokenResult.openid),
                     CheckInType = WCheckInType.Oauth,  //每个渠道不同
                     LanguageType = WLanguageType.ZH_CN,
@@ -137,8 +137,8 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
                     Deleted = false,
                     SubscribeTime = 0,
                     UnSubscribeTime = 0,
-                    UpdateTime = 0,
-                    CreatTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now)
+                    UpdateTime = DateTime.Now,
+                    CreatTime = DateTime.Now
                 };
 
                 //获取推荐人Id
@@ -173,7 +173,7 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
                 //使用UserApi获取用户基础信息
                 #region 使用UserApi获取用户基础信息
                 var userInfoGetSuccess = false; //UserApi获取是否成功
-                if (currentUser.UpdateTime + 36000 < Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now))
+                if (currentUser.UpdateTime.AddMinutes(60) < DateTime.Now)
                 {
                     var userInfo = AdvancedAPIs.UserApi.Info(_senparcWeixinSetting.WeixinAppId, accessTokenResult.openid);
                     if (userInfo != null && userInfo.errcode == ReturnCode.请求成功)
@@ -190,9 +190,9 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
                             currentUser.City = userInfo.city;
                             currentUser.Province = userInfo.province;
                             currentUser.Country = userInfo.country;
-                            currentUser.HeadImgUrl = Utilities.HeadImageUrlHelper.GetHeadImageUrlKey(userInfo.headimgurl);
+                            currentUser.HeadImgUrlShort = Utilities.HeadImageUrlHelper.GetHeadImageUrlKey(userInfo.headimgurl);
                             currentUser.SubscribeTime = (int)userInfo.subscribe_time;
-                            currentUser.UpdateTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now);
+                            currentUser.UpdateTime = DateTime.Now;
                             currentUser.UnionId = userInfo.unionid;
                             currentUser.Remark = userInfo.remark;
                             currentUser.GroupId = userInfo.groupid.ToString();
@@ -222,9 +222,9 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
                         currentUser.City = userBaseInfo.city;
                         currentUser.Province = userBaseInfo.province;
                         currentUser.Country = userBaseInfo.country;
-                        currentUser.HeadImgUrl = Utilities.HeadImageUrlHelper.GetHeadImageUrlKey(userBaseInfo.headimgurl);
+                        currentUser.HeadImgUrlShort = Utilities.HeadImageUrlHelper.GetHeadImageUrlKey(userBaseInfo.headimgurl);
                         currentUser.UnionId = userBaseInfo.unionid;
-                        currentUser.UpdateTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now);
+                        currentUser.UpdateTime = DateTime.Now;
                     }
                 }
                 #endregion
@@ -238,13 +238,13 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
             //更新oauthSession信息
             #region 更新oauthSession信息
 
-            oauthSession.UserBaseInfo.HeadImgUrl = HeadImageUrlHelper.GetHeadImageUrl(currentUser.HeadImgUrl);
-            oauthSession.UserBaseInfo.NickName = currentUser.NickName;
-            oauthSession.UserBaseInfo.OpenId = currentUser.OpenId;
-            oauthSession.UserBaseInfo.Subscribe = currentUser.Subscribe;
-            oauthSession.UserBaseInfo.SubscribeTime = currentUser.SubscribeTime;
-            oauthSession.UserBaseInfo.UnSubscribeTime = currentUser.UnSubscribeTime;
-            oauthSession.UserBaseInfo.UnionId = currentUser.UnionId;
+            oauthSession.User.HeadImgUrl = HeadImageUrlHelper.GetHeadImageUrl(currentUser.HeadImgUrlShort);
+            oauthSession.User.NickName = currentUser.NickName;
+            oauthSession.User.OpenId = currentUser.OpenId;
+            oauthSession.User.Subscribe = currentUser.Subscribe;
+            oauthSession.User.SubscribeTime = currentUser.SubscribeTime;
+            oauthSession.User.UnSubscribeTime = currentUser.UnSubscribeTime;
+            oauthSession.User.UnionId = currentUser.UnionId;
             //保存更新
             HttpContext.Session.Set(NopWeixinDefaults.WeixinOauthSession, oauthSession);
 

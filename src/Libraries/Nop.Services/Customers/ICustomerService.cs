@@ -148,9 +148,9 @@ namespace Nop.Services.Customers
         Task<Customer> GetCustomerByGuidAsync(Guid customerGuid);
 
         /// <summary>
-        /// Gets a customer by openId
+        /// Gets a customer by OpenId
         /// </summary>
-        /// <param name="openId"></param>
+        /// <param name="OpenId"></param>
         /// <returns></returns>
         Task<Customer> GetCustomerByOpenIdAsync(string openId);
 

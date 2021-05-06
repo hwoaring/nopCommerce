@@ -226,7 +226,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                 {
                     OpenId = requestMessage.FromUserName,
                     RefereeId = (refereeUser != null && !string.IsNullOrEmpty(qrCodeSceneParam.OpenIdReferee)) ? refereeUser.Id : 0,
-                    WConfigId = 0,
+                    OriginalId = 0,
                     OpenIdHash = CommonHelper.StringToLong(requestMessage.FromUserName),
                     CheckInType = WCheckInType.Subscribe,  //每个进入接口不同
                     LanguageType = WLanguageType.ZH_CN,
@@ -246,8 +246,8 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                     Deleted = false,
                     SubscribeTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now),
                     UnSubscribeTime = 0,
-                    UpdateTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now),
-                    CreatTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now)
+                    UpdateTime = DateTime.Now,
+                    CreatTime = DateTime.Now
                 };
 
                 var userInfo = AdvancedAPIs.UserApi.Info(_senparcWeixinSetting.WeixinAppId, requestMessage.FromUserName);
@@ -258,14 +258,14 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                     currentUser.Province = userInfo.province;
                     currentUser.City = userInfo.city;
                     currentUser.Country = userInfo.country;
-                    currentUser.HeadImgUrl = HeadImageUrlHelper.GetHeadImageUrlKey(userInfo.headimgurl);
+                    currentUser.HeadImgUrlShort = HeadImageUrlHelper.GetHeadImageUrlKey(userInfo.headimgurl);
                     currentUser.Remark = userInfo.remark;
                     currentUser.GroupId = userInfo.groupid.ToString();
                     currentUser.TagIdList = string.Join(",", userInfo.tagid_list) + (userInfo.tagid_list.Length > 0 ? "," : "");
                     currentUser.Sex = Convert.ToByte(userInfo.sex);
                     currentUser.LanguageType = Enum.TryParse(typeof(WLanguageType), userInfo.language, true, out var wLanguageType) ? (WLanguageType)wLanguageType : WLanguageType.ZH_CN;
                     currentUser.SubscribeSceneType = Enum.TryParse(typeof(WSubscribeSceneType), userInfo.subscribe_scene, true, out var wSubscribeSceneType) ? (WSubscribeSceneType)wSubscribeSceneType : WSubscribeSceneType.ADD_SCENE_OTHERS;
-                    currentUser.UpdateTime = (int)userInfo.subscribe_time;
+                    currentUser.UpdateTime = Nop.Core.Weixin.Helpers.DateTimeHelper.GetDateTimeFromXml(userInfo.subscribe_time);
                     currentUser.SubscribeTime = (int)userInfo.subscribe_time;
                 }
 
@@ -488,7 +488,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                 {
                     OpenId = requestMessage.FromUserName,
                     RefereeId = (refereeUser != null && !string.IsNullOrEmpty(qrCodeSceneParam.OpenIdReferee)) ? refereeUser.Id : 0,
-                    WConfigId = 0,
+                    OriginalId = 0,
                     OpenIdHash = CommonHelper.StringToLong(requestMessage.FromUserName),
                     CheckInType = WCheckInType.Subscribe,  //每个渠道不同
                     LanguageType = WLanguageType.ZH_CN,
@@ -508,8 +508,8 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                     Deleted = false,
                     SubscribeTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now),
                     UnSubscribeTime = 0,
-                    UpdateTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now),
-                    CreatTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now)
+                    UpdateTime = DateTime.Now,
+                    CreatTime = DateTime.Now
                 };
             }
             else
@@ -526,14 +526,14 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                 currentUser.Province = userInfo.province;
                 currentUser.City = userInfo.city;
                 currentUser.Country = userInfo.country;
-                currentUser.HeadImgUrl = Utilities.HeadImageUrlHelper.GetHeadImageUrlKey(userInfo.headimgurl);
+                currentUser.HeadImgUrlShort = Utilities.HeadImageUrlHelper.GetHeadImageUrlKey(userInfo.headimgurl);
                 currentUser.Remark = userInfo.remark;
                 currentUser.GroupId = userInfo.groupid.ToString();
                 currentUser.TagIdList = string.Join(",", userInfo.tagid_list) + (userInfo.tagid_list.Length > 0 ? "," : "");
                 currentUser.Sex = Convert.ToByte(userInfo.sex);
                 currentUser.LanguageType = Enum.TryParse(typeof(WLanguageType), userInfo.language, true, out var wLanguageType) ? (WLanguageType)wLanguageType : WLanguageType.ZH_CN;
                 currentUser.SubscribeSceneType = Enum.TryParse(typeof(WSubscribeSceneType), userInfo.subscribe_scene, true, out var wSubscribeSceneType) ? (WSubscribeSceneType)wSubscribeSceneType : WSubscribeSceneType.ADD_SCENE_OTHERS;
-                currentUser.UpdateTime = (int)userInfo.subscribe_time;
+                currentUser.UpdateTime = Nop.Core.Weixin.Helpers.DateTimeHelper.GetDateTimeFromXml(userInfo.subscribe_time);
                 currentUser.SubscribeTime = (int)userInfo.subscribe_time;
             }
 
