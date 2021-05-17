@@ -2974,7 +2974,7 @@ namespace Nop.Services.Installation
                 RichEditorAllowStyleTag = false,
                 UseRichEditorForCustomerEmails = false,
                 UseRichEditorInMessageTemplates = false,
-                CheckCopyrightRemovalKey = true,
+                CheckCopyrightRemovalKey = false,
                 UseIsoDateFormatInJsonResult = true,
                 ShowDocumentationReferenceLinks = true
             });
