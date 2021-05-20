@@ -90,6 +90,11 @@ namespace Nop.Core.Domain.Vendors
         public bool UseAddressId { get; set; }
 
         /// <summary>
+        /// 是否拥有实体店铺（针对有共享实体店铺的人）
+        /// </summary>
+        public bool HasStores { get; set; }
+
+        /// <summary>
         /// 无现货（缺货）
         /// </summary>
         public bool OutOfStock { get; set; }
