@@ -85,6 +85,16 @@ namespace Nop.Core.Domain.Vendors
         public bool AllowBuyOnline { get; set; }
 
         /// <summary>
+        /// 显示信息收集表单
+        /// </summary>
+        public bool DisplayForm { get; set; }
+
+        /// <summary>
+        /// 显示默认信息
+        /// </summary>
+        public bool DisplayDefaultInfo { get; set; }
+
+        /// <summary>
         /// 使用AddressId地址信息
         /// </summary>
         public bool UseAddressId { get; set; }
