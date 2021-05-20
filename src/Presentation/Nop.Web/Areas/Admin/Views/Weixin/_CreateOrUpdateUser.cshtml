@@ -8,14 +8,16 @@
     var hideInfoBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideInfoBlockAttributeName);
 }
 
-<div class="content">
-    <div class="form-horizontal">
-        <nop-panels id="user-panels">
-            <nop-panel asp-name="user-info" asp-icon="fa fa-info" asp-title="@T("Admin.Weixin.Users.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdateUser.Info", Model)</nop-panel>
-            @if (Model.Id > 0)
-            {
+<section class="content">
+    <div class="container-fluid">
+        <div class="form-horizontal">
+            <nop-cards id="user-cards">
+                <nop-card asp-name="user-info" asp-icon="fas fa-info" asp-title="@T("Admin.Weixin.Users.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdateUser.Info", Model)</nop-card>
+                @if (Model.Id > 0)
+                {
 
-            }
-        </nop-panels>
+                }
+            </nop-cards>
+        </div>
     </div>
-</div>
+</section>

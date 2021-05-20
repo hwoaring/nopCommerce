@@ -303,6 +303,10 @@
                                     Title = T("Admin.Customers.Customers.Fields.CustomerRoles").Text,
                                     Width = "100"
                                 });
+                                gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.OpenId))
+                                {
+                                    Title = T("Admin.Customers.Customers.Fields.Company").Text
+                                });
                                 if (Model.CompanyEnabled)
                                 {
                                     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.Company))

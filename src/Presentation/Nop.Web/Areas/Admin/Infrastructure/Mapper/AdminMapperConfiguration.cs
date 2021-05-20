@@ -864,6 +864,7 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
                 .ForMember(entity => entity.Deleted, options => options.Ignore())
                 .ForMember(entity => entity.IsSystemAccount, options => options.Ignore())
                 .ForMember(entity => entity.SystemName, options => options.Ignore())
+                .ForMember(entity => entity.OpenId, options => options.Ignore())
                 .ForMember(entity => entity.LastLoginDateUtc, options => options.Ignore())
                 .ForMember(entity => entity.BillingAddressId, options => options.Ignore())
                 .ForMember(entity => entity.ShippingAddressId, options => options.Ignore())

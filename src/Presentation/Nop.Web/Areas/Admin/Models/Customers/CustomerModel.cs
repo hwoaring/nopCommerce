@@ -87,6 +87,9 @@ namespace Nop.Web.Areas.Admin.Models.Customers
 
         public bool CompanyEnabled { get; set; }
 
+        [NopResourceDisplayName("Admin.Customers.Customers.Fields.OpenId")]
+        public string OpenId { get; set; }
+
         [NopResourceDisplayName("Admin.Customers.Customers.Fields.Company")]
         public string Company { get; set; }
 
