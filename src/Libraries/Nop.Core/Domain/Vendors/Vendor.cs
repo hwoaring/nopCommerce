@@ -75,6 +75,16 @@ namespace Nop.Core.Domain.Vendors
         public string AdminComment { get; set; }
 
         /// <summary>
+        /// 是否显示商城购买链接
+        /// </summary>
+        public bool ShowShoppingMallLink { get; set; }
+
+        /// <summary>
+        /// 是否允许在线购买（指在本地平台显示购买按钮）
+        /// </summary>
+        public bool AllowBuyOnline { get; set; }
+
+        /// <summary>
         /// 使用AddressId地址信息
         /// </summary>
         public bool UseAddressId { get; set; }
@@ -88,6 +98,11 @@ namespace Nop.Core.Domain.Vendors
         /// 是否暂停营业（休假中）
         /// </summary>
         public bool Suspended { get; set; }
+
+        /// <summary>
+        /// 仅显示扫码价格（部分商家要加价卖，不显示零售价）
+        /// </summary>
+        public bool ScanCodePrice { get; set; }
 
         /// <summary>
         /// 是否临时供应商
