@@ -25,6 +25,11 @@ namespace Nop.Core.Domain.Vendors
         public string Description { get; set; }
 
         /// <summary>
+        /// 店铺名称（线下店铺名称）
+        /// </summary>
+        public string StoreName { get; set; }
+
+        /// <summary>
         /// 个人促销信息
         /// </summary>
         public string PromotionInfo { get; set; }
