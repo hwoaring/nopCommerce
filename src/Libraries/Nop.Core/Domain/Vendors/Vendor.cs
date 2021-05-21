@@ -130,6 +130,11 @@ namespace Nop.Core.Domain.Vendors
         public bool IsTemporary { get; set; }
 
         /// <summary>
+        /// 能对外招商
+        /// </summary>
+        public bool IsMerchants { get; set; }
+
+        /// <summary>
         /// 是否前台展示
         /// </summary>
         public bool Displayed { get; set; }

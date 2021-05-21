@@ -15720,6 +15720,222 @@
   <LocaleResource Name="Admin.Vendors.Fields.Name.Required">
     <Value>Please provide a name.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.StoreName">
+    <Value>StoreName</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.StoreName.Hint">
+    <Value>The StoreName of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.StoreName.Required">
+    <Value>Please provide a StoreName.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.PromotionInfo">
+    <Value>PromotionInfo</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.PromotionInfo.Hint">
+    <Value>The PromotionInfo of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.PromotionInfo.Required">
+    <Value>Please provide a PromotionInfo.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ContactNumber">
+    <Value>ContactNumber</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ContactNumber.Hint">
+    <Value>The ContactNumber of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ContactNumber.Required">
+    <Value>Please provide a ContactNumber.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ContactAddress">
+    <Value>ContactAddress</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ContactAddress.Hint">
+    <Value>The ContactAddress of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ContactAddress.Required">
+    <Value>Please provide a ContactAddress.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ShoppingMallLink">
+    <Value>ShoppingMallLink</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ShoppingMallLink.Hint">
+    <Value>The ShoppingMallLink of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ShoppingMallLink.Required">
+    <Value>Please provide a ShoppingMallLink.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.OpenHours">
+    <Value>OpenHours</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.OpenHours.Hint">
+    <Value>The OpenHours of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.OpenHours.Required">
+    <Value>Please provide a OpenHours.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.QrCodeId">
+    <Value>QrCodeId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.QrCodeId.Hint">
+    <Value>The QrCodeId of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.QrCodeId.Required">
+    <Value>Please provide a QrCodeId.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.StorePictureId">
+    <Value>StorePictureId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.StorePictureId.Hint">
+    <Value>The StorePictureId of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.StorePictureId.Required">
+    <Value>Please provide a StorePictureId.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ShowShoppingMallLink">
+    <Value>ShowShoppingMallLink</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ShowShoppingMallLink.Hint">
+    <Value>The ShowShoppingMallLink of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ShowShoppingMallLink.Required">
+    <Value>Please provide a ShowShoppingMallLink.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.AllowBuyOnline">
+    <Value>AllowBuyOnline</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.AllowBuyOnline.Hint">
+    <Value>The AllowBuyOnline of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.AllowBuyOnline.Required">
+    <Value>Please provide a AllowBuyOnline.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.DisplayForm">
+    <Value>DisplayForm</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.DisplayForm.Hint">
+    <Value>The DisplayForm of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.DisplayForm.Required">
+    <Value>Please provide a DisplayForm.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.DisplayDefaultInfo">
+    <Value>DisplayDefaultInfo</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.DisplayDefaultInfo.Hint">
+    <Value>The DisplayDefaultInfo of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.DisplayDefaultInfo.Required">
+    <Value>Please provide a DisplayDefaultInfo.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.UseAddressId">
+    <Value>UseAddressId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.UseAddressId.Hint">
+    <Value>The UseAddressId of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.UseAddressId.Required">
+    <Value>Please provide a UseAddressId.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.HasStores">
+    <Value>HasStores</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.HasStores.Hint">
+    <Value>The HasStores of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.HasStores.Required">
+    <Value>Please provide a HasStores.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.OutOfStock">
+    <Value>OutOfStock</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.OutOfStock.Hint">
+    <Value>The OutOfStock of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.OutOfStock.Required">
+    <Value>Please provide a OutOfStock.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.Suspended">
+    <Value>Suspended</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.Suspended.Hint">
+    <Value>The Suspended of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.Suspended.Required">
+    <Value>Please provide a Suspended.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ScanCodePrice">
+    <Value>ScanCodePrice</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ScanCodePrice.Hint">
+    <Value>The ScanCodePrice of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ScanCodePrice.Required">
+    <Value>Please provide a ScanCodePrice.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.IsTemporary">
+    <Value>IsTemporary</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.IsTemporary.Hint">
+    <Value>The IsTemporary of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.IsTemporary.Required">
+    <Value>Please provide a IsTemporary.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.IsMerchants">
+    <Value>IsMerchants</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.IsMerchants.Hint">
+    <Value>The IsMerchants of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.IsMerchants.Required">
+    <Value>Please provide a IsMerchants.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.Displayed">
+    <Value>Displayed</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.Displayed.Hint">
+    <Value>The Displayed of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.Displayed.Required">
+    <Value>Please provide a Displayed.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ShareLinkUrl">
+    <Value>ShareLinkUrl</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ShareLinkUrl.Hint">
+    <Value>The ShareLinkUrl of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ShareLinkUrl.Required">
+    <Value>Please provide a ShareLinkUrl.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.MetaImageUrl">
+    <Value>MetaImageUrl</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.MetaImageUrl.Hint">
+    <Value>The MetaImageUrl of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.MetaImageUrl.Required">
+    <Value>Please provide a MetaImageUrl.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.MetaLinkUrl">
+    <Value>MetaLinkUrl</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.MetaLinkUrl.Hint">
+    <Value>The MetaLinkUrl of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.MetaLinkUrl.Required">
+    <Value>Please provide a MetaLinkUrl.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ShareImageUrl">
+    <Value>ShareImageUrl</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ShareImageUrl.Hint">
+    <Value>The ShareImageUrl of the vendor.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Vendors.Fields.ShareImageUrl.Required">
+    <Value>Please provide a ShareImageUrl.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.PageSize">
     <Value>Page size</Value>
   </LocaleResource>

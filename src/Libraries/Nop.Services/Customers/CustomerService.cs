@@ -765,7 +765,7 @@ namespace Nop.Services.Customers
                                      order == null && blogComment == null && newsComment == null && productReview == null && productReviewHelpfulness == null &&
                                      pollVotingRecord == null && forumTopic == null && forumPost == null &&
                                      !guest.IsSystemAccount &&
-                                     guest.OpenId == null &&  //有对应的OpenId时不删除
+                                     string.IsNullOrEmpty(guest.OpenId) &&  //有对应的OpenId时不删除
                                      (createdFromUtc == null || guest.CreatedOnUtc > createdFromUtc) &&
                                      (createdToUtc == null || guest.CreatedOnUtc < createdToUtc)
                                  select new { CustomerId = guest.Id };

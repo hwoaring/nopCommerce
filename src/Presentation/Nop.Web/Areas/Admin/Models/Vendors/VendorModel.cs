@@ -70,6 +70,80 @@ namespace Nop.Web.Areas.Admin.Models.Vendors
         [NopResourceDisplayName("Admin.Vendors.Fields.PageSize")]
         public int PageSize { get; set; }
 
+        [NopResourceDisplayName("Admin.Vendors.Fields.StoreName")]
+        public string StoreName { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.PromotionInfo")]
+        public string PromotionInfo { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.ContactNumber")]
+        public string ContactNumber { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.ContactAddress")]
+        public string ContactAddress { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.ShoppingMallLink")]
+        public string ShoppingMallLink { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.OpenHours")]
+        public string OpenHours { get; set; }
+
+        [UIHint("Picture")]
+        [NopResourceDisplayName("Admin.Vendors.Fields.QrCodeId")]
+        public int QrCodeId { get; set; }
+
+        [UIHint("Picture")]
+        [NopResourceDisplayName("Admin.Vendors.Fields.StorePictureId")]
+        public int StorePictureId { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.ShowShoppingMallLink")]
+        public bool ShowShoppingMallLink { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.AllowBuyOnline")]
+        public bool AllowBuyOnline { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.DisplayForm")]
+        public bool DisplayForm { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.DisplayDefaultInfo")]
+        public bool DisplayDefaultInfo { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.UseAddressId")]
+        public bool UseAddressId { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.HasStores")]
+        public bool HasStores { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.OutOfStock")]
+        public bool OutOfStock { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.Suspended")]
+        public bool Suspended { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.ScanCodePrice")]
+        public bool ScanCodePrice { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.IsTemporary")]
+        public bool IsTemporary { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.IsMerchants")]
+        public bool IsMerchants { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.Displayed")]
+        public bool Displayed { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.ShareLinkUrl")]
+        public string ShareLinkUrl { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.MetaImageUrl")]
+        public string MetaImageUrl { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.MetaLinkUrl")]
+        public string MetaLinkUrl { get; set; }
+
+        [NopResourceDisplayName("Admin.Vendors.Fields.ShareImageUrl")]
+        public string ShareImageUrl { get; set; }
+
         [NopResourceDisplayName("Admin.Vendors.Fields.AllowCustomersToSelectPageSize")]
         public bool AllowCustomersToSelectPageSize { get; set; }
 
