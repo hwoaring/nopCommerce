@@ -234,6 +234,7 @@ namespace Nop.Data.Migrations
             _migrationManager.BuildTable<WUserTag>(Create);
             _migrationManager.BuildTable<WUserSysTag>(Create);
             _migrationManager.BuildTable<WUserUserSysTagMapping>(Create);
+            _migrationManager.BuildTable<WeChatBrowserCheck>(Create);
 
             _migrationManager.BuildTable<WLocation>(Create);
             _migrationManager.BuildTable<WMenu>(Create);
