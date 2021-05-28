@@ -13,12 +13,15 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
     {
         #region Properties
 
-        [NopResourceDisplayName("Admin.Weixin.Users.Fields.OpenId")]
-        public string OpenId { get; set; }
-        [NopResourceDisplayName("Admin.Weixin.Users.Fields.RefereeId")]
-        public int RefereeId { get; set; }
         [NopResourceDisplayName("Admin.Weixin.Users.Fields.OriginalId")]
         public int OriginalId { get; set; }
+
+        [NopResourceDisplayName("Admin.Weixin.Users.Fields.OpenId")]
+        public string OpenId { get; set; }
+
+        [NopResourceDisplayName("Admin.Weixin.Users.Fields.RefereeId")]
+        public int RefereeId { get; set; }
+
         [NopResourceDisplayName("Admin.Weixin.Users.Fields.OpenIdHash")]
         public long OpenIdHash { get; set; }
 
@@ -81,8 +84,10 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
 
         [NopResourceDisplayName("Admin.Weixin.Users.Fields.QrSceneStr")]
         public string QrSceneStr { get; set; }
+
         [NopResourceDisplayName("Admin.Weixin.Users.Fields.Subscribe")]
         public bool Subscribe { get; set; }
+
         [NopResourceDisplayName("Admin.Weixin.Users.Fields.AllowReferee")]
         public bool AllowReferee { get; set; }
 

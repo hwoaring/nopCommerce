@@ -34,6 +34,11 @@ namespace Nop.Core.Domain.Customers
         public string EmailToRevalidate { get; set; }
 
         /// <summary>
+        /// 手机号（可用于手机号登录或者账号找回）
+        /// </summary>
+        public string PhoneNumber { get; set; }
+
+        /// <summary>
         /// 当前用户OpenId
         /// </summary>
         public string OpenId { get; set; }

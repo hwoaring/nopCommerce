@@ -83,9 +83,14 @@ namespace Nop.Core.Domain.Catalog
         public decimal PriceAdjustment { get; set; }
 
         /// <summary>
+        /// 会员价调整
+        /// </summary>
+        public decimal MemberPriceAdjustment { get; set; }
+
+        /// <summary>
         /// 原价，划线价
         /// </summary>
-        public decimal OldPrice { get; set; }
+        public decimal OldPriceAdjustment { get; set; }
 
         /// <summary>
         /// 最小购买数量

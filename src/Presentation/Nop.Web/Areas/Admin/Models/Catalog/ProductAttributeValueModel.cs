@@ -48,8 +48,17 @@ namespace Nop.Web.Areas.Admin.Models.Catalog
         [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.Content")]
         public string Content { get; set; }
 
-        [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.OldPrice")]
-        public decimal OldPrice { get; set; }
+        [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.AgentPriceAdjustment")]
+        public decimal AgentPriceAdjustment { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.DistributorPriceAdjustment")]
+        public decimal DistributorPriceAdjustment { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.MemberPriceAdjustment")]
+        public decimal MemberPriceAdjustment { get; set; }
+
+        [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.OldPriceAdjustment")]
+        public decimal OldPriceAdjustment { get; set; }
 
         [NopResourceDisplayName("Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.PriceAdjustmentUseFixedValue")]
         public bool PriceAdjustmentUseFixedValue { get; set; }

@@ -46,6 +46,11 @@
         public decimal? OverriddenPrice { get; set; }
 
         /// <summary>
+        /// 会员价调整
+        /// </summary>
+        public decimal? OverriddenMemberPrice { get; set; }
+
+        /// <summary>
         /// 覆盖分销商价格
         /// </summary>
         public decimal? OverriddenDistributorPrice { get; set; }

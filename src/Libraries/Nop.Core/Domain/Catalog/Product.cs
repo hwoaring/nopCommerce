@@ -590,6 +590,11 @@ namespace Nop.Core.Domain.Catalog
         public decimal AgentPrice { get; set; }
 
         /// <summary>
+        /// 会员价
+        /// </summary>
+        public decimal MemberPrice{ get; set; }
+
+        /// <summary>
         /// Gets or sets the price
         /// </summary>
         public decimal Price { get; set; }

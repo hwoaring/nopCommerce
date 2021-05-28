@@ -3891,6 +3891,30 @@
   <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.Picture.NoPicture">
     <Value>No picture</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.AgentPriceAdjustment">
+    <Value>Agent Price Adjustment</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.AgentPriceAdjustment.Hint">
+    <Value>The Agent Price Adjustment applied when choosing this attribute value. For example '10' to add 10 dollars. Or 10% if 'Use percentage' is ticked.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.DistributorPriceAdjustment">
+    <Value>Distributor Price Adjustment</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.DistributorPriceAdjustment.Hint">
+    <Value>The Distributor Price Adjustment applied when choosing this attribute value. For example '10' to add 10 dollars. Or 10% if 'Use percentage' is ticked.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.MemberPriceAdjustment">
+    <Value>Member Price Adjustment</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.MemberPriceAdjustment.Hint">
+    <Value>The Member Price Adjustment applied when choosing this attribute value. For example '10' to add 10 dollars. Or 10% if 'Use percentage' is ticked.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.OldPriceAdjustment">
+    <Value>Old Price Adjustment</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.OldPriceAdjustment.Hint">
+    <Value>The Old Price Adjustment applied when choosing this attribute value. For example '10' to add 10 dollars. Or 10% if 'Use percentage' is ticked.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.Attributes.Values.Fields.PriceAdjustment">
     <Value>Price adjustment</Value>
   </LocaleResource>
@@ -15720,8 +15744,11 @@
   <LocaleResource Name="Admin.Vendors.Fields.Name.Required">
     <Value>Please provide a name.</Value>
   </LocaleResource>
+  <LocaleResource Name="admin.vendors.sale">
+    <Value>Sale Info</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.StoreName">
-    <Value>StoreName</Value>
+    <Value>Store Name</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.StoreName.Hint">
     <Value>The StoreName of the vendor.</Value>
@@ -15730,7 +15757,7 @@
     <Value>Please provide a StoreName.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.PromotionInfo">
-    <Value>PromotionInfo</Value>
+    <Value>Promotion Info</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.PromotionInfo.Hint">
     <Value>The PromotionInfo of the vendor.</Value>
@@ -15739,7 +15766,7 @@
     <Value>Please provide a PromotionInfo.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ContactNumber">
-    <Value>ContactNumber</Value>
+    <Value>Contact Number</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ContactNumber.Hint">
     <Value>The ContactNumber of the vendor.</Value>
@@ -15748,7 +15775,7 @@
     <Value>Please provide a ContactNumber.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ContactAddress">
-    <Value>ContactAddress</Value>
+    <Value>Contact Address</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ContactAddress.Hint">
     <Value>The ContactAddress of the vendor.</Value>
@@ -15757,7 +15784,7 @@
     <Value>Please provide a ContactAddress.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ShoppingMallLink">
-    <Value>ShoppingMallLink</Value>
+    <Value>Shopping Mall Link</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ShoppingMallLink.Hint">
     <Value>The ShoppingMallLink of the vendor.</Value>
@@ -15766,7 +15793,7 @@
     <Value>Please provide a ShoppingMallLink.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.OpenHours">
-    <Value>OpenHours</Value>
+    <Value>Open Hours</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.OpenHours.Hint">
     <Value>The OpenHours of the vendor.</Value>
@@ -15775,7 +15802,7 @@
     <Value>Please provide a OpenHours.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.QrCodeId">
-    <Value>QrCodeId</Value>
+    <Value>QrCode Id</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.QrCodeId.Hint">
     <Value>The QrCodeId of the vendor.</Value>
@@ -15784,7 +15811,7 @@
     <Value>Please provide a QrCodeId.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.StorePictureId">
-    <Value>StorePictureId</Value>
+    <Value>Store PictureId</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.StorePictureId.Hint">
     <Value>The StorePictureId of the vendor.</Value>
@@ -15793,7 +15820,7 @@
     <Value>Please provide a StorePictureId.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ShowShoppingMallLink">
-    <Value>ShowShoppingMallLink</Value>
+    <Value>Show Shopping Mall Link</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ShowShoppingMallLink.Hint">
     <Value>The ShowShoppingMallLink of the vendor.</Value>
@@ -15802,7 +15829,7 @@
     <Value>Please provide a ShowShoppingMallLink.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.AllowBuyOnline">
-    <Value>AllowBuyOnline</Value>
+    <Value>Allow Buy Online</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.AllowBuyOnline.Hint">
     <Value>The AllowBuyOnline of the vendor.</Value>
@@ -15811,7 +15838,7 @@
     <Value>Please provide a AllowBuyOnline.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.DisplayForm">
-    <Value>DisplayForm</Value>
+    <Value>Display Form</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.DisplayForm.Hint">
     <Value>The DisplayForm of the vendor.</Value>
@@ -15820,7 +15847,7 @@
     <Value>Please provide a DisplayForm.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.DisplayDefaultInfo">
-    <Value>DisplayDefaultInfo</Value>
+    <Value>Display Default Info</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.DisplayDefaultInfo.Hint">
     <Value>The DisplayDefaultInfo of the vendor.</Value>
@@ -15829,7 +15856,7 @@
     <Value>Please provide a DisplayDefaultInfo.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.UseAddressId">
-    <Value>UseAddressId</Value>
+    <Value>Use Address Id</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.UseAddressId.Hint">
     <Value>The UseAddressId of the vendor.</Value>
@@ -15838,7 +15865,7 @@
     <Value>Please provide a UseAddressId.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.HasStores">
-    <Value>HasStores</Value>
+    <Value>Has Stores</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.HasStores.Hint">
     <Value>The HasStores of the vendor.</Value>
@@ -15847,7 +15874,7 @@
     <Value>Please provide a HasStores.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.OutOfStock">
-    <Value>OutOfStock</Value>
+    <Value>Out Of Stock</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.OutOfStock.Hint">
     <Value>The OutOfStock of the vendor.</Value>
@@ -15865,16 +15892,16 @@
     <Value>Please provide a Suspended.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ScanCodePrice">
-    <Value>ScanCodePrice</Value>
+    <Value>Scan Code Price</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ScanCodePrice.Hint">
-    <Value>The ScanCodePrice of the vendor.</Value>
+    <Value>The Scan Code Price of the vendor.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ScanCodePrice.Required">
     <Value>Please provide a ScanCodePrice.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.IsTemporary">
-    <Value>IsTemporary</Value>
+    <Value>Is Temporary</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.IsTemporary.Hint">
     <Value>The IsTemporary of the vendor.</Value>
@@ -15883,7 +15910,7 @@
     <Value>Please provide a IsTemporary.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.IsMerchants">
-    <Value>IsMerchants</Value>
+    <Value>Is Merchants</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.IsMerchants.Hint">
     <Value>The IsMerchants of the vendor.</Value>
@@ -15901,7 +15928,7 @@
     <Value>Please provide a Displayed.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ShareLinkUrl">
-    <Value>ShareLinkUrl</Value>
+    <Value>Share Link Url</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ShareLinkUrl.Hint">
     <Value>The ShareLinkUrl of the vendor.</Value>
@@ -15910,16 +15937,16 @@
     <Value>Please provide a ShareLinkUrl.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.MetaImageUrl">
-    <Value>MetaImageUrl</Value>
+    <Value>Meta Image Url</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.MetaImageUrl.Hint">
-    <Value>The MetaImageUrl of the vendor.</Value>
+    <Value>The Meta Image Url of the vendor.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.MetaImageUrl.Required">
     <Value>Please provide a MetaImageUrl.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.MetaLinkUrl">
-    <Value>MetaLinkUrl</Value>
+    <Value>Meta Link Url</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.MetaLinkUrl.Hint">
     <Value>The MetaLinkUrl of the vendor.</Value>
@@ -15928,7 +15955,7 @@
     <Value>Please provide a MetaLinkUrl.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ShareImageUrl">
-    <Value>ShareImageUrl</Value>
+    <Value>Share Image Url</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Vendors.Fields.ShareImageUrl.Hint">
     <Value>The ShareImageUrl of the vendor.</Value>
@@ -16262,6 +16289,330 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Weixin.MessageAutoReply">
     <Value>Message Auto Reply</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.OriginalId">
+    <Value>Original Id</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.OriginalId.Hint">
+    <Value>Enter OriginalId.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.OriginalId.Required">
+    <Value>OriginalId is required.</Value>
+  </LocaleResource>
+    <LocaleResource Name="Admin.Weixin.Fields.OpenId">
+    <Value>OpenId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.OpenId.Hint">
+    <Value>Enter OpenId.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.OpenId.Required">
+    <Value>OpenId is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.RefereeId">
+    <Value>RefereeId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.RefereeId.Hint">
+    <Value>Enter RefereeId.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.RefereeId.Required">
+    <Value>RefereeId is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.OpenIdHash">
+    <Value>OpenIdHash</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.OpenIdHash.Hint">
+    <Value>Enter OpenIdHash.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.OpenIdHash.Required">
+    <Value>OpenIdHash is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.UnionId">
+    <Value>UnionId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.UnionId.Hint">
+    <Value>Enter UnionId.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.UnionId.Required">
+    <Value>UnionId is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.NickName">
+    <Value>Nick Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.NickName.Hint">
+    <Value>Enter NickName.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.NickName.Required">
+    <Value>NickName is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Province">
+    <Value>Province</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Province.Hint">
+    <Value>Enter Province.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Province.Required">
+    <Value>Province is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.City">
+    <Value>City</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.City.Hint">
+    <Value>Enter City.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.City.Required">
+    <Value>City is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Country">
+    <Value>Country</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Country.Hint">
+    <Value>Enter Country.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Country.Required">
+    <Value>Country is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.HeadImgUrl">
+    <Value>Head ImgUrl</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.HeadImgUrl.Hint">
+    <Value>Enter HeadImgUrl.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.HeadImgUrl.Required">
+    <Value>HeadImgUrl is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Remark">
+    <Value>Remark</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Remark.Hint">
+    <Value>Enter Remark.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Remark.Required">
+    <Value>Remark is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.SysRemark">
+    <Value>SysRemark</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.SysRemark.Hint">
+    <Value>Enter SysRemark.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.SysRemark.Required">
+    <Value>SysRemark is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.GroupId">
+    <Value>GroupId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.GroupId.Hint">
+    <Value>Enter GroupId.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.GroupId.Required">
+    <Value>GroupId is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.TagIdList">
+    <Value>TagId List</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.TagIdList.Hint">
+    <Value>Enter TagIdList.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.TagIdList.Required">
+    <Value>TagIdList is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Sex">
+    <Value>Sex</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Sex.Hint">
+    <Value>Enter Sex.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Sex.Required">
+    <Value>Sex is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.CheckInTypeId">
+    <Value>CheckInTypeId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.CheckInTypeId.Hint">
+    <Value>Enter CheckInTypeId.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.CheckInTypeId.Required">
+    <Value>CheckInTypeId is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.LanguageTypeId">
+    <Value>Language TypeId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.LanguageTypeId.Hint">
+    <Value>Enter LanguageTypeId.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.LanguageTypeId.Required">
+    <Value>LanguageTypeId is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.SubscribeSceneTypeId">
+    <Value>Subscribe SceneType Id</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.SubscribeSceneTypeId.Hint">
+    <Value>Enter SubscribeSceneTypeId.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.SubscribeSceneTypeId.Required">
+    <Value>SubscribeSceneTypeId is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.RoleTypeId">
+    <Value>Role TypeId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.RoleTypeId.Hint">
+    <Value>Enter RoleTypeId.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.RoleTypeId.Required">
+    <Value>RoleTypeId is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.SceneTypeId">
+    <Value>SceneTypeId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.SceneTypeId.Hint">
+    <Value>Enter SceneTypeId.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.SceneTypeId.Required">
+    <Value>SceneTypeId is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Status">
+    <Value>Status</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Status.Hint">
+    <Value>Enter Status.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Status.Required">
+    <Value>Status is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.SupplierShopId">
+    <Value>SupplierShopId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.SupplierShopId.Hint">
+    <Value>Enter SupplierShopId.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.SupplierShopId.Required">
+    <Value>SupplierShopId is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.QrScene">
+    <Value>QrScene</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.QrScene.Hint">
+    <Value>Enter QrScene.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.QrScene.Required">
+    <Value>QrScene is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.QrSceneStr">
+    <Value>QrSceneStr</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.QrSceneStr.Hint">
+    <Value>Enter QrSceneStr.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.QrSceneStr.Required">
+    <Value>QrSceneStr is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Subscribe">
+    <Value>Subscribe</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Subscribe.Hint">
+    <Value>Enter Subscribe.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Subscribe.Required">
+    <Value>Subscribe is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.AllowReferee">
+    <Value>AllowReferee</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.AllowReferee.Hint">
+    <Value>Enter AllowReferee.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.AllowReferee.Required">
+    <Value>AllowReferee is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.AllowResponse">
+    <Value>Allow Response</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.AllowResponse.Hint">
+    <Value>Enter AllowResponse.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.AllowResponse.Required">
+    <Value>AllowResponse is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.AllowOrder">
+    <Value>Allow Order</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.AllowOrder.Hint">
+    <Value>Enter AllowOrder.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.AllowOrder.Required">
+    <Value>AllowOrder is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.AllowNotice">
+    <Value>Allow Notice</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.AllowNotice.Hint">
+    <Value>Enter AllowNotice.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.AllowNotice.Required">
+    <Value>AllowNotice is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.AllowOrderNotice">
+    <Value>Allow Order Notice</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.AllowOrderNotice.Hint">
+    <Value>Enter AllowOrderNotice.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.AllowOrderNotice.Required">
+    <Value>AllowOrderNotice is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.InBlackList">
+    <Value>InBlackList</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.InBlackList.Hint">
+    <Value>Enter InBlackList.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.InBlackList.Required">
+    <Value>InBlackList is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Deleted">
+    <Value>Deleted</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Deleted.Hint">
+    <Value>Enter Deleted.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.Deleted.Required">
+    <Value>Deleted is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.SubscribeTime">
+    <Value>Subscribe Time</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.SubscribeTime.Hint">
+    <Value>Enter SubscribeTime.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.SubscribeTime.Required">
+    <Value>SubscribeTime is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.UnSubscribeTime">
+    <Value>UnSubscribe Time</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.UnSubscribeTime.Hint">
+    <Value>Enter UnSubscribeTime.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.UnSubscribeTime.Required">
+    <Value>UnSubscribeTime is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.UpdateTime">
+    <Value>Update Time</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.UpdateTime.Hint">
+    <Value>Enter UpdateTime.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.UpdateTime.Required">
+    <Value>UpdateTime is required.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.CreatTime">
+    <Value>CreatTime</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.CreatTime.Hint">
+    <Value>Enter CreatTime.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Weixin.Fields.CreatTime.Required">
+    <Value>CreatTime is required.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Weixin.Users.List.SearchUserNickName">
     <Value>NickName</Value>

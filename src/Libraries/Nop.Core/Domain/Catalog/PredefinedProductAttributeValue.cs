@@ -18,6 +18,26 @@ namespace Nop.Core.Domain.Catalog
         public string Name { get; set; }
 
         /// <summary>
+        /// 分销价
+        /// </summary>
+        public decimal DistributorPriceAdjustment { get; set; }
+
+        /// <summary>
+        /// 代理价
+        /// </summary>
+        public decimal AgentPriceAdjustment { get; set; }
+
+        /// <summary>
+        /// 会员价
+        /// </summary>
+        public decimal MemberPriceAdjustment { get; set; }
+
+        /// <summary>
+        /// 划线价
+        /// </summary>
+        public decimal OldPriceAdjustment { get; set; }
+
+        /// <summary>
         /// Gets or sets the price adjustment
         /// </summary>
         public decimal PriceAdjustment { get; set; }

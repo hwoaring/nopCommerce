@@ -843,7 +843,7 @@ namespace Nop.Web.Factories
                             ShortName = attributeValue.ShortName,
                             Discription = attributeValue.Discription,
                             Content = attributeValue.Content,
-                            OldPrice = attributeValue.OldPrice,
+                            OldPrice = attributeValue.OldPriceAdjustment,
                             PriceAdjustmentUseFixedValue = attributeValue.PriceAdjustmentUseFixedValue,
                             ColorSquaresRgb = attributeValue.ColorSquaresRgb, //used with "Color squares" attribute type
                             IsPreSelected = attributeValue.IsPreSelected,
