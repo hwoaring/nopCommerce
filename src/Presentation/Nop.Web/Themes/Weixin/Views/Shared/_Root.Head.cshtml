@@ -47,10 +47,10 @@
         Html.AppendHeadCustomParts(seoSettings.CustomHeadTags);
     }
 
-    var displayMiniProfiler = appSettings.CommonConfig.MiniProfilerEnabled && permissionService.Authorize(StandardPermissionProvider.AccessProfiling);
+    var displayMiniProfiler = appSettings.CommonConfig.MiniProfilerEnabled && await permissionService.AuthorizeAsync(StandardPermissionProvider.AccessProfiling);
 
     //event
-    eventPublisher.Publish(new PageRenderingEvent(this.Html));
+    await eventPublisher.PublishAsync(new PageRenderingEvent(this.Html));
 }
 
 <!DOCTYPE html>

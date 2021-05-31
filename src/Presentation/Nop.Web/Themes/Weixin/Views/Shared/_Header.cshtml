@@ -2,7 +2,7 @@
 
 @{
     //themes path
-    var themeName = themeContext.WorkingThemeName;
+    var themeName = await themeContext.GetWorkingThemeNameAsync();
     var themesPath = $"/Themes/{themeName}/Content";
 }
 <!--header-->

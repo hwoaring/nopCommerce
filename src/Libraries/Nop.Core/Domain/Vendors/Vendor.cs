@@ -70,6 +70,21 @@ namespace Nop.Core.Domain.Vendors
         public int StorePictureId { get; set; }
 
         /// <summary>
+        /// 地理位置纬度
+        /// </summary>
+        public decimal Latitude { get; set; }
+
+        /// <summary>
+        /// 地理位置经度
+        /// </summary>
+        public decimal Longitude { get; set; }
+
+        /// <summary>
+        /// 地理位置精度
+        /// </summary>
+        public decimal Precision { get; set; }
+
+        /// <summary>
         /// Gets or sets the address identifier
         /// </summary>
         public int AddressId { get; set; }

@@ -5,7 +5,7 @@
 @inject IThemeContext themeContext
 @inject IUserAgentHelper userAgentHelper
 @{
-    var themeName = themeContext.WorkingThemeName;
+    var themeName = await themeContext.GetWorkingThemeNameAsync();
 
     //add main CSS file
     Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/weixin-base.css");

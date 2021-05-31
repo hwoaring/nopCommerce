@@ -11613,6 +11613,12 @@
   <LocaleResource Name="Admin.Customers.Customers.Fields.Newsletter.Hint">
     <Value>Choose stores to subscribe to newsletter.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Customers.Customers.Fields.OpenId">
+    <Value>OpenId</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Customers.Customers.Fields.OpenId.Hint">
+    <Value>The customer's OpenId.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Customers.Customers.Fields.Password">
     <Value>Password</Value>
   </LocaleResource>

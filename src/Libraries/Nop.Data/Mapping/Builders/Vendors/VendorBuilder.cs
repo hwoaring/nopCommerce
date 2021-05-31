@@ -30,7 +30,11 @@ namespace Nop.Data.Mapping.Builders.Vendors
                 .WithColumn(nameof(Vendor.MetaLinkUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Vendor.ShareImageUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Vendor.ShareLinkUrl)).AsAnsiString(1024).Nullable()
-                .WithColumn(nameof(Vendor.PageSizeOptions)).AsString(200).Nullable();
+                .WithColumn(nameof(Vendor.PageSizeOptions)).AsString(200).Nullable()
+                .WithColumn(nameof(Vendor.Latitude)).AsDecimal(9, 6)
+                .WithColumn(nameof(Vendor.Longitude)).AsDecimal(9, 6)
+                .WithColumn(nameof(Vendor.Precision)).AsDecimal(9, 6)
+                ;
         }
 
         #endregion
