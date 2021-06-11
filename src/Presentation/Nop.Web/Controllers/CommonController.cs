@@ -95,6 +95,8 @@ namespace Nop.Web.Controllers
         #region Methods
 
         //page not found
+        //available even when weixin oauth2
+        [CheckWeixinOAuth(true)]
         public virtual IActionResult PageNotFound()
         {
             Response.StatusCode = 404;
