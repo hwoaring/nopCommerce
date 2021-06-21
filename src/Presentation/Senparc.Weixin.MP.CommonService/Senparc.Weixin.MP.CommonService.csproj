@@ -10,16 +10,16 @@
 
   <ItemGroup>
     <PackageReference Include="Senparc.NeuChar" Version="1.4.400" />
-    <PackageReference Include="Senparc.WebSocket" Version="0.12.400" />
-    <PackageReference Include="Senparc.Weixin" Version="6.9.400" />
-    <PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.3.400" />
-    <PackageReference Include="Senparc.Weixin.Cache.Memcached" Version="2.8.400" />
-    <PackageReference Include="Senparc.Weixin.Cache.Redis" Version="2.10.400" />
-    <PackageReference Include="Senparc.Weixin.MP" Version="16.12.400" />
-    <PackageReference Include="Senparc.Weixin.Open" Version="4.9.400" />
-    <PackageReference Include="Senparc.Weixin.TenPay" Version="1.7.400" />
-    <PackageReference Include="Senparc.Weixin.Work" Version="3.9.400" />
-    <PackageReference Include="Senparc.Weixin.WxOpen" Version="3.11.400" />
+    <PackageReference Include="Senparc.WebSocket" Version="0.12.501" />
+    <PackageReference Include="Senparc.Weixin" Version="6.9.501" />
+    <PackageReference Include="Senparc.Weixin.Cache.CsRedis" Version="0.3.501" />
+    <PackageReference Include="Senparc.Weixin.Cache.Memcached" Version="2.8.501" />
+    <PackageReference Include="Senparc.Weixin.Cache.Redis" Version="2.10.501" />
+    <PackageReference Include="Senparc.Weixin.MP" Version="16.12.501.1" />
+    <PackageReference Include="Senparc.Weixin.Open" Version="4.9.501" />
+    <PackageReference Include="Senparc.Weixin.TenPay" Version="1.7.501" />
+    <PackageReference Include="Senparc.Weixin.Work" Version="3.9.501" />
+    <PackageReference Include="Senparc.Weixin.WxOpen" Version="3.11.501" />
   </ItemGroup>
 
   <ItemGroup>
