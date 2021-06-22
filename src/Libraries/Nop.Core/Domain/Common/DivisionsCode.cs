@@ -1,27 +1,12 @@
 ﻿using Humanizer;
 
-namespace Nop.Core.Domain.Marketing
+namespace Nop.Core.Domain.Common
 {
     /// <summary>
-    /// 中国行政区划代码表:http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2019/index.html
+    /// 行政区划代码表:http://www.mca.gov.cn/article/sj/xzqh/2020/
     /// </summary>
-    public partial class DivisionsCodeChina : BaseEntity
+    public partial class DivisionsCode : BaseEntity
     {
-        /// <summary>
-        /// 父级ID
-        /// </summary>
-        public int ParentId { get; set; }
-
-        /// <summary>
-        /// 国家ID
-        /// </summary>
-        public int CountryId { get; set; }
-
-        /// <summary>
-        /// 国家代码（保留暂不用）
-        /// </summary>
-        public string CountryCode { get; set; }
-
         /// <summary>
         /// 区划代码
         /// </summary>
@@ -36,6 +21,11 @@ namespace Nop.Core.Domain.Marketing
         /// 简写
         /// </summary>
         public string Abbreviation { get; set; }
+
+        /// <summary>
+        /// 国家ID
+        /// </summary>
+        public int CountryId { get; set; }
 
         /// <summary>
         /// 区划等级：0=国家级，1=省级，2=市级，3=区/县级，4=街道，5=居委会

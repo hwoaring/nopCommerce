@@ -37,6 +37,14 @@ namespace Nop.Services.ExportImport
         Task<int> ImportStatesFromTxtAsync(Stream stream, bool writeLog = true);
 
         /// <summary>
+        /// 安装区划代码
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="writeLog"></param>
+        /// <returns></returns>
+        Task<int> ImportDivisionsCodeFromTxtAsync(Stream stream, bool writeLog = true);
+
+        /// <summary>
         /// Import manufacturers from XLSX file
         /// </summary>
         /// <param name="stream">Stream</param>

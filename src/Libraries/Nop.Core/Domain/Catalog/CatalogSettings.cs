@@ -536,6 +536,11 @@ namespace Nop.Core.Domain.Catalog
         public bool EnableRegionalProduct { get; set; }
 
         /// <summary>
+        /// 分类是否允许分享（分类总控）
+        /// </summary>
+        public bool AllowSharing { get; set; }
+
+        /// <summary>
         /// Gets or sets the attribute value display type when out of stock
         /// </summary>
         public AttributeValueOutOfStockDisplayType AttributeValueOutOfStockDisplayType { get; set; }

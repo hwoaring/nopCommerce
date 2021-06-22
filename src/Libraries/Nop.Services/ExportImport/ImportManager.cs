@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
+using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Messages;
@@ -1931,6 +1932,91 @@ namespace Nop.Services.ExportImport
             {
                 await _customerActivityService.InsertActivityAsync("ImportStates",
                     string.Format(await _localizationService.GetResourceAsync("ActivityLog.ImportStates"), count));
+            }
+
+            return count;
+        }
+
+        /// <summary>
+        /// Import Divisions Code from TXT file
+        /// </summary>
+        /// <param name="stream">Stream</param>
+        /// <param name="writeLog">Indicates whether to add logging</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the number of imported states
+        /// </returns>
+        public virtual async Task<int> ImportDivisionsCodeFromTxtAsync(Stream stream, bool writeLog = true)
+        {
+            var count = 0;
+            using (var reader = new StreamReader(stream))
+            {
+                while (!reader.EndOfStream)
+                {
+                    var line = await reader.ReadLineAsync();
+                    if (string.IsNullOrWhiteSpace(line))
+                        continue;
+                    var tmp = line.Split(',');
+
+                    if (tmp.Length != 9)
+                        throw new NopException("Wrong file format");
+
+                    //AreaCode,AreaName,Abbreviation,CountryId,AreaLevel,DisplayOrder,AllowsShipping,HotArea,Published
+                    //parse
+                    var areaCode = tmp[0].Trim();
+                    var areaName = tmp[1].Trim();
+                    var abbreviation = tmp[2].Trim();
+                    var countryId = int.Parse(tmp[3].Trim());
+                    var areaLevel = byte.Parse(tmp[4].Trim());
+                    var displayOrder = int.Parse(tmp[5].Trim());
+                    var allowsShipping = bool.Parse(tmp[6].Trim());
+                    var hotArea = bool.Parse(tmp[7].Trim());
+                    var published = bool.Parse(tmp[8].Trim());
+
+                    //import
+                    var divisionsCodes = await _stateProvinceService.GetDivisionsCodesAsync(showHidden: true);
+
+                    var divisionsCode = divisionsCodes.FirstOrDefault(dc => dc.AreaCode == areaCode);
+
+                    if (divisionsCode != null)
+                    {
+                        divisionsCode.AreaName = areaName;
+                        divisionsCode.Abbreviation = abbreviation;
+                        divisionsCode.CountryId = countryId;
+                        divisionsCode.AreaLevel = areaLevel;
+                        divisionsCode.DisplayOrder = displayOrder;
+                        divisionsCode.AllowsShipping = allowsShipping;
+                        divisionsCode.HotArea = hotArea;
+                        divisionsCode.Published = published;
+
+                        await _stateProvinceService.UpdateDivisionsCodeAsync(divisionsCode);
+                    }
+                    else
+                    {
+                        divisionsCode = new DivisionsCode
+                        {
+                            AreaCode = areaCode,
+                            AreaName = areaName,
+                            Abbreviation = abbreviation,
+                            CountryId = countryId,
+                            AreaLevel = areaLevel,
+                            DisplayOrder = displayOrder,
+                            AllowsShipping = allowsShipping,
+                            HotArea = hotArea,
+                            Published = published,
+                        };
+                        await _stateProvinceService.InsertDivisionsCodeAsync(divisionsCode);
+                    }
+
+                    count++;
+                }
+            }
+
+            //activity log
+            if (writeLog)
+            {
+                await _customerActivityService.InsertActivityAsync("ImportDivisionsCodes",
+                    string.Format(await _localizationService.GetResourceAsync("ActivityLog.ImportDivisionsCodes"), count));
             }
 
             return count;

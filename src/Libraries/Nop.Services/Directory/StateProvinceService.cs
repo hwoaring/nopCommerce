@@ -19,6 +19,7 @@ namespace Nop.Services.Directory
         private readonly IStaticCacheManager _staticCacheManager;
         private readonly ILocalizationService _localizationService;
         private readonly IRepository<StateProvince> _stateProvinceRepository;
+        private readonly IRepository<DivisionsCode> _divisionsCodeRepository;
 
         #endregion
 
@@ -26,11 +27,13 @@ namespace Nop.Services.Directory
 
         public StateProvinceService(IStaticCacheManager staticCacheManager,
             ILocalizationService localizationService,
-            IRepository<StateProvince> stateProvinceRepository)
+            IRepository<StateProvince> stateProvinceRepository,
+            IRepository<DivisionsCode> divisionsCodeRepository)
         {
             _staticCacheManager = staticCacheManager;
             _localizationService = localizationService;
             _stateProvinceRepository = stateProvinceRepository;
+            _divisionsCodeRepository = divisionsCodeRepository;
         }
 
         #endregion
@@ -171,6 +174,100 @@ namespace Nop.Services.Directory
         public virtual async Task UpdateStateProvinceAsync(StateProvince stateProvince)
         {
             await _stateProvinceRepository.UpdateAsync(stateProvince);
+        }
+
+        /// <summary>
+        /// 获取区划码（子级查询或模糊查询）
+        /// </summary>
+        /// <param name="areaCode"></param>
+        /// <param name="showHidden"></param>
+        /// <returns></returns>
+        public virtual async Task<IList<DivisionsCode>> GetSubDivisionsCodesAsync(string areaCode, bool showHidden = false)
+        {
+
+            var divisionsCodes = await GetDivisionsCodesAsync(showHidden);
+
+            if (string.IsNullOrEmpty(areaCode))
+                return divisionsCodes.Where(dc => dc.AreaLevel == 1).ToList();
+
+            var currentDivisionsCode = divisionsCodes.FirstOrDefault(dc => dc.AreaCode == areaCode);
+
+            if (currentDivisionsCode == null)
+                return new List<DivisionsCode>();
+
+            var filterResults = divisionsCodes.Where(dc => dc.AreaLevel == currentDivisionsCode.AreaLevel + 1 && dc.AreaCode.StartsWith(currentDivisionsCode.AreaCode.Substring(0, 2))).ToList();
+
+            return filterResults;
+        }
+
+        /// <summary>
+        /// 获取区划码
+        /// </summary>
+        /// <param name="showHidden"></param>
+        /// <returns></returns>
+        public virtual async Task<IList<DivisionsCode>> GetDivisionsCodesAsync(bool showHidden = false)
+        {
+            var query = from dc in _divisionsCodeRepository.Table
+                        orderby dc.AreaCode, dc.DisplayOrder
+                        where showHidden || dc.Published
+                        select dc;
+
+            var divisionsCodes = await _staticCacheManager.GetAsync(_staticCacheManager.PrepareKeyForDefaultCache(NopDirectoryDefaults.DivisionsCodesAllCacheKey, showHidden), async () => await query.ToListAsync());
+            return divisionsCodes;
+        }
+
+        /// <summary>
+        /// 获取区划码
+        /// </summary>
+        /// <param name="areaCode"></param>
+        /// <param name="showHidden"></param>
+        /// <returns></returns>
+        public virtual async Task<DivisionsCode> GetDivisionsCodeByAreaCodeAsync(string areaCode)
+        {
+            if (string.IsNullOrEmpty(areaCode))
+                return null;
+
+            var query = from dc in _divisionsCodeRepository.Table
+                        where dc.AreaCode== areaCode
+                        select dc;
+            return await query.FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// 获取热门区划码
+        /// </summary>
+        /// <param name="areaLevel">默认选择2级</param>
+        /// <param name="showHidden"></param>
+        /// <returns></returns>
+        public virtual async Task<IList<DivisionsCode>> GetDivisionsCodesByHotAsync(int areaLevel = 2, bool showHidden = false)
+        {
+            var query = from dc in _divisionsCodeRepository.Table
+                        where dc.AreaLevel == areaLevel &&
+                        dc.HotArea == true &&
+                        (showHidden || dc.Published)
+                        orderby dc.DisplayOrder
+                        select dc;
+            return await query.ToListAsync();
+        }
+
+        /// <summary>
+        /// 插入区划码
+        /// </summary>
+        /// <param name="divisionsCode"></param>
+        /// <returns></returns>
+        public virtual async Task InsertDivisionsCodeAsync(DivisionsCode divisionsCode)
+        {
+            await _divisionsCodeRepository.InsertAsync(divisionsCode);
+        }
+
+        /// <summary>
+        /// 更新区划码
+        /// </summary>
+        /// <param name="divisionsCode"></param>
+        /// <returns></returns>
+        public virtual async Task UpdateDivisionsCodeAsync(DivisionsCode divisionsCode)
+        {
+            await _divisionsCodeRepository.UpdateAsync(divisionsCode);
         }
 
         #endregion

@@ -286,7 +286,7 @@ namespace Nop.Data.Migrations
             _migrationManager.BuildTable<UserAdvertChannelAnalysis>(Create);
 
 
-            _migrationManager.BuildTable<DivisionsCodeChina>(Create);
+            _migrationManager.BuildTable<DivisionsCode>(Create);
             _migrationManager.BuildTable<ProductExtendLabel>(Create);
             _migrationManager.BuildTable<ProductMarketLabel>(Create);
             _migrationManager.BuildTable<PromotionCommission>(Create);

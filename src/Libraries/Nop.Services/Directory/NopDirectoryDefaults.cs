@@ -1,5 +1,6 @@
 ﻿using Nop.Core.Caching;
 using Nop.Core.Domain.Directory;
+using Nop.Core.Domain.Common;
 
 namespace Nop.Services.Directory
 {
@@ -71,6 +72,11 @@ namespace Nop.Services.Directory
         /// {0} : show hidden records?
         /// </remarks>
         public static CacheKey StateProvincesAllCacheKey => new CacheKey("Nop.stateprovince.all.{0}", NopEntityCacheDefaults<StateProvince>.Prefix);
+
+        /// <summary>
+        /// 区划码缓存
+        /// </summary>
+        public static CacheKey DivisionsCodesAllCacheKey => new CacheKey("Nop.divisionscode.all.{0}", NopEntityCacheDefaults<DivisionsCode>.Prefix);
 
         /// <summary>
         /// Gets a key for caching

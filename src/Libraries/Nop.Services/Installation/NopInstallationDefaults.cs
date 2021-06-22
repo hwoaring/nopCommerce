@@ -15,6 +15,8 @@
         /// </summary>
         public static string LocalizationResourcesPath => "~/App_Data/Localization/";
 
+        public static string LocalizationDivisionsCodeResourcesPath => "~/App_Data/Localization/DivisionsCode/";
+
         /// <summary>
         /// Gets a localization resources file extension
         /// </summary>

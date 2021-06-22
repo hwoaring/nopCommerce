@@ -1080,6 +1080,9 @@
   <LocaleResource Name="ActivityLog.ImportStates">
     <Value>{0} states and provinces were imported</Value>
   </LocaleResource>
+  <LocaleResource Name="ActivityLog.ImportDivisionsCodes">
+    <Value>{0} divisions codes were imported</Value>
+  </LocaleResource>
   <LocaleResource Name="ActivityLog.InstallNewPlugin">
     <Value>Installed a new plugin (FriendlyName: '{0}')</Value>
   </LocaleResource>

@@ -147,6 +147,11 @@ namespace Nop.Core.Domain.Topics
         public string MetaLinkUrl { get; set; }
 
         /// <summary>
+        /// 页面是否允许分享
+        /// </summary>
+        public bool AllowSharing { get; set; }
+
+        /// <summary>
         /// 分享大图
         /// </summary>
         public string ShareImageUrl { get; set; }

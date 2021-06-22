@@ -135,6 +135,11 @@ namespace Nop.Core.Domain.Catalog
         public string ItemTemplateName { get; set; }
 
         /// <summary>
+        /// 分类是否允许分享
+        /// </summary>
+        public bool AllowSharing { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the entity is published
         /// </summary>
         public bool Published { get; set; }

@@ -152,6 +152,11 @@ namespace Nop.Core.Domain.Catalog
         public string ShareImageUrl { get; set; }
 
         /// <summary>
+        /// 是否允许分享
+        /// </summary>
+        public bool AllowSharing { get; set; }
+
+        /// <summary>
         /// Gets or sets a value of used product template identifier
         /// </summary>
         public int ProductTemplateId { get; set; }

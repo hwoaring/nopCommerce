@@ -704,6 +704,24 @@ namespace Nop.Services.Installation
         }
 
         /// <returns>A task that represents the asynchronous operation</returns>
+        protected virtual async Task InstallDivisionsCodeAsync()
+        {
+            //Import Divisions Code China
+            var directoryPath = _fileProvider.MapPath(NopInstallationDefaults.LocalizationDivisionsCodeResourcesPath);
+            var pattern = "*.txt";
+
+            //we use different scope to prevent creating wrong settings in DI, because the settings data not exists yet
+            var serviceScopeFactory = EngineContext.Current.Resolve<IServiceScopeFactory>();
+            using var scope = serviceScopeFactory.CreateScope();
+            var importManager = EngineContext.Current.Resolve<IImportManager>(scope);
+            foreach (var filePath in _fileProvider.EnumerateFiles(directoryPath, pattern))
+            {
+                await using var stream = new FileStream(filePath, FileMode.Open);
+                await importManager.ImportDivisionsCodeFromTxtAsync(stream, false);
+            }
+        }
+
+        /// <returns>A task that represents the asynchronous operation</returns>
         protected virtual async Task InstallShippingMethodsAsync()
         {
             var shippingMethods = new List<ShippingMethod>
@@ -9498,6 +9516,7 @@ namespace Nop.Services.Installation
             await InstallLanguagesAsync(languagePackInfo, cultureInfo, regionInfo);
             await InstallCurrenciesAsync(cultureInfo, regionInfo);
             await InstallCountriesAndStatesAsync();
+            await InstallDivisionsCodeAsync(); //安装区划码
             await InstallShippingMethodsAsync();
             await InstallDeliveryDatesAsync();
             await InstallProductAvailabilityRangesAsync();

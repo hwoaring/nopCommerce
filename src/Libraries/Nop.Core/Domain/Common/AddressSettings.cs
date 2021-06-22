@@ -117,5 +117,15 @@ namespace Nop.Core.Domain.Common
         /// Gets or sets a value indicating whether we have to preselect a country if there's only one country available (public store)
         /// </summary>
         public bool PreselectCountryIfOnlyOne { get; set; }
+
+        /// <summary>
+        /// 前台国家，省，市仅显示可用
+        /// </summary>
+        public bool OnlyShowAvailable { get; set; }
+
+        /// <summary>
+        /// 启用区划表选择地址
+        /// </summary>
+        public bool UseDivisionsCode { get; set; }
     }
 }
