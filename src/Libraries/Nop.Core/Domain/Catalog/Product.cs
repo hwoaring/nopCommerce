@@ -585,6 +585,11 @@ namespace Nop.Core.Domain.Catalog
         public bool CallForPrice { get; set; }
 
         /// <summary>
+        /// 是否开启分销
+        /// </summary>
+        public bool AllowDistribute { get; set; }
+
+        /// <summary>
         /// 分销商价格
         /// </summary>
         public decimal DistributorPrice { get; set; }
