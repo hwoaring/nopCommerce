@@ -1,7 +1,7 @@
 ﻿using FluentMigrator.Builders.Create.Table;
-using Nop.Core.Domain.Common;
+using Nop.Core.Domain.Directory;
 
-namespace Nop.Data.Mapping.Builders.Common
+namespace Nop.Data.Mapping.Builders.Directory
 {
     /// <summary>
     /// Represents a Divisions Code entity builder

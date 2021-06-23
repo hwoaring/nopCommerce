@@ -223,6 +223,9 @@ namespace Nop.Data.Migrations
             _migrationManager.BuildTable<VendorAttributeValue>(Create);
             _migrationManager.BuildTable<VendorNote>(Create);
 
+            _migrationManager.BuildTable<ProductVendorMapping>(Create);
+            _migrationManager.BuildTable<CategoryVendorMapping>(Create);
+
             //Weixin
             _migrationManager.BuildTable<WConfig>(Create);
 

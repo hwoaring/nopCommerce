@@ -210,6 +210,11 @@ namespace Nop.Core.Domain.Vendors
         public int PageSize { get; set; }
 
         /// <summary>
+        /// 是否允许联系
+        /// </summary>
+        public bool AllowCustomersToContactVendors { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether customers can select the page size
         /// </summary>
         public bool AllowCustomersToSelectPageSize { get; set; }

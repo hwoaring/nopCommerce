@@ -1,5 +1,4 @@
 ﻿using FluentMigrator;
-using FluentMigrator.SqlServer;
 using Nop.Core.Domain.Weixin;
 
 namespace Nop.Data.Migrations.Indexes

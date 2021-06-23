@@ -1,6 +1,5 @@
 ﻿using FluentMigrator;
-using FluentMigrator.SqlServer;
-using Nop.Core.Domain.Common;
+using Nop.Core.Domain.Directory;
 
 namespace Nop.Data.Migrations.Indexes
 {

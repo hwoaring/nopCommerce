@@ -740,6 +740,11 @@ namespace Nop.Core.Domain.Catalog
         public bool Deleted { get; set; }
 
         /// <summary>
+        /// 仅对允许的Vendor共享显示产品信息（自己添加的默认显示）-对应到ProductVendorMapping中
+        /// </summary>
+        public bool VendorLimitDisplay { get; set; }
+
+        /// <summary>
         /// 是否通过审核（编辑或其他商家上的产品需要先通过审核）
         /// </summary>
         public bool Audited { get; set; }

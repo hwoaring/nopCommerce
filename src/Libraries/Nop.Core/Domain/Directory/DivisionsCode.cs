@@ -1,6 +1,6 @@
 ﻿using Humanizer;
 
-namespace Nop.Core.Domain.Common
+namespace Nop.Core.Domain.Directory
 {
     /// <summary>
     /// 行政区划代码表:http://www.mca.gov.cn/article/sj/xzqh/2020/

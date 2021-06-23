@@ -88,6 +88,11 @@ namespace Nop.Core.Domain.Catalog
         public int PictureId { get; set; }
 
         /// <summary>
+        /// VendorId用于指定到个人（隔离展示信息）
+        /// </summary>
+        public int VendorId { get; set; }
+
+        /// <summary>
         /// Gets or sets the page size
         /// </summary>
         public int PageSize { get; set; }
@@ -183,5 +188,10 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets a value indicating whether the price range should be entered manually
         /// </summary>
         public bool ManuallyPriceRange { get; set; }
+
+        /// <summary>
+        /// 仅对允许的Vendor共享显示产品信息（自己添加的默认显示）-对应到CatrgoryVendorMapping中
+        /// </summary>
+        public bool VendorLimitDisplay { get; set; }
     }
 }
