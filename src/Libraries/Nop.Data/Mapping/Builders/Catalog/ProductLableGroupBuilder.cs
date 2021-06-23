@@ -16,7 +16,10 @@ namespace Nop.Data.Mapping.Builders.Catalog
         /// <param name="table">Create table expression builder</param>
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
-            table.WithColumn(nameof(ProductLableGroup.Name)).AsString(64).NotNullable();
+            table
+                .WithColumn(nameof(ProductLableGroup.Name)).AsString(64).NotNullable()
+                .WithColumn(nameof(ProductLableGroup.CssName)).AsAnsiString(64).Nullable()
+                ;
         }
 
         #endregion

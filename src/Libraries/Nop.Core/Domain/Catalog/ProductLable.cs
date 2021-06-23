@@ -19,6 +19,11 @@ namespace Nop.Core.Domain.Catalog
         public string Description { get; set; }
 
         /// <summary>
+        /// 用于CSS格式
+        /// </summary>
+        public string CssName { get; set; }
+
+        /// <summary>
         /// 默认内容
         /// </summary>
         public string Content { get; set; }
