@@ -88,6 +88,8 @@ namespace Nop.Data.Migrations
             _migrationManager.BuildTable<Product>(Create);
             _migrationManager.BuildTable<ProductTemplate>(Create);
             _migrationManager.BuildTable<ProductComment>(Create);
+            _migrationManager.BuildTable<ProductLableGroup>(Create);
+            _migrationManager.BuildTable<ProductLable>(Create);
             _migrationManager.BuildTable<BackInStockSubscription>(Create);
             _migrationManager.BuildTable<RelatedProduct>(Create);
             _migrationManager.BuildTable<ReviewType>(Create);
@@ -96,6 +98,7 @@ namespace Nop.Data.Migrations
             _migrationManager.BuildTable<ProductAttributeCombination>(Create);
             _migrationManager.BuildTable<ProductAttributeMapping>(Create);
             _migrationManager.BuildTable<ProductAttributeValue>(Create);
+            _migrationManager.BuildTable<ProductProductLableMapping>(Create);
 
             _migrationManager.BuildTable<Order>(Create);
             _migrationManager.BuildTable<OrderItem>(Create);

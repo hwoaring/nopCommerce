@@ -88,6 +88,11 @@ namespace Nop.Core.Domain.Catalog
         public int PictureId { get; set; }
 
         /// <summary>
+        /// 供应商ID
+        /// </summary>
+        public int SupplierId { get; set; }
+
+        /// <summary>
         /// VendorId用于指定到个人（隔离展示信息）
         /// </summary>
         public int VendorId { get; set; }
