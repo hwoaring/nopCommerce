@@ -1,4 +1,4 @@
-using Nop.Core.Domain.Localization;
+﻿using Nop.Core.Domain.Localization;
 
 namespace Nop.Core.Domain.Stores
 {
@@ -56,5 +56,21 @@ namespace Nop.Core.Domain.Stores
         /// Gets or sets the company VAT (used in Europe Union countries)
         /// </summary>
         public string CompanyVat { get; set; }
+
+        /// <summary>
+        /// 联系人姓名
+        /// </summary>
+        public string ContactName { get; set; }
+
+        /// <summary>
+        /// 地图链接
+        /// </summary>
+        public string MapURL { get; set; }
+
+        /// <summary>
+        /// 启用区域联系人（启用后，该区域访客在该区域，自动获取本区域联系信息）
+        /// </summary>
+        public bool AllowRegionalContact { get; set; }
+
     }
 }

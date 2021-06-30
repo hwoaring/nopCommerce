@@ -153,6 +153,7 @@ namespace Nop.Web.Framework.Infrastructure
             services.AddScoped<IStateProvinceService, StateProvinceService>();
             services.AddScoped<IStoreService, StoreService>();
             services.AddScoped<IStoreMappingService, StoreMappingService>();
+            services.AddScoped<IStoreRegionalContactService, StoreRegionalContactService>();
             services.AddScoped<IDiscountService, DiscountService>();
             services.AddScoped<ILocalizationService, LocalizationService>();
             services.AddScoped<ILocalizedEntityService, LocalizedEntityService>();

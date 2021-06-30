@@ -116,6 +116,7 @@ namespace Nop.Data.Migrations
 
             _migrationManager.BuildTable<Store>(Create);
             _migrationManager.BuildTable<StoreMapping>(Create);
+            _migrationManager.BuildTable<StoreRegionalContact>(Create);
 
             _migrationManager.BuildTable<Language>(Create);
             _migrationManager.BuildTable<LocaleStringResource>(Create);
