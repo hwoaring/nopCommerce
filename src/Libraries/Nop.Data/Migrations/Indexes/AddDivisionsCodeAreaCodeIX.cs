@@ -3,7 +3,7 @@ using Nop.Core.Domain.Directory;
 
 namespace Nop.Data.Migrations.Indexes
 {
-    [NopMigration("2020/04/13 09:36:08:9057686")]
+    [NopMigration("2020/04/13 10:36:08:9557686")]
     public class AddDivisionsCodeAreaCodeIX : AutoReversingMigration
     {
         #region Methods          

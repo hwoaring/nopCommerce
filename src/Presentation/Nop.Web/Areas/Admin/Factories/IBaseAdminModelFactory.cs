@@ -52,7 +52,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="withSpecialDefaultItem">Whether to insert the first special item for the default value</param>
         /// <param name="defaultItemText">Default item text; pass null to use default value of the default item text</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        Task PrepareCountriesAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null);
+        Task PrepareCountriesAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null, bool showHidden = true);
 
         /// <summary>
         /// Prepare available states and provinces
@@ -63,7 +63,10 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="defaultItemText">Default item text; pass null to use default value of the default item text</param>
         /// <returns>A task that represents the asynchronous operation</returns>
         Task PrepareStatesAndProvincesAsync(IList<SelectListItem> items, int? countryId,
-            bool withSpecialDefaultItem = true, string defaultItemText = null);
+            bool withSpecialDefaultItem = true, string defaultItemText = null, bool showHidden = true);
+
+        Task PrepareCityAndCountiesAsync(IList<SelectListItem> items, int? stateProvinceId,
+            bool withSpecialDefaultItem = true, string defaultItemText = null, int areaLevel = 0, bool showHidden = true);
 
         /// <summary>
         /// Prepare available languages

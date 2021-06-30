@@ -13,6 +13,11 @@
         public string RegionalKey { get; set; }
 
         /// <summary>
+        /// 区域代码，以逗号分开
+        /// </summary>
+        public string RegionalAreaCode { get; set; }
+
+        /// <summary>
         /// 区域等级（1=省级，2=市级，3=县级，4=区域级别）
         /// </summary>
         public int RegionalLevel { get; set; }

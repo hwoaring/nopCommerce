@@ -1452,6 +1452,9 @@
   <LocaleResource Name="Admin.Address.SelectState">
     <Value>Select state</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Address.SelectCity">
+    <Value>Select city</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Affiliates">
     <Value>Affiliates</Value>
   </LocaleResource>

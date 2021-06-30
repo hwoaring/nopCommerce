@@ -151,6 +151,8 @@ namespace Nop.Web.Framework.Infrastructure
             services.AddScoped<ICurrencyService, CurrencyService>();
             services.AddScoped<IMeasureService, MeasureService>();
             services.AddScoped<IStateProvinceService, StateProvinceService>();
+            services.AddScoped<ICityCountyService, CityCountyService>();
+            services.AddScoped<IDivisionsCodeService, DivisionsCodeService>();
             services.AddScoped<IStoreService, StoreService>();
             services.AddScoped<IStoreMappingService, StoreMappingService>();
             services.AddScoped<IStoreRegionalContactService, StoreRegionalContactService>();

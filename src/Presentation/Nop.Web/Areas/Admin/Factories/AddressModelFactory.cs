@@ -40,7 +40,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="model">Address model</param>
         /// <param name="address">Address</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        public virtual async Task PrepareAddressModelAsync(AddressModel model, Address address = null)
+        public virtual async Task PrepareAddressModelAsync(AddressModel model, Address address = null, bool showHidden = true)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
@@ -50,6 +50,9 @@ namespace Nop.Web.Areas.Admin.Factories
 
             //prepare available states
             await _baseAdminModelFactory.PrepareStatesAndProvincesAsync(model.AvailableStates, model.CountryId);
+
+            //prepare available County/Region (获取城市和区县)
+            await _baseAdminModelFactory.PrepareCityAndCountiesAsync(model.AvailableCities, model.StateProvinceId);
 
             //prepare custom address attributes
             await _addressAttributeModelFactory.PrepareCustomAddressAttributesAsync(model.CustomAddressAttributes, address);

@@ -13,6 +13,7 @@ namespace Nop.Web.Areas.Admin.Models.Common
         {
             AvailableCountries = new List<SelectListItem>();
             AvailableStates = new List<SelectListItem>();
+            AvailableCities = new List<SelectListItem>();
             CustomAddressAttributes = new List<AddressAttributeModel>();
         }
 
@@ -73,7 +74,8 @@ namespace Nop.Web.Areas.Admin.Models.Common
 
         public IList<SelectListItem> AvailableCountries { get; set; }
         public IList<SelectListItem> AvailableStates { get; set; }
-        
+        public IList<SelectListItem> AvailableCities { get; set; }
+
         public bool FirstNameRequired { get; set; }
         public bool LastNameRequired { get; set; }
         public bool EmailRequired { get; set; }

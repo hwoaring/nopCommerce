@@ -15,6 +15,6 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="model">Address model</param>
         /// <param name="address">Address</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        Task PrepareAddressModelAsync(AddressModel model, Address address = null);
+        Task PrepareAddressModelAsync(AddressModel model, Address address = null, bool showHidden = true);
     }
 }

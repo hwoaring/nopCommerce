@@ -59,6 +59,7 @@ namespace Nop.Web.Areas.Admin.Factories
         private readonly ISpecificationAttributeService _specificationAttributeService;
         private readonly IShippingService _shippingService;
         private readonly IStateProvinceService _stateProvinceService;
+        private readonly ICityCountyService _cityCountyService;
         private readonly IStaticCacheManager _staticCacheManager;
         private readonly IStoreService _storeService;
         private readonly ITaxCategoryService _taxCategoryService;
@@ -89,6 +90,7 @@ namespace Nop.Web.Areas.Admin.Factories
             ISpecificationAttributeService specificationAttributeService,
             IShippingService shippingService,
             IStateProvinceService stateProvinceService,
+            ICityCountyService cityCountyService,
             IStaticCacheManager staticCacheManager,
             IStoreService storeService,
             ITaxCategoryService taxCategoryService,
@@ -115,6 +117,7 @@ namespace Nop.Web.Areas.Admin.Factories
             _specificationAttributeService = specificationAttributeService;
             _shippingService = shippingService;
             _stateProvinceService = stateProvinceService;
+            _cityCountyService = cityCountyService;
             _staticCacheManager = staticCacheManager;
             _storeService = storeService;
             _taxCategoryService = taxCategoryService;
@@ -360,13 +363,13 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="withSpecialDefaultItem">Whether to insert the first special item for the default value</param>
         /// <param name="defaultItemText">Default item text; pass null to use default value of the default item text</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        public virtual async Task PrepareCountriesAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null)
+        public virtual async Task PrepareCountriesAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null, bool showHidden = true)
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
             //prepare available countries
-            var availableCountries = await _countryService.GetAllCountriesAsync(showHidden: true);
+            var availableCountries = await _countryService.GetAllCountriesAsync(showHidden: showHidden);
             foreach (var country in availableCountries)
             {
                 items.Add(new SelectListItem { Value = country.Id.ToString(), Text = country.Name });
@@ -385,7 +388,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="defaultItemText">Default item text; pass null to use default value of the default item text</param>
         /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task PrepareStatesAndProvincesAsync(IList<SelectListItem> items, int? countryId,
-            bool withSpecialDefaultItem = true, string defaultItemText = null)
+            bool withSpecialDefaultItem = true, string defaultItemText = null, bool showHidden = true)
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
@@ -393,7 +396,7 @@ namespace Nop.Web.Areas.Admin.Factories
             if (countryId.HasValue)
             {
                 //prepare available states and provinces of the country
-                var availableStates = await _stateProvinceService.GetStateProvincesByCountryIdAsync(countryId.Value, showHidden: true);
+                var availableStates = await _stateProvinceService.GetStateProvincesByCountryIdAsync(countryId.Value, showHidden: showHidden);
                 foreach (var state in availableStates)
                 {
                     items.Add(new SelectListItem { Value = state.Id.ToString(), Text = state.Name });
@@ -402,6 +405,31 @@ namespace Nop.Web.Areas.Admin.Factories
                 //insert special item for the default value
                 if (items.Count > 1)
                     await PrepareDefaultItemAsync(items, withSpecialDefaultItem, defaultItemText ?? await _localizationService.GetResourceAsync("Admin.Address.SelectState"));
+            }
+
+            //insert special item for the default value
+            if (!items.Any())
+                await PrepareDefaultItemAsync(items, withSpecialDefaultItem, defaultItemText ?? await _localizationService.GetResourceAsync("Admin.Address.Other"));
+        }
+
+        public virtual async Task PrepareCityAndCountiesAsync(IList<SelectListItem> items, int? stateProvinceId,
+            bool withSpecialDefaultItem = true, string defaultItemText = null, int areaLevel = 0, bool showHidden = true)
+        {
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
+
+            if (stateProvinceId.HasValue)
+            {
+                //prepare available Cities and Counties of the country
+                var availableCities = await _cityCountyService.GetCityCountiesByStateProvinceIdAsync(stateProvinceId.Value, showHidden: showHidden);
+                foreach (var city in availableCities)
+                {
+                    items.Add(new SelectListItem { Value = city.Id.ToString(), Text = city.Name });
+                }
+
+                //insert special item for the default value
+                if (items.Count > 1)
+                    await PrepareDefaultItemAsync(items, withSpecialDefaultItem, defaultItemText ?? await _localizationService.GetResourceAsync("Admin.Address.SelectCity"));
             }
 
             //insert special item for the default value

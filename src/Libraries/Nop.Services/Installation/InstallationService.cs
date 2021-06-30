@@ -3129,7 +3129,7 @@ namespace Nop.Services.Installation
 
             await settingService.SaveSettingAsync(new CustomerSettings
             {
-                RefereeIdAvailableSeconds = 0,
+                RefereeIdAvailableSeconds = 604800, //7天
                 UsernamesEnabled = false,
                 CheckUsernameAvailabilityEnabled = false,
                 AllowUsersToChangeUsernames = false,
@@ -3222,7 +3222,10 @@ namespace Nop.Services.Installation
                 StateProvinceEnabled = true,
                 PhoneEnabled = true,
                 PhoneRequired = true,
-                FaxEnabled = true
+                FaxEnabled = true,
+                PreselectCountryIfOnlyOne = true,
+                OnlyShowAvailable = true,
+                UseDivisionsCode = false
             });
 
             await settingService.SaveSettingAsync(new MediaSettings

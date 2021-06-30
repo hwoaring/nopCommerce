@@ -59,6 +59,8 @@ namespace Nop.Data.Migrations
             _migrationManager.BuildTable<MeasureDimension>(Create);
             _migrationManager.BuildTable<MeasureWeight>(Create);
             _migrationManager.BuildTable<StateProvince>(Create);
+            _migrationManager.BuildTable<CityCounty>(Create);
+            _migrationManager.BuildTable<DivisionsCode>(Create);
             _migrationManager.BuildTable<Address>(Create);
             _migrationManager.BuildTable<Affiliate>(Create);
 
@@ -293,7 +295,7 @@ namespace Nop.Data.Migrations
             _migrationManager.BuildTable<UserAdvertChannelAnalysis>(Create);
 
 
-            _migrationManager.BuildTable<DivisionsCode>(Create);
+            
             _migrationManager.BuildTable<ProductExtendLabel>(Create);
             _migrationManager.BuildTable<ProductMarketLabel>(Create);
             _migrationManager.BuildTable<PromotionCommission>(Create);

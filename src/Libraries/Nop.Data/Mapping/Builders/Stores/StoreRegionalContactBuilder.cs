@@ -21,6 +21,7 @@ namespace Nop.Data.Mapping.Builders.Stores
                 .WithColumn(nameof(StoreRegionalContact.StoreId)).AsInt32().ForeignKey<Store>()
                 .WithColumn(nameof(StoreRegionalContact.RegionalKey)).AsString(64).NotNullable()
                 .WithColumn(nameof(StoreRegionalContact.CompanyName)).AsString(64).NotNullable()
+                .WithColumn(nameof(StoreRegionalContact.RegionalAreaCode)).AsAnsiString(4000).Nullable()
                 .WithColumn(nameof(StoreRegionalContact.CompanyImage)).AsString(512).Nullable()
                 .WithColumn(nameof(StoreRegionalContact.ContactName)).AsString(512).Nullable()
                 .WithColumn(nameof(StoreRegionalContact.CompanyPhoneNumber)).AsString(512).Nullable()

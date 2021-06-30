@@ -42,6 +42,16 @@ namespace Nop.Core.Domain.Common
         public int? StateProvinceId { get; set; }
 
         /// <summary>
+        /// 城市
+        /// </summary>
+        public int? CityId { get; set; }
+
+        /// <summary>
+        /// 区县
+        /// </summary>
+        public int? CountyRegionId { get; set; }
+
+        /// <summary>
         /// 区划表AreaCode
         /// </summary>
         public string DivisionsCode { get; set; }

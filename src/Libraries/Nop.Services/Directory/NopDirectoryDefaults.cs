@@ -65,6 +65,8 @@ namespace Nop.Services.Directory
         /// </remarks>
         public static CacheKey StateProvincesByCountryCacheKey => new CacheKey("Nop.stateprovince.bycountry.{0}-{1}-{2}", NopEntityCacheDefaults<StateProvince>.Prefix);
 
+        public static CacheKey CityCountiesByStateProvinceCacheKey => new CacheKey("Nop.cityCounty.byprovince.{0}-{1}-{2}", NopEntityCacheDefaults<CityCounty>.Prefix);
+
         /// <summary>
         /// Gets a key for caching
         /// </summary>
@@ -72,6 +74,8 @@ namespace Nop.Services.Directory
         /// {0} : show hidden records?
         /// </remarks>
         public static CacheKey StateProvincesAllCacheKey => new CacheKey("Nop.stateprovince.all.{0}", NopEntityCacheDefaults<StateProvince>.Prefix);
+
+        public static CacheKey CityCountiesAllCacheKey => new CacheKey("Nop.citycounty.all.{0}", NopEntityCacheDefaults<CityCounty>.Prefix);
 
         /// <summary>
         /// 区划码缓存
@@ -86,6 +90,8 @@ namespace Nop.Services.Directory
         /// {1} : country ID
         /// </remarks>
         public static CacheKey StateProvincesByAbbreviationCacheKey => new CacheKey("Nop.stateprovince.byabbreviation.{0}-{1}", NopEntityCacheDefaults<StateProvince>.Prefix);
+
+        public static CacheKey CityCountiesByAbbreviationCacheKey => new CacheKey("Nop.citycounty.byabbreviation.{0}-{1}", NopEntityCacheDefaults<CityCounty>.Prefix);
 
         #endregion
 

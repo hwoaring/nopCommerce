@@ -73,6 +73,7 @@ namespace Nop.Services.ExportImport
         private readonly IShippingService _shippingService;
         private readonly ISpecificationAttributeService _specificationAttributeService;
         private readonly IStateProvinceService _stateProvinceService;
+        private readonly IDivisionsCodeService _divisionsCodeService;
         private readonly IStoreContext _storeContext;
         private readonly IStoreMappingService _storeMappingService;
         private readonly IStoreService _storeService;
@@ -109,6 +110,7 @@ namespace Nop.Services.ExportImport
             IShippingService shippingService,
             ISpecificationAttributeService specificationAttributeService,
             IStateProvinceService stateProvinceService,
+            IDivisionsCodeService divisionsCodeService,
             IStoreContext storeContext,
             IStoreMappingService storeMappingService,
             IStoreService storeService,
@@ -141,6 +143,7 @@ namespace Nop.Services.ExportImport
             _shippingService = shippingService;
             _specificationAttributeService = specificationAttributeService;
             _stateProvinceService = stateProvinceService;
+            _divisionsCodeService = divisionsCodeService;
             _storeContext = storeContext;
             _storeMappingService = storeMappingService;
             _storeService = storeService;
@@ -1974,7 +1977,7 @@ namespace Nop.Services.ExportImport
                     var published = bool.Parse(tmp[8].Trim());
 
                     //import
-                    var divisionsCodes = await _stateProvinceService.GetDivisionsCodesAsync(showHidden: true);
+                    var divisionsCodes = await _divisionsCodeService.GetDivisionsCodesAsync(showHidden: true);
 
                     var divisionsCode = divisionsCodes.FirstOrDefault(dc => dc.AreaCode == areaCode);
 
@@ -1989,7 +1992,7 @@ namespace Nop.Services.ExportImport
                         divisionsCode.HotArea = hotArea;
                         divisionsCode.Published = published;
 
-                        await _stateProvinceService.UpdateDivisionsCodeAsync(divisionsCode);
+                        await _divisionsCodeService.UpdateDivisionsCodeAsync(divisionsCode);
                     }
                     else
                     {
@@ -2005,7 +2008,7 @@ namespace Nop.Services.ExportImport
                             HotArea = hotArea,
                             Published = published,
                         };
-                        await _stateProvinceService.InsertDivisionsCodeAsync(divisionsCode);
+                        await _divisionsCodeService.InsertDivisionsCodeAsync(divisionsCode);
                     }
 
                     count++;
