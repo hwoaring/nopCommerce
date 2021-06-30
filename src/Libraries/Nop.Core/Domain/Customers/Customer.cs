@@ -34,7 +34,7 @@ namespace Nop.Core.Domain.Customers
         public string EmailToRevalidate { get; set; }
 
         /// <summary>
-        /// 手机号（可用于手机号登录或者账号找回）
+        /// 手机号（可用于手机号登录或者账号找回，或用于账户手机号绑定验证）
         /// </summary>
         public string PhoneNumber { get; set; }
 

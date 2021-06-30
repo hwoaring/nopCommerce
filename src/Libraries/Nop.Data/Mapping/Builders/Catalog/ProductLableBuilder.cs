@@ -22,6 +22,7 @@ namespace Nop.Data.Mapping.Builders.Catalog
                 .WithColumn(nameof(ProductLable.ProductLableGroupId)).AsInt32().ForeignKey<ProductLableGroup>()
                 .WithColumn(nameof(ProductLable.Name)).AsString(64).NotNullable()
                 .WithColumn(nameof(ProductLable.CssName)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(ProductLable.IcoName)).AsAnsiString(64).Nullable()
                 ;
         }
 

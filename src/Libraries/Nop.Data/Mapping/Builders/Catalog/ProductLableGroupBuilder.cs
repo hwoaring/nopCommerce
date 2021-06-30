@@ -19,6 +19,7 @@ namespace Nop.Data.Mapping.Builders.Catalog
             table
                 .WithColumn(nameof(ProductLableGroup.Name)).AsString(64).NotNullable()
                 .WithColumn(nameof(ProductLableGroup.CssName)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(ProductLableGroup.IcoName)).AsAnsiString(64).Nullable()
                 ;
         }
 

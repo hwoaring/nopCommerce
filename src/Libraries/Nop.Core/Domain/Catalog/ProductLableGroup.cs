@@ -14,6 +14,11 @@ namespace Nop.Core.Domain.Catalog
         public string Name { get; set; }
 
         /// <summary>
+        /// 分组对应ICO标签样式
+        /// </summary>
+        public string IcoName { get; set; }
+
+        /// <summary>
         /// 用于CSS格式
         /// </summary>
         public string CssName { get; set; }

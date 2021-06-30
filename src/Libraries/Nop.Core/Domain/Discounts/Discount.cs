@@ -38,6 +38,11 @@ namespace Nop.Core.Domain.Discounts
         public bool EnableRefereeRequirement { get; set; }
 
         /// <summary>
+        /// 活动是否允许退款
+        /// </summary>
+        public bool RefundAllowed { get; set; }
+
+        /// <summary>
         /// 最低推荐人数（达到推荐人数可以使用，默认为0）
         /// </summary>
         public int MinReferralsNumber { get; set; }

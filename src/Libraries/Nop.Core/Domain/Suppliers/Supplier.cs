@@ -73,26 +73,42 @@ namespace Nop.Core.Domain.Suppliers
         /// 结束时间
         /// </summary>
         public DateTime? EndDateTimeUtc { get; set; }
+
         /// <summary>
-        /// 合作类型：年费，免费，季度等（预留）
+        /// 付费合作类型结束时间（年度用户，季度，Vip用户等）
+        /// </summary>
+        public DateTime? CooperationEndDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 合作类型：0=免费，付费等（预留）
         /// </summary>
         public byte CooperationTypeId { get; set; }
+
+        /// <summary>
+        /// 累计付费合作月数
+        /// </summary>
+        public int CooperationMonths { get; set; }
+
         /// <summary>
         /// 店铺最大数量
         /// </summary>
         public int MaxShopCount { get; set; }
+
         /// <summary>
         /// 分组管理最大数量
         /// </summary>
         public int MaxGroupCount { get; set; }
+
         /// <summary>
         /// 每个店铺环境图最大数量
         /// </summary>
         public int MaxImageCount { get; set; }
+
         /// <summary>
         /// 每个店铺员工信息最大数量
         /// </summary>
         public int MaxStaffCount { get; set; }
+
         /// <summary>
         /// 每个店铺产品最大数量
         /// </summary>
@@ -136,6 +152,12 @@ namespace Nop.Core.Domain.Suppliers
         /// 是否个人店铺
         /// </summary>
         public bool IsPersonal { get; set; }
+
+        /// <summary>
+        /// 是否已经认证（企业店铺认证，或个人店铺认证）
+        /// </summary>
+        public bool IsCertified { get; set; }
+
         /// <summary>
         /// 发布
         /// </summary>

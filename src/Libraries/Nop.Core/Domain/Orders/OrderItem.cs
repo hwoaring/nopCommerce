@@ -116,6 +116,11 @@ namespace Nop.Core.Domain.Orders
         public bool IsDownloadActivated { get; set; }
 
         /// <summary>
+        /// 是否固定日期消费，与AvailableEndDateUtc字段共同使用。
+        /// </summary>
+        public bool IsFixedConsumDate { get; set; }
+
+        /// <summary>
         /// Gets or sets a license download identifier (in case this is a downloadable product)
         /// </summary>
         public int? LicenseDownloadId { get; set; }
@@ -135,5 +140,10 @@ namespace Nop.Core.Domain.Orders
         /// Gets or sets the rental product end date (null if it's not a rental product)
         /// </summary>
         public DateTime? RentalEndDateUtc { get; set; }
+
+        /// <summary>
+        /// 购买成功产品最晚有效使用时间
+        /// </summary>
+        public DateTime? AvailableEndDateUtc { get; set; }
     }
 }

@@ -77,7 +77,7 @@ namespace Nop.Core.Domain.Catalog
         /// </summary>
         public bool DiscountPrice { get; set; }
         /// <summary>
-        /// 置顶
+        /// 是否置顶
         /// </summary>
         public bool IsTop { get; set; }
         /// <summary>
@@ -96,6 +96,17 @@ namespace Nop.Core.Domain.Catalog
         /// 是否图片
         /// </summary>
         public bool IsImage { get; set; }
+
+        /// <summary>
+        /// 是否显示供应商Supplier联系方式
+        /// </summary>
+        public bool DisplaySupplierContact { get; set; }
+
+        /// <summary>
+        /// 是否允许Vendor屏蔽本产品的供应商联系方式
+        /// </summary>
+        public bool AllowVendorShieldSupplierContact { get; set; }
+
         /// <summary>
         /// 是否延迟加载详情内容中的图片
         /// </summary>
@@ -534,6 +545,11 @@ namespace Nop.Core.Domain.Catalog
         public int OrderMaximumQuantity { get; set; }
 
         /// <summary>
+        /// 产品可用最大积分数量
+        /// </summary>
+        public int MaxPointsAvailable { get; set; }
+
+        /// <summary>
         /// 【价格保护】使用免费的折扣券最大折扣比例（超出比例不显示可用折扣卡或取最小折扣比例）
         /// </summary>
         public decimal? MaxDiscountPercentage { get; set; }
@@ -625,6 +641,11 @@ namespace Nop.Core.Domain.Catalog
         public bool CustomerEntersPrice { get; set; }
 
         /// <summary>
+        /// 产品允许使用的优惠券最大金额
+        /// </summary>
+        public decimal MaxCouponAmountAvailable { get; set; }
+
+        /// <summary>
         /// Gets or sets the minimum price entered by a customer
         /// </summary>
         public decimal MinimumCustomerEnteredPrice { get; set; }
@@ -663,6 +684,11 @@ namespace Nop.Core.Domain.Catalog
         /// 仅新用户可购买
         /// </summary>
         public bool OnlyForNewUser { get; set; }
+
+        /// <summary>
+        /// 产品是否允许退款
+        /// </summary>
+        public bool RefundAllowed { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this product is marked as new
