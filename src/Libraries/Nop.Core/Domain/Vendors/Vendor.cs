@@ -15,6 +15,16 @@ namespace Nop.Core.Domain.Vendors
         public string Name { get; set; }
 
         /// <summary>
+        /// Vendor识别码(确定后一般不能修改，可用于在快递中备注)
+        /// </summary>
+        public string VendorNumber { get; set; }
+
+        /// <summary>
+        /// Vendor邀请码(可以修改)
+        /// </summary>
+        public string InviteCode { get; set; }
+
+        /// <summary>
         /// Gets or sets the email
         /// </summary>
         public string Email { get; set; }
@@ -23,6 +33,11 @@ namespace Nop.Core.Domain.Vendors
         /// Gets or sets the description
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// 用于存储个人Js代码（三方统计代码，个人浏览量统计等）
+        /// </summary>
+        public string JsContent { get; set; }
 
         /// <summary>
         /// 店铺名称（线下店铺名称）
@@ -55,6 +70,16 @@ namespace Nop.Core.Domain.Vendors
         public string OpenHours { get; set; }
 
         /// <summary>
+        /// 推荐人的VendorId（只有先成为Vendor才能推荐）
+        /// </summary>
+        public int ReferrerVendorId { get; set; }
+
+        /// <summary>
+        /// 自助申请成为Vendor的CustomerId，没有绑定到Customer中，作为快速绑定使用
+        /// </summary>
+        public int ApplyCustomerId { get; set; }
+
+        /// <summary>
         /// Gets or sets the picture identifier
         /// </summary>
         public int PictureId { get; set; }
@@ -68,6 +93,11 @@ namespace Nop.Core.Domain.Vendors
         /// 提货点环境（门头）照片ID
         /// </summary>
         public int StorePictureId { get; set; }
+
+        /// <summary>
+        /// 等级
+        /// </summary>
+        public int VendorLevel { get; set; }
 
         /// <summary>
         /// 地理位置纬度
@@ -90,14 +120,39 @@ namespace Nop.Core.Domain.Vendors
         public int AddressId { get; set; }
 
         /// <summary>
+        /// Vendor 父级查询次数
+        /// </summary>
+        public int VendorParentLevel { get; set; }
+
+        /// <summary>
         /// Gets or sets the admin comment
         /// </summary>
         public string AdminComment { get; set; }
 
         /// <summary>
+        /// 启用默认地区区域管理
+        /// </summary>
+        public bool VendorRegionEnable { get; set; }
+
+        /// <summary>
+        /// 启用SMS服务
+        /// </summary>
+        public bool SmsServiceEnable { get; set; }
+
+        /// <summary>
+        /// 是否显示OpenHours
+        /// </summary>
+        public bool DisplayOpenHours { get; set; }
+
+        /// <summary>
         /// 是否显示商城购买链接
         /// </summary>
-        public bool ShowShoppingMallLink { get; set; }
+        public bool DisplayShoppingMallLink { get; set; }
+
+        /// <summary>
+        /// 是否显示地址
+        /// </summary>
+        public bool DisplayContactAddress { get; set; }
 
         /// <summary>
         /// 是否允许在线购买（指在本地平台显示购买按钮）
@@ -110,9 +165,34 @@ namespace Nop.Core.Domain.Vendors
         public bool DisplayForm { get; set; }
 
         /// <summary>
+        /// 显示店铺名称（有图片的同时显示图片）
+        /// </summary>
+        public bool DisplayStoreName { get; set; }
+
+        /// <summary>
+        /// 显示推销信息
+        /// </summary>
+        public bool DisplayPromotionInfo { get; set; }
+
+        /// <summary>
         /// 显示默认信息
         /// </summary>
         public bool DisplayDefaultInfo { get; set; }
+
+        /// <summary>
+        /// 启用第三方统计JS
+        /// </summary>
+        public bool JsContentEnable { get; set; }
+
+        /// <summary>
+        /// 启用页面统计功能（数据保存在VendorPageAnalyse表）
+        /// </summary>
+        public bool PageAnalyseEnabled { get; set; }
+
+        /// <summary>
+        /// 显示页面统计数据（数据保存在VendorPageAnalyse表）
+        /// </summary>
+        public bool DisplayPageAnalyse { get; set; }
 
         /// <summary>
         /// 使用AddressId地址信息
@@ -123,6 +203,16 @@ namespace Nop.Core.Domain.Vendors
         /// 是否拥有实体店铺（针对有共享实体店铺的人）
         /// </summary>
         public bool HasStores { get; set; }
+
+        /// <summary>
+        /// 屏蔽产品的供应商联系方式
+        /// </summary>
+        public bool ShieldSupplierContact { get; set; }
+
+        /// <summary>
+        /// 是否代理商（支付了代理费）
+        /// </summary>
+        public bool IsAgent { get; set; }
 
         /// <summary>
         /// 无现货（缺货）
@@ -210,7 +300,7 @@ namespace Nop.Core.Domain.Vendors
         public int PageSize { get; set; }
 
         /// <summary>
-        /// 是否允许联系
+        /// 是否允许访客联系
         /// </summary>
         public bool AllowCustomersToContactVendors { get; set; }
 

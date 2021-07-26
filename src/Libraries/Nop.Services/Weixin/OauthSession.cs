@@ -13,7 +13,7 @@ namespace Nop.Services.Weixin
     {
         public OauthSession()
         {
-            User = new WUser();
+            User = new WxUser();
         }
         /// <summary>
         /// 原始返回页面，非微信的回调页面(备用)
@@ -34,9 +34,9 @@ namespace Nop.Services.Weixin
         /// <summary>
         /// CreatTime 最后创建/更新时间
         /// </summary>
-        public int CreatTime { get; set; }
+        public DateTime CreatTime { get; set; }
 
-        public WUser User { get; set; }
+        public WxUser User { get; set; }
 
     }
 }

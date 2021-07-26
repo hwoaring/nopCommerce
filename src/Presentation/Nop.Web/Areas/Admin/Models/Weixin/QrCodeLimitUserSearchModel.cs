@@ -13,7 +13,7 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
 
         #region Properties
 
-        public int UserId { get; set; }
+        public int CustomerId { get; set; }
 
         public int QrCodeLimitId { get; set; }
 

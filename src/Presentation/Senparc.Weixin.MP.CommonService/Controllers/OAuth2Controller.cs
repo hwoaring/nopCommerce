@@ -8,7 +8,9 @@ using Senparc.Weixin.Entities;
 using Nop.Core;
 using Nop.Core.Http.Extensions;
 using Nop.Core.Infrastructure;
+using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Weixin;
+using Nop.Services.Customers;
 using Nop.Services.Weixin;
 using Senparc.Weixin.MP.CommonService.Utilities;
 using StackExchange.Profiling.Internal;
@@ -24,7 +26,9 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
         private readonly SenparcWeixinSetting _senparcWeixinSetting;
         private readonly IWebHelper _webHelper;
         private readonly IWorkContext _workContext;
-        private readonly IWUserService _wUserService;
+        private readonly IWxUserService _wUserService;
+        private readonly ICustomerService _customerService;
+        private readonly CustomerSettings _customerSettings;
         private readonly ISupplierUserAuthorityMappingService _supplierUserAuthorityMappingService;
 
         #endregion
@@ -32,10 +36,12 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
         #region Ctor
 
         public OAuth2Controller(INopFileProvider fileProvider,
-            IWUserService wUserService,
+            IWxUserService wUserService,
             IWebHelper webHelper,
             IWorkContext workContext,
             ISupplierUserAuthorityMappingService supplierUserAuthorityMappingService,
+            ICustomerService customerService,
+            CustomerSettings customerSettings,
             SenparcWeixinSetting senparcWeixinSetting)
         {
             _fileProvider = fileProvider;
@@ -43,6 +49,8 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
             _webHelper = webHelper;
             _workContext = workContext;
             _supplierUserAuthorityMappingService = supplierUserAuthorityMappingService;
+            _customerService = customerService;
+            _customerSettings = customerSettings;
             _senparcWeixinSetting = senparcWeixinSetting;
         }
 
@@ -58,16 +66,12 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
         public async Task<IActionResult> Index(string code, string state, string returnUrl)
         {
             if (string.IsNullOrEmpty(code))
-            {
                 return Content("您拒绝了授权！");
-            }
 
             var stateSession = HttpContext.Session.GetString(NopWeixinDefaults.WeixinOauthStateString);
 
             if (string.IsNullOrEmpty(stateSession) || state != stateSession)
-            {
                 return Content("验证失败！");
-            }
 
             //判断是否使用的userinfo的Oauth授权
             var isUserInfoOauthType = state.StartsWith("userinfo", StringComparison.InvariantCultureIgnoreCase);
@@ -75,7 +79,7 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
             //为了安全清除session
             HttpContext.Session.Remove(NopWeixinDefaults.WeixinOauthStateString);
 
-            OAuthAccessTokenResult accessTokenResult = null;
+            OAuthAccessTokenResult accessTokenResult;
 
             //通过，用code换取access_token
             try
@@ -98,7 +102,7 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
                 OpenId = accessTokenResult.openid,
                 AccessToken = accessTokenResult.access_token,
                 RefreshToken = accessTokenResult.refresh_token,
-                CreatTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now)
+                CreatTime = DateTime.Now
             };
 
             //保存基础session信息
@@ -106,159 +110,146 @@ namespace Senparc.Weixin.MP.CommonService.Controllers
 
             //初始化用户数据库基础信息
             #region 初始化用户数据库基础信息
-            var insertCurrentUser = false;
-            var needUpdateCurrentUser = false;
-            var currentUser = await _wUserService.GetWUserByOpenIdAsync(accessTokenResult.openid);
-            if (currentUser == null)
+            var insertCurrentWxUser = false;  //是否需要插入WxUser到数据库（普通授权不需要插入）
+            var needUpdateCurrentWxUser = false; //需要更新
+
+            var currentCustomer = await _workContext.GetCurrentCustomerAsync(); //已自动绑定OpenId
+            var currentWxUser = await _wUserService.GetWxUserByOpenIdAsync(oauthSession.OpenId);
+
+            //获取当前Customer推荐人
+            var charPosition = state.IndexOf("_"); //空值返回-1
+            if (charPosition > 0) //第一个下划线出现位置
             {
-                insertCurrentUser = true; //需要插入
-                needUpdateCurrentUser = true;// 需要更新（插入即更新）
-                currentUser = new WUser
+                await _workContext.SetCustomerReferrerIdAsync(state.Substring(charPosition + 1), currentCustomer, refreshCache: true);
+            }
+
+            //初始化WxUser
+            if (currentWxUser == null)
+            {
+                //需要插入数据
+                insertCurrentWxUser = true;
+
+                currentWxUser = new WxUser
                 {
-                    OpenId = accessTokenResult.openid,
-                    RefereeId = 0, //从State参数中分离查找
-                    OriginalId = 0,
-                    OpenIdHash = CommonHelper.StringToLong(accessTokenResult.openid),
-                    CheckInType = WCheckInType.Oauth,  //每个渠道不同
-                    LanguageType = WLanguageType.ZH_CN,
+                    CustomerId = currentCustomer.Id,
+                    OpenId = oauthSession.OpenId,
+                    CheckInType = CheckInType.Oauth,  //每个渠道不同
+                    LanguageType = LanguageType.ZH_CN,
                     Sex = 0,
-                    RoleType = WRoleType.Visitor,
-                    SceneType = WSceneType.None,
+                    RoleType = RoleType.Visitor,
+                    SceneType = SceneType.None,
                     Status = 0,
                     SupplierShopId = 0,  //需要参数传入重新赋值
                     QrScene = 0,
                     Subscribe = false,
-                    AllowReferee = true,
                     AllowResponse = true,
-                    AllowOrder = true,
                     AllowNotice = false,
                     AllowOrderNotice = false,
                     InBlackList = false,
-                    Deleted = false,
                     SubscribeTime = 0,
                     UnSubscribeTime = 0,
-                    UpdateTime = DateTime.Now,
+                    UpdateTime = DateTime.Now.AddDays(-30),
                     CreatTime = DateTime.Now
                 };
-
-                //获取推荐人Id
-                var stateParams = state.Split("_", StringSplitOptions.RemoveEmptyEntries);
-                if (stateParams.Length == 2 && !string.IsNullOrEmpty(stateParams[1]))
-                {
-                    long.TryParse(stateParams[1], out var refereeOpenIdHash);
-                    if (refereeOpenIdHash > 0)
-                    {
-                        var refereeUser = await _wUserService.GetWUserByOpenIdHashAsync(refereeOpenIdHash);
-                        if (refereeUser != null)
-                            currentUser.RefereeId = refereeUser.Id;
-                    }
-                    else
-                    {
-                        var refereeUser = await _wUserService.GetWUserByOpenIdAsync(stateParams[1]);
-                        if (refereeUser != null)
-                            currentUser.RefereeId = refereeUser.Id;
-                    }
-                }
-
-                //获取SupplierShopId
-                var supplierUserAuthorityMapping = await _supplierUserAuthorityMappingService.GetEntityByUserIdAsync(currentUser.RefereeId);
-                if (supplierUserAuthorityMapping != null)
-                    currentUser.SupplierShopId = supplierUserAuthorityMapping.SupplierShopId ?? 0;
             }
+
+            //是否SupplierShop员工推荐的用户，绑定用户到SupplierShop
+            var supplierUserAuthorityMapping = await _supplierUserAuthorityMappingService.GetEntityByCustomerIdAsync(currentCustomer.ReferrerCustomerId);
+            if (supplierUserAuthorityMapping != null)
+                currentWxUser.SupplierShopId = supplierUserAuthorityMapping.SupplierShopId ?? 0;
 
             #endregion
 
-            try
+            //是否拉取最新微信用户信息
+            if(currentWxUser.UpdateTime.AddMinutes(60) < DateTime.Now)
             {
-                //使用UserApi获取用户基础信息
-                #region 使用UserApi获取用户基础信息
-                var userInfoGetSuccess = false; //UserApi获取是否成功
-                if (currentUser.UpdateTime.AddMinutes(60) < DateTime.Now)
+                var apiGetSuccess = false; //UserApi获取是否成功
+
+                try
                 {
+                    //尝试API方法更新
                     var userInfo = AdvancedAPIs.UserApi.Info(_senparcWeixinSetting.WeixinAppId, accessTokenResult.openid);
                     if (userInfo != null && userInfo.errcode == ReturnCode.请求成功)
                     {
-                        needUpdateCurrentUser = true;// 需要更新
+                        needUpdateCurrentWxUser = true;// 需要更新
+
                         if (userInfo.subscribe == 1)
                         {
-                            userInfoGetSuccess = true;  //UserApi获取成功
+                            apiGetSuccess = true; //Api获取信息成功
 
-                            currentUser.Subscribe = true;
-                            currentUser.NickName = userInfo.nickname;
-                            currentUser.Sex = Convert.ToByte(userInfo.sex);
-                            currentUser.LanguageType = Enum.TryParse(typeof(WLanguageType), userInfo.language, true, out var outLanguage) ? (WLanguageType)outLanguage : WLanguageType.ZH_CN;
-                            currentUser.City = userInfo.city;
-                            currentUser.Province = userInfo.province;
-                            currentUser.Country = userInfo.country;
-                            currentUser.HeadImgUrlShort = Utilities.HeadImageUrlHelper.GetHeadImageUrlKey(userInfo.headimgurl);
-                            currentUser.SubscribeTime = (int)userInfo.subscribe_time;
-                            currentUser.UpdateTime = DateTime.Now;
-                            currentUser.UnionId = userInfo.unionid;
-                            currentUser.Remark = userInfo.remark;
-                            currentUser.GroupId = userInfo.groupid.ToString();
-                            currentUser.TagIdList = string.Join(",", userInfo.tagid_list) + (userInfo.tagid_list.Length > 0 ? "," : "");
-                            currentUser.SubscribeSceneType = Enum.TryParse(typeof(WSubscribeSceneType), userInfo.subscribe_scene, true, out var wSubscribeSceneType) ? (WSubscribeSceneType)wSubscribeSceneType : WSubscribeSceneType.ADD_SCENE_OTHERS;
+                            currentWxUser.Subscribe = true;
+                            currentWxUser.NickName = userInfo.nickname;
+                            currentWxUser.Sex = Convert.ToByte(userInfo.sex);
+                            currentWxUser.LanguageType = Enum.TryParse(typeof(LanguageType), userInfo.language, true, out var outLanguage) ? (LanguageType)outLanguage : LanguageType.ZH_CN;
+                            currentWxUser.City = userInfo.city;
+                            currentWxUser.Province = userInfo.province;
+                            currentWxUser.Country = userInfo.country;
+                            currentWxUser.HeadImgUrlShort = Utilities.HeadImageUrlHelper.GetHeadImageUrlKey(userInfo.headimgurl);
+                            currentWxUser.SubscribeTime = (int)userInfo.subscribe_time;
+                            currentWxUser.UpdateTime = DateTime.Now;
+                            currentWxUser.UnionId = userInfo.unionid;
+                            currentWxUser.Remark = userInfo.remark;
+                            currentWxUser.GroupId = userInfo.groupid.ToString();
+                            currentWxUser.TagIdList = string.Join(",", userInfo.tagid_list) + (userInfo.tagid_list.Length > 0 ? "," : "");
+                            currentWxUser.SubscribeSceneType = Enum.TryParse(typeof(SubscribeSceneType), userInfo.subscribe_scene, true, out var wSubscribeSceneType) ? (SubscribeSceneType)wSubscribeSceneType : SubscribeSceneType.ADD_SCENE_OTHERS;
                         }
                         else
                         {
-                            currentUser.Subscribe = false;
+                            userInfo.subscribe = 0;
+                        }
+                    }
+
+                    //尝试UserInfo方法更新
+                    if (!apiGetSuccess && isUserInfoOauthType)
+                    {
+                        var userBaseInfo = await OAuthApi.GetUserInfoAsync(accessTokenResult.access_token, accessTokenResult.openid);
+                        if (userBaseInfo != null && !string.IsNullOrEmpty(userBaseInfo.nickname))
+                        {
+                            needUpdateCurrentWxUser = true;// 需要更新
+
+                            currentWxUser.NickName = userBaseInfo.nickname;
+                            currentWxUser.Sex = Convert.ToByte(userBaseInfo.sex);
+                            currentWxUser.City = userBaseInfo.city;
+                            currentWxUser.Province = userBaseInfo.province;
+                            currentWxUser.Country = userBaseInfo.country;
+                            currentWxUser.HeadImgUrlShort = Utilities.HeadImageUrlHelper.GetHeadImageUrlKey(userBaseInfo.headimgurl);
+                            currentWxUser.UnionId = userBaseInfo.unionid;
+                            currentWxUser.UpdateTime = DateTime.Now;
                         }
                     }
                 }
-
-                #endregion
-
-                //使用SnapUserInfo获取用户基础信息
-                #region 使用SnapUserInfo获取用户基础信息
-                if (!userInfoGetSuccess && isUserInfoOauthType)
+                catch
                 {
-                    var userBaseInfo = await OAuthApi.GetUserInfoAsync(accessTokenResult.access_token, accessTokenResult.openid);
-                    if (userBaseInfo != null && !string.IsNullOrEmpty(userBaseInfo.nickname))
-                    {
-                        needUpdateCurrentUser = true;// 需要更新
-
-                        currentUser.NickName = userBaseInfo.nickname;
-                        currentUser.Sex = Convert.ToByte(userBaseInfo.sex);
-                        currentUser.City = userBaseInfo.city;
-                        currentUser.Province = userBaseInfo.province;
-                        currentUser.Country = userBaseInfo.country;
-                        currentUser.HeadImgUrlShort = Utilities.HeadImageUrlHelper.GetHeadImageUrlKey(userBaseInfo.headimgurl);
-                        currentUser.UnionId = userBaseInfo.unionid;
-                        currentUser.UpdateTime = DateTime.Now;
-                    }
+                    //do nothing
+                    //进入该步骤表示授权成功，能否获取用户基本信息不重要，这里不能影响跳转操作
                 }
-                #endregion
-
-            }
-            catch
-            {
-                //do nothing 进入该步骤表示授权成功，能否获取用户基本信息不重要，这里不能影响跳转操作
             }
 
             //更新oauthSession信息
             #region 更新oauthSession信息
+            if (!string.IsNullOrEmpty(currentWxUser.NickName))
+            {
+                oauthSession.User.HeadImgUrl = HeadImageUrlHelper.GetHeadImageUrl(currentWxUser.HeadImgUrlShort);
+                oauthSession.User.NickName = currentWxUser.NickName;
+                oauthSession.User.OpenId = currentWxUser.OpenId;
+                oauthSession.User.Subscribe = currentWxUser.Subscribe;
+                oauthSession.User.SubscribeTime = currentWxUser.SubscribeTime;
+                oauthSession.User.UnSubscribeTime = currentWxUser.UnSubscribeTime;
+                oauthSession.User.UnionId = currentWxUser.UnionId;
 
-            oauthSession.User.HeadImgUrl = HeadImageUrlHelper.GetHeadImageUrl(currentUser.HeadImgUrlShort);
-            oauthSession.User.NickName = currentUser.NickName;
-            oauthSession.User.OpenId = currentUser.OpenId;
-            oauthSession.User.Subscribe = currentUser.Subscribe;
-            oauthSession.User.SubscribeTime = currentUser.SubscribeTime;
-            oauthSession.User.UnSubscribeTime = currentUser.UnSubscribeTime;
-            oauthSession.User.UnionId = currentUser.UnionId;
-            //保存更新
-            HttpContext.Session.Set(NopWeixinDefaults.WeixinOauthSession, oauthSession);
-
+                //更新Session
+                HttpContext.Session.Set(NopWeixinDefaults.WeixinOauthSession, oauthSession);
+            }
             #endregion
 
             //用户基础信息插入/更新
             #region 用户基础信息插入/更新
-            if (insertCurrentUser)
-                await _wUserService.InsertWUserAsync(currentUser);
-            else if (needUpdateCurrentUser)
-                await _wUserService.UpdateWUserAsync(currentUser);
+            if (insertCurrentWxUser)
+                await _wUserService.InsertWxUserAsync(currentWxUser);
+            else if (needUpdateCurrentWxUser)
+                await _wUserService.UpdateWxUserAsync(currentWxUser);
 
             #endregion
-
 
             if (!string.IsNullOrEmpty(returnUrl))
             {

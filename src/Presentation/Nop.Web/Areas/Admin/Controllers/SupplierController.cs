@@ -63,10 +63,10 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly ILocalizedEntityService _localizedEntityService;
         private readonly INopFileProvider _fileProvider;
         private readonly INotificationService _notificationService;
-        private readonly IWUserService _wUserService;
-        private readonly IWLocationService _wLocationService;
-        private readonly IWQrCodeLimitService _wQrCodeLimitService;
-        private readonly IWQrCodeLimitUserService _wQrCodeLimitUserService;
+        private readonly IWxUserService _wUserService;
+        private readonly IWxLocationService _wLocationService;
+        private readonly IQrCodeLimitService _wQrCodeLimitService;
+        private readonly IQrCodeLimitUserService _wQrCodeLimitUserService;
         private readonly IQrCodeLimitBindingSourceService _qrCodeLimitBindingSourceService;
         private readonly IQrCodeSupplierVoucherCouponMappingService _qrCodeSupplierVoucherCouponMappingService;
         private readonly ISupplierVoucherCouponService _supplierVoucherCouponService;
@@ -92,10 +92,10 @@ namespace Nop.Web.Areas.Admin.Controllers
             ILocalizedEntityService localizedEntityService,
             INopFileProvider fileProvider,
             INotificationService notificationService,
-            IWUserService wUserService,
-            IWLocationService wLocationService,
-            IWQrCodeLimitService wQrCodeLimitService,
-            IWQrCodeLimitUserService wQrCodeLimitUserService,
+            IWxUserService wUserService,
+            IWxLocationService wLocationService,
+            IQrCodeLimitService wQrCodeLimitService,
+            IQrCodeLimitUserService wQrCodeLimitUserService,
             IQrCodeLimitBindingSourceService qrCodeLimitBindingSourceService,
             IQrCodeSupplierVoucherCouponMappingService qrCodeSupplierVoucherCouponMappingService,
             ISupplierVoucherCouponService supplierVoucherCouponService,
@@ -154,7 +154,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return await AccessDeniedDataTablesJson();
 
             //try to get a Entity with the specified id
-            var qrCodeLimit = await _wQrCodeLimitService.GetWQrCodeLimitByIdAsync(searchModel.QrCodeId)
+            var qrCodeLimit = await _wQrCodeLimitService.GetQrCodeLimitByIdAsync(searchModel.QrCodeId)
                 ?? throw new ArgumentException("No QrCodeLimit found with the specified id");
 
             //prepare model

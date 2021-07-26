@@ -8,22 +8,22 @@
         /// <summary>
         /// 文本
         /// </summary>
-        Text,
+        Text = 1,
         /// <summary>
         /// 图片
         /// </summary>
-        Img,
+        Img = 2,
         /// <summary>
         /// 语音
         /// </summary>
-        Voice,
+        Voice = 3,
         /// <summary>
         /// 视频
         /// </summary>
-        Video,
+        Video = 4,
         /// <summary>
         /// 关键词自动回复则还多了图文消息
         /// </summary>
-        News
+        News = 5
     }
 }

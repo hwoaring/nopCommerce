@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using FluentMigrator.Builders.Create.Table;
+using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Suppliers;
 using Nop.Data.Extensions;
 
@@ -19,8 +20,9 @@ namespace Nop.Data.Mapping.Builders.Suppliers
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
+                .WithColumn(nameof(SupplierUserAuthorityMapping.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(SupplierUserAuthorityMapping.SupplierId)).AsInt32().ForeignKey<Supplier>()
-                .WithColumn(nameof(SupplierUserAuthorityMapping.SupplierShopId)).AsInt32().Nullable().ForeignKey<SupplierShop>().OnDelete(Rule.None)
+                .WithColumn(nameof(SupplierUserAuthorityMapping.SupplierShopId)).AsInt32().Nullable().ForeignKey<SupplierShop>(onDelete: Rule.None)
                 ;
         }
 

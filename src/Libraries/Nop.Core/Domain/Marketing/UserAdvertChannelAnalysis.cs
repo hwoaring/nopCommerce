@@ -11,7 +11,7 @@ namespace Nop.Core.Domain.Marketing
         /// <summary>
         /// 新增用户的ID（不是推荐人ID）
         /// </summary>
-        public int WUserId { get; set; }
+        public int CustomerId { get; set; }
         /// <summary>
         /// 供应商ID（用于统计）
         /// </summary>

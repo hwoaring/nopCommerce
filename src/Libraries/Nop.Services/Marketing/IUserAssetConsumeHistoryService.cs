@@ -23,12 +23,12 @@ namespace Nop.Services.Marketing
 
         Task<UserAssetConsumeHistory> GetEntityByIdAsync(int id);
 
-        Task<IList<UserAssetConsumeHistory>> GetEntitiesByUserIdAsync(int userId, bool completed, bool isInvalid);
+        Task<IList<UserAssetConsumeHistory>> GetEntitiesByCustomerIdAsync(int customerId, bool completed, bool isInvalid);
 
         Task<IList<UserAssetConsumeHistory>> GetEntitiesByUserAssetIncomeHistoryIdAsync(int userAssetIncomeHistoryId, bool completed, bool isInvalid);
 
         Task<IPagedList<UserAssetConsumeHistory>> GetEntitiesAsync(
-            int ownerUserId = 0,
+            int customerId = 0,
             int? userAssetIncomeHistoryId = 0,
             AssetConsumType? assetConsumType = null,
             bool? completed = null,

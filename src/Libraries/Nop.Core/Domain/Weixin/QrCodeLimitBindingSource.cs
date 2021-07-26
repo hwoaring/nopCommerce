@@ -9,9 +9,9 @@
         /// 永久二维码ID
         /// </summary>
         public int QrCodeLimitId { get; set; }
-            /// <summary>
-            /// 供应商ID（用于统计）
-            /// </summary>
+        /// <summary>
+        /// 供应商ID（用于统计）
+        /// </summary>
         public int SupplierId { get; set; }
         /// <summary>
         /// 店铺ID（用于统计）
@@ -44,25 +44,25 @@
         /// <summary>
         /// 场景类型
         /// </summary>
-        public byte WSceneTypeId { get; set; }
+        public byte SceneTypeId { get; set; }
         /// <summary>
         /// 场景类型
         /// </summary>
-        public WSceneType WSceneType
+        public SceneType SceneType
         {
-            get => (WSceneType)WSceneTypeId;
-            set => WSceneTypeId = (byte)value;
+            get => (SceneType)SceneTypeId;
+            set => SceneTypeId = (byte)value;
         }
         /// <summary>
         /// 【WMessageType】消息类型:文本为text，图片为image，语音为voice，视频消息为video，音乐消息为music，图文消息（点击跳转到外链）为news，图文消息（点击跳转到图文消息页面）为mpnews，卡券为wxcard，小程序为miniprogrampage
         /// </summary>
         public byte MessageTypeId { get; set; }
         /// <summary>
-        /// 【WMessageType】
+        /// 【MessageType】
         /// </summary>
-        public WMessageType MessageType
+        public MessageType MessageType
         {
-            get => (WMessageType)MessageTypeId;
+            get => (MessageType)MessageTypeId;
             set => MessageTypeId = (byte)value;
         }
         /// <summary>
@@ -78,7 +78,6 @@
         /// </summary>
 
         public bool Published { get; set; }
-
 
     }
 }

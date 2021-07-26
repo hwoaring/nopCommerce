@@ -24,15 +24,12 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
 
         #region Properties
 
-        [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.List.WConfigId")]
-        public int WConfigId { get; set; }
-
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.List.WQrCodeCategoryId")]
-        public int WQrCodeCategoryId { get; set; }
+        public int QrCodeCategoryId { get; set; }
         public IList<SelectListItem> AvailableCategories { get; set; }
 
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.List.WQrCodeChannelId")]
-        public int WQrCodeChannelId { get; set; }
+        public int QrCodeChannelId { get; set; }
         public IList<SelectListItem> AvailableChannels { get; set; }
 
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.List.SearchSysName")]

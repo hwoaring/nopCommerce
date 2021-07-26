@@ -18,31 +18,31 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
 {
     public partial class CustomMessageHandler
     {
-        protected async Task<IResponseMessageBase> GetResponseMessagesByIdsAsync(List<int> messageIds, WResponseType? wResponseType = null)
+        protected async Task<IResponseMessageBase> GetResponseMessagesByIdsAsync(List<int> messageIds, MessageResponseType? messageResponseType = null)
         {
             IResponseMessageBase responseMessage = null;
 
-            var wmessageService = EngineContext.Current.Resolve<IWMessageService>();
-            var wmessages = await wmessageService.GetWMessagesByIdsAsync(messageIds.ToArray());
+            var wmessageService = EngineContext.Current.Resolve<IWxMessageService>();
+            var wmessages = await wmessageService.GetWxMessagesByIdsAsync(messageIds.ToArray());
 
             if (wmessages != null && wmessages.Count > 0)
             {
                 foreach (var messageEntity in wmessages)
                 {
-                    WResponseType? currentResponseType = null;
+                    MessageResponseType? currentResponseType = null;
 
                     //强制执行指定回复方式
-                    if (wResponseType.HasValue)
-                        currentResponseType = wResponseType;
+                    if (messageResponseType.HasValue)
+                        currentResponseType = messageResponseType;
                     else
-                        currentResponseType = messageEntity.ResponseType;
+                        currentResponseType = messageEntity.MessageResponseType;
 
 
-                    if (currentResponseType == WResponseType.Custom)//客服方式回复
+                    if (currentResponseType == MessageResponseType.Custom)//客服方式回复
                     {
                         CustomResponseMessage(messageEntity, out responseMessage);
                     }
-                    else if (currentResponseType == WResponseType.Passive)//被动方式回复
+                    else if (currentResponseType == MessageResponseType.Passive)//被动方式回复
                     {
                         PassiveResponseMessage(messageEntity, out responseMessage);
                     }
@@ -52,13 +52,13 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
             return responseMessage;
         }
 
-        protected void CustomResponseMessage(WMessage message, out IResponseMessageBase responseMessage)
+        protected void CustomResponseMessage(WxMessage message, out IResponseMessageBase responseMessage)
         {
             responseMessage = null;
 
             switch (message.MessageType)
             {
-                case WMessageType.Text:
+                case MessageType.Text:
                     {
                         if (!string.IsNullOrEmpty(message.Content))
                         {
@@ -67,9 +67,9 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WMessageType.Image:
+                case MessageType.Image:
                     {
-                        var messageService = EngineContext.Current.Resolve<IWMessageService>();
+                        var messageService = EngineContext.Current.Resolve<IWxMessageService>();
                         //是否永久素材ID
                         if (!message.MaterialMsg)
                         {
@@ -89,7 +89,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                                     {
                                         message.MediaId = uploadResult.media_id;
                                         message.CreatTime = (int)uploadResult.created_at;
-                                        messageService.UpdateWMessageAsync(message);
+                                        messageService.UpdateWxMessageAsync(message);
                                     }
                                 }
                             }
@@ -102,7 +102,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WMessageType.Voice:
+                case MessageType.Voice:
                     {
                         if (!string.IsNullOrEmpty(message.MediaId))
                         {
@@ -111,7 +111,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WMessageType.Video:
+                case MessageType.Video:
                     {
                         if (!string.IsNullOrEmpty(message.MediaId) &&
                             !string.IsNullOrEmpty(message.Title) &&
@@ -125,7 +125,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WMessageType.Music:
+                case MessageType.Music:
                     {
                         if (!string.IsNullOrEmpty(message.ThumbMediaId))
                         {
@@ -136,7 +136,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WMessageType.News:
+                case MessageType.News:
                     {
                         var articles = new List<Article>();
 
@@ -162,7 +162,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WMessageType.MpNews:
+                case MessageType.MpNews:
                     {
                         if (!string.IsNullOrEmpty(message.MediaId))
                         {
@@ -171,14 +171,14 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WMessageType.WxCard:
+                case MessageType.WxCard:
                     {
                         AdvancedAPIs.CardExt cardExt = null;
                         AdvancedAPIs.CustomApi.SendCard(_senparcWeixinSetting.WeixinAppId,
                             OpenId, message.MediaId, cardExt);
                         break;
                     }
-                case WMessageType.MiniProgramPage:
+                case MessageType.MiniProgramPage:
                     {
                         break;
                     }
@@ -194,13 +194,13 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
         /// </summary>
         /// <param name="message"></param>
         /// <param name="responseMessage"></param>
-        protected void PassiveResponseMessage(WMessage message, out IResponseMessageBase responseMessage)
+        protected void PassiveResponseMessage(WxMessage message, out IResponseMessageBase responseMessage)
         {
             responseMessage = null;
 
             switch (message.MessageType)
             {
-                case WMessageType.Text:
+                case MessageType.Text:
                     {
                         if (!string.IsNullOrEmpty(message.Content))
                         {
@@ -210,11 +210,11 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WMessageType.Image:
+                case MessageType.Image:
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageImage>();
 
-                        var messageService = EngineContext.Current.Resolve<IWMessageService>();
+                        var messageService = EngineContext.Current.Resolve<IWxMessageService>();
                         //是否永久素材ID
                         if (!message.MaterialMsg)
                         {
@@ -234,7 +234,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                                     {
                                         message.MediaId = uploadResult.media_id;
                                         message.CreatTime = (int)uploadResult.created_at;
-                                        messageService.UpdateWMessageAsync(message);
+                                        messageService.UpdateWxMessageAsync(message);
                                     }
                                 }
                             }
@@ -248,11 +248,11 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
 
                         break;
                     }
-                case WMessageType.Voice:
+                case MessageType.Voice:
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageVoice>();
 
-                        var messageService = EngineContext.Current.Resolve<IWMessageService>();
+                        var messageService = EngineContext.Current.Resolve<IWxMessageService>();
                         //是否永久素材ID
                         if (!message.MaterialMsg)
                         {
@@ -272,7 +272,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                                     {
                                         message.MediaId = uploadResult.media_id;
                                         message.CreatTime = (int)uploadResult.created_at;
-                                        messageService.UpdateWMessageAsync(message);
+                                        messageService.UpdateWxMessageAsync(message);
                                     }
                                 }
                             }
@@ -285,11 +285,11 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WMessageType.Video:
+                case MessageType.Video:
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageVideo>();
 
-                        var messageService = EngineContext.Current.Resolve<IWMessageService>();
+                        var messageService = EngineContext.Current.Resolve<IWxMessageService>();
                         //是否永久素材ID
                         if (!message.MaterialMsg)
                         {
@@ -326,7 +326,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                                     //更新
                                     if (string.IsNullOrEmpty(uploadResultMediaId.errmsg))
                                     {
-                                        messageService.UpdateWMessageAsync(message);
+                                        messageService.UpdateWxMessageAsync(message);
                                     }
                                 }
                             }
@@ -341,11 +341,11 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WMessageType.Music:
+                case MessageType.Music:
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageMusic>();
 
-                        var messageService = EngineContext.Current.Resolve<IWMessageService>();
+                        var messageService = EngineContext.Current.Resolve<IWxMessageService>();
                         //是否永久素材ID
                         if (!message.MaterialMsg)
                         {
@@ -366,7 +366,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                                         message.MediaId = uploadResult.media_id;
                                         message.ThumbMediaId = uploadResult.media_id;
                                         message.CreatTime = (int)uploadResult.created_at;
-                                        messageService.UpdateWMessageAsync(message);
+                                        messageService.UpdateWxMessageAsync(message);
                                     }
                                 }
                             }
@@ -384,7 +384,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WMessageType.News:
+                case MessageType.News:
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
 
@@ -410,15 +410,15 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
 
                         break;
                     }
-                case WMessageType.MpNews:
+                case MessageType.MpNews:
                     {
                         break;
                     }
-                case WMessageType.WxCard:
+                case MessageType.WxCard:
                     {
                         break;
                     }
-                case WMessageType.MiniProgramPage:
+                case MessageType.MiniProgramPage:
                     {
                         break;
                     }
@@ -443,9 +443,9 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
             var thumbImageUrl = string.Empty;
             var adverImageUrl = string.Empty;
 
-            switch (source.WSceneType)
+            switch (source.SceneType)
             {
-                case WSceneType.Adver:
+                case SceneType.Adver:
                     {
                         //可以为广告竖图
                         if (source.ProductId > 0)
@@ -475,12 +475,12 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WSceneType.Message:
+                case SceneType.Message:
                     {
                         content = source.Content;
                         break;
                     }
-                case WSceneType.Product:
+                case SceneType.Product:
                     {
                         if (source.ProductId > 0)
                         {
@@ -508,7 +508,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WSceneType.Supplier:
+                case SceneType.Supplier:
                     {
                         if (source.SupplierId > 0 && source.SupplierShopId > 0)
                         {
@@ -525,12 +525,12 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WSceneType.Command:
-                case WSceneType.GiftCard://卡券领取操作放到二维码扫码事件或二维码关注事件中，同永久二维码一起处理
-                case WSceneType.IDCard:
-                case WSceneType.Verify:
-                case WSceneType.Vote:
-                case WSceneType.None:
+                case SceneType.Command:
+                case SceneType.GiftCard://卡券领取操作放到二维码扫码事件或二维码关注事件中，同永久二维码一起处理
+                case SceneType.IDCard:
+                case SceneType.Verify:
+                case SceneType.Vote:
+                case SceneType.None:
                 default:
                     {
                         return null;
@@ -539,7 +539,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
 
             switch (source.MessageType)
             {
-                case WMessageType.Text:
+                case MessageType.Text:
                     {
                         if (!string.IsNullOrEmpty(content))
                         {
@@ -549,7 +549,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WMessageType.Image:
+                case MessageType.Image:
                     {
                         if (!string.IsNullOrEmpty(adverImageUrl))
                         {
@@ -570,19 +570,19 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
 
                         break;
                     }
-                case WMessageType.Voice:
+                case MessageType.Voice:
                     {
                         break;
                     }
-                case WMessageType.Video:
+                case MessageType.Video:
                     {
                         break;
                     }
-                case WMessageType.Music:
+                case MessageType.Music:
                     {
                         break;
                     }
-                case WMessageType.News:
+                case MessageType.News:
                     {
                         var strongResponseMessage = CreateResponseMessage<ResponseMessageNews>();
 
@@ -610,15 +610,15 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
 
                         break;
                     }
-                case WMessageType.MpNews:
+                case MessageType.MpNews:
                     {
                         break;
                     }
-                case WMessageType.WxCard:
+                case MessageType.WxCard:
                     {
                         break;
                     }
-                case WMessageType.MiniProgramPage:
+                case MessageType.MiniProgramPage:
                     {
                         break;
                     }
@@ -637,7 +637,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
 
             switch (source.SceneType)
             {
-                case WSceneType.Adver:
+                case SceneType.Adver:
                     {
                         int.TryParse(source.Value, out var adverId);
                         //可以为广告竖图
@@ -667,7 +667,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WSceneType.Message:
+                case SceneType.Message:
                     {
                         if (!string.IsNullOrEmpty(source.Value))
                         {
@@ -677,7 +677,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WSceneType.Product:
+                case SceneType.Product:
                     {
                         int.TryParse(source.Value, out var productId);
                         if (productId > 0)
@@ -710,7 +710,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WSceneType.Supplier:
+                case SceneType.Supplier:
                     {
                         int.TryParse(source.Value, out var supplierId);
                         int.TryParse(source.Value1, out var supplierShopId);
@@ -744,7 +744,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WSceneType.Verify:
+                case SceneType.Verify:
                     {
                         if (!string.IsNullOrEmpty(source.Value))
                         {
@@ -754,7 +754,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WSceneType.Command:
+                case SceneType.Command:
                     {
                         if (!string.IsNullOrEmpty(source.Value))
                         {
@@ -764,7 +764,7 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WSceneType.Vote:
+                case SceneType.Vote:
                     {
                         if (!string.IsNullOrEmpty(source.Value))
                         {
@@ -774,9 +774,9 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
                         }
                         break;
                     }
-                case WSceneType.GiftCard: //卡券领取操作放到二维码扫码事件或二维码关注事件中，同永久二维码一起处理
-                case WSceneType.IDCard:
-                case WSceneType.None:
+                case SceneType.GiftCard: //卡券领取操作放到二维码扫码事件或二维码关注事件中，同永久二维码一起处理
+                case SceneType.IDCard:
+                case SceneType.None:
                 default:
                     {
                         break;
@@ -792,15 +792,11 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
             var receiveNumber = 0; //本次领取总数
 
             var userAssetIncomeHistoryService = EngineContext.Current.Resolve<IUserAssetIncomeHistoryService>();
-            var wuserService = EngineContext.Current.Resolve<IWUserService>();
             var supplierVoucherCouponService = EngineContext.Current.Resolve<ISupplierVoucherCouponService>();
 
-            var wuser = await wuserService.GetWUserByOpenIdAsync(currentOpenId);
-            if (wuser == null)
+            var currentCustomer = await _customerService.GetCustomerByOpenIdAsync(currentOpenId);
+            if (currentCustomer == null)
                 return null;
-
-            //当前用户Id赋值
-           var wuserId = wuser.Id;
 
             var supplierVoucherCoupons = await supplierVoucherCouponService.GetEntitiesByIdsAsync(cardIds.ToArray());
 
@@ -810,19 +806,19 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
             {
                 if (item.LimitUsableNumber > 0)
                 {
-                    var userAssetIncomeHistory =await userAssetIncomeHistoryService.GetEntitiesBySupplierVoucherCouponIdAsync(wuserId, item.Id, true);
+                    var userAssetIncomeHistory =await userAssetIncomeHistoryService.GetEntitiesBySupplierVoucherCouponIdAsync(currentCustomer.Id, item.Id, true);
                     if (userAssetIncomeHistory.Count >= item.LimitUsableNumber)
                         continue;
                 }
                 if (item.LimitReceiveNumber > 0)
                 {
-                    var userAssetIncomeHistory =await userAssetIncomeHistoryService.GetEntitiesBySupplierVoucherCouponIdAsync(wuserId, item.Id);
+                    var userAssetIncomeHistory =await userAssetIncomeHistoryService.GetEntitiesBySupplierVoucherCouponIdAsync(currentCustomer.Id, item.Id);
                     if (userAssetIncomeHistory.Count >= item.LimitUsableNumber)
                         continue;
                 }
 
                 //为当前用户添加卡券资产
-                await userAssetIncomeHistoryService.InsertEntityBysupplierVoucherCouponParamsAsync(item, wuserId, 0, null, qrCodeSceneParam.SceneType);
+                await userAssetIncomeHistoryService.InsertEntityBysupplierVoucherCouponParamsAsync(item, currentCustomer.Id, 0, null, qrCodeSceneParam.SceneType);
 
                 receiveNumber++; //成功领取计数
             }

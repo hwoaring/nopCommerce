@@ -43,18 +43,18 @@
                                     <div class="col-md-5">
                                         <div class="form-group">
                                             <div class="col-md-4">
-                                                <nop-label asp-for="WQrCodeCategoryId" />
+                                                <nop-label asp-for="QrCodeCategoryId" />
                                             </div>
                                             <div class="col-md-8">
-                                                <nop-select asp-for="WQrCodeCategoryId" asp-items="Model.AvailableCategories" />
+                                                <nop-select asp-for="QrCodeCategoryId" asp-items="Model.AvailableCategories" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-4">
-                                                <nop-label asp-for="WQrCodeChannelId" />
+                                                <nop-label asp-for="QrCodeChannelId" />
                                             </div>
                                             <div class="col-md-8">
-                                                <nop-select asp-for="WQrCodeChannelId" asp-items="Model.AvailableChannels" />
+                                                <nop-select asp-for="QrCodeChannelId" asp-items="Model.AvailableChannels" />
                                             </div>
                                         </div>
 
@@ -111,8 +111,8 @@
                             LengthMenu = Model.AvailablePageSizes,
                             Filters = new List<FilterParameter>
                             {
-                                new FilterParameter(nameof(Model.WQrCodeCategoryId)),
-                                new FilterParameter(nameof(Model.WQrCodeChannelId)),
+                                new FilterParameter(nameof(Model.QrCodeCategoryId)),
+                                new FilterParameter(nameof(Model.QrCodeChannelId)),
                                 new FilterParameter(nameof(Model.SearchSysName)),
                                 new FilterParameter(nameof(Model.SearchFixedUse), typeof(bool)),
                                 new FilterParameter(nameof(Model.SearchHasCreated), typeof(bool)),

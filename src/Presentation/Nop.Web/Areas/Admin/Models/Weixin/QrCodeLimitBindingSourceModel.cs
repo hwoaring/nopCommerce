@@ -47,8 +47,8 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimitBindingSources.Fields.MessageResponse")]
         public bool MessageResponse { get; set; }
 
-        [NopResourceDisplayName("Admin.Weixin.QrCodeLimitBindingSources.Fields.WSceneTypeId")]
-        public byte WSceneTypeId { get; set; }
+        [NopResourceDisplayName("Admin.Weixin.QrCodeLimitBindingSources.Fields.SceneTypeId")]
+        public byte SceneTypeId { get; set; }
         public IList<SelectListItem> AvailableSceneTypes { get; set; }
 
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimitBindingSources.Fields.MessageTypeId")]

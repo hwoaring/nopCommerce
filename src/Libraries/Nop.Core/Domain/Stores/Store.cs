@@ -38,6 +38,11 @@ namespace Nop.Core.Domain.Stores
         public int DisplayOrder { get; set; }
 
         /// <summary>
+        /// 等级
+        /// </summary>
+        public int StoreLevel { get; set; }
+
+        /// <summary>
         /// Gets or sets the company name
         /// </summary>
         public string CompanyName { get; set; }

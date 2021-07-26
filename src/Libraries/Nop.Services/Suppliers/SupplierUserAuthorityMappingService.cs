@@ -66,13 +66,13 @@ namespace Nop.Services.Suppliers
             return await _supplierUserAuthorityMappingRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual async Task<SupplierUserAuthorityMapping> GetEntityByUserIdAsync(int userId)
+        public virtual async Task<SupplierUserAuthorityMapping> GetEntityByCustomerIdAsync(int customerId)
         {
-            if (userId == 0)
+            if (customerId == 0)
                 return null;
 
             var query = from t in _supplierUserAuthorityMappingRepository.Table
-                        where t.WUserId == userId &&
+                        where t.CustomerId == customerId &&
                         !t.Deleted &&
                         t.Published
                         select t;

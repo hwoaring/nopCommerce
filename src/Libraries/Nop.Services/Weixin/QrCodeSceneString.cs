@@ -20,94 +20,94 @@ namespace Nop.Services.Weixin
         /// 返回临时二维码场景字符串
         /// </summary>
         /// <returns></returns>
-        public static string GetTempSceneString(WSceneType sceneType, string openId, string value, string value1)
+        public static string GetTempSceneString(SceneType sceneType, string openId, string value, string value1)
         {
             string result;
 
             switch (sceneType)
             {
-                case WSceneType.Adver:
+                case SceneType.Adver:
                     {
-                        result = WSceneType.Adver.ToString() + "_"
+                        result = SceneType.Adver.ToString() + "_"
                             + openId + "_"
                             + value + "_"  //ProductAdvertImageId，广告传单ID
                             + Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now).ToString();
                         break;
                     }
-                case WSceneType.Command:
+                case SceneType.Command:
                     {
-                        result = WSceneType.Command.ToString() + "_"
+                        result = SceneType.Command.ToString() + "_"
                             + openId + "_"
                             + value + "_"  //命令值
                             + Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now).ToString();
                         break;
                     }
-                case WSceneType.GiftCard:
+                case SceneType.GiftCard:
                     {
-                        result = WSceneType.GiftCard.ToString() + "_"
+                        result = SceneType.GiftCard.ToString() + "_"
                             + openId + "_"
                             + value + "_"  //自动领取卡券的ID
                             + Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now).ToString();
                         break;
                     }
-                case WSceneType.IDCard:
+                case SceneType.IDCard:
                     {
-                        result = WSceneType.IDCard.ToString() + "_"
+                        result = SceneType.IDCard.ToString() + "_"
                             + openId + "_"
                             + Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now).ToString();
                         break;
                     }
-                case WSceneType.Message:
+                case SceneType.Message:
                     {
-                        result = WSceneType.Message.ToString() + "_"
+                        result = SceneType.Message.ToString() + "_"
                             + openId + "_"
                             + value + "_"  //MessageId
                             + Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now).ToString();
                         break;
                     }
-                case WSceneType.Product:
+                case SceneType.Product:
                     {
-                        result = WSceneType.Product.ToString() + "_"
+                        result = SceneType.Product.ToString() + "_"
                             + openId + "_"
                             + value + "_"  //产品ID
                             + Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now).ToString();
                         break;
                     }
-                case WSceneType.Supplier:
+                case SceneType.Supplier:
                     {
-                        result = WSceneType.Supplier.ToString() + "_"
+                        result = SceneType.Supplier.ToString() + "_"
                             + openId + "_"
                             + value + "_"    //SupplierId
                             + value1 + "_"  //SupplierShopId
                             + Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now).ToString();
                         break;
                     }
-                case WSceneType.Verify:
+                case SceneType.Verify:
                     {
-                        result = WSceneType.Verify.ToString() + "_"
+                        result = SceneType.Verify.ToString() + "_"
                             + openId + "_"
                             + value + "_"  //验证码值
                             + Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now).ToString();
                         break;
                     }
-                case WSceneType.Vote:
+                case SceneType.Vote:
                     {
-                        result = WSceneType.Vote.ToString() + "_"
+                        result = SceneType.Vote.ToString() + "_"
                             + openId + "_"
                             + value + "_"  //投票选项值
                             + Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now).ToString();
                         break;
                     }
-                case WSceneType.None:
+                case SceneType.None:
                     {
-                        result = WSceneType.None.ToString() + "_"
+                        result = SceneType.None.ToString() + "_"
                             + openId + "_"
                             + Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now).ToString();
                         break;
                     }
                 default:
                     {
-                        result = WSceneType.None.ToString() + "_"
+                        result = SceneType.None.ToString() + "_"
                             + openId + "_"
                             + Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now).ToString();
                         break;
@@ -126,68 +126,68 @@ namespace Nop.Services.Weixin
 
             var sceneParam = new QrCodeSceneParam()
             {
-                SceneType = (WSceneType)Enum.Parse(typeof(WSceneType), sceneStrParam[0], true),
+                SceneType = (SceneType)Enum.Parse(typeof(SceneType), sceneStrParam[0], true),
                 OpenIdReferee = sceneStrParam[1],
                 IsQrCodeLimit = false,
             };
 
             switch (sceneParam.SceneType)
             {
-                case WSceneType.Adver:
+                case SceneType.Adver:
                     {
                         sceneParam.Value = sceneStrParam[2];
                         sceneParam.CreatTime = Convert.ToInt32(sceneStrParam[3]);
                         break;
                     }
-                case WSceneType.Command:
+                case SceneType.Command:
                     {
                         sceneParam.Value = sceneStrParam[2];
                         sceneParam.CreatTime = Convert.ToInt32(sceneStrParam[3]);
                         break;
                     }
-                case WSceneType.GiftCard:
+                case SceneType.GiftCard:
                     {
                         sceneParam.Value = sceneStrParam[2];
                         sceneParam.CreatTime = Convert.ToInt32(sceneStrParam[3]);
                         break;
                     }
-                case WSceneType.IDCard:
+                case SceneType.IDCard:
                     {
                         sceneParam.CreatTime = Convert.ToInt32(sceneStrParam[2]);
                         break;
                     }
-                case WSceneType.Message:
+                case SceneType.Message:
                     {
                         sceneParam.Value = sceneStrParam[2];
                         sceneParam.CreatTime = Convert.ToInt32(sceneStrParam[3]);
                         break;
                     }
-                case WSceneType.Product:
+                case SceneType.Product:
                     {
                         sceneParam.Value = sceneStrParam[2];
                         sceneParam.CreatTime = Convert.ToInt32(sceneStrParam[3]);
                         break;
                     }
-                case WSceneType.Supplier:
+                case SceneType.Supplier:
                     {
                         sceneParam.Value = sceneStrParam[2];
                         sceneParam.Value1 = sceneStrParam[3];
                         sceneParam.CreatTime = Convert.ToInt32(sceneStrParam[4]);
                         break;
                     }
-                case WSceneType.Verify:
+                case SceneType.Verify:
                     {
                         sceneParam.Value = sceneStrParam[2];
                         sceneParam.CreatTime = Convert.ToInt32(sceneStrParam[3]);
                         break;
                     }
-                case WSceneType.Vote:
+                case SceneType.Vote:
                     {
                         sceneParam.Value = sceneStrParam[2];
                         sceneParam.CreatTime = Convert.ToInt32(sceneStrParam[3]);
                         break;
                     }
-                case WSceneType.None:
+                case SceneType.None:
                     {
                         sceneParam.CreatTime = Convert.ToInt32(sceneStrParam[2]);
                         break;
@@ -206,11 +206,11 @@ namespace Nop.Services.Weixin
             /// <summary>
             /// 场景类型
             /// </summary>
-            public WSceneType SceneType { get; set; }
+            public SceneType SceneType { get; set; }
             /// <summary>
             /// 指定回复消息类型
             /// </summary>
-            public WMessageType MessageType { get; set; }
+            public MessageType MessageType { get; set; }
             /// <summary>
             /// 推荐人ID/二维码生成人ID
             /// </summary>

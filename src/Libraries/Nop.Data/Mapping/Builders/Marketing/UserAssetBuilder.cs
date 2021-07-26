@@ -1,6 +1,6 @@
 ﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Marketing;
-using Nop.Core.Domain.Weixin;
+using Nop.Core.Domain.Customers;
 using Nop.Data.Extensions;
 
 namespace Nop.Data.Mapping.Builders.Marketing
@@ -19,7 +19,7 @@ namespace Nop.Data.Mapping.Builders.Marketing
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(UserAsset.OwnerUserId)).AsInt32().ForeignKey<WUser>()
+                .WithColumn(nameof(UserAsset.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(UserAsset.PartnerRemark)).AsString(512).Nullable()
                 .WithColumn(nameof(UserAsset.AnnualCardAmount)).AsDecimal(9, 2)
                 .WithColumn(nameof(UserAsset.Discount)).AsDecimal(9, 2)

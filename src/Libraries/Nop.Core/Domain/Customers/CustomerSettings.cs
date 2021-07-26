@@ -8,9 +8,20 @@ namespace Nop.Core.Domain.Customers
     public class CustomerSettings : ISettings
     {
         /// <summary>
-        /// 推荐人ID可用秒数。最新推荐用户信息保存在customer中，多少秒之内使用customer保存的推荐用户ID，超出时间采用wuser中的推荐用户ID
+        /// 推荐人ID可用过期分钟数。最新推荐用户信息保存在customer中，多少秒之内使用customer保存的推荐用户ID，超出时间采用wuser中的推荐用户ID
+        /// 0：表示不使用临时推荐人功能
         /// </summary>
-        public int RefereeIdAvailableSeconds { get; set; }
+        public int RefereeIdAvailableMinutes { get; set; }
+
+        /// <summary>
+        /// 使用Gid作为获取推荐人的Url参数（默认使用OpenId）
+        /// </summary>
+        public bool UseGidForReferrerParam { get; set; }
+
+        /// <summary>
+        /// 通过Ip自动检测所在城市
+        /// </summary>
+        public bool AutoDetectCity { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether usernames are used instead of emails
@@ -41,6 +52,16 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets a username validation rule
         /// </summary>
         public string UsernameValidationRule { get; set; }
+
+        /// <summary>
+        /// 是否使用手机号登录
+        /// </summary>
+        public bool PhoneNumberLogin { get; set; }
+
+        /// <summary>
+        /// 手机号使用短信(SMS)认证
+        /// </summary>
+        public bool PhoneNumberValidationBySMS { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether phone number will be validated (when registering or changing on the 'My Account' page)

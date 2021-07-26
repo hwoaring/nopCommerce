@@ -19,7 +19,7 @@ namespace Nop.Data.Mapping.Builders.Weixin
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(QrCodeLimitBindingSource.QrCodeLimitId)).AsInt32().ForeignKey<WQrCodeLimit>()
+                .WithColumn(nameof(QrCodeLimitBindingSource.QrCodeLimitId)).AsInt32().ForeignKey<QrCodeLimit>()
                 .WithColumn(nameof(QrCodeLimitBindingSource.Address)).AsString(32).Nullable()
                 .WithColumn(nameof(QrCodeLimitBindingSource.Url)).AsString(1024).Nullable()
                 ;

@@ -21,7 +21,7 @@ namespace Nop.Core.Domain.Discounts
         /// <summary>
         /// 推荐人ID
         /// </summary>
-        public int RefereeUserId { get; set; }
+        public int ReferrerCustomerId { get; set; }
 
         /// <summary>
         /// 用户推广用的个人折扣码，查找对应的公用DiscountId

@@ -1,6 +1,6 @@
 ﻿using FluentMigrator.Builders.Create.Table;
+using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Suppliers;
-using Nop.Core.Domain.Weixin;
 using Nop.Data.Extensions;
 
 namespace Nop.Data.Mapping.Builders.Suppliers
@@ -21,8 +21,8 @@ namespace Nop.Data.Mapping.Builders.Suppliers
             table
                 .WithColumn(NameCompatibilityManager.GetColumnName(typeof(SupplierShopUserFollowMapping), nameof(SupplierShopUserFollowMapping.SupplierShopId)))
                    .AsInt32().PrimaryKey().ForeignKey<SupplierShop>()
-                .WithColumn(NameCompatibilityManager.GetColumnName(typeof(SupplierShopUserFollowMapping), nameof(SupplierShopUserFollowMapping.WUserId)))
-                   .AsInt32().PrimaryKey().ForeignKey<WUser>()
+                .WithColumn(NameCompatibilityManager.GetColumnName(typeof(SupplierShopUserFollowMapping), nameof(SupplierShopUserFollowMapping.CustomerId)))
+                   .AsInt32().PrimaryKey().ForeignKey<Customer>()
                 ;
         }
 

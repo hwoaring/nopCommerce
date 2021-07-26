@@ -44,14 +44,19 @@ namespace Nop.Core.Domain.Customers
         public string OpenId { get; set; }
 
         /// <summary>
-        /// 推荐用户WuserId（最近推荐的ID）
+        /// 永久推荐用户ID
         /// </summary>
-        public int RefereeId { get; set; }
+        public int ReferrerCustomerId { get; set; }
 
         /// <summary>
-        /// 推荐用户ID最近更新时间（用于多长时间内更新的ID，临时属于另一个推荐人，超出时间属于默认推荐人）
+        /// 临时推荐用户ID
         /// </summary>
-        public int RefereeIdUpdateTime { get; set; }
+        public int TempReferrerCustomerId { get; set; }
+
+        /// <summary>
+        /// 临时推荐用户更新时间（更新时间+系统设置的过期市场=过期时间，超出时间属于默认推荐人）
+        /// </summary>
+        public DateTime? TempReferrerDateUtc { get; set; }
 
         /// <summary>
         /// Gets or sets the customer GUID
@@ -132,6 +137,16 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets a value indicating whether the customer account is system
         /// </summary>
         public bool IsSystemAccount { get; set; }
+
+        /// <summary>
+        /// 是否允许推荐用户，默认true，不允许时，该用户不会传递推荐参数
+        /// </summary>
+        public bool ReferrerEnable { get; set; }
+
+        /// <summary>
+        /// 是否允许下单
+        /// </summary>
+        public bool AllowOrder { get; set; }
 
         /// <summary>
         /// Gets or sets the last IP address

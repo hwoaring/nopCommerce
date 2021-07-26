@@ -1066,41 +1066,41 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
                 .ForMember(model => model.JsApiList_OverrideForStore, options => options.Ignore());
             CreateMap<WeixinSettingsModel, WeixinSettings>();
 
-            CreateMap<WUser, UserModel>()
+            CreateMap<WxUser, UserModel>()
                 .ForMember(model => model.HeadImgUrl, options => options.Ignore())
                 .ForMember(model => model.SubscribeTime, options => options.Ignore())
                 .ForMember(model => model.UnSubscribeTime, options => options.Ignore())
                 .ForMember(model => model.UpdateTime, options => options.Ignore())
                 .ForMember(model => model.CreatTime, options => options.Ignore());
 
-            CreateMap<UserModel, WUser>()
+            CreateMap<UserModel, WxUser>()
                 .ForMember(entity => entity.HeadImgUrl, options => options.Ignore())
                 .ForMember(entity => entity.SubscribeTime, options => options.Ignore())
                 .ForMember(entity => entity.UnSubscribeTime, options => options.Ignore())
                 .ForMember(entity => entity.UpdateTime, options => options.Ignore())
                 .ForMember(entity => entity.CreatTime, options => options.Ignore());
 
-            CreateMap<WQrCodeLimit, QrCodeLimitModel>()
+            CreateMap<QrCodeLimit, QrCodeLimitModel>()
                 .ForMember(model => model.BindingSource, options => options.Ignore())
                 .ForMember(model => model.QrCodeImageUrl, options => options.Ignore());
-            CreateMap<QrCodeLimitModel, WQrCodeLimit>();
+            CreateMap<QrCodeLimitModel, QrCodeLimit>();
 
-            CreateMap<WQrCodeLimitUserMapping, QrCodeLimitUserModel>()
+            CreateMap<QrCodeLimitUserMapping, QrCodeLimitUserModel>()
                 .ForMember(model => model.UserNameTemp, options => options.Ignore());
-            CreateMap<QrCodeLimitUserModel, WQrCodeLimitUserMapping>();
+            CreateMap<QrCodeLimitUserModel, QrCodeLimitUserMapping>();
 
-            CreateMap<WUser, AddUserRelatedUserModel>();
-            CreateMap<AddUserRelatedUserModel, WUser>();
+            CreateMap<WxUser, AddUserRelatedUserModel>();
+            CreateMap<AddUserRelatedUserModel, WxUser>();
 
             CreateMap<QrCodeLimitBindingSource, QrCodeLimitBindingSourceModel>();
             CreateMap<QrCodeLimitBindingSourceModel, QrCodeLimitBindingSource>();
 
-            CreateMap<WMenu, MenuModel>();
-            CreateMap<MenuModel, WMenu>();
+            CreateMap<WxMenu, MenuModel>();
+            CreateMap<MenuModel, WxMenu>();
 
-            CreateMap<WMenuButton, MenuButtonModel>()
+            CreateMap<WxMenuButton, MenuButtonModel>()
                 .ForMember(model => model.MenuButtonTypeNameString, options => options.Ignore());
-            CreateMap<MenuButtonModel, WMenuButton>();
+            CreateMap<MenuButtonModel, WxMenuButton>();
 
         }
 

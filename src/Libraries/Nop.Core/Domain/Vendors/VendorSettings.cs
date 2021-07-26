@@ -63,6 +63,16 @@ namespace Nop.Core.Domain.Vendors
         public int MaximumProductNumber { get; set; }
 
         /// <summary>
+        /// Vendor 父级查询次数
+        /// </summary>
+        public int VendorParentLevel { get; set; }
+
+        /// <summary>
+        /// 自助申请是否需要邀请码
+        /// </summary>
+        public bool InviteCodeEnable { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether vendors are allowed to import products
         /// </summary>
         public bool AllowVendorsToImportProducts { get; set; }

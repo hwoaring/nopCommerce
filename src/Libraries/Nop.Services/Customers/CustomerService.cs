@@ -647,6 +647,7 @@ namespace Nop.Services.Customers
             {
                 CustomerGuid = Guid.NewGuid(),
                 Active = true,
+                ReferrerEnable = true,
                 CreatedOnUtc = DateTime.UtcNow,
                 LastActivityDateUtc = DateTime.UtcNow
             };

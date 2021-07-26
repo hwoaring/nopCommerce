@@ -135,8 +135,8 @@ namespace Nop.Web.Areas.Admin.Models.Suppliers
         [NopResourceDisplayName("Admin.Supplier.QrCodeLimitCoupons.Fields.DisplayOrder")]
         public int DisplayOrder { get; set; }
 
-        [NopResourceDisplayName("Admin.Supplier.QrCodeLimitCoupons.Fields.CreatUserId")]
-        public int CreatUserId { get; set; }
+        [NopResourceDisplayName("Admin.Supplier.QrCodeLimitCoupons.Fields.CreatCustomerId")]
+        public int CreatCustomerId { get; set; }
 
         [NopResourceDisplayName("Admin.Supplier.QrCodeLimitCoupons.Fields.StartDateTimeUtc")]
         [UIHint("DateTime")]

@@ -18,7 +18,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="product">User</param>
         /// <param name="excludeProperties">Whether to exclude populating of some properties of model</param>
         /// <returns>Product model</returns>
-        Task<UserModel> PrepareUserModelAsync(UserModel model, WUser user, bool excludeProperties = false);
+        Task<UserModel> PrepareUserModelAsync(UserModel model, WxUser user, bool excludeProperties = false);
 
         /// <summary>
         /// Prepare User search model
@@ -41,7 +41,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="QrCodeLimit">QrCodeLimit</param>
         /// <param name="excludeProperties">Whether to exclude populating of some properties of model</param>
         /// <returns>Product model</returns>
-         Task<QrCodeLimitModel> PrepareQrCodeLimitModelAsync(QrCodeLimitModel model, WQrCodeLimit qrCodeLimit, bool excludeProperties = false);
+         Task<QrCodeLimitModel> PrepareQrCodeLimitModelAsync(QrCodeLimitModel model, QrCodeLimit qrCodeLimit, bool excludeProperties = false);
 
         /// <summary>
         /// Prepare QrCodeLimit search model
@@ -57,21 +57,21 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <returns>User list model</returns>
          Task<QrCodeLimitListModel> PrepareQrCodeLimitListModelAsync(QrCodeLimitSearchModel searchModel);
 
-         Task<QrCodeLimitUserListModel> PrepareQrCodeLimitUserListModelAsync(QrCodeLimitUserSearchModel searchModel, WQrCodeLimit qrCodeLimit);
+         Task<QrCodeLimitUserListModel> PrepareQrCodeLimitUserListModelAsync(QrCodeLimitUserSearchModel searchModel, QrCodeLimit qrCodeLimit);
 
          Task<AddUserRelatedSearchModel> PrepareAddUserRelatedSearchModelAsync(AddUserRelatedSearchModel searchModel);
 
          Task<AddUserRelatedUserListModel> PrepareAddUserRelatedUserListModelAsync(AddUserRelatedSearchModel searchModel);
 
-         Task<QrCodeLimitUserModel> PrepareQrCodeLimitUserModelAsync(QrCodeLimitUserModel model, WQrCodeLimitUserMapping qrCodeLimitUser, bool excludeProperties = false);
+         Task<QrCodeLimitUserModel> PrepareQrCodeLimitUserModelAsync(QrCodeLimitUserModel model, QrCodeLimitUserMapping qrCodeLimitUser, bool excludeProperties = false);
 
 
         #region Menu Model
 
          Task<MenuSearchModel> PrepareMenuSearchModelAsync(MenuSearchModel searchModel);
          Task<MenuListModel> PrepareMenuListModelAsync(MenuSearchModel searchModel);
-         Task<MenuModel> PrepareMenuModelAsync(MenuModel model, WMenu menu, bool excludeProperties = false);
-         Task<MenuButtonListModel> PrepareMenuButtonListModelAsync(MenuButtonSearchModel searchModel, WMenu menu);
+         Task<MenuModel> PrepareMenuModelAsync(MenuModel model, WxMenu menu, bool excludeProperties = false);
+         Task<MenuButtonListModel> PrepareMenuButtonListModelAsync(MenuButtonSearchModel searchModel, WxMenu menu);
 
 
         #endregion

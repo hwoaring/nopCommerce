@@ -1,8 +1,8 @@
 ﻿using FluentMigrator.Builders.Create.Table;
+using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Suppliers;
-using Nop.Core.Domain.Catalog;
 using Nop.Data.Extensions;
-using Nop.Core.Domain.Weixin;
+
 
 namespace Nop.Data.Mapping.Builders.Suppliers
 {
@@ -20,7 +20,7 @@ namespace Nop.Data.Mapping.Builders.Suppliers
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(UserSupplierVoucherCoupon.WUserId)).AsInt32().PrimaryKey().ForeignKey<WUser>()
+                .WithColumn(nameof(UserSupplierVoucherCoupon.CustomerId)).AsInt32().PrimaryKey().ForeignKey<Customer>()
                 .WithColumn(nameof(UserSupplierVoucherCoupon.SupplierVoucherCouponId)).AsInt32().PrimaryKey().ForeignKey<SupplierVoucherCoupon>()
                 ;
         }

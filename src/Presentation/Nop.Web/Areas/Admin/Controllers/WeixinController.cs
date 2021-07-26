@@ -63,14 +63,14 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly ILocalizedEntityService _localizedEntityService;
         private readonly INopFileProvider _fileProvider;
         private readonly INotificationService _notificationService;
-        private readonly IWUserService _wUserService;
-        private readonly IWLocationService _wLocationService;
-        private readonly IWQrCodeLimitService _wQrCodeLimitService;
-        private readonly IWQrCodeLimitUserService _wQrCodeLimitUserService;
+        private readonly IWxUserService _wUserService;
+        private readonly IWxLocationService _wLocationService;
+        private readonly IQrCodeLimitService _wQrCodeLimitService;
+        private readonly IQrCodeLimitUserService _wQrCodeLimitUserService;
         private readonly IQrCodeLimitBindingSourceService _qrCodeLimitBindingSourceService;
         private readonly IQrCodeSupplierVoucherCouponMappingService _qrCodeSupplierVoucherCouponMappingService;
-        private readonly IWMenuService _wMenuService;
-        private readonly IWMenuButtonService _wMenuButtonService;
+        private readonly IWxMenuService _wMenuService;
+        private readonly IWxMenuButtonService _wMenuButtonService;
         private readonly IPictureService _pictureService;
         private readonly ISettingService _settingService;
         private readonly IStoreContext _storeContext;
@@ -92,14 +92,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             ILocalizedEntityService localizedEntityService,
             INopFileProvider fileProvider,
             INotificationService notificationService,
-            IWUserService wUserService,
-            IWLocationService wLocationService,
-            IWQrCodeLimitService wQrCodeLimitService,
-            IWQrCodeLimitUserService wQrCodeLimitUserService,
+            IWxUserService wUserService,
+            IWxLocationService wLocationService,
+            IQrCodeLimitService wQrCodeLimitService,
+            IQrCodeLimitUserService wQrCodeLimitUserService,
             IQrCodeLimitBindingSourceService qrCodeLimitBindingSourceService,
             IQrCodeSupplierVoucherCouponMappingService qrCodeSupplierVoucherCouponMappingService,
-            IWMenuService wMenuService,
-            IWMenuButtonService wMenuButtonService,
+            IWxMenuService wMenuService,
+            IWxMenuButtonService wMenuButtonService,
             IPictureService pictureService,
             ISettingService settingService,
             IStoreContext storeContext,
@@ -180,8 +180,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return AccessDeniedView();
 
             //try to get a weixin customer with the specified id
-            var user = await _wUserService.GetWUserByIdAsync(id);
-            if (user == null || user.Deleted)
+            var user = await _wUserService.GetWxUserByIdAsync(id);
+            if (user == null)
                 return RedirectToAction("UserList");
 
             //判断是否关注，是否需要同步用户数据到本地
@@ -200,8 +200,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return AccessDeniedView();
 
             //try to get a weixin user with the specified id
-            var user = await _wUserService.GetWUserByIdAsync(model.Id);
-            if (user == null || user.Deleted)
+            var user = await _wUserService.GetWxUserByIdAsync(model.Id);
+            if (user == null)
                 return RedirectToAction("UserList");
 
             if (ModelState.IsValid)
@@ -219,13 +219,11 @@ namespace Nop.Web.Areas.Admin.Controllers
                     user.SupplierShopId = model.SupplierShopId;
                     user.QrScene = model.QrScene;
                     user.QrSceneStr = model.QrSceneStr;
-                    user.AllowReferee = model.AllowReferee;
                     user.AllowResponse = model.AllowResponse;
-                    user.AllowOrder = model.AllowOrder;
                     user.AllowNotice = model.AllowNotice;
                     user.AllowOrderNotice = model.AllowOrderNotice;
 
-                    await _wUserService.UpdateWUserAsync(user);
+                    await _wUserService.UpdateWxUserAsync(user);
 
                     //activity log
                     await _customerActivityService.InsertActivityAsync("EditUser",
@@ -308,10 +306,10 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 //fill entity from model
-                var qrCodeLimit = model.ToEntity<WQrCodeLimit>();
-                qrCodeLimit.QrCodeActionType = WQrCodeActionType.QR_LIMIT_SCENE;
+                var qrCodeLimit = model.ToEntity<QrCodeLimit>();
+                qrCodeLimit.QrCodeActionType = QrCodeActionType.QR_LIMIT_SCENE;
 
-                await _wQrCodeLimitService.InsertWQrCodeLimitAsync(qrCodeLimit);
+                await _wQrCodeLimitService.InsertQrCodeLimitAsync(qrCodeLimit);
 
                 //插入bingdingSource
                 model.BindingSource.QrCodeLimitId = qrCodeLimit.Id;
@@ -332,7 +330,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                     }
                 }
 
-                await _wQrCodeLimitService.UpdateWQrCodeLimitAsync(qrCodeLimit);
+                await _wQrCodeLimitService.UpdateQrCodeLimitAsync(qrCodeLimit);
 
                 //activity log
                 await _customerActivityService.InsertActivityAsync("AddNewQrCodeLimit",
@@ -358,7 +356,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return AccessDeniedView();
 
             //try to get a weixin customer with the specified id
-            var qrcodeLimit = await _wQrCodeLimitService.GetWQrCodeLimitByIdAsync(id);
+            var qrcodeLimit = await _wQrCodeLimitService.GetQrCodeLimitByIdAsync(id);
             if (qrcodeLimit == null)
                 return RedirectToAction("QrCodeLimitList");
 
@@ -376,7 +374,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return AccessDeniedView();
 
             //try to get a weixin user with the specified id
-            var qrcodeLimit = await _wQrCodeLimitService.GetWQrCodeLimitByIdAsync(model.Id);
+            var qrcodeLimit = await _wQrCodeLimitService.GetQrCodeLimitByIdAsync(model.Id);
             if (qrcodeLimit == null)
                 return RedirectToAction("QrCodeLimitList");
 
@@ -384,8 +382,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             {
                 try
                 {
-                    qrcodeLimit.WQrCodeCategoryId = model.WQrCodeCategoryId;
-                    qrcodeLimit.WQrCodeChannelId = model.WQrCodeChannelId;
+                    qrcodeLimit.QrCodeCategoryId = model.QrCodeCategoryId;
+                    qrcodeLimit.QrCodeChannelId = model.QrCodeChannelId;
                     qrcodeLimit.SysName = model.SysName;
                     qrcodeLimit.Description = model.Description;
                     qrcodeLimit.TagIdList = model.TagIdList;
@@ -402,7 +400,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                         }
                     }
 
-                    await _wQrCodeLimitService.UpdateWQrCodeLimitAsync(qrcodeLimit);
+                    await _wQrCodeLimitService.UpdateQrCodeLimitAsync(qrcodeLimit);
 
                     //更新binding source
                     var qrCodeLimitBindingSource = await _qrCodeLimitBindingSourceService.GetEntityByQrcodeLimitIdAsync(qrcodeLimit.Id);
@@ -419,7 +417,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                             UseFixUrl = model.BindingSource.UseFixUrl,
                             Url = model.BindingSource.Url,
                             MessageResponse = model.BindingSource.MessageResponse,
-                            WSceneTypeId = model.BindingSource.WSceneTypeId,
+                            SceneTypeId = model.BindingSource.SceneTypeId,
                             MessageTypeId = model.BindingSource.MessageTypeId,
                             Content = model.BindingSource.Content,
                             UseBindingMessage = model.BindingSource.UseBindingMessage
@@ -436,7 +434,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                         qrCodeLimitBindingSource.UseFixUrl = model.BindingSource.UseFixUrl;
                         qrCodeLimitBindingSource.Url = model.BindingSource.Url;
                         qrCodeLimitBindingSource.MessageResponse = model.BindingSource.MessageResponse;
-                        qrCodeLimitBindingSource.WSceneTypeId = model.BindingSource.WSceneTypeId;
+                        qrCodeLimitBindingSource.SceneTypeId = model.BindingSource.SceneTypeId;
                         qrCodeLimitBindingSource.MessageTypeId = model.BindingSource.MessageTypeId;
                         qrCodeLimitBindingSource.Content = model.BindingSource.Content;
                         qrCodeLimitBindingSource.UseBindingMessage = model.BindingSource.UseBindingMessage;
@@ -476,7 +474,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return await AccessDeniedDataTablesJson();
 
             //try to get a product with the specified id
-            var qrCodeLimit = await _wQrCodeLimitService.GetWQrCodeLimitByIdAsync(searchModel.QrCodeLimitId)
+            var qrCodeLimit = await _wQrCodeLimitService.GetQrCodeLimitByIdAsync(searchModel.QrCodeLimitId)
                 ?? throw new ArgumentException("No QrCodeLimit found with the specified id");
 
             //prepare model
@@ -530,19 +528,19 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageWeixin))
                 return AccessDeniedView();
 
-            var selectedUsers = await _wUserService.GetWUsersByIdsAsync(model.SelectedUserIds.ToArray());
+            var selectedUsers = await _wUserService.GetWxUsersByIdsAsync(model.SelectedUserIds.ToArray());
 
             if(selectedUsers.Any())
             {
                 var existingRelatedUsers = await _wQrCodeLimitUserService.GetEntitiesByQrcodeLimitIdAsync(model.RelatedId);
                 foreach (var user in selectedUsers)
                 {
-                    if (user.Deleted || !user.AllowReferee || !user.Subscribe || existingRelatedUsers.Any(t => t.UserId == user.Id))
+                    if (!user.Subscribe || existingRelatedUsers.Any(t => t.CustomerId == user.CustomerId))
                         continue;
 
-                    await _wQrCodeLimitUserService.InsertEntityAsync(new WQrCodeLimitUserMapping
+                    await _wQrCodeLimitUserService.InsertEntityAsync(new QrCodeLimitUserMapping
                     {
-                        UserId = user.Id,
+                        CustomerId = user.CustomerId,
                         QrCodeLimitId = model.RelatedId,
                         ExpireTime = DateTime.Now.AddDays(30),
                         Published = true
@@ -670,7 +668,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 //fill entity from model
-                var menu = model.ToEntity<WMenu>();
+                var menu = model.ToEntity<WxMenu>();
 
                 await _wMenuService.InsertMenuAsync(menu);
 

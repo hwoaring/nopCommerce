@@ -65,16 +65,16 @@ namespace Nop.Services.Marketing
             return await _userAssetConsumeHistoryRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual async Task<IList<UserAssetConsumeHistory>> GetEntitiesByUserIdAsync(
-            int userId,
+        public virtual async Task<IList<UserAssetConsumeHistory>> GetEntitiesByCustomerIdAsync(
+            int customerId,
             bool completed,
             bool isInvalid)
         {
-            if (userId == 0)
+            if (customerId == 0)
                 return new List<UserAssetConsumeHistory>();
 
             var query = from t in _userAssetConsumeHistoryRepository.Table
-                        where t.OwnerUserId == userId &&
+                        where t.CustomerId == customerId &&
                         t.Completed == completed &&
                         t.IsInvalid == isInvalid
                         select t;
@@ -100,7 +100,7 @@ namespace Nop.Services.Marketing
         }
 
         public virtual async Task<IPagedList<UserAssetConsumeHistory>> GetEntitiesAsync(
-            int ownerUserId = 0,
+            int customerId = 0,
             int? userAssetIncomeHistoryId = 0,
             AssetConsumType? assetConsumType = null,
             bool? completed = null,
@@ -109,7 +109,7 @@ namespace Nop.Services.Marketing
             int pageIndex = 0, int pageSize = int.MaxValue)
         {
             var query = _userAssetConsumeHistoryRepository.Table;
-            query = query.Where(q => q.OwnerUserId == ownerUserId);
+            query = query.Where(q => q.CustomerId == customerId);
 
             if (userAssetIncomeHistoryId.HasValue && userAssetIncomeHistoryId > 0)
                 query = query.Where(q => q.UserAssetIncomeHistoryId == userAssetIncomeHistoryId);

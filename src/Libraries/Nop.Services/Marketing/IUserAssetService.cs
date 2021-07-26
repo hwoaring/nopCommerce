@@ -23,7 +23,7 @@ namespace Nop.Services.Marketing
 
         Task<UserAsset> GetEntityByIdAsync(int id);
 
-        Task<UserAsset> GetEntityByUserIdAsync(int wuserId);
+        Task<UserAsset> GetEntityByCustomerIdAsync(int customerId);
 
     }
 }

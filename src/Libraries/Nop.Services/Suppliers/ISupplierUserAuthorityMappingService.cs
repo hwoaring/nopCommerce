@@ -22,7 +22,7 @@ namespace Nop.Services.Suppliers
 
         Task<SupplierUserAuthorityMapping> GetEntityByIdAsync(int id);
 
-        Task<SupplierUserAuthorityMapping> GetEntityByUserIdAsync(int userId);
+        Task<SupplierUserAuthorityMapping> GetEntityByCustomerIdAsync(int customerId);
 
         Task<IList<SupplierUserAuthorityMapping>> GetEntitiesByIdsAsync(int[] entityIds);
 

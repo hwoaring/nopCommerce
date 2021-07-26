@@ -13,17 +13,11 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
     {
         #region Properties
 
-        [NopResourceDisplayName("Admin.Weixin.Users.Fields.OriginalId")]
-        public int OriginalId { get; set; }
+        [NopResourceDisplayName("Admin.Weixin.Users.Fields.CustomerId")]
+        public string CustomerId { get; set; }
 
         [NopResourceDisplayName("Admin.Weixin.Users.Fields.OpenId")]
         public string OpenId { get; set; }
-
-        [NopResourceDisplayName("Admin.Weixin.Users.Fields.RefereeId")]
-        public int RefereeId { get; set; }
-
-        [NopResourceDisplayName("Admin.Weixin.Users.Fields.OpenIdHash")]
-        public long OpenIdHash { get; set; }
 
         [NopResourceDisplayName("Admin.Weixin.Users.Fields.UnionId")]
         public string UnionId { get; set; }
@@ -88,14 +82,8 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
         [NopResourceDisplayName("Admin.Weixin.Users.Fields.Subscribe")]
         public bool Subscribe { get; set; }
 
-        [NopResourceDisplayName("Admin.Weixin.Users.Fields.AllowReferee")]
-        public bool AllowReferee { get; set; }
-
         [NopResourceDisplayName("Admin.Weixin.Users.Fields.AllowResponse")]
         public bool AllowResponse { get; set; }
-
-        [NopResourceDisplayName("Admin.Weixin.Users.Fields.AllowOrder")]
-        public bool AllowOrder { get; set; }
 
         [NopResourceDisplayName("Admin.Weixin.Users.Fields.AllowNotice")]
         public bool AllowNotice { get; set; }
@@ -105,9 +93,6 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
 
         [NopResourceDisplayName("Admin.Weixin.Users.Fields.InBlackList")]
         public bool InBlackList { get; set; }
-
-        [NopResourceDisplayName("Admin.Weixin.Users.Fields.Deleted")]
-        public bool Deleted { get; set; }
 
         [NopResourceDisplayName("Admin.Weixin.Users.Fields.SubscribeTime")]
         [UIHint("DateTimeNullable")]

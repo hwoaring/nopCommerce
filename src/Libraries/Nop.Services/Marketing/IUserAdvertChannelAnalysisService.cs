@@ -23,7 +23,7 @@ namespace Nop.Services.Marketing
 
         Task<UserAdvertChannelAnalysis> GetEntityByIdAsync(int id);
 
-        Task<UserAdvertChannelAnalysis> GetEntitiesByUserIdAsync(int wuserId);
+        Task<UserAdvertChannelAnalysis> GetEntitiesByCustomerIdAsync(int customerId);
 
         Task<IList<UserAdvertChannelAnalysis>> GetEntitiesByProductIdAsync(int productId);
 
@@ -31,7 +31,7 @@ namespace Nop.Services.Marketing
 
 
         Task<IPagedList<UserAdvertChannelAnalysis>> GetEntitiesAsync(
-            int userId = 0,
+            int customerId = 0,
             int supplierId = 0,
             int supplierShopId = 0,
             int productId = 0,

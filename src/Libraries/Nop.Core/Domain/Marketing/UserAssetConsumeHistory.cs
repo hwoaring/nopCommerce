@@ -12,7 +12,7 @@ namespace Nop.Core.Domain.Marketing
         /// <summary>
         /// 资产消费明细所属人ID
         /// </summary>
-        public int OwnerUserId { get; set; }
+        public int CustomerId { get; set; }
         /// <summary>
         /// 备注
         /// </summary>
@@ -28,7 +28,7 @@ namespace Nop.Core.Domain.Marketing
         /// <summary>
         /// 验单人员ID
         /// </summary>
-        public int? VerifyUserId { get; set; }
+        public int? VerifyCustomerId { get; set; }
         /// <summary>
         /// 【AssetConsumType】积分/账户收支出方式EnumID
         /// </summary>

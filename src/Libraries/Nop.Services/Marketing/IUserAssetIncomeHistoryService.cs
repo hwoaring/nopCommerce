@@ -15,7 +15,7 @@ namespace Nop.Services.Marketing
     {
         Task InsertEntityAsync(UserAssetIncomeHistory entity);
 
-        Task InsertEntityBysupplierVoucherCouponParamsAsync(SupplierVoucherCoupon supplierVoucherCoupon, int ownerUserId, int orderItemId = 0, AssetConsumType? assetConsumType = null, WSceneType? sceneType = null);
+        Task InsertEntityBysupplierVoucherCouponParamsAsync(SupplierVoucherCoupon supplierVoucherCoupon, int ownerCustomerId, int orderItemId = 0, AssetConsumType? assetConsumType = null, SceneType? sceneType = null);
 
         Task DeleteEntityAsync(UserAssetIncomeHistory entity);
 
@@ -32,14 +32,14 @@ namespace Nop.Services.Marketing
 
         Task<UserAssetIncomeHistory> GetEntityByIdAsync(int id);
 
-        Task<IList<UserAssetIncomeHistory>> GetEntitiesByUserIdAsync(int wuserId);
+        Task<IList<UserAssetIncomeHistory>> GetEntitiesByOwnerCustomerIdAsync(int ownerCustomerId);
 
-        Task<IList<UserAssetIncomeHistory>> GetEntitiesBySupplierIdAsync(int wuserId, int supplierId, int? supplierShopId = null, bool? onlyUsable = null);
+        Task<IList<UserAssetIncomeHistory>> GetEntitiesBySupplierIdAsync(int ownerCustomerId, int supplierId, int? supplierShopId = null, bool? onlyUsable = null);
 
-        Task<IList<UserAssetIncomeHistory>> GetEntitiesBySupplierVoucherCouponIdAsync(int wuserId, int supplierVoucherCouponId, bool? onlyUsable = null);
+        Task<IList<UserAssetIncomeHistory>> GetEntitiesBySupplierVoucherCouponIdAsync(int ownerCustomerId, int supplierVoucherCouponId, bool? onlyUsable = null);
 
         Task<IPagedList<UserAssetIncomeHistory>> GetEntitiesAsync(
-            int ownerUserId = 0,
+            int ownerCustomerId = 0,
             int supplierId = 0,
             int supplierShopId = 0,
             int supplierVoucherCouponId = 0,

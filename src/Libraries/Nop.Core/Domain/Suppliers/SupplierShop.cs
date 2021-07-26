@@ -13,18 +13,27 @@ namespace Nop.Core.Domain.Suppliers
         /// 【Supplier.Id】供应商ID
         /// </summary>
         public int SupplierId { get; set; }
+
         /// <summary>
         /// 店铺名称
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// 供应商店铺独立域名链接
+        /// </summary>
+        public string Url { get; set; }
+
         /// <summary>
         /// 店铺描述
         /// </summary>
         public string Description { get; set; }
+
         /// <summary>
         /// 店铺内容
         /// </summary>
         public string Content { get; set; }
+
         /// <summary>
         /// 店铺门图，横图/大图
         /// </summary>
@@ -65,6 +74,12 @@ namespace Nop.Core.Domain.Suppliers
         ///  店铺二维码
         /// </summary>
         public string QrCodeUrl { get; set; }
+
+        /// <summary>
+        /// 等级
+        /// </summary>
+        public int SupplierShopLevel { get; set; }
+
         /// <summary>
         /// 地理位置纬度
         /// </summary>

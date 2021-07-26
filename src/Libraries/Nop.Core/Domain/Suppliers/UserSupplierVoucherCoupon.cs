@@ -9,9 +9,9 @@ namespace Nop.Core.Domain.Suppliers
     public partial class UserSupplierVoucherCoupon : BaseEntity
     {
         /// <summary>
-        /// 【WUser.Id】合作伙伴ID
+        /// 
         /// </summary>
-        public int WUserId { get; set; }
+        public int CustomerId { get; set; }
 
         /// <summary>
         /// 【SupplierVoucherCoupon.Id】ID

@@ -194,7 +194,7 @@ namespace Nop.Core.Domain.Suppliers
         /// <summary>
         /// 创建人ID
         /// </summary>
-        public int CreatUserId { get; set; }
+        public int CreatCustomerId { get; set; }
         /// <summary>
         /// 开始时间
         /// </summary>

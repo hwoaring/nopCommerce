@@ -65,13 +65,13 @@ namespace Nop.Services.Marketing
             return await _userAssetRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual async Task<UserAsset> GetEntityByUserIdAsync(int wuserId)
+        public virtual async Task<UserAsset> GetEntityByCustomerIdAsync(int customerId)
         {
-            if (wuserId == 0)
+            if (customerId == 0)
                 return null;
 
             var query = from t in _userAssetRepository.Table
-                        where t.OwnerUserId==wuserId
+                        where t.CustomerId== customerId
                         select t;
 
             return await query.FirstOrDefaultAsync();

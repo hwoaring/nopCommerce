@@ -40,15 +40,15 @@ namespace Nop.Core.Domain.Marketing
         /// <summary>
         /// 创建人ID
         /// </summary>
-        public int CreatedUserId { get; set; }
+        public int CreatedCustomerId { get; set; }
         /// <summary>
         /// 资产所属人ID，拥有人ID，没有赠送情况下=创建人ID
         /// </summary>
-        public int OwnerUserId { get; set; }
+        public int OwnerCustomerId { get; set; }
         /// <summary>
         /// 赠送人用户Id，卡券类可赠送的（可用于统计卡券发放人绩效）
         /// </summary>
-        public int GiverUserId { get; set; }
+        public int GiverCustomerId { get; set; }
         /// <summary>
         /// 剩余转赠次数，避免来回不断赠送
         /// </summary>

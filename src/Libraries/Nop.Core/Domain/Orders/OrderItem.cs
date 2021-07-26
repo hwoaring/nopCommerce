@@ -142,8 +142,13 @@ namespace Nop.Core.Domain.Orders
         public DateTime? RentalEndDateUtc { get; set; }
 
         /// <summary>
+        /// 购买成功产品最早使用时间
+        /// </summary>
+        public DateTime? AvailableUseStartDateUtc { get; set; }
+
+        /// <summary>
         /// 购买成功产品最晚有效使用时间
         /// </summary>
-        public DateTime? AvailableEndDateUtc { get; set; }
+        public DateTime? AvailableUseEndDateUtc { get; set; }
     }
 }

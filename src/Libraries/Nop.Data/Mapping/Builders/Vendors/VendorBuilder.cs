@@ -19,6 +19,8 @@ namespace Nop.Data.Mapping.Builders.Vendors
             table
                 .WithColumn(nameof(Vendor.Name)).AsString(400).NotNullable()
                 .WithColumn(nameof(Vendor.Email)).AsString(400).Nullable()
+                .WithColumn(nameof(Vendor.VendorNumber)).AsString(32).Nullable()
+                .WithColumn(nameof(Vendor.InviteCode)).AsString(32).Nullable()
                 .WithColumn(nameof(Vendor.StoreName)).AsString(512).Nullable()
                 .WithColumn(nameof(Vendor.ContactNumber)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(Vendor.ContactAddress)).AsString(1024).Nullable()

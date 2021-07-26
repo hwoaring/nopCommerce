@@ -28,6 +28,16 @@ namespace Nop.Services.Customers
         /// </summary>
         public static string CustomerAttributePrefix => "customer_attribute_";
 
+        /// <summary>
+        /// 推荐人参数openid
+        /// </summary>
+        public static string CustomerQueryParamOpenid => "openid";
+
+        /// <summary>
+        /// 推荐人参数cgid
+        /// </summary>
+        public static string CustomerQueryParamGuid => "cgid";
+
         #region Caching defaults
 
         #region Customer

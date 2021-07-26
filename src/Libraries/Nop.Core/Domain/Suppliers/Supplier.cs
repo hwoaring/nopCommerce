@@ -1,5 +1,4 @@
 ﻿using System;
-using Humanizer;
 
 namespace Nop.Core.Domain.Suppliers
 {
@@ -13,6 +12,12 @@ namespace Nop.Core.Domain.Suppliers
         /// 供应商名称
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// 供应商独立域名链接
+        /// </summary>
+        public string Url { get; set; }
+
         /// <summary>
         ///  所在国家
         /// </summary>
@@ -78,6 +83,11 @@ namespace Nop.Core.Domain.Suppliers
         /// 付费合作类型结束时间（年度用户，季度，Vip用户等）
         /// </summary>
         public DateTime? CooperationEndDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 等级
+        /// </summary>
+        public int SupplierLevel { get; set; }
 
         /// <summary>
         /// 合作类型：0=免费，付费等（预留）

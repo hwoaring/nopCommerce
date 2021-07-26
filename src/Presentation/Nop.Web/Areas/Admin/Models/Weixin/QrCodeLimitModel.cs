@@ -20,8 +20,8 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
             QrCodeSupplierVoucherCouponSearchModel = new QrCodeSupplierVoucherCouponSearchModel();
             BindingSource = new QrCodeLimitBindingSourceModel();
 
-            AvailableWQrCodeCategorys = new List<SelectListItem>();
-            AvailableWQrCodeChannels = new List<SelectListItem>();
+            AvailableQrCodeCategorys = new List<SelectListItem>();
+            AvailableQrCodeChannels = new List<SelectListItem>();
         }
 
         #region Properties
@@ -29,16 +29,13 @@ namespace Nop.Web.Areas.Admin.Models.Weixin
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.Fields.QrCodeId")]
         public int QrCodeId { get; set; }
 
-        [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.Fields.WConfigId")]
-        public int WConfigId { get; set; }
+        [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.Fields.QrCodeCategoryId")]
+        public int QrCodeCategoryId { get; set; }
+        public IList<SelectListItem> AvailableQrCodeCategorys { get; set; }
 
-        [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.Fields.WQrCodeCategoryId")]
-        public int WQrCodeCategoryId { get; set; }
-        public IList<SelectListItem> AvailableWQrCodeCategorys { get; set; }
-
-        [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.Fields.WQrCodeChannelId")]
-        public int WQrCodeChannelId { get; set; }
-        public IList<SelectListItem> AvailableWQrCodeChannels { get; set; }
+        [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.Fields.QrCodeChannelId")]
+        public int QrCodeChannelId { get; set; }
+        public IList<SelectListItem> AvailableQrCodeChannels { get; set; }
 
         [NopResourceDisplayName("Admin.Weixin.QrCodeLimits.Fields.QrCodeActionTypeId")]
         public byte QrCodeActionTypeId { get; set; }

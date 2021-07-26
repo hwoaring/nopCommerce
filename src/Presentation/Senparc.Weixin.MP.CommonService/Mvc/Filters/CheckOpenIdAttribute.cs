@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Primitives;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Weixin;
@@ -16,7 +17,7 @@ using Nop.Core.Http.Extensions;
 namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
 {
     /// <summary>
-    /// Represents filter attribute that checks and updates WUser OpenId of customer
+    /// Represents filter attribute that checks and updates OpenId of customer
     /// </summary>
     public sealed class CheckOpenIdAttribute : TypeFilterAttribute
     {
@@ -34,78 +35,39 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
         #region Nested filter
 
         /// <summary>
-        /// Represents a filter that checks and updates WUser OpenId of customer
+        /// Represents a filter that checks and updates OpenId of customer
         /// </summary>
         private class CheckOpenIdFilter : IAsyncActionFilter
         {
-            #region Constants
-
-            //这两个都是保存推荐人或分享人的信息，当前用户的openid 在Oauth2中获取
-            private const string WUSER_OPENID_QUERY_PARAMETER_NAME = "openid";
-            private const string WUSER_OPENID_HASH_QUERY_PARAMETER_NAME = "openidhash";
-
-            #endregion
 
             #region Fields
 
             private readonly ICustomerService _customerService;
             private readonly IWorkContext _workContext;
-            private readonly IWUserService _wUserService;
+            private readonly IWxUserService _wUserService;
             private readonly IHttpContextAccessor _httpContextAccessor;
+            private readonly CustomerSettings _customerSettings;
 
             #endregion
 
             #region Ctor
 
             public CheckOpenIdFilter(ICustomerService customerService,
-                IWUserService wUserService,
+                IWxUserService wUserService,
                 IHttpContextAccessor httpContextAccessor,
-                IWorkContext workContext)
+                IWorkContext workContext,
+                CustomerSettings customerSettings)
             {
                 _customerService = customerService;
                 _workContext = workContext;
                 _httpContextAccessor = httpContextAccessor;
                 _wUserService = wUserService;
+                _customerSettings = customerSettings;
             }
 
             #endregion
 
             #region Utilities
-
-            /// <summary>
-            /// Set the wuser referee openid of current customer
-            /// </summary>
-            /// <param name="affiliate">Affiliate</param>
-            private async Task SetCustomerOpenIdAsync(Customer customer, string refereeOpenId, long refereeOpenIdHash)
-            {
-                var update = false;
-
-                //不能自己推荐自己
-                if (!string.IsNullOrEmpty(refereeOpenId) && refereeOpenId.Length < 32 && refereeOpenId != customer.OpenId)
-                {
-                    var refereeUser = await _wUserService.GetWUserByOpenIdAsync(refereeOpenId);
-                    if (refereeUser != null)
-                    {
-                        customer.RefereeId = refereeUser.Id;
-                        customer.RefereeIdUpdateTime = Convert.ToInt32(Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now));
-                        update = true;
-                    }
-                }
-                else if (refereeOpenIdHash > 0)
-                {
-                    var refereeUser = await _wUserService.GetWUserByOpenIdHashAsync(refereeOpenIdHash);
-                    if (refereeUser != null && refereeUser.OpenId != customer.OpenId)
-                    {
-                        customer.RefereeId = refereeUser.Id;
-                        customer.RefereeIdUpdateTime = Convert.ToInt32(Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now));
-                        update = true;
-                    }
-                }
-
-                //update openId Info
-                if (update)
-                    await _customerService.UpdateCustomerAsync(customer);
-            }
 
             #endregion
 
@@ -129,26 +91,17 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
                 if (customer.IsSearchEngineAccount() || customer.IsBackgroundTaskAccount())
                     return;
 
-                //Customer与OpenId绑定
-                var oauthSession = _httpContextAccessor.HttpContext.Session.Get<OauthSession>(NopWeixinDefaults.WeixinOauthSession);
-                if (oauthSession != null && !string.IsNullOrEmpty(oauthSession.OpenId) && string.IsNullOrEmpty(customer.OpenId))
-                {
-                    customer.OpenId = oauthSession.OpenId;
-                    await _customerService.UpdateCustomerAsync(customer);
-                }
-
                 //check request query parameters
-                var request = context.HttpContext.Request;
-                if (request?.Query == null || !request.Query.Any())
+                if (!context.HttpContext.Request?.Query?.Any() ?? true)
                     return;
 
-                var openIds = request.Query[WUSER_OPENID_QUERY_PARAMETER_NAME];  //这里是推荐人OpenId
-                var openIdsHash = request.Query[WUSER_OPENID_HASH_QUERY_PARAMETER_NAME]; //这里是推荐人OpenIdHash
+                //推荐人参数
+                var queryKey = _customerSettings.UseGidForReferrerParam ? NopCustomerServicesDefaults.CustomerQueryParamGuid : NopCustomerServicesDefaults.CustomerQueryParamOpenid;
+                if (!context.HttpContext.Request.Query.TryGetValue(queryKey, out var referrerCodes) || StringValues.IsNullOrEmpty(referrerCodes))
+                    return;
 
-                var openId = openIds.Any() ? openIds.FirstOrDefault() : string.Empty;
-                var openIdHash = openIdsHash.Any() ? (long.TryParse(openIdsHash.FirstOrDefault(), out var hashResult) ? hashResult : 0) : 0;
-
-                await SetCustomerOpenIdAsync(customer, openId, openIdHash);
+                //绑定推荐人Id
+                await _workContext.SetCustomerReferrerIdAsync(referrerCodes.FirstOrDefault(), customer, refreshCache: true);
             }
 
             /// <summary>

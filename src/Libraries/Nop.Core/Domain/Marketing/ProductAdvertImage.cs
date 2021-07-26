@@ -32,9 +32,9 @@ namespace Nop.Core.Domain.Marketing
         /// <summary>
         /// 【WImagePositionType】
         /// </summary>
-        public WImagePositionType ImagePositionType
+        public ImagePositionType ImagePositionType
         {
-            get => (WImagePositionType)ImagePositionTypeId;
+            get => (ImagePositionType)ImagePositionTypeId;
             set => ImagePositionTypeId = (byte)value;
         }
         /// <summary>

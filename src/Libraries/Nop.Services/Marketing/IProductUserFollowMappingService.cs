@@ -28,17 +28,17 @@ namespace Nop.Services.Marketing
 
         Task<IList<ProductUserFollowMapping>> GetEntitiesByProductIdAsync(int productId);
 
-        Task<IList<ProductUserFollowMapping>> GetEntitiesByUserIdAsync(int userId);
+        Task<IList<ProductUserFollowMapping>> GetEntitiesByCustomerIdAsync(int customerId);
 
         Task<int> GetUserFollowCountAsync(int productId);
 
-        Task<IList<int>> GetFollowUserIdByProductIdAsync(int productId);
+        Task<IList<int>> GetFollowCustomerIdByProductIdAsync(int productId);
 
-        Task<IList<int>> GetFollowProductIdByUserIdAsync(int wuserId);
+        Task<IList<int>> GetFollowProductIdByCustomerIdAsync(int customerId);
 
         Task<IPagedList<ProductUserFollowMapping>> GetEntitiesAsync(
             int productId = 0,
-            int userId = 0,
+            int customerId = 0,
             bool? subscribe = null,
             int pageIndex = 0, int pageSize = int.MaxValue);
     }

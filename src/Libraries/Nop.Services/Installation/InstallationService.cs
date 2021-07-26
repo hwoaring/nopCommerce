@@ -3129,7 +3129,9 @@ namespace Nop.Services.Installation
 
             await settingService.SaveSettingAsync(new CustomerSettings
             {
-                RefereeIdAvailableSeconds = 604800, //7天
+                RefereeIdAvailableMinutes = 0, //7天
+                AutoDetectCity = false,
+                UseGidForReferrerParam = false,
                 UsernamesEnabled = false,
                 CheckUsernameAvailabilityEnabled = false,
                 AllowUsersToChangeUsernames = false,
@@ -3176,6 +3178,8 @@ namespace Nop.Services.Installation
                 CountryRequired = false,
                 StateProvinceEnabled = false,
                 StateProvinceRequired = false,
+                PhoneNumberLogin = false,
+                PhoneNumberValidationBySMS = false,
                 PhoneEnabled = false,
                 FaxEnabled = false,
                 AcceptPrivacyPolicyEnabled = false,
@@ -3537,7 +3541,9 @@ namespace Nop.Services.Installation
                 AllowVendorsToEditInfo = false,
                 NotifyStoreOwnerAboutVendorInformationChange = true,
                 MaximumProductNumber = 3000,
-                AllowVendorsToImportProducts = true
+                AllowVendorsToImportProducts = true,
+                VendorParentLevel = 1,
+                InviteCodeEnable = false
             });
 
             var eaGeneral = _emailAccountRepository.Table.FirstOrDefault();

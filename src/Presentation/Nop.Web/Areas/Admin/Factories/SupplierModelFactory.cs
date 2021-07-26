@@ -79,10 +79,10 @@ namespace Nop.Web.Areas.Admin.Factories
         private readonly IStoreMappingSupportedModelFactory _storeMappingSupportedModelFactory;
         private readonly IStoreService _storeService;
         private readonly IUrlRecordService _urlRecordService;
-        private readonly IWUserService _wUserService;
-        private readonly IWUserTagService _wUserTagService;
-        private readonly IWQrCodeLimitService _wQrCodeLimitService;
-        private readonly IWQrCodeLimitUserService _wQrCodeLimitUserService;
+        private readonly IWxUserService _wUserService;
+        private readonly IWxUserTagService _wUserTagService;
+        private readonly IQrCodeLimitService _wQrCodeLimitService;
+        private readonly IQrCodeLimitUserService _wQrCodeLimitUserService;
         private readonly IQrCodeLimitBindingSourceService _qrCodeLimitBindingSourceService;
         private readonly ISupplierVoucherCouponService _supplierVoucherCouponService;
         private readonly IQrCodeSupplierVoucherCouponMappingService _qrCodeSupplierVoucherCouponMappingService;
@@ -126,10 +126,10 @@ namespace Nop.Web.Areas.Admin.Factories
             IStoreMappingSupportedModelFactory storeMappingSupportedModelFactory,
             IStoreService storeService,
             IUrlRecordService urlRecordService,
-            IWUserService wUserService,
-            IWUserTagService wUserTagService,
-            IWQrCodeLimitService wQrCodeLimitService,
-            IWQrCodeLimitUserService wQrCodeLimitUserService,
+            IWxUserService wUserService,
+            IWxUserTagService wUserTagService,
+            IQrCodeLimitService wQrCodeLimitService,
+            IQrCodeLimitUserService wQrCodeLimitUserService,
             IQrCodeLimitBindingSourceService qrCodeLimitBindingSourceService,
             ISupplierVoucherCouponService supplierVoucherCouponService,
             IQrCodeSupplierVoucherCouponMappingService qrCodeSupplierVoucherCouponMappingService,
@@ -197,7 +197,7 @@ namespace Nop.Web.Areas.Admin.Factories
 
         #region SupplierVoucherCouponModel
 
-        public virtual async Task<QrCodeSupplierVoucherCouponListModel> PrepareQrCodeSupplierVoucherCouponListModelAsync(QrCodeSupplierVoucherCouponSearchModel searchModel, WQrCodeLimit qrCodeLimit)
+        public virtual async Task<QrCodeSupplierVoucherCouponListModel> PrepareQrCodeSupplierVoucherCouponListModelAsync(QrCodeSupplierVoucherCouponSearchModel searchModel, QrCodeLimit qrCodeLimit)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));

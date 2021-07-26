@@ -65,8 +65,8 @@ namespace Nop.Web.Areas.Admin.Factories
         private readonly ITaxCategoryService _taxCategoryService;
         private readonly ITopicTemplateService _topicTemplateService;
         private readonly IVendorService _vendorService;
-        private readonly IWQrCodeCategoryService _wQrCodeCategoryService;
-        private readonly IWQrCodeChannelService _wQrCodeChannelService;
+        private readonly IQrCodeCategoryService _qrCodeCategoryService;
+        private readonly IQrCodeChannelService _qrCodeChannelService;
 
         #endregion
 
@@ -96,8 +96,8 @@ namespace Nop.Web.Areas.Admin.Factories
             ITaxCategoryService taxCategoryService,
             ITopicTemplateService topicTemplateService,
             IVendorService vendorService,
-            IWQrCodeCategoryService wQrCodeCategoryService,
-            IWQrCodeChannelService wQrCodeChannelService)
+            IQrCodeCategoryService qrCodeCategoryService,
+            IQrCodeChannelService qrCodeChannelService)
         {
             _categoryService = categoryService;
             _categoryTemplateService = categoryTemplateService;
@@ -123,8 +123,8 @@ namespace Nop.Web.Areas.Admin.Factories
             _taxCategoryService = taxCategoryService;
             _topicTemplateService = topicTemplateService;
             _vendorService = vendorService;
-            _wQrCodeCategoryService = wQrCodeCategoryService;
-            _wQrCodeChannelService = wQrCodeChannelService;
+            _qrCodeCategoryService = qrCodeCategoryService;
+            _qrCodeChannelService = qrCodeChannelService;
         }
 
         #endregion
@@ -928,7 +928,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 throw new ArgumentNullException(nameof(items));
 
             //prepare available items
-            var availableItems = await _wQrCodeCategoryService.GetAllEntitiesAsync();
+            var availableItems = await _qrCodeCategoryService.GetAllEntitiesAsync();
             foreach (var item in availableItems)
             {
                 items.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.Title });
@@ -944,7 +944,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 throw new ArgumentNullException(nameof(items));
 
             //prepare available items
-            var availableItems = await _wQrCodeChannelService.GetAllEntitiesAsync();
+            var availableItems = await _qrCodeChannelService.GetAllEntitiesAsync();
             foreach (var item in availableItems)
             {
                 items.Add(new SelectListItem { Value = item.Id.ToString(), Text = item.Title });

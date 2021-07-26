@@ -12,10 +12,10 @@ namespace Nop.Core.Domain.Suppliers
         /// 店铺ID
         /// </summary>
         public int SupplierShopId { get; set; }
-            /// <summary>
-            /// 关注人ID
-            /// </summary>
-        public int WUserId { get; set; }
+        /// <summary>
+        /// 关注人ID
+        /// </summary>
+        public int CustomerId { get; set; }
         /// <summary>
         /// 最后更新时间
         /// </summary>

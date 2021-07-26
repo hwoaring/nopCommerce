@@ -20,7 +20,7 @@ namespace Nop.Core.Domain.Suppliers
         /// <summary>
         /// 微信用户ID
         /// </summary>
-        public int WUserId { get; set; }
+        public int CustomerId { get; set; }
         /// <summary>
         /// 是否财务管理员
         /// </summary>

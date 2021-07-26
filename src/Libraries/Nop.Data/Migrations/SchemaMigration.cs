@@ -228,51 +228,54 @@ namespace Nop.Data.Migrations
             _migrationManager.BuildTable<VendorAttribute>(Create);
             _migrationManager.BuildTable<VendorAttributeValue>(Create);
             _migrationManager.BuildTable<VendorNote>(Create);
+            _migrationManager.BuildTable<VendorPageAnalyse>(Create);
+            _migrationManager.BuildTable<VendorCustomerForm>(Create);
+            _migrationManager.BuildTable<VendorSms>(Create);
+            _migrationManager.BuildTable<VendorSmsHistory>(Create);
+            _migrationManager.BuildTable<VendorSelfPrice>(Create);
+            _migrationManager.BuildTable<VendorRegion>(Create);
 
             _migrationManager.BuildTable<ProductVendorMapping>(Create);
             _migrationManager.BuildTable<CategoryVendorMapping>(Create);
 
             //Weixin
-            _migrationManager.BuildTable<WConfig>(Create);
+            _migrationManager.BuildTable<WxConfig>(Create);
 
-            _migrationManager.BuildTable<WApp>(Create);
+            _migrationManager.BuildTable<WxUser>(Create);
+            _migrationManager.BuildTable<WxAddress>(Create);
+            _migrationManager.BuildTable<WxUserTag>(Create);
+            _migrationManager.BuildTable<WxUserSysTag>(Create);
+            _migrationManager.BuildTable<WxUserUserSysTagMapping>(Create);
+            _migrationManager.BuildTable<WxBrowserCheck>(Create);
 
-            _migrationManager.BuildTable<WUser>(Create);
-            _migrationManager.BuildTable<WUserAddress>(Create);
-            _migrationManager.BuildTable<WUserRefereeMapping>(Create);
-            _migrationManager.BuildTable<WUserTag>(Create);
-            _migrationManager.BuildTable<WUserSysTag>(Create);
-            _migrationManager.BuildTable<WUserUserSysTagMapping>(Create);
-            _migrationManager.BuildTable<WeChatBrowserCheck>(Create);
+            _migrationManager.BuildTable<WxLocation>(Create);
+            _migrationManager.BuildTable<WxMenu>(Create);
+            _migrationManager.BuildTable<WxMenuButton>(Create);
+            _migrationManager.BuildTable<WxMessage>(Create);
+            _migrationManager.BuildTable<WxOauth>(Create);
+            _migrationManager.BuildTable<WxMessageBindMapping>(Create);
 
-            _migrationManager.BuildTable<WLocation>(Create);
-            _migrationManager.BuildTable<WMenu>(Create);
-            _migrationManager.BuildTable<WMenuButton>(Create);
-            _migrationManager.BuildTable<WMessage>(Create);
-            _migrationManager.BuildTable<WOauth>(Create);
-            _migrationManager.BuildTable<WMessageBindMapping>(Create);
+            _migrationManager.BuildTable<WxAutoreplyNewsInfo>(Create);
 
-            _migrationManager.BuildTable<WAutoreplyNewsInfo>(Create);
-
-            _migrationManager.BuildTable<WMessageAutoReply>(Create);
-            _migrationManager.BuildTable<WKeywordAutoreply>(Create);
-            _migrationManager.BuildTable<WKeywordAutoreplyKeyword>(Create);
-            _migrationManager.BuildTable<WKeywordAutoreplyReply>(Create);
+            _migrationManager.BuildTable<WxMessageAutoReply>(Create);
+            _migrationManager.BuildTable<WxKeywordAutoreplyKeyword>(Create);
+            _migrationManager.BuildTable<WxKeywordAutoreplyReply>(Create);
             
 
-            _migrationManager.BuildTable<WShareLink>(Create);
-            _migrationManager.BuildTable<WJSDKShare>(Create);
-            _migrationManager.BuildTable<WShareCount>(Create);
+            _migrationManager.BuildTable<WxShareLink>(Create);
+            _migrationManager.BuildTable<WxJSDKShare>(Create);
+            _migrationManager.BuildTable<WxShareCount>(Create);
             
-            _migrationManager.BuildTable<WQrCodeCategory>(Create);
-            _migrationManager.BuildTable<WQrCodeChannel>(Create);
-            _migrationManager.BuildTable<WQrCodeLimit>(Create);
+            _migrationManager.BuildTable<QrCodeCategory>(Create);
+            _migrationManager.BuildTable<QrCodeChannel>(Create);
+            _migrationManager.BuildTable<QrCodeLimit>(Create);
             
-            _migrationManager.BuildTable<WQrCodeLimitUserMapping>(Create);
+            _migrationManager.BuildTable<QrCodeLimitUserMapping>(Create);
             _migrationManager.BuildTable<QrCodeLimitBindingSource>(Create);
 
-            _migrationManager.BuildTable<WQrCodeTemp>(Create);
+            _migrationManager.BuildTable<QrCodeTemp>(Create);
 
+            //Supplier
             _migrationManager.BuildTable<Supplier>(Create);
             _migrationManager.BuildTable<SupplierShop>(Create);
             _migrationManager.BuildTable<SupplierShopTag>(Create);

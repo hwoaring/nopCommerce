@@ -1,6 +1,5 @@
 ﻿using System;
 using Nop.Core.Domain.Discounts;
-using Humanizer;
 
 namespace Nop.Core.Domain.Suppliers
 {

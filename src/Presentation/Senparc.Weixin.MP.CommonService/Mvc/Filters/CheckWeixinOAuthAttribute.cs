@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.Primitives;
 using Nop.Core;
+using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Weixin;
 using Nop.Core.Http.Extensions;
 using Nop.Data;
+using Nop.Services.Customers;
 using Nop.Services.Security;
 using Nop.Services.Weixin;
 
@@ -62,6 +66,7 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
             private readonly IUrlHelperFactory _urlHelperFactory;
             private readonly IWebHelper _webHelper;
             private readonly IStoreContext _storeContext;
+            private readonly CustomerSettings _customerSettings;
             private readonly SenparcWeixinSetting _senparcWeixinSetting;
             #endregion
 
@@ -75,6 +80,7 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
                 IUrlHelperFactory urlHelperFactory,
                 IWebHelper webHelper,
                 IStoreContext storeContext,
+                CustomerSettings customerSettings,
                 SenparcWeixinSetting senparcWeixinSetting
                 )
             {
@@ -85,6 +91,7 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
                 _urlHelperFactory = urlHelperFactory;
                 _webHelper = webHelper;
                 _storeContext = storeContext;
+                _customerSettings = customerSettings;
                 _senparcWeixinSetting = senparcWeixinSetting;
             }
 
@@ -101,7 +108,14 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
                 if (context == null)
                     throw new ArgumentNullException(nameof(context));
 
-                //check whether this filter has been overridden for the Action
+                //only in GET requests
+                //if (!context.HttpContext.Request.Method.Equals(WebRequestMethods.Http.Get, StringComparison.InvariantCultureIgnoreCase))
+                //return;
+
+                if (!await DataSettingsManager.IsDatabaseInstalledAsync())
+                    return;
+
+                //check whether this filter has been overridden for the action
                 var actionFilter = context.ActionDescriptor.FilterDescriptors
                     .Where(filterDescriptor => filterDescriptor.Scope == FilterScope.Action)
                     .Select(filterDescriptor => filterDescriptor.Filter)
@@ -110,9 +124,6 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
 
                 //ignore filter (the action is available even if navigation is not allowed)
                 if (actionFilter?.IgnoreFilter ?? _ignoreFilter)
-                    return;
-
-                if (!await DataSettingsManager.IsDatabaseInstalledAsync())
                     return;
 
                 //whether Oauth is enabled
@@ -126,11 +137,11 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
                     context.Result = new RedirectResult(wechatBrowserControlerUrl);
                 }
 
+                //Oauth Session 是否过期
                 var session = context.HttpContext.Session.Get<OauthSession>(NopWeixinDefaults.WeixinOauthSession);
-                if (session != null && (session.CreatTime + 2160000) > Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now))  //RefreshToken30天有效期，在25天内刷新有效
+                if (session != null && session.CreatTime.AddDays(25) > DateTime.Now)  //RefreshToken30天有效期，在25天内刷新有效
                 {
-                    //oauth accesstoken 过期
-                    if (session.CreatTime + 6600 < Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now))  //2小时过期，提前10分钟验证
+                    if (session.CreatTime.AddMinutes(110) < DateTime.Now)  // oauth accesstoken 2小时过期，提前10分钟验证
                     {
                         try
                         {
@@ -138,9 +149,9 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
                             if (refreshResult.errcode == ReturnCode.请求成功)
                             {
                                 session.AccessToken = refreshResult.access_token;
-                                session.CreatTime = (int)Nop.Core.Weixin.Helpers.DateTimeHelper.GetUnixDateTime(DateTime.Now);
+                                session.CreatTime = DateTime.Now;
                                 session.RefreshToken = refreshResult.refresh_token;
-
+                                //Set Session
                                 context.HttpContext.Session.Set(NopWeixinDefaults.WeixinOauthSession, session);
 
                                 return;
@@ -157,30 +168,19 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
                     }
                 }
 
-                //初始化Oauth State
-                var oauthStateString = ((_oauthScope == OAuthScope.snsapi_userinfo) ? "userinfo" : "base") + SystemTime.Now.Ticks.ToString();
+                //初始化Oauth State（官方邀请state只能是a-zA-Z0-9）测试下面格式是否能通过传递
+                //格式为：userinfo{TimeTicket}+【_{CustomerGuid}或{OpenId}】
+                var oauthStateString = string.Concat(((_oauthScope == OAuthScope.snsapi_userinfo) ? "userinfo" : "userbase"), SystemTime.Now.Ticks.ToString());
 
                 //check request query parameters
                 var request = context.HttpContext.Request;
-                if (request?.Query == null || !request.Query.Any())
+                if (request?.Query?.Any() ?? false)
                 {
-                    //do nothing
-                }
-                else
-                {
-                    var openIds = request.Query["openid"];  //这里是推荐人OpenId
-                    var openIdsHash = request.Query["openidhash"]; //这里是推荐人OpenIdHash
-
-                    var openId = openIds.Any() ? openIds.FirstOrDefault() : string.Empty;
-                    var openIdHash = openIdsHash.Any() ? (long.TryParse(openIdsHash.FirstOrDefault(), out var hashResult) ? hashResult : 0) : 0;
-
-                    if (!string.IsNullOrEmpty(openId))
+                    //推荐人参数
+                    var queryKey = _customerSettings.UseGidForReferrerParam ? NopCustomerServicesDefaults.CustomerQueryParamGuid : NopCustomerServicesDefaults.CustomerQueryParamOpenid;
+                    if (request.Query.TryGetValue(queryKey, out var referrerCodes) && !StringValues.IsNullOrEmpty(referrerCodes))
                     {
-                        oauthStateString += "_" + openId;
-                    }
-                    else if (openIdHash > 0)
-                    {
-                        oauthStateString += "_" + openIdHash.ToString();
+                        oauthStateString += "_" + referrerCodes.FirstOrDefault();
                     }
                 }
 

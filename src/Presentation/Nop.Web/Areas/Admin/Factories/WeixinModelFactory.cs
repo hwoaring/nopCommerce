@@ -75,13 +75,13 @@ namespace Nop.Web.Areas.Admin.Factories
         private readonly IStoreMappingSupportedModelFactory _storeMappingSupportedModelFactory;
         private readonly IStoreService _storeService;
         private readonly IUrlRecordService _urlRecordService;
-        private readonly IWUserService _wUserService;
-        private readonly IWUserTagService _wUserTagService;
-        private readonly IWQrCodeLimitService _wQrCodeLimitService;
-        private readonly IWQrCodeLimitUserService _wQrCodeLimitUserService;
+        private readonly IWxUserService _wUserService;
+        private readonly IWxUserTagService _wUserTagService;
+        private readonly IQrCodeLimitService _wQrCodeLimitService;
+        private readonly IQrCodeLimitUserService _wQrCodeLimitUserService;
         private readonly IQrCodeLimitBindingSourceService _qrCodeLimitBindingSourceService;
-        private readonly IWMenuService _wMenuService;
-        private readonly IWMenuButtonService _wMenuButtonService;
+        private readonly IWxMenuService _wMenuService;
+        private readonly IWxMenuButtonService _wMenuButtonService;
         private readonly IWorkContext _workContext;
         private readonly MeasureSettings _measureSettings;
         private readonly TaxSettings _taxSettings;
@@ -122,13 +122,13 @@ namespace Nop.Web.Areas.Admin.Factories
             IStoreMappingSupportedModelFactory storeMappingSupportedModelFactory,
             IStoreService storeService,
             IUrlRecordService urlRecordService,
-            IWUserService wUserService,
-            IWUserTagService wUserTagService,
-            IWQrCodeLimitService wQrCodeLimitService,
-            IWQrCodeLimitUserService wQrCodeLimitUserService,
+            IWxUserService wUserService,
+            IWxUserTagService wUserTagService,
+            IQrCodeLimitService wQrCodeLimitService,
+            IQrCodeLimitUserService wQrCodeLimitUserService,
             IQrCodeLimitBindingSourceService qrCodeLimitBindingSourceService,
-            IWMenuService wMenuService,
-            IWMenuButtonService wMenuButtonService,
+            IWxMenuService wMenuService,
+            IWxMenuButtonService wMenuButtonService,
             IWorkContext workContext,
             MeasureSettings measureSettings,
             TaxSettings taxSettings,
@@ -195,7 +195,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="product">User</param>
         /// <param name="excludeProperties">Whether to exclude populating of some properties of model</param>
         /// <returns>Product model</returns>
-        public virtual Task<UserModel> PrepareUserModelAsync(UserModel model, WUser user, bool excludeProperties = false)
+        public virtual Task<UserModel> PrepareUserModelAsync(UserModel model, WxUser user, bool excludeProperties = false)
         {
             if (user != null)
             {
@@ -208,9 +208,6 @@ namespace Nop.Web.Areas.Admin.Factories
                 if (!excludeProperties)
                 {
                     model.OpenId = user.OpenId;
-                    model.RefereeId = user.RefereeId;
-                    model.OriginalId = user.OriginalId;
-                    model.OpenIdHash = user.OpenIdHash;
                     model.UnionId = user.UnionId;
                     model.NickName = user.NickName;
                     model.Province = user.Province;
@@ -232,13 +229,10 @@ namespace Nop.Web.Areas.Admin.Factories
                     model.QrScene = user.QrScene;
                     model.QrSceneStr = user.QrSceneStr;
                     model.Subscribe = user.Subscribe;
-                    model.AllowReferee = user.AllowReferee;
                     model.AllowResponse = user.AllowResponse;
-                    model.AllowOrder = user.AllowOrder;
                     model.AllowNotice = user.AllowNotice;
                     model.AllowOrderNotice = user.AllowOrderNotice;
                     model.InBlackList = user.InBlackList;
-                    model.Deleted = user.Deleted;
 
                     if (user.SubscribeTime == 0)
                         model.SubscribeTime = null;
@@ -340,7 +334,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="QrCodeLimit">QrCodeLimit</param>
         /// <param name="excludeProperties">Whether to exclude populating of some properties of model</param>
         /// <returns>Product model</returns>
-        public virtual async Task<QrCodeLimitModel> PrepareQrCodeLimitModelAsync(QrCodeLimitModel model, WQrCodeLimit qrCodeLimit, bool excludeProperties = false)
+        public virtual async Task<QrCodeLimitModel> PrepareQrCodeLimitModelAsync(QrCodeLimitModel model, QrCodeLimit qrCodeLimit, bool excludeProperties = false)
         {
             if (qrCodeLimit != null)
             {
@@ -353,9 +347,8 @@ namespace Nop.Web.Areas.Admin.Factories
                 if (!excludeProperties)
                 {
                     model.QrCodeId = qrCodeLimit.QrCodeId;
-                    model.WConfigId = qrCodeLimit.WConfigId ?? 0;
-                    model.WQrCodeCategoryId = qrCodeLimit.WQrCodeCategoryId ?? 0;
-                    model.WQrCodeChannelId = qrCodeLimit.WQrCodeChannelId ?? 0;
+                    model.QrCodeCategoryId = qrCodeLimit.QrCodeCategoryId;
+                    model.QrCodeChannelId = qrCodeLimit.QrCodeChannelId;
                     model.QrCodeActionTypeId = qrCodeLimit.QrCodeActionTypeId;
                     model.SysName = qrCodeLimit.SysName;
                     model.Description = qrCodeLimit.Description;
@@ -386,8 +379,8 @@ namespace Nop.Web.Areas.Admin.Factories
 
             }
 
-            await _baseAdminModelFactory.PrepareQrCodeCategorysAsync(model.AvailableWQrCodeCategorys, false);
-            await _baseAdminModelFactory.PrepareQrCodeChannelsAsync(model.AvailableWQrCodeChannels, false);
+            await _baseAdminModelFactory.PrepareQrCodeCategorysAsync(model.AvailableQrCodeCategorys, false);
+            await _baseAdminModelFactory.PrepareQrCodeChannelsAsync(model.AvailableQrCodeChannels, false);
 
             //set default values for the new model
             if (qrCodeLimit == null)
@@ -464,10 +457,9 @@ namespace Nop.Web.Areas.Admin.Factories
             var overrideCreated = searchModel.SearchHasCreated == 0 ? null : (bool?)(searchModel.SearchHasCreated == 1);
 
             //get users
-            var qrCodeLimits = await _wQrCodeLimitService.GetWQrCodeLimitsAsync(
-                wConfigId: searchModel.WConfigId,
-                wQrCodeCategoryId:searchModel.WQrCodeCategoryId,
-                wQrCodeChannelId:searchModel.WQrCodeChannelId,
+            var qrCodeLimits = await _wQrCodeLimitService.GetQrCodeLimitsAsync(
+                qrCodeCategoryId: searchModel.QrCodeCategoryId,
+                qrCodeChannelId: searchModel.QrCodeChannelId,
                 fixedUse: overrideFixedUse,
                 hasCreated: overrideCreated,
                 pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
@@ -490,7 +482,7 @@ namespace Nop.Web.Areas.Admin.Factories
             return model;
         }
 
-        public virtual async Task<QrCodeLimitUserListModel> PrepareQrCodeLimitUserListModelAsync(QrCodeLimitUserSearchModel searchModel, WQrCodeLimit qrCodeLimit)
+        public virtual async Task<QrCodeLimitUserListModel> PrepareQrCodeLimitUserListModelAsync(QrCodeLimitUserSearchModel searchModel, QrCodeLimit qrCodeLimit)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -499,7 +491,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 throw new ArgumentNullException(nameof(qrCodeLimit));
 
             var qrCodeLimitUsers = await _wQrCodeLimitUserService.GetEntitiesAsync(
-                userId: searchModel.UserId,
+                customerId: searchModel.CustomerId,
                 qrCodeLimitId: qrCodeLimit.Id,
                 pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
@@ -511,7 +503,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     //fill in model values from the entity
                     var qrCodeLimitUserModel = qrCodeLimitUser.ToModel<QrCodeLimitUserModel>();
 
-                    var user = await _wUserService.GetWUserByIdAsync(qrCodeLimitUser.UserId);
+                    var user = await _wUserService.GetWxUserByCustomerIdAsync(qrCodeLimitUser.CustomerId);
                     if (user != null)
                     {
                         if (string.IsNullOrWhiteSpace(qrCodeLimitUserModel.UserName))
@@ -570,7 +562,7 @@ namespace Nop.Web.Areas.Admin.Factories
             return model;
         }
 
-        protected virtual Task<QrCodeLimitUserSearchModel> PrepareQrCodeLimitUserSearchModelAsync(QrCodeLimitUserSearchModel searchModel, WQrCodeLimit qrCodeLimit)
+        protected virtual Task<QrCodeLimitUserSearchModel> PrepareQrCodeLimitUserSearchModelAsync(QrCodeLimitUserSearchModel searchModel, QrCodeLimit qrCodeLimit)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -586,7 +578,7 @@ namespace Nop.Web.Areas.Admin.Factories
             return Task.FromResult(searchModel);
         }
 
-        protected virtual Task<QrCodeSupplierVoucherCouponSearchModel> PrepareQrCodeSupplierVoucherCouponSearchModelAsync(QrCodeSupplierVoucherCouponSearchModel searchModel, WQrCodeLimit qrCodeLimit)
+        protected virtual Task<QrCodeSupplierVoucherCouponSearchModel> PrepareQrCodeSupplierVoucherCouponSearchModelAsync(QrCodeSupplierVoucherCouponSearchModel searchModel, QrCodeLimit qrCodeLimit)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -603,7 +595,7 @@ namespace Nop.Web.Areas.Admin.Factories
             return Task.FromResult(searchModel);
         }
 
-        public virtual async Task<QrCodeLimitUserModel> PrepareQrCodeLimitUserModelAsync(QrCodeLimitUserModel model, WQrCodeLimitUserMapping qrCodeLimitUser, bool excludeProperties = false)
+        public virtual async Task<QrCodeLimitUserModel> PrepareQrCodeLimitUserModelAsync(QrCodeLimitUserModel model, QrCodeLimitUserMapping qrCodeLimitUser, bool excludeProperties = false)
         {
             if (qrCodeLimitUser != null)
             {
@@ -615,7 +607,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //whether to fill in some of properties
                 if (!excludeProperties)
                 {
-                    model.UserId = qrCodeLimitUser.UserId;
+                    model.CustomerId = qrCodeLimitUser.CustomerId;
                     model.QrCodeLimitId = qrCodeLimitUser.QrCodeLimitId;
                     model.UserName = qrCodeLimitUser.UserName;
                     model.Description = qrCodeLimitUser.Description;
@@ -624,14 +616,13 @@ namespace Nop.Web.Areas.Admin.Factories
                     model.ExpireTime = qrCodeLimitUser.ExpireTime;
                     model.Published = qrCodeLimitUser.Published;
 
-                    var user = await _wUserService.GetWUserByIdAsync(model.UserId);
+                    var user = await _wUserService.GetWxUserByCustomerIdAsync(model.CustomerId);
                     if (user != null)
                     {
                         if (string.IsNullOrEmpty(model.UserName))
                             model.UserNameTemp = user.NickName + (string.IsNullOrEmpty(user.Remark) ? "" : "(" + user.Remark + ")");
                     }
   
-
                 }
 
             }
@@ -708,7 +699,7 @@ namespace Nop.Web.Areas.Admin.Factories
             return model;
         }
 
-        public virtual async Task<MenuModel> PrepareMenuModelAsync(MenuModel model, WMenu menu, bool excludeProperties = false)
+        public virtual async Task<MenuModel> PrepareMenuModelAsync(MenuModel model, WxMenu menu, bool excludeProperties = false)
         {
             if (menu != null)
             {
@@ -759,7 +750,7 @@ namespace Nop.Web.Areas.Admin.Factories
             return model;
         }
 
-        protected virtual Task<MenuButtonSearchModel> PrepareMenuButtonSearchModelAsync(MenuButtonSearchModel searchModel, WMenu menu)
+        protected virtual Task<MenuButtonSearchModel> PrepareMenuButtonSearchModelAsync(MenuButtonSearchModel searchModel, WxMenu menu)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -775,7 +766,7 @@ namespace Nop.Web.Areas.Admin.Factories
             return Task.FromResult(searchModel);
         }
 
-        public virtual async Task<MenuButtonListModel> PrepareMenuButtonListModelAsync(MenuButtonSearchModel searchModel, WMenu menu)
+        public virtual async Task<MenuButtonListModel> PrepareMenuButtonListModelAsync(MenuButtonSearchModel searchModel, WxMenu menu)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -792,7 +783,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 {
                     //fill in model values from the entity
                     var menuButtonModel = menuButton.ToModel<MenuButtonModel>();
-                    menuButtonModel.MenuButtonTypeNameString = (Enum.TryParse(typeof(WMenuButtonType), menuButtonModel.MenuButtonTypeId.ToString(), out var parseResult) ? (WMenuButtonType)parseResult : WMenuButtonType.Click).ToString();
+                    menuButtonModel.MenuButtonTypeNameString = (Enum.TryParse(typeof(MenuButtonType), menuButtonModel.MenuButtonTypeId.ToString(), out var parseResult) ? (MenuButtonType)parseResult : MenuButtonType.Click).ToString();
 
                     return menuButtonModel;
                 });

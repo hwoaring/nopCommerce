@@ -305,6 +305,16 @@ namespace Nop.Core.Domain.Catalog
         public DateTime? GiftCardEndUseDateTimeUtc { get; set; }
 
         /// <summary>
+        /// 购买成功产品最早使用时间
+        /// </summary>
+        public DateTime? AvailableUseStartDateUtc { get; set; }
+
+        /// <summary>
+        /// 购买成功产品最晚使用时间
+        /// </summary>
+        public DateTime? AvailableUseEndDateUtc { get; set; }
+
+        /// <summary>
         /// Gets or sets gift card amount that can be used after purchase. If not specified, then product price will be used.
         /// </summary>
         public decimal? OverriddenGiftCardAmount { get; set; }
@@ -771,7 +781,7 @@ namespace Nop.Core.Domain.Catalog
         public bool Deleted { get; set; }
 
         /// <summary>
-        /// 仅对允许的Vendor共享显示产品信息（自己添加的默认显示）-对应到ProductVendorMapping中
+        /// 仅对允许的Vendor共享显示自己的产品信息（自己添加的默认显示）-对应到ProductVendorMapping中
         /// </summary>
         public bool VendorLimitDisplay { get; set; }
 

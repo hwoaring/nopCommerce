@@ -2,7 +2,7 @@
 using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Marketing;
 using Nop.Core.Domain.Orders;
-using Nop.Core.Domain.Weixin;
+using Nop.Core.Domain.Customers;
 using Nop.Data.Extensions;
 
 namespace Nop.Data.Mapping.Builders.Marketing
@@ -21,11 +21,11 @@ namespace Nop.Data.Mapping.Builders.Marketing
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(UserAssetConsumeHistory.OwnerUserId)).AsInt32().ForeignKey<WUser>()
+                .WithColumn(nameof(UserAssetConsumeHistory.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(UserAssetConsumeHistory.Remark)).AsString(512).Nullable()
                 .WithColumn(nameof(UserAssetConsumeHistory.UserAssetIncomeHistoryId)).AsInt32().Nullable().ForeignKey<UserAssetIncomeHistory>().OnDelete(Rule.None)
                 .WithColumn(nameof(UserAssetConsumeHistory.UsedWithOrderId)).AsInt32().Nullable().ForeignKey<OrderItem>().OnDelete(Rule.None)
-                .WithColumn(nameof(UserAssetConsumeHistory.VerifyUserId)).AsInt32().Nullable().ForeignKey<WUser>().OnDelete(Rule.None)
+                .WithColumn(nameof(UserAssetConsumeHistory.VerifyCustomerId)).AsInt32().Nullable().ForeignKey<Customer>().OnDelete(Rule.None)
                 .WithColumn(nameof(UserAssetConsumeHistory.UsedValue)).AsDecimal(9, 2)
                 ;
         }

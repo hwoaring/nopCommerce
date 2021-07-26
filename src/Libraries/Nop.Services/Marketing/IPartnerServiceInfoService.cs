@@ -23,12 +23,12 @@ namespace Nop.Services.Marketing
 
         Task<PartnerServiceInfo> GetEntityByIdAsync(int id);
 
-        Task<PartnerServiceInfo> GetEntityByUserIdAsync(int wuserId);
+        Task<PartnerServiceInfo> GetEntityByCustomerIdAsync(int customerId);
 
         Task<IList<PartnerServiceInfo>> GetEntitiesByIdsAsync(int[] entityIds);
 
         Task<IPagedList<PartnerServiceInfo>> GetEntitiesAsync(
-            int userId = 0,
+            int customerId = 0,
             bool? published = null,
             bool? deleted = null,
             int pageIndex = 0, int pageSize = int.MaxValue);

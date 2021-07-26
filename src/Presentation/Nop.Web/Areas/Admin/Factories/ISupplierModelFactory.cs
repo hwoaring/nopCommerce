@@ -13,7 +13,7 @@ namespace Nop.Web.Areas.Admin.Factories
     /// </summary>
     public partial interface ISupplierModelFactory
     {
-        Task<QrCodeSupplierVoucherCouponListModel> PrepareQrCodeSupplierVoucherCouponListModelAsync(QrCodeSupplierVoucherCouponSearchModel searchModel, WQrCodeLimit qrCodeLimit);
+        Task<QrCodeSupplierVoucherCouponListModel> PrepareQrCodeSupplierVoucherCouponListModelAsync(QrCodeSupplierVoucherCouponSearchModel searchModel, QrCodeLimit qrCodeLimit);
 
         Task<AddSupplierVoucherCouponRelatedSearchModel> PrepareAddSupplierVoucherCouponRelatedSearchModelAsync(AddSupplierVoucherCouponRelatedSearchModel searchModel);
 

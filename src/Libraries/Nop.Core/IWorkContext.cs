@@ -26,6 +26,25 @@ namespace Nop.Core
         Task SetCurrentCustomerAsync(Customer customer = null);
 
         /// <summary>
+        /// 绑定OpenId
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <param name="customer"></param>
+        /// <returns></returns>
+        Task SetCustomerOpenIdAsync(string openId, Customer customer = null);
+
+        /// <summary>
+        /// 绑定RefferrerCustomerId
+        /// </summary>
+        /// <param name="referrerOpenId"></param>
+        /// <param name="customer"></param>
+        /// <param name="forceUpdateReferrerCustomerId"></param>
+        /// <returns></returns>
+        Task SetCustomerReferrerIdAsync(string referrerOpenId, Customer currentCustomer, bool openIdParamFixed = false, bool forceUpdateReferrerCustomerId = false, bool refreshCache = false);
+
+        Task SetCustomerReferrerIdAsync(int referrerCustomerId, Customer currentCustomer, bool forceUpdateReferrerCustomerId = false, bool refreshCache = false);
+
+        /// <summary>
         /// Gets the original customer (in case the current one is impersonated)
         /// </summary>
         Customer OriginalCustomerIfImpersonated { get; }

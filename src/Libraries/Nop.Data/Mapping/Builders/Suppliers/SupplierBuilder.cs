@@ -1,5 +1,7 @@
 ﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Suppliers;
+using Nop.Core.Domain.Stores;
+using Nop.Data.Extensions;
 
 namespace Nop.Data.Mapping.Builders.Suppliers
 {
@@ -17,7 +19,9 @@ namespace Nop.Data.Mapping.Builders.Suppliers
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
+                .WithColumn(nameof(Supplier.StoreId)).AsInt32().ForeignKey<Store>()
                 .WithColumn(nameof(Supplier.Name)).AsString(64).NotNullable()
+                .WithColumn(nameof(Supplier.Url)).AsAnsiString(512).Nullable()
                 .WithColumn(nameof(Supplier.Country)).AsString(15).Nullable()
                 .WithColumn(nameof(Supplier.Province)).AsString(15).Nullable()
                 .WithColumn(nameof(Supplier.City)).AsString(15).Nullable()

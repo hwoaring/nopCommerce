@@ -9,9 +9,9 @@ namespace Nop.Core.Domain.Marketing
     public partial class UserAsset : BaseEntity, ISoftDeletedEntity
     {
         /// <summary>
-        /// OwnerUserId【WUser.Id】
+        /// 
         /// </summary>
-        public int OwnerUserId { get; set; }
+        public int CustomerId { get; set; }
 
         /// <summary>
         /// 合伙人备注信息

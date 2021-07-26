@@ -21,20 +21,20 @@ namespace Senparc.Weixin.MP.CommonService.Infrastructure
         /// <param name="config">Config</param>
         public virtual void Register(IServiceCollection services, ITypeFinder typeFinder, AppSettings appSettings)
         {
-            services.AddScoped<IWConfigService, WConfigService>();
-            services.AddScoped<IWLocationService, WLocationService>();
-            services.AddScoped<IWMessageBindService, WMessageBindService>();
-            services.AddScoped<IWMessageService, WMessageService>();
-            services.AddScoped<IWQrCodeCategoryService, WQrCodeCategoryService>();
-            services.AddScoped<IWQrCodeChannelService, WQrCodeChannelService>();
-            services.AddScoped<IWQrCodeLimitService, WQrCodeLimitService>();
-            services.AddScoped<IWQrCodeLimitUserService, WQrCodeLimitUserService>();
-            services.AddScoped<IWUserService, WUserService>();
-            services.AddScoped<IWUserTagService, WUserTagService>();
+            services.AddScoped<IWxConfigService, WxConfigService>();
+            services.AddScoped<IWxLocationService, WxLocationService>();
+            services.AddScoped<IWxMessageBindService, WxMessageBindService>();
+            services.AddScoped<IWxMessageService, WxMessageService>();
+            services.AddScoped<IQrCodeCategoryService, QrCodeCategoryService>();
+            services.AddScoped<IQrCodeChannelService, QrCodeChannelService>();
+            services.AddScoped<IQrCodeLimitService, QrCodeLimitService>();
+            services.AddScoped<IQrCodeLimitUserService, QrCodeLimitUserService>();
+            services.AddScoped<IWxUserService, WxUserService>();
+            services.AddScoped<IWxUserTagService, WxUserTagService>();
             services.AddScoped<IQrCodeLimitBindingSourceService, QrCodeLimitBindingSourceService>();
 
-            services.AddScoped<IWMenuService, WMenuService>();
-            services.AddScoped<IWMenuButtonService, WMenuButtonService>();
+            services.AddScoped<IWxMenuService, WxMenuService>();
+            services.AddScoped<IWxMenuButtonService, WxMenuButtonService>();
             //builder.RegisterType<WAutoreplyNewsInfoService>().As<IWAutoreplyNewsInfoService>().InstancePerLifetimeScope();
             //builder.RegisterType<WMessageAutoReplyService>().As<IWMessageAutoReplyService>().InstancePerLifetimeScope();
             //builder.RegisterType<WKeywordAutoreplyService>().As<IWKeywordAutoreplyService>().InstancePerLifetimeScope();

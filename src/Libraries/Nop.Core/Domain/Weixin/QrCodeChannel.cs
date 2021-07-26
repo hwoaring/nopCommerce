@@ -1,0 +1,48 @@
+﻿using Nop.Core.Domain.Common;
+
+namespace Nop.Core.Domain.Weixin
+{
+    /// <summary>
+    /// Represents an 二维码渠道名称
+    /// </summary>
+    public partial class QrCodeChannel : BaseEntity, ISoftDeletedEntity
+    {
+        /// <summary>
+        /// 站点ID
+        /// </summary>
+        public int StoreId { get; set; }
+
+        /// <summary>
+        /// 父级ID
+        /// </summary>
+        public int ParentId { get; set; }
+
+        /// <summary>
+        /// 分组名称
+        /// </summary>
+        /// <returns></returns>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// 描述
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// 状态位，预留
+        /// </summary>
+        /// <returns></returns>
+        public byte Status { get; set; }
+
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public int DisplayOrder { get; set; }
+
+        /// <summary>
+        /// 删除标志，不允许直接删除
+        /// </summary>
+        /// <returns></returns>
+        public bool Deleted { get; set; }
+    }
+}

@@ -37,7 +37,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
+using Nop.Core;
+using Nop.Core.Domain.Customers;
 using Nop.Core.Infrastructure;
+using Nop.Services.Customers;
 using Nop.Services.Weixin;
 
 namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
@@ -55,7 +58,10 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
          */
 
         private readonly SenparcWeixinSetting _senparcWeixinSetting;
+        private readonly ICustomerService _customerService;
+        private readonly IWxUserService _wxUserService;
         private readonly INopFileProvider _fileProvider;
+        private readonly IWorkContext _workContext;
 
         /// <summary>
         /// 模板消息集合（Key：checkCode，Value：OpenId）
@@ -69,17 +75,24 @@ namespace Senparc.Weixin.MP.CommonService.CustomMessageHandler
         public static Func<Stream, PostModel, int, CustomMessageHandler> GenerateMessageHandler = (stream, postModel, maxRecordCount)
                         => new CustomMessageHandler(stream, postModel, maxRecordCount, false /* 是否只允许处理加密消息，以提高安全性 */);
 
-        public CustomMessageHandler(Stream inputStream, PostModel postModel, int maxRecordCount = 0, bool onlyAllowEncryptMessage = false)
+        public CustomMessageHandler(Stream inputStream, 
+            PostModel postModel, 
+            int maxRecordCount = 0, 
+            bool onlyAllowEncryptMessage = false)
             : base(inputStream, postModel, maxRecordCount, onlyAllowEncryptMessage)
         {
+            _senparcWeixinSetting = EngineContext.Current.Resolve<SenparcWeixinSetting>();
+            _customerService = EngineContext.Current.Resolve<ICustomerService>();
+            _wxUserService = EngineContext.Current.Resolve<IWxUserService>();
+            _fileProvider = EngineContext.Current.Resolve<INopFileProvider>();
+            _workContext = EngineContext.Current.Resolve<IWorkContext>();
+
+
             //这里设置仅用于测试，实际开发可以在外部更全局的地方设置，
             //比如MessageHandler<MessageContext>.GlobalGlobalMessageContext.ExpireMinutes = 3。
             GlobalMessageContext.ExpireMinutes = 3;
 
             //OnlyAllowEncryptMessage = true; //是否只允许接收加密消息，默认为 false
-
-            _senparcWeixinSetting = EngineContext.Current.Resolve<SenparcWeixinSetting>();
-            _fileProvider = EngineContext.Current.Resolve<INopFileProvider>();
 
             if (!string.IsNullOrEmpty(postModel.AppId))
             {

@@ -47,12 +47,12 @@ namespace Nop.Services.Marketing
 
         public virtual async Task InsertEntityBysupplierVoucherCouponParamsAsync(
             SupplierVoucherCoupon supplierVoucherCoupon, 
-            int ownerUserId, 
+            int ownerCustomerId, 
             int orderItemId=0,
             AssetConsumType? assetConsumType = null,
-            WSceneType? sceneType = null)
+            SceneType? sceneType = null)
         {
-            if (supplierVoucherCoupon == null || ownerUserId == 0)
+            if (supplierVoucherCoupon == null || ownerCustomerId == 0)
                 return;
 
             var incomeHistory = new Nop.Core.Domain.Marketing.UserAssetIncomeHistory
@@ -64,9 +64,9 @@ namespace Nop.Services.Marketing
                 SupplierId = supplierVoucherCoupon.SupplierId,
                 SupplierShopId = supplierVoucherCoupon.SupplierShopId ?? 0,
                 SupplierVoucherCouponId = supplierVoucherCoupon.Id,
-                CreatedUserId = ownerUserId,
-                OwnerUserId = ownerUserId,
-                GiverUserId = 0,
+                CreatedCustomerId = ownerCustomerId,
+                OwnerCustomerId = ownerCustomerId,
+                GiverCustomerId = 0,
                 TransferTimes = supplierVoucherCoupon.TransferTimes,
                 PurchasedWithOrderItemId = orderItemId,
                 Amount = supplierVoucherCoupon.Amount,
@@ -103,14 +103,14 @@ namespace Nop.Services.Marketing
             {
                 switch (sceneType)
                 {
-                    case WSceneType.Adver:
-                    case WSceneType.Product:
-                    case WSceneType.Supplier:
+                    case SceneType.Adver:
+                    case SceneType.Product:
+                    case SceneType.Supplier:
                         {
                             incomeHistory.AssetConsumType = AssetConsumType.SupplierPromotion;
                             break;
                         }
-                    case WSceneType.GiftCard:
+                    case SceneType.GiftCard:
                         {
                             incomeHistory.AssetConsumType = AssetConsumType.PersonalPromotion;
                             break;
@@ -284,13 +284,13 @@ namespace Nop.Services.Marketing
             return await _userAssetIncomeHistoryRepository.GetByIdAsync(id, cache => default);
         }
 
-        public virtual async Task<IList<UserAssetIncomeHistory>> GetEntitiesByUserIdAsync(int wuserId)
+        public virtual async Task<IList<UserAssetIncomeHistory>> GetEntitiesByOwnerCustomerIdAsync(int ownerCustomerId)
         {
-            if (wuserId == 0)
+            if (ownerCustomerId == 0)
                 return new List<UserAssetIncomeHistory>();
 
             var query = from t in _userAssetIncomeHistoryRepository.Table
-                        where t.OwnerUserId == wuserId &&
+                        where t.OwnerCustomerId == ownerCustomerId &&
                         !t.Deleted
                         select t;
 
@@ -298,16 +298,16 @@ namespace Nop.Services.Marketing
         }
 
         public virtual async Task<IList<UserAssetIncomeHistory>> GetEntitiesBySupplierIdAsync(
-            int wuserId,
+            int ownerCustomerId,
             int supplierId,
             int? supplierShopId = null,
             bool? onlyUsable = null)
         {
-            if (wuserId == 0 || supplierId == 0)
+            if (ownerCustomerId == 0 || supplierId == 0)
                 return new List<UserAssetIncomeHistory>();
 
             var query = _userAssetIncomeHistoryRepository.Table;
-            query = query.Where(q => q.OwnerUserId == wuserId);
+            query = query.Where(q => q.OwnerCustomerId == ownerCustomerId);
             query = query.Where(q => q.SupplierId == supplierId);
             if (supplierShopId.HasValue && supplierShopId > 0)
                 query = query.Where(q => q.SupplierShopId == supplierShopId);
@@ -332,15 +332,15 @@ namespace Nop.Services.Marketing
         }
 
         public virtual async Task<IList<UserAssetIncomeHistory>> GetEntitiesBySupplierVoucherCouponIdAsync(
-            int wuserId, 
+            int ownerCustomerId, 
             int supplierVoucherCouponId, 
             bool? onlyUsable = null)
         {
-            if (wuserId == 0 || supplierVoucherCouponId == 0)
+            if (ownerCustomerId == 0 || supplierVoucherCouponId == 0)
                 return new List<UserAssetIncomeHistory>();
 
             var query = _userAssetIncomeHistoryRepository.Table;
-            query = query.Where(q => q.OwnerUserId == wuserId);
+            query = query.Where(q => q.OwnerCustomerId == ownerCustomerId);
             query = query.Where(q => q.SupplierVoucherCouponId == supplierVoucherCouponId);
             if (onlyUsable.HasValue)
             {
@@ -363,7 +363,7 @@ namespace Nop.Services.Marketing
         }
 
         public virtual async Task<IPagedList<UserAssetIncomeHistory>> GetEntitiesAsync(
-            int ownerUserId = 0,
+            int ownerCustomerId = 0,
             int supplierId = 0,
             int supplierShopId = 0,
             int supplierVoucherCouponId = 0,
@@ -377,7 +377,7 @@ namespace Nop.Services.Marketing
             int pageIndex = 0, int pageSize = int.MaxValue)
         {
             var query = _userAssetIncomeHistoryRepository.Table;
-            query = query.Where(q => q.OwnerUserId == ownerUserId);
+            query = query.Where(q => q.OwnerCustomerId == ownerCustomerId);
 
             if (supplierId > 0)
                 query = query.Where(q => q.SupplierId == supplierId);

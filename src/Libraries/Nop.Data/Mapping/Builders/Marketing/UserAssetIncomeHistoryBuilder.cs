@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Marketing;
-using Nop.Core.Domain.Weixin;
+using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Suppliers;
 using Nop.Data.Extensions;
@@ -22,7 +22,7 @@ namespace Nop.Data.Mapping.Builders.Marketing
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(UserAssetIncomeHistory.OwnerUserId)).AsInt32().ForeignKey<WUser>()
+                .WithColumn(nameof(UserAssetIncomeHistory.OwnerCustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(UserAssetIncomeHistory.Name)).AsString(64).Nullable()
                 .WithColumn(nameof(UserAssetIncomeHistory.Description)).AsString(512).Nullable()
                 .WithColumn(nameof(UserAssetIncomeHistory.Remark)).AsString(512).Nullable()

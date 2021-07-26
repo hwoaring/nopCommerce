@@ -23,13 +23,13 @@ namespace Nop.Services.Marketing
 
         Task<PartnerApplicationForm> GetEntityByIdAsync(int id);
 
-        Task<PartnerApplicationForm> GetEntityByUserIdAsync(int wuserId);
+        Task<PartnerApplicationForm> GetEntityByCustomerIdAsync(int customerId);
 
         Task<IList<PartnerApplicationForm>> GetEntitiesByIdsAsync(int[] entityIds);
 
         Task<IPagedList<PartnerApplicationForm>> GetEntitiesAsync(
             string telephoneNumber = "",
-            int wUserId = 0,
+            int customerId = 0,
             DateTime? endDateTimeUtc = null,
             bool? approved = null,
             bool? locked = null,
