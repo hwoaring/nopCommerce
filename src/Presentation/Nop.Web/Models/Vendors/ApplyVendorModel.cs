@@ -24,6 +24,11 @@ namespace Nop.Web.Models.Vendors
 
         public IList<VendorAttributeModel> VendorAttributes { get; set; }
 
+        /// <summary>
+        /// 邀请码
+        /// </summary>
+        public string InviteCode { get; set; }
+
         public bool DisplayCaptcha { get; set; }
 
         public bool TermsOfServiceEnabled { get; set; }

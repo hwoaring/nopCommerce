@@ -63,6 +63,14 @@ namespace Nop.Services.Customers
             int[] customerRoleIds, int pageIndex = 0, int pageSize = int.MaxValue);
 
         /// <summary>
+        /// 获取推荐用户
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <param name="ignoreState">忽略用户状态</param>
+        /// <returns></returns>
+        Task<Customer> GetReferrerCustomerAsync(Customer customer, bool ignoreState = false);
+
+        /// <summary>
         /// Gets customers with shopping carts
         /// </summary>
         /// <param name="shoppingCartType">Shopping cart type; pass null to load all records</param>

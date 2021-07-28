@@ -45,6 +45,18 @@ namespace Nop.Core
         Task SetCustomerReferrerIdAsync(int referrerCustomerId, Customer currentCustomer, bool forceUpdateReferrerCustomerId = false, bool refreshCache = false);
 
         /// <summary>
+        /// 获取当前用户的Vendor（自己或父级）
+        /// </summary>
+        /// <returns></returns>
+        Task<Vendor> GetVendorForCurrentCustomerAsync();
+
+        /// <summary>
+        /// 获取当前用户的Referrer(临时或永久)
+        /// </summary>
+        /// <returns></returns>
+        Task<Customer> GetReferrerForCurrentCustomerAsync();
+
+        /// <summary>
         /// Gets the original customer (in case the current one is impersonated)
         /// </summary>
         Customer OriginalCustomerIfImpersonated { get; }

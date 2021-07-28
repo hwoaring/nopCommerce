@@ -82,6 +82,10 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
                 if (context == null)
                     throw new ArgumentNullException(nameof(context));
 
+                //check request query parameters
+                if (!context.HttpContext.Request?.Query?.Any() ?? true)
+                    return;
+
                 if (!await DataSettingsManager.IsDatabaseInstalledAsync())
                     return;
 
@@ -89,10 +93,6 @@ namespace Senparc.Weixin.MP.CommonService.Mvc.Filters
 
                 //ignore search engines and back ground task
                 if (customer.IsSearchEngineAccount() || customer.IsBackgroundTaskAccount())
-                    return;
-
-                //check request query parameters
-                if (!context.HttpContext.Request?.Query?.Any() ?? true)
                     return;
 
                 //推荐人参数

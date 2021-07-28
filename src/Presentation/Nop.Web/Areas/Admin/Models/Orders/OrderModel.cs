@@ -65,6 +65,12 @@ namespace Nop.Web.Areas.Admin.Models.Orders
         [NopResourceDisplayName("Admin.Orders.Fields.Affiliate")]
         public string AffiliateName { get; set; }
 
+        [NopResourceDisplayName("Admin.Orders.Fields.ReferrerCustomerId")]
+        public int ReferrerCustomerId { get; set; }
+        [NopResourceDisplayName("Admin.Orders.Fields.ReferrerCustomerName")]
+        public string ReferrerCustomerName { get; set; }
+        
+
         //Used discounts
         [NopResourceDisplayName("Admin.Orders.Fields.UsedDiscounts")]
         public IList<UsedDiscountModel> UsedDiscounts { get; set; }

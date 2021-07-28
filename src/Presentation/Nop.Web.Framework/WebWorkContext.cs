@@ -48,10 +48,13 @@ namespace Nop.Web.Framework
         private readonly LocalizationSettings _localizationSettings;
         private readonly TaxSettings _taxSettings;
         private readonly CustomerSettings _customerSettings;
+        private readonly VendorSettings _vendorSettings;
 
         private Customer _cachedCustomer;
+        private Customer _cachedReferrerForCustomer;
         private Customer _originalCustomerIfImpersonated;
         private Vendor _cachedVendor;
+        private Vendor _cachedVendorForCustomer;
         private Language _cachedLanguage;
         private Currency _cachedCurrency;
         private TaxDisplayType? _cachedTaxDisplayType;
@@ -75,7 +78,8 @@ namespace Nop.Web.Framework
             IWebHelper webHelper,
             LocalizationSettings localizationSettings,
             TaxSettings taxSettings,
-            CustomerSettings customerSettings)
+            CustomerSettings customerSettings,
+            VendorSettings vendorSettings)
         {
             _cookieSettings = cookieSettings;
             _currencySettings = currencySettings;
@@ -93,6 +97,7 @@ namespace Nop.Web.Framework
             _localizationSettings = localizationSettings;
             _taxSettings = taxSettings;
             _customerSettings = customerSettings;
+            _vendorSettings = vendorSettings;
         }
 
         #endregion
@@ -370,7 +375,7 @@ namespace Nop.Web.Framework
             var referrerCustomer = openIdParamFixed ?
                 await _customerService.GetCustomerByOpenIdAsync(referrerParam) :
                 (_customerSettings.UseGidForReferrerParam ?
-                await _customerService.GetCustomerByGuidAsync(new Guid(referrerParam)) :
+                (Guid.TryParse(referrerParam, out var customerGuid) ? await _customerService.GetCustomerByGuidAsync(customerGuid) : null) :
                 await _customerService.GetCustomerByOpenIdAsync(referrerParam));
 
             if (referrerCustomer == null
@@ -387,8 +392,11 @@ namespace Nop.Web.Framework
             {
                 //没有第一推荐人或强制更新
                 currentCustomer.ReferrerCustomerId = referrerCustomer.Id;
-                currentCustomer.TempReferrerCustomerId = referrerCustomer.Id;
-                currentCustomer.TempReferrerDateUtc = DateTime.UtcNow;
+                if (referrerCustomer.AsTempReferrerEnable)
+                {
+                    currentCustomer.TempReferrerCustomerId = referrerCustomer.Id;
+                    currentCustomer.TempReferrerDateUtc = DateTime.UtcNow;
+                }
 
                 //update Customer
                 await _customerService.UpdateCustomerAsync(currentCustomer);
@@ -396,7 +404,7 @@ namespace Nop.Web.Framework
                 if (refreshCache)
                     await SetCurrentCustomerAsync(currentCustomer);
             }
-            else if (_customerSettings.RefereeIdAvailableMinutes > 0)
+            else if (_customerSettings.RefereeIdAvailableMinutes > 0 && referrerCustomer.AsTempReferrerEnable)
             {
                 //启用临时推荐人过时
                 currentCustomer.TempReferrerCustomerId = referrerCustomer.Id;
@@ -443,8 +451,11 @@ namespace Nop.Web.Framework
             {
                 //没有第一推荐人或强制更新
                 currentCustomer.ReferrerCustomerId = referrerCustomer.Id;
-                currentCustomer.TempReferrerCustomerId = referrerCustomer.Id;
-                currentCustomer.TempReferrerDateUtc = DateTime.UtcNow;
+                if (referrerCustomer.AsTempReferrerEnable)
+                {
+                    currentCustomer.TempReferrerCustomerId = referrerCustomer.Id;
+                    currentCustomer.TempReferrerDateUtc = DateTime.UtcNow;
+                }
 
                 //update Customer
                 await _customerService.UpdateCustomerAsync(currentCustomer);
@@ -452,7 +463,7 @@ namespace Nop.Web.Framework
                 if (refreshCache)
                     await SetCurrentCustomerAsync(currentCustomer);
             }
-            else if (_customerSettings.RefereeIdAvailableMinutes > 0)
+            else if (_customerSettings.RefereeIdAvailableMinutes > 0 && referrerCustomer.AsTempReferrerEnable)
             {
                 //启用临时推荐人过时
                 currentCustomer.TempReferrerCustomerId = referrerCustomer.Id;
@@ -464,6 +475,70 @@ namespace Nop.Web.Framework
                 if (refreshCache)
                     await SetCurrentCustomerAsync(currentCustomer);
             }
+        }
+
+        /// <summary>
+        /// 获取当前用户的Vendor（自己或父级）
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task<Vendor> GetVendorForCurrentCustomerAsync()
+        {
+            //whether there is a cached value
+            if (_cachedVendorForCustomer != null)
+                return _cachedVendorForCustomer;
+
+            var customer = await GetCurrentCustomerAsync();
+            if (customer == null)
+                return null;
+
+            //自己是Vendor，不再往上找
+            var vendor = await GetCurrentVendorAsync();
+
+            //向上查找父级Vendor
+            if (vendor == null)
+            {
+                //至少查一级
+                var vendorParentLevel = _vendorSettings.VendorParentLevel > 0 ?
+                    _vendorSettings.VendorParentLevel : 1;
+
+                for (var i = 0; i < vendorParentLevel; i++)
+                {
+                    customer = await _customerService.GetReferrerCustomerAsync(customer, true);
+                    if (customer != null && customer.Active && !customer.Deleted)
+                    {
+                        vendor = await _vendorService.GetVendorByIdAsync(customer.VendorId);
+                        if (vendor != null && vendor.Active && !vendor.Deleted)
+                            break;
+                    }
+                }
+            }
+
+            //cache the found Vendor
+            _cachedVendorForCustomer = vendor;
+
+            return _cachedVendorForCustomer;
+        }
+
+        /// <summary>
+        /// 获取当前用户的Referrer(临时或永久)
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task<Customer> GetReferrerForCurrentCustomerAsync()
+        {
+            //whether there is a cached value
+            if (_cachedReferrerForCustomer != null)
+                return _cachedReferrerForCustomer;
+
+            var customer = await GetCurrentCustomerAsync();
+            if (customer == null)
+                return null;
+
+            var referrerCustomer = await _customerService.GetReferrerCustomerAsync(customer);
+
+            //cache the found Referrer
+            _cachedReferrerForCustomer = referrerCustomer;
+
+            return _cachedReferrerForCustomer;
         }
 
         /// <summary>

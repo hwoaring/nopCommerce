@@ -196,6 +196,8 @@ namespace Nop.Web.Controllers
         [ValidateCaptcha]
         public virtual async Task<IActionResult> ApplyVendorSubmit(ApplyVendorModel model, bool captchaValid, IFormFile uploadedFile, IFormCollection form)
         {
+            var currentCustomer = await _workContext.GetCurrentCustomerAsync();
+
             if (!_vendorSettings.AllowCustomersToApplyForVendorAccount)
                 return RedirectToRoute("Homepage");
 
@@ -211,9 +213,48 @@ namespace Nop.Web.Controllers
                 ModelState.AddModelError("", await _localizationService.GetResourceAsync("Common.WrongCaptchaMessage"));
             }
 
+            //已经提交申请
+            var appliedVendor = await _vendorService.GetVendorByApplyCustomerIdAsync(currentCustomer.Id);
+            if (appliedVendor != null)
+            {
+                ModelState.AddModelError("", await _localizationService.GetResourceAsync("Vendors.ApplyAccount.HasApplied"));
+            }
+            //已经绑定
+            if (currentCustomer.VendorId > 0)
+            {
+                ModelState.AddModelError("", await _localizationService.GetResourceAsync("Vendors.ApplyAccount.HasBound"));
+            }
+            //需要推荐码
+            if (_vendorSettings.InviteCodeEnable && string.IsNullOrEmpty(model.InviteCode))
+            {
+                ModelState.AddModelError("", await _localizationService.GetResourceAsync("Vendors.ApplyAccount.NeedInviteCode"));
+            }
+
+            //是否需要推荐才能申请
+            Vendor referrerVendor = null;
+            if (_vendorSettings.NeedVendorInvite)
+            {
+                if (_vendorSettings.InviteCodeEnable)
+                {
+                    referrerVendor = await _vendorService.GetVendorByInviteCodeAsync(model.InviteCode);
+                }
+                else
+                {
+                    referrerVendor = await _vendorService.GetVendorByInviteCodeAsync(model.InviteCode);
+                    if (referrerVendor == null || referrerVendor.Deleted || !referrerVendor.Active)
+                        referrerVendor = await _workContext.GetVendorForCurrentCustomerAsync();
+                }
+            }
+
+            //需要推荐人
+            if (_vendorSettings.NeedVendorInvite && referrerVendor == null)
+            {
+                ModelState.AddModelError("", await _localizationService.GetResourceAsync("Vendors.ApplyAccount.NeedVendorInvite"));
+            }
+
             var pictureId = 0;
 
-            if (uploadedFile != null && !string.IsNullOrEmpty(uploadedFile.FileName))
+            if (ModelState.IsValid && uploadedFile != null && !string.IsNullOrEmpty(uploadedFile.FileName))
             {
                 try
                 {
@@ -248,8 +289,12 @@ namespace Nop.Web.Controllers
                     AllowCustomersToSelectPageSize = true,
                     PageSizeOptions = _vendorSettings.DefaultVendorPageSizeOptions,
                     PictureId = pictureId,
-                    Description = description
+                    Description = description,
+                    ApplyCustomerId = currentCustomer.Id,
+                    ReferrerVendorId = referrerVendor != null ? referrerVendor.Id : 0,
+                    CreatedOnUtc = DateTime.UtcNow
                 };
+
                 await _vendorService.InsertVendorAsync(vendor);
                 //search engine name (the same as vendor name)
                 var seName = await _urlRecordService.ValidateSeNameAsync(vendor, vendor.Name, vendor.Name, true);

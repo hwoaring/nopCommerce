@@ -1144,6 +1144,13 @@ namespace Nop.Web.Areas.Admin.Factories
                     model.AffiliateName = await _affiliateService.GetAffiliateFullNameAsync(affiliate);
                 }
 
+                var referrerCustomr = await _customerService.GetCustomerByIdAsync(order.ReferrerCustomerId);
+                if (referrerCustomr != null)
+                {
+                    model.ReferrerCustomerId = referrerCustomr.ReferrerCustomerId;
+                    model.ReferrerCustomerName = await _customerService.GetCustomerFullNameAsync(referrerCustomr);
+                }
+
                 //prepare order totals
                 await PrepareOrderModelTotalsAsync(model, order);
 

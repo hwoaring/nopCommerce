@@ -75,6 +75,26 @@ namespace Nop.Services.Vendors
                     select v).FirstOrDefaultAsync();
         }
 
+        public virtual async Task<Vendor> GetVendorByInviteCodeAsync(string inviteCode)
+        {
+            if (string.IsNullOrEmpty(inviteCode))
+                return null;
+
+            return await (from v in _vendorRepository.Table
+                          where v.InviteCode == inviteCode
+                          select v).FirstOrDefaultAsync();
+        }
+
+        public virtual async Task<Vendor> GetVendorByApplyCustomerIdAsync(int applyCustomerId)
+        {
+            if (applyCustomerId == 0)
+                return null;
+
+            return await (from v in _vendorRepository.Table
+                          where v.ApplyCustomerId == applyCustomerId
+                          select v).FirstOrDefaultAsync();
+        }
+
         /// <summary>
         /// Gets vendors by product identifiers
         /// </summary>

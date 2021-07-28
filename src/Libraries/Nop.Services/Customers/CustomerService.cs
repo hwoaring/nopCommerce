@@ -315,6 +315,49 @@ namespace Nop.Services.Customers
         }
 
         /// <summary>
+        /// 获取推荐用户
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <param name="ignoreState">忽略用户是否有效</param>
+        /// <returns></returns>
+        public virtual async Task<Customer> GetReferrerCustomerAsync(Customer customer, bool ignoreState = false)
+        {
+            if (customer == null)
+                return null;
+
+            //推荐人ID
+            var referrerId = 0;
+            //获取临时推荐ID
+            if (customer.TempReferrerCustomerId > 0
+                && _customerSettings.RefereeIdAvailableMinutes > 0
+                && customer.TempReferrerDateUtc.HasValue
+                && customer.TempReferrerDateUtc.Value.AddMinutes(_customerSettings.RefereeIdAvailableMinutes) > DateTime.UtcNow
+                )
+            {
+                referrerId = customer.TempReferrerCustomerId;
+            }
+
+            //获取永久推荐ID
+            if (referrerId == 0 && customer.ReferrerCustomerId > 0)
+                referrerId = customer.ReferrerCustomerId;
+
+            //获取推荐人信息
+            var referrerCustomer = await GetCustomerByIdAsync(referrerId);
+            if (referrerCustomer == null)
+                return null;
+
+            //忽略Customer状态
+            if (!ignoreState)
+            {
+                if (referrerCustomer.Deleted || !referrerCustomer.Active)
+                    return null;
+            }
+
+            return referrerCustomer;
+        }
+
+
+        /// <summary>
         /// Gets customers with shopping carts
         /// </summary>
         /// <param name="shoppingCartType">Shopping cart type; pass null to load all records</param>
@@ -648,6 +691,7 @@ namespace Nop.Services.Customers
                 CustomerGuid = Guid.NewGuid(),
                 Active = true,
                 ReferrerEnable = true,
+                AsTempReferrerEnable = true,
                 CreatedOnUtc = DateTime.UtcNow,
                 LastActivityDateUtc = DateTime.UtcNow
             };

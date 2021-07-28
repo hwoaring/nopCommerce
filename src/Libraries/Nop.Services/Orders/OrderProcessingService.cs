@@ -210,6 +210,11 @@ namespace Nop.Services.Orders
             public int AffiliateId { get; set; }
 
             /// <summary>
+            /// 推荐人ID
+            /// </summary>
+            public int ReferrerCustomerId { get; set; }
+
+            /// <summary>
             /// TAx display type
             /// </summary>
             public TaxDisplayType CustomerTaxDisplayType { get; set; }
@@ -413,6 +418,12 @@ namespace Nop.Services.Orders
             var affiliate = await _affiliateService.GetAffiliateByIdAsync(details.Customer.AffiliateId);
             if (affiliate != null && affiliate.Active && !affiliate.Deleted)
                 details.AffiliateId = affiliate.Id;
+
+            //referrerCustomer
+            var referrerCustomer = await _customerService.GetReferrerCustomerAsync(details.Customer);
+            if (referrerCustomer != null && referrerCustomer.Active && !referrerCustomer.Deleted)
+                details.ReferrerCustomerId = referrerCustomer.Id;
+
 
             //check whether customer is guest
             if (await _customerService.IsGuestAsync(details.Customer) && !_orderSettings.AnonymousCheckoutAllowed)
@@ -659,6 +670,11 @@ namespace Nop.Services.Orders
             if (affiliate != null && affiliate.Active && !affiliate.Deleted)
                 details.AffiliateId = affiliate.Id;
 
+            //referrerCustomer
+            var referrerCustomer = await _customerService.GetReferrerCustomerAsync(details.Customer);
+            if (referrerCustomer != null && referrerCustomer.Active && !referrerCustomer.Deleted)
+                details.ReferrerCustomerId = referrerCustomer.Id;
+
             //check whether customer is guest
             if (await _customerService.IsGuestAsync(details.Customer) && !_orderSettings.AnonymousCheckoutAllowed)
                 throw new NopException("Anonymous checkout is not allowed");
@@ -791,6 +807,7 @@ namespace Nop.Services.Orders
                 CustomerCurrencyCode = details.CustomerCurrencyCode,
                 CurrencyRate = details.CustomerCurrencyRate,
                 AffiliateId = details.AffiliateId,
+                ReferrerCustomerId = details.ReferrerCustomerId,
                 OrderStatus = OrderStatus.Pending,
                 AllowStoringCreditCardNumber = processPaymentResult.AllowStoringCreditCardNumber,
                 CardType = processPaymentResult.AllowStoringCreditCardNumber ? _encryptionService.EncryptText(processPaymentRequest.CreditCardType) : string.Empty,

@@ -1,4 +1,5 @@
-﻿using Nop.Core.Domain.Common;
+﻿using System;
+using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Seo;
 
@@ -120,9 +121,9 @@ namespace Nop.Core.Domain.Vendors
         public int AddressId { get; set; }
 
         /// <summary>
-        /// Vendor 父级查询次数
+        /// 指定Vendor子级查询深度(如果大于0，则覆盖VendorSetting中的VendorChildrenLevel值)
         /// </summary>
-        public int VendorParentLevel { get; set; }
+        public int VendorChildrenLevel { get; set; }
 
         /// <summary>
         /// Gets or sets the admin comment
@@ -333,5 +334,15 @@ namespace Nop.Core.Domain.Vendors
         /// Gets or sets a value indicating whether the price range should be entered manually
         /// </summary>
         public bool ManuallyPriceRange { get; set; }
+
+        /// <summary>
+        /// 第一次启用时间
+        /// </summary>
+        public DateTime? FirstActiveDateUtc { get; set; }
+
+        /// <summary>
+        /// 创建时间（可用于筛选成为Vendor后的成交数据）
+        /// </summary>
+        public DateTime CreatedOnUtc { get; set; }
     }
 }

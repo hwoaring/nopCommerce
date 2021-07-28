@@ -30,6 +30,10 @@ namespace Nop.Services.Vendors
         /// </returns>
         Task<IList<Vendor>> GetVendorsByProductIdsAsync(int[] productIds);
 
+        Task<Vendor> GetVendorByInviteCodeAsync(string inviteCode);
+
+        Task<Vendor> GetVendorByApplyCustomerIdAsync(int applyCustomerId);
+
         /// <summary>
         /// Gets a vendors by customers identifiers
         /// </summary>

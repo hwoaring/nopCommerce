@@ -144,6 +144,11 @@ namespace Nop.Core.Domain.Customers
         public bool ReferrerEnable { get; set; }
 
         /// <summary>
+        /// 是否允许成为临时推荐人（是否允许覆盖历史的临时推荐人）
+        /// </summary>
+        public bool AsTempReferrerEnable { get; set; }
+
+        /// <summary>
         /// 是否允许下单
         /// </summary>
         public bool AllowOrder { get; set; }

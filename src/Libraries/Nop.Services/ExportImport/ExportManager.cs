@@ -1495,6 +1495,7 @@ namespace Nop.Services.ExportImport
                 await xmlWriter.WriteStringAsync("CurrencyRate", order.CurrencyRate);
                 await xmlWriter.WriteStringAsync("CustomerCurrencyCode", order.CustomerCurrencyCode);
                 await xmlWriter.WriteStringAsync("AffiliateId", order.AffiliateId, ignore);
+                await xmlWriter.WriteStringAsync("ReferrerCustomerId", order.ReferrerCustomerId, ignore);
                 await xmlWriter.WriteStringAsync("AllowStoringCreditCardNumber", order.AllowStoringCreditCardNumber, ignore);
                 await xmlWriter.WriteStringAsync("CardType", order.CardType, ignore);
                 await xmlWriter.WriteStringAsync("CardName", order.CardName, ignore);
@@ -1619,6 +1620,7 @@ namespace Nop.Services.ExportImport
                 new PropertyByName<Order>("CurrencyRate", p => p.CurrencyRate),
                 new PropertyByName<Order>("CustomerCurrencyCode", p => p.CustomerCurrencyCode),
                 new PropertyByName<Order>("AffiliateId", p => p.AffiliateId, ignore),
+                new PropertyByName<Order>("ReferrerCustomerId", p => p.ReferrerCustomerId, ignore),
                 new PropertyByName<Order>("PaymentMethodSystemName", p => p.PaymentMethodSystemName, ignore),
                 new PropertyByName<Order>("ShippingPickupInStore", p => p.PickupInStore, ignore),
                 new PropertyByName<Order>("ShippingMethod", p => p.ShippingMethod),

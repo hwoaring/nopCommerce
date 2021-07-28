@@ -68,7 +68,17 @@ namespace Nop.Core.Domain.Vendors
         public int VendorParentLevel { get; set; }
 
         /// <summary>
-        /// 自助申请是否需要邀请码
+        /// 指定Vendor子级查询次数
+        /// </summary>
+        public int VendorChildrenLevel { get; set; }
+
+        /// <summary>
+        /// 自助申请是否需要Vendor邀请才能申请
+        /// </summary>
+        public bool NeedVendorInvite { get; set; }
+
+        /// <summary>
+        /// 自助申请是否强制需要邀请码
         /// </summary>
         public bool InviteCodeEnable { get; set; }
 

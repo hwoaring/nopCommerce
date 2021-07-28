@@ -1406,6 +1406,7 @@ namespace Nop.Services.Installation
                 CustomerCurrencyCode = "USD",
                 CurrencyRate = 1M,
                 AffiliateId = 0,
+                ReferrerCustomerId = 0,
                 OrderStatus = OrderStatus.Processing,
                 AllowStoringCreditCardNumber = false,
                 CardType = string.Empty,
@@ -1582,6 +1583,7 @@ namespace Nop.Services.Installation
                 CustomerCurrencyCode = "USD",
                 CurrencyRate = 1M,
                 AffiliateId = 0,
+                ReferrerCustomerId = 0,
                 OrderStatus = OrderStatus.Pending,
                 AllowStoringCreditCardNumber = false,
                 CardType = string.Empty,
@@ -1706,6 +1708,7 @@ namespace Nop.Services.Installation
                 CustomerCurrencyCode = "USD",
                 CurrencyRate = 1M,
                 AffiliateId = 0,
+                ReferrerCustomerId = 0,
                 OrderStatus = OrderStatus.Pending,
                 AllowStoringCreditCardNumber = false,
                 CardType = string.Empty,
@@ -1857,6 +1860,7 @@ namespace Nop.Services.Installation
                 CustomerCurrencyCode = "USD",
                 CurrencyRate = 1M,
                 AffiliateId = 0,
+                ReferrerCustomerId = 0,
                 OrderStatus = OrderStatus.Processing,
                 AllowStoringCreditCardNumber = false,
                 CardType = string.Empty,
@@ -2082,6 +2086,7 @@ namespace Nop.Services.Installation
                 CustomerCurrencyCode = "USD",
                 CurrencyRate = 1M,
                 AffiliateId = 0,
+                ReferrerCustomerId = 0,
                 OrderStatus = OrderStatus.Complete,
                 AllowStoringCreditCardNumber = false,
                 CardType = string.Empty,
@@ -3543,6 +3548,7 @@ namespace Nop.Services.Installation
                 MaximumProductNumber = 3000,
                 AllowVendorsToImportProducts = true,
                 VendorParentLevel = 1,
+                VendorChildrenLevel = 1,
                 InviteCodeEnable = false
             });
 
