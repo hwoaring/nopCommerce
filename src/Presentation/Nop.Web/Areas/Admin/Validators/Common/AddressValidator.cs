@@ -18,15 +18,15 @@ namespace Nop.Web.Areas.Admin.Validators.Common
             RuleFor(x => x.LastName)
                 .NotEmpty()
                 .WithMessageAwait(localizationService.GetResourceAsync("Admin.Address.Fields.LastName.Required"))
-                .When(x => x.LastNameRequired);
+                .When(x => addressSettings.LastNameEnabled && x.LastNameRequired);
             RuleFor(x => x.Email)
                 .NotEmpty()
                 .WithMessageAwait(localizationService.GetResourceAsync("Admin.Address.Fields.Email.Required"))
-                .When(x => x.EmailRequired);
+                .When(x => addressSettings.EmailEnabled && x.EmailRequired);
             RuleFor(x => x.Email)
                 .EmailAddress()
                 .WithMessageAwait(localizationService.GetResourceAsync("Admin.Common.WrongEmail"))
-                .When(x => x.EmailRequired);
+                .When(x => addressSettings.EmailEnabled && x.EmailRequired);
             RuleFor(x => x.Company)
                 .NotEmpty()
                 .WithMessageAwait(localizationService.GetResourceAsync("Admin.Address.Fields.Company.Required"))

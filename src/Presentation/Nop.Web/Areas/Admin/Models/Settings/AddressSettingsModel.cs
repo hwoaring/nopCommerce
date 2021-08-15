@@ -78,6 +78,15 @@ namespace Nop.Web.Areas.Admin.Models.Settings
         [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.AddressFormFields.FaxRequired")]
         public bool FaxRequired { get; set; }
 
+        [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.AddressFormFields.PreselectCountryIfOnlyOne")]
+        public bool PreselectCountryIfOnlyOne { get; set; }
+
+        [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.AddressFormFields.OnlyShowAvailable")]
+        public bool OnlyShowAvailable { get; set; }
+
+        [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.AddressFormFields.UseDivisionsCode")]
+        public bool UseDivisionsCode { get; set; }
+
         #endregion
     }
 }

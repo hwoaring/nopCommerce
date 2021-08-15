@@ -13,6 +13,15 @@ namespace Nop.Web.Areas.Admin.Models.Settings
 
         public int ActiveStoreScopeConfiguration { get; set; }
 
+        [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.RefereeIdAvailableMinutes")]
+        public bool RefereeIdAvailableMinutes { get; set; }
+
+        [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.UseGidForReferrerParam")]
+        public bool UseGidForReferrerParam { get; set; }
+
+        [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.AutoDetectCity")]
+        public bool AutoDetectCity { get; set; }
+
         [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.UsernamesEnabled")]
         public bool UsernamesEnabled { get; set; }
 
@@ -29,7 +38,13 @@ namespace Nop.Web.Areas.Admin.Models.Settings
         public bool UsernameValidationUseRegex { get; set; }
 
         [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.UsernameValidationRule")]
-        public string UsernameValidationRule { get; set; }       
+        public string UsernameValidationRule { get; set; }
+
+        [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.PhoneNumberLogin")]
+        public string PhoneNumberLogin { get; set; }
+
+        [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.PhoneNumberValidationBySMS")]
+        public string PhoneNumberValidationBySMS { get; set; }
 
         [NopResourceDisplayName("Admin.Configuration.Settings.CustomerUser.UserRegistrationType")]
         public int UserRegistrationType { get; set; }

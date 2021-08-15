@@ -20,7 +20,6 @@ namespace Nop.Data.Mapping.Builders.Weixin
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(WxShareCount.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(WxShareCount.WxShareLinkId)).AsInt32().ForeignKey<WxShareLink>()
                 ;
         }

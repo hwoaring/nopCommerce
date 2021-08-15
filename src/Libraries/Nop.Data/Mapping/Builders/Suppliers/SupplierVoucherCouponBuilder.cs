@@ -26,17 +26,13 @@ namespace Nop.Data.Mapping.Builders.Suppliers
                 .WithColumn(nameof(SupplierVoucherCoupon.Description)).AsString(512).Nullable()
                 .WithColumn(nameof(SupplierVoucherCoupon.ImageUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(SupplierVoucherCoupon.SupplierId)).AsInt32().ForeignKey<Supplier>()
-                .WithColumn(nameof(SupplierVoucherCoupon.SupplierShopId)).AsInt32().Nullable().ForeignKey<SupplierShop>().OnDelete(Rule.None)
-                .WithColumn(nameof(SupplierVoucherCoupon.Percentage)).AsDecimal(9,2)
+                .WithColumn(nameof(SupplierVoucherCoupon.SupplierShopId)).AsInt32().Nullable().ForeignKey<SupplierShop>(onDelete: Rule.None)
+                .WithColumn(nameof(SupplierVoucherCoupon.Percentage)).AsDecimal(9, 2)
                 .WithColumn(nameof(SupplierVoucherCoupon.MaxDiscountAmount)).AsDecimal(9, 2)
                 .WithColumn(nameof(SupplierVoucherCoupon.Amount)).AsDecimal(9, 2)
                 .WithColumn(nameof(SupplierVoucherCoupon.UpAmountCanUsed)).AsDecimal(9, 2)
                 .WithColumn(nameof(SupplierVoucherCoupon.UpProfitCanUsed)).AsDecimal(9, 2)
-                .WithColumn(nameof(SupplierVoucherCoupon.StartDateTimeUtc)).AsDateTime2().Nullable()
-
-
-
-
+                .WithColumn(nameof(SupplierVoucherCoupon.StartDateTimeUtc)).AsDateTime2()
                 ;
         }
 

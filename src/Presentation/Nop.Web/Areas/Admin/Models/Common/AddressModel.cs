@@ -17,6 +17,9 @@ namespace Nop.Web.Areas.Admin.Models.Common
             CustomAddressAttributes = new List<AddressAttributeModel>();
         }
 
+        [NopResourceDisplayName("Admin.Address.Fields.AddressLable")]
+        public string AddressLable { get; set; }
+
         [NopResourceDisplayName("Admin.Address.Fields.FirstName")]
         public string FirstName { get; set; }
 
@@ -53,6 +56,15 @@ namespace Nop.Web.Areas.Admin.Models.Common
 
         [NopResourceDisplayName("Admin.Address.Fields.Address2")]
         public string Address2 { get; set; }
+
+        [NopResourceDisplayName("Admin.Address.Fields.Longitude")]
+        public string Longitude { get; set; }
+
+        [NopResourceDisplayName("Admin.Address.Fields.Latitude")]
+        public string Latitude { get; set; }
+
+        [NopResourceDisplayName("Admin.Address.Fields.ScaleLevel")]
+        public int ScaleLevel { get; set; }
 
         [NopResourceDisplayName("Admin.Address.Fields.ZipPostalCode")]
         public string ZipPostalCode { get; set; }
