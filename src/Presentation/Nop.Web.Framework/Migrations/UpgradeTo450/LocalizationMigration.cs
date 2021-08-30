@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using FluentMigrator;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Data.Migrations;
+using Nop.Services.Common;
 using Nop.Services.Localization;
 
 namespace Nop.Web.Framework.Migrations.UpgradeTo450
@@ -31,6 +34,12 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo450
                 "Admin.Configuration.AppSettings.Hosting.ForwardedHttpHeader.Hint"
             }).Wait();
 
+            var languageService = EngineContext.Current.Resolve<ILanguageService>();
+            var languages = languageService.GetAllLanguagesAsync(true).Result;
+            var languageId = languages
+                .Where(lang => lang.UniqueSeoCode == new CultureInfo(NopCommonDefaults.DefaultLanguageCulture).TwoLetterISOLanguageName)
+                .Select(lang => lang.Id).FirstOrDefault();
+
             localizationService.AddLocaleResourceAsync(new Dictionary<string, string>
             {
                 //#5696
@@ -50,7 +59,14 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo450
                 //#5618
                 ["Admin.Configuration.Settings.GeneralCommon.EnableCssBundling.Hint"] = "Enable to combine (bundle) multiple CSS files into a single file. Do not enable if you're running nopCommerce in IIS virtual directory. And please note it could take up to two minutes for changes to existing files to be applied (when enabled).",
                 ["Admin.Configuration.Settings.GeneralCommon.EnableJsBundling.Hint"] = "Enable to combine (bundle) multiple JavaScript files into a single file. And please note it could take up to two minutes for changes to existing files to be applied (when enabled).",
-            }).Wait();
+
+                //#4880
+                ["Admin.Configuration.AppSettings.Common.ServeUnknownFileTypes"] = "Serve unknown types of static files",
+                ["Admin.Configuration.AppSettings.Common.ServeUnknownFileTypes.Hint"] = "Enable this setting to serve files that are in the .well-known directory without a recognized content-type",
+
+                //#5532
+                ["Admin.Configuration.Languages.CLDR.Warning"] = "Please make sure the appropriate CLDR package is installed for this culture. You can set CLDR for the specified culture on the <a href=\"{0}\" target=\"_blank\">General Settings page, Localization tab</a>.",
+            }, languageId).Wait();
 
             // rename locales
             var localesToRename = new[]
@@ -58,8 +74,6 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo450
                 new { Name = "", NewName = "" }
             };
 
-            var languageService = EngineContext.Current.Resolve<ILanguageService>();
-            var languages = languageService.GetAllLanguagesAsync(true).Result;
             foreach (var lang in languages)
             {
                 foreach (var locale in localesToRename)
