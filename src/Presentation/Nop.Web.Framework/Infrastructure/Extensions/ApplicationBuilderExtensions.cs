@@ -17,6 +17,7 @@ using Microsoft.Net.Http.Headers;
 using Nop.Core;
 using Nop.Core.Configuration;
 using Nop.Core.Domain.Common;
+using Nop.Core.Http;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Data.Migrations;
@@ -203,7 +204,7 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
         {
             if (!DataSettingsManager.IsDatabaseInstalled())
                 return;
-            
+
             //whether to use compression (gzip by default)
             if (EngineContext.Current.Resolve<CommonSettings>().UseResponseCompression)
                 application.UseResponseCompression();
@@ -353,9 +354,15 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                     .OrderBy(language => language.DisplayOrder)
                     .Select(language => new CultureInfo(language.LanguageCulture)).ToList();
                 options.SupportedCultures = cultures;
+                options.SupportedUICultures = cultures;
                 options.DefaultRequestCulture = new RequestCulture(cultures.FirstOrDefault());
+                options.ApplyCurrentCultureToResponseHeaders = true;
 
-                options.AddInitialRequestCultureProvider(new NopRequestCultureProvider(options));
+                //configure culture providers
+                options.AddInitialRequestCultureProvider(new NopSeoUrlCultureProvider());
+                var cookieRequestCultureProvider = options.RequestCultureProviders.OfType<CookieRequestCultureProvider>().FirstOrDefault();
+                if (cookieRequestCultureProvider is not null)
+                    cookieRequestCultureProvider.CookieName = $"{NopCookieDefaults.Prefix}{NopCookieDefaults.CultureCookie}";
             });
         }
 
