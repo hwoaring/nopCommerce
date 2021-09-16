@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -6,8 +7,10 @@ using Nop.Core;
 using Nop.Core.Infrastructure;
 using Nop.Services.Localization;
 using Nop.Services.Seo;
+using Nop.Services.Themes;
 using Nop.Services.Topics;
 using Nop.Web.Framework.Extensions;
+using Nop.Web.Framework.Themes;
 using Nop.Web.Framework.UI.Paging;
 using Nop.Web.Models.Boards;
 using Nop.Web.Models.Common;
@@ -282,7 +285,7 @@ namespace Nop.Web.Extensions
         /// <param name="systemName">System name</param>
         /// <returns>
         /// A task that represents the asynchronous operation
-        /// The task result contains the opic SEO Name
+        /// The task result contains the topic SEO Name
         /// </returns>
         public static async Task<string> GetTopicSeNameAsync<TModel>(this IHtmlHelper<TModel> html, string systemName)
         {
@@ -297,6 +300,41 @@ namespace Nop.Web.Extensions
             var urlRecordService = EngineContext.Current.Resolve<IUrlRecordService>();
 
             return await urlRecordService.GetSeNameAsync(topic);
+        }
+
+        /// <summary>
+        /// Get a value of the text flow uses for the current UI culture
+        /// </summary>
+        /// <param name="html">HTML helper</param>
+        /// <param name="ignoreRtl">A value indicating whether to we should ignore RTL language property for admin area. False by default</param>
+        /// <returns>"rtl" if text flows from right to left; otherwise, "ltr".</returns>
+        public static string GetUIDirection(this IHtmlHelper html, bool ignoreRtl = false)
+        {
+            if (ignoreRtl)
+                return "ltr";
+
+            return CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft ? "rtl" : "ltr";
+        }
+
+        /// <summary>
+        /// Return a value indicating whether the working language and theme support RTL (right-to-left)
+        /// </summary>
+        /// <param name="html">HTML helper</param>
+        /// <param name="themeName">Theme name</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the value
+        /// </returns>
+        public static async Task<bool> ShouldUseRtlThemeAsync(this IHtmlHelper html, string themeName = null)
+        {
+            if (!CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft)
+                return false;
+
+            //ensure that the active theme also supports it
+            themeName ??= await EngineContext.Current.Resolve<IThemeContext>().GetWorkingThemeNameAsync();
+            var theme = await EngineContext.Current.Resolve<IThemeProvider>().GetThemeBySystemNameAsync(themeName);
+
+            return theme?.SupportRtl ?? false;
         }
     }
 }
