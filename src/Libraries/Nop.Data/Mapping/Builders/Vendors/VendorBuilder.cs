@@ -25,6 +25,7 @@ namespace Nop.Data.Mapping.Builders.Vendors
                 .WithColumn(nameof(Vendor.ContactNumber)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(Vendor.ContactAddress)).AsString(1024).Nullable()
                 .WithColumn(nameof(Vendor.ShoppingMallLink)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Vendor.ShoppingMallLink2)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Vendor.OpenHours)).AsString(512).Nullable()
                 .WithColumn(nameof(Vendor.MetaKeywords)).AsString(400).Nullable()
                 .WithColumn(nameof(Vendor.MetaTitle)).AsString(400).Nullable()

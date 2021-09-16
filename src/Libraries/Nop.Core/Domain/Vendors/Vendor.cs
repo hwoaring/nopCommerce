@@ -66,6 +66,11 @@ namespace Nop.Core.Domain.Vendors
         public string ShoppingMallLink{ get; set; }
 
         /// <summary>
+        /// 商城购买链接2（或第三方商城）
+        /// </summary>
+        public string ShoppingMallLink2 { get; set; }
+
+        /// <summary>
         /// 营业时间
         /// </summary>
         public string OpenHours { get; set; }
