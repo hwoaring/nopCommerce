@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ClosedXML.Excel;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
 using Nop.Core;
@@ -30,7 +31,6 @@ using Nop.Services.Shipping.Date;
 using Nop.Services.Stores;
 using Nop.Services.Tax;
 using Nop.Services.Vendors;
-using OfficeOpenXml;
 
 namespace Nop.Services.ExportImport
 {
@@ -39,15 +39,6 @@ namespace Nop.Services.ExportImport
     /// </summary>
     public partial class ImportManager : IImportManager
     {
-        #region Constants
-
-        //it's quite fast hash (to cheaply distinguish between objects)
-        private const string IMAGE_HASH_ALGORITHM = "SHA512";
-
-        private const string UPLOADS_TEMP_PATH = "~/App_Data/TempUploads";
-
-        #endregion
-
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
@@ -155,7 +146,7 @@ namespace Nop.Services.ExportImport
 
         #region Utilities
 
-        private static ExportedAttributeType GetTypeOfExportedAttribute(ExcelWorksheet worksheet, PropertyManager<ExportProductAttribute> productAttributeManager, PropertyManager<ExportSpecificationAttribute> specificationAttributeManager, int iRow)
+        private static ExportedAttributeType GetTypeOfExportedAttribute(IXLWorksheet worksheet, PropertyManager<ExportProductAttribute> productAttributeManager, PropertyManager<ExportSpecificationAttribute> specificationAttributeManager, int iRow)
         {
             productAttributeManager.ReadFromXlsx(worksheet, iRow, ExportProductAttribute.ProducAttributeCellOffset);
 
@@ -175,7 +166,7 @@ namespace Nop.Services.ExportImport
         }
 
         /// <returns>A task that represents the asynchronous operation</returns>
-        private static async Task SetOutLineForSpecificationAttributeRowAsync(object cellValue, ExcelWorksheet worksheet, int endRow)
+        private static async Task SetOutLineForSpecificationAttributeRowAsync(object cellValue, IXLWorksheet worksheet, int endRow)
         {
             var attributeType = (cellValue ?? string.Empty).ToString();
 
@@ -193,16 +184,16 @@ namespace Nop.Services.ExportImport
             }
         }
 
-        private static void CopyDataToNewFile(ImportProductMetadata metadata, ExcelWorksheet worksheet, string filePath, int startRow, int endRow, int endCell)
+        private static void CopyDataToNewFile(ImportProductMetadata metadata, IXLWorksheet worksheet, string filePath, int startRow, int endRow, int endCell)
         {
             using var stream = new FileStream(filePath, FileMode.OpenOrCreate);
             // ok, we can run the real code of the sample now
-            using var xlPackage = new ExcelPackage(stream);
+            using var workbook = new XLWorkbook(stream);
             // uncomment this line if you want the XML written out to the outputDir
             //xlPackage.DebugMode = true; 
 
             // get handles to the worksheets
-            var outWorksheet = xlPackage.Workbook.Worksheets.Add(typeof(Product).Name);
+            var outWorksheet = workbook.Worksheets.Add(typeof(Product).Name);
             metadata.Manager.WriteCaption(outWorksheet);
             var outRow = 2;
             for (var row = startRow; row <= endRow; row++)
@@ -210,13 +201,13 @@ namespace Nop.Services.ExportImport
                 outWorksheet.Row(outRow).OutlineLevel = worksheet.Row(row).OutlineLevel;
                 for (var cell = 1; cell <= endCell; cell++)
                 {
-                    outWorksheet.Cells[outRow, cell].Value = worksheet.Cells[row, cell].Value;
+                    outWorksheet.Row(outRow).Cell(cell).Value = worksheet.Row(row).Cell(cell).Value;
                 }
 
                 outRow += 1;
             }
 
-            xlPackage.Save();
+            workbook.Save();
         }
 
         protected virtual int GetColumnIndex(string[] properties, string columnName)
@@ -379,12 +370,12 @@ namespace Nop.Services.ExportImport
                         {
                             var newImageHash = HashHelper.CreateHash(
                                 newPictureBinary,
-                                IMAGE_HASH_ALGORITHM,
+                                ExportImportDefaults.ImageHashAlgorithm,
                                 trimByteCount);
 
                             var newValidatedImageHash = HashHelper.CreateHash(
-                                await _pictureService.ValidatePictureAsync(newPictureBinary, mimeType), 
-                                IMAGE_HASH_ALGORITHM,
+                                await _pictureService.ValidatePictureAsync(newPictureBinary, mimeType),
+                                ExportImportDefaults.ImageHashAlgorithm,
                                 trimByteCount);
 
                             var imagesIds = productsImagesIds.ContainsKey(product.ProductItem.Id)
@@ -538,7 +529,7 @@ namespace Nop.Services.ExportImport
         }
 
         /// <returns>A task that represents the asynchronous operation</returns>
-        protected virtual async Task<(Category category, bool isNew, string curentCategoryBreadCrumb)> GetCategoryFromXlsxAsync(PropertyManager<Category> manager, ExcelWorksheet worksheet, int iRow, Dictionary<string, ValueTask<Category>> allCategories)
+        protected virtual async Task<(Category category, bool isNew, string curentCategoryBreadCrumb)> GetCategoryFromXlsxAsync(PropertyManager<Category> manager, IXLWorksheet worksheet, int iRow, Dictionary<string, ValueTask<Category>> allCategories)
         {
             manager.ReadFromXlsx(worksheet, iRow);
 
@@ -601,7 +592,7 @@ namespace Nop.Services.ExportImport
         }
 
         /// <returns>A task that represents the asynchronous operation</returns>
-        protected virtual async Task SetOutLineForProductAttributeRowAsync(object cellValue, ExcelWorksheet worksheet, int endRow)
+        protected virtual async Task SetOutLineForProductAttributeRowAsync(object cellValue, IXLWorksheet worksheet, int endRow)
         {
             try
             {
@@ -797,7 +788,7 @@ namespace Nop.Services.ExportImport
                 return string.Empty;
 
             //ensure that temp directory is created
-            var tempDirectory = _fileProvider.MapPath(UPLOADS_TEMP_PATH);
+            var tempDirectory = _fileProvider.MapPath(ExportImportDefaults.UploadsTempPath);
             _fileProvider.CreateDirectory(tempDirectory);
 
             var fileName = _fileProvider.GetFileName(urlString);
@@ -824,7 +815,7 @@ namespace Nop.Services.ExportImport
         }
 
         /// <returns>A task that represents the asynchronous operation</returns>
-        private async Task<ImportProductMetadata> PrepareImportProductDataAsync(ExcelWorksheet worksheet)
+        private async Task<ImportProductMetadata> PrepareImportProductDataAsync(IXLWorksheet worksheet)
         {
             //the columns
             var properties = GetPropertiesByExcelCells<Product>(worksheet);
@@ -951,17 +942,17 @@ namespace Nop.Services.ExportImport
             while (true)
             {
                 var allColumnsAreEmpty = manager.GetProperties
-                    .Select(property => worksheet.Cells[endRow, property.PropertyOrderPosition])
+                    .Select(property => worksheet.Row(endRow).Cell(property.PropertyOrderPosition))
                     .All(cell => string.IsNullOrEmpty(cell?.Value?.ToString()));
 
                 if (allColumnsAreEmpty)
                     break;
 
-                if (new[] { 1, 2 }.Select(cellNum => worksheet.Cells[endRow, cellNum])
+                if (new[] { 1, 2 }.Select(cellNum => worksheet.Row(endRow).Cell(cellNum))
                         .All(cell => string.IsNullOrEmpty(cell?.Value?.ToString())) &&
                     worksheet.Row(endRow).OutlineLevel == 0)
                 {
-                    var cellValue = worksheet.Cells[endRow, attributeIdCellNum].Value;
+                    var cellValue = worksheet.Row(endRow).Cell(attributeIdCellNum).Value;
                     await SetOutLineForProductAttributeRowAsync(cellValue, worksheet, endRow);
                     await SetOutLineForSpecificationAttributeRowAsync(cellValue, worksheet, endRow);
                 }
@@ -983,7 +974,7 @@ namespace Nop.Services.ExportImport
                         case ExportedAttributeType.ProductAttribute:
                             productAttributeManager.ReadFromXlsx(worksheet, endRow,
                                 ExportProductAttribute.ProducAttributeCellOffset);
-                            if (int.TryParse((worksheet.Cells[endRow, attributeIdCellNum].Value ?? string.Empty).ToString(), out var aid))
+                            if (int.TryParse((worksheet.Row(endRow).Cell(attributeIdCellNum).Value ?? string.Empty).ToString(), out var aid))
                             {
                                 allAttributeIds.Add(aid);
                             }
@@ -992,7 +983,7 @@ namespace Nop.Services.ExportImport
                         case ExportedAttributeType.SpecificationAttribute:
                             specificationAttributeManager.ReadFromXlsx(worksheet, endRow, ExportProductAttribute.ProducAttributeCellOffset);
 
-                            if (int.TryParse((worksheet.Cells[endRow, specificationAttributeOptionIdCellNum].Value ?? string.Empty).ToString(), out var saoid))
+                            if (int.TryParse((worksheet.Row(endRow).Cell(specificationAttributeOptionIdCellNum).Value ?? string.Empty).ToString(), out var saoid))
                             {
                                 allSpecificationAttributeOptionIds.Add(saoid);
                             }
@@ -1006,7 +997,7 @@ namespace Nop.Services.ExportImport
 
                 if (categoryCellNum > 0)
                 {
-                    var categoryIds = worksheet.Cells[endRow, categoryCellNum].Value?.ToString() ?? string.Empty;
+                    var categoryIds = worksheet.Row(endRow).Cell(categoryCellNum).Value?.ToString() ?? string.Empty;
 
                     if (!string.IsNullOrEmpty(categoryIds))
                         allCategories.AddRange(categoryIds
@@ -1016,7 +1007,7 @@ namespace Nop.Services.ExportImport
 
                 if (skuCellNum > 0)
                 {
-                    var sku = worksheet.Cells[endRow, skuCellNum].Value?.ToString() ?? string.Empty;
+                    var sku = worksheet.Row(endRow).Cell(skuCellNum).Value?.ToString() ?? string.Empty;
 
                     if (!string.IsNullOrEmpty(sku))
                         allSku.Add(sku);
@@ -1024,7 +1015,7 @@ namespace Nop.Services.ExportImport
 
                 if (manufacturerCellNum > 0)
                 {
-                    var manufacturerIds = worksheet.Cells[endRow, manufacturerCellNum].Value?.ToString() ??
+                    var manufacturerIds = worksheet.Row(endRow).Cell(manufacturerCellNum).Value?.ToString() ??
                                           string.Empty;
                     if (!string.IsNullOrEmpty(manufacturerIds))
                         allManufacturers.AddRange(manufacturerIds
@@ -1033,7 +1024,7 @@ namespace Nop.Services.ExportImport
 
                 if (limitedToStoresCellNum > 0)
                 {
-                    var storeIds = worksheet.Cells[endRow, limitedToStoresCellNum].Value?.ToString() ??
+                    var storeIds = worksheet.Row(endRow).Cell(limitedToStoresCellNum).Value?.ToString() ??
                                           string.Empty;
                     if (!string.IsNullOrEmpty(storeIds))
                         allStores.AddRange(storeIds
@@ -1095,7 +1086,7 @@ namespace Nop.Services.ExportImport
         }
 
         /// <returns>A task that represents the asynchronous operation</returns>
-        private async Task ImportProductsFromSplitedXlsxAsync(ExcelWorksheet worksheet, ImportProductMetadata metadata)
+        private async Task ImportProductsFromSplitedXlsxAsync(IXLWorksheet worksheet, ImportProductMetadata metadata)
         {
             foreach (var path in SplitProductFile(worksheet, metadata))
             {
@@ -1117,7 +1108,7 @@ namespace Nop.Services.ExportImport
             }
         }
 
-        private IList<string> SplitProductFile(ExcelWorksheet worksheet, ImportProductMetadata metadata)
+        private IList<string> SplitProductFile(IXLWorksheet worksheet, ImportProductMetadata metadata)
         {
             var fileIndex = 1;
             var fileName = Guid.NewGuid().ToString();
@@ -1135,7 +1126,7 @@ namespace Nop.Services.ExportImport
                     ? metadata.ProductsInFile[curIndex - 1]
                     : metadata.EndRow;
 
-                var filePath = $"{_fileProvider.MapPath(UPLOADS_TEMP_PATH)}/{fileName}_part_{fileIndex}.xlsx";
+                var filePath = $"{_fileProvider.MapPath(ExportImportDefaults.UploadsTempPath)}/{fileName}_part_{fileIndex}.xlsx";
 
                 CopyDataToNewFile(metadata, worksheet, filePath, startRow, endRow, endCell);
 
@@ -1159,7 +1150,7 @@ namespace Nop.Services.ExportImport
         /// <typeparam name="T">Type of object</typeparam>
         /// <param name="worksheet">Excel worksheet</param>
         /// <returns>Property list</returns>
-        public static IList<PropertyByName<T>> GetPropertiesByExcelCells<T>(ExcelWorksheet worksheet)
+        public static IList<PropertyByName<T>> GetPropertiesByExcelCells<T>(IXLWorksheet worksheet)
         {
             var properties = new List<PropertyByName<T>>();
             var poz = 1;
@@ -1167,7 +1158,7 @@ namespace Nop.Services.ExportImport
             {
                 try
                 {
-                    var cell = worksheet.Cells[1, poz];
+                    var cell = worksheet.Row(1).Cell(poz);
 
                     if (string.IsNullOrEmpty(cell?.Value?.ToString()))
                         break;
@@ -1191,9 +1182,9 @@ namespace Nop.Services.ExportImport
         /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task ImportProductsFromXlsxAsync(Stream stream)
         {
-            using var xlPackage = new ExcelPackage(stream);
+            using var workbook = new XLWorkbook(stream);
             // get the first worksheet in the workbook
-            var worksheet = xlPackage.Workbook.Worksheets.FirstOrDefault();
+            var worksheet = workbook.Worksheets.FirstOrDefault();
             if (worksheet == null)
                 throw new NopException("No worksheet found");
 
@@ -1208,14 +1199,15 @@ namespace Nop.Services.ExportImport
             }
 
             //performance optimization, load all products by SKU in one SQL request
-            var allProductsBySku = await _productService.GetProductsBySkuAsync(metadata.AllSku.ToArray(), (await _workContext.GetCurrentVendorAsync())?.Id ?? 0);
+            var currentVendor = await _workContext.GetCurrentVendorAsync();
+            var allProductsBySku = await _productService.GetProductsBySkuAsync(metadata.AllSku.ToArray(), currentVendor?.Id ?? 0);
 
             //validate maximum number of products per vendor
             if (_vendorSettings.MaximumProductNumber > 0 &&
-                await _workContext.GetCurrentVendorAsync() != null)
+                currentVendor != null)
             {
                 var newProductsCount = metadata.CountProductsInFile - allProductsBySku.Count;
-                if (await _productService.GetNumberOfProductsByVendorIdAsync((await _workContext.GetCurrentVendorAsync()).Id) + newProductsCount > _vendorSettings.MaximumProductNumber)
+                if (await _productService.GetNumberOfProductsByVendorIdAsync(currentVendor.Id) + newProductsCount > _vendorSettings.MaximumProductNumber)
                     throw new ArgumentException(string.Format(await _localizationService.GetResourceAsync("Admin.Catalog.Products.ExceededMaximumNumber"), _vendorSettings.MaximumProductNumber));
             }
 
@@ -1325,7 +1317,7 @@ namespace Nop.Services.ExportImport
                             break;
                         case "Vendor":
                             //vendor can't change this field
-                            if (await _workContext.GetCurrentVendorAsync() == null)
+                            if (currentVendor == null)
                                 product.VendorId = property.IntValue;
                             break;
                         case "ProductTemplate":
@@ -1333,12 +1325,12 @@ namespace Nop.Services.ExportImport
                             break;
                         case "ShowOnHomepage":
                             //vendor can't change this field
-                            if (await _workContext.GetCurrentVendorAsync() == null)
+                            if (currentVendor == null)
                                 product.ShowOnHomepage = property.BooleanValue;
                             break;
                         case "DisplayOrder":
                             //vendor can't change this field
-                            if (await _workContext.GetCurrentVendorAsync() == null)
+                            if (currentVendor == null)
                                 product.DisplayOrder = property.IntValue;
                             break;
                         case "MetaKeywords":
@@ -1590,8 +1582,8 @@ namespace Nop.Services.ExportImport
                     product.Published = true;
 
                 //sets the current vendor for the new product
-                if (isNew && await _workContext.GetCurrentVendorAsync() != null)
-                    product.VendorId = (await _workContext.GetCurrentVendorAsync()).Id;
+                if (isNew && currentVendor != null)
+                    product.VendorId = currentVendor.Id;
 
                 product.UpdatedOnUtc = DateTime.UtcNow;
 
@@ -1814,7 +1806,8 @@ namespace Nop.Services.ExportImport
 
                     var isActive = true;
 
-                    var storeId = (await _storeContext.GetCurrentStoreAsync()).Id;
+                    var store = await _storeContext.GetCurrentStoreAsync();
+                    var storeId = store.Id;
 
                     //"email" field specified
                     var email = tmp[0].Trim();
@@ -1940,9 +1933,9 @@ namespace Nop.Services.ExportImport
         /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task ImportManufacturersFromXlsxAsync(Stream stream)
         {
-            using var xlPackage = new ExcelPackage(stream);
+            using var workbook = new XLWorkbook(stream);
             // get the first worksheet in the workbook
-            var worksheet = xlPackage.Workbook.Worksheets.FirstOrDefault();
+            var worksheet = workbook.Worksheets.FirstOrDefault();
             if (worksheet == null)
                 throw new NopException("No worksheet found");
 
@@ -1957,7 +1950,7 @@ namespace Nop.Services.ExportImport
             while (true)
             {
                 var allColumnsAreEmpty = manager.GetProperties
-                    .Select(property => worksheet.Cells[iRow, property.PropertyOrderPosition])
+                    .Select(property => worksheet.Row(iRow).Cell(property.PropertyOrderPosition))
                     .All(cell => cell?.Value == null || string.IsNullOrEmpty(cell.Value.ToString()));
 
                 if (allColumnsAreEmpty)
@@ -2072,9 +2065,9 @@ namespace Nop.Services.ExportImport
         /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task ImportCategoriesFromXlsxAsync(Stream stream)
         {
-            using var xlPackage = new ExcelPackage(stream);
+            using var workboox = new XLWorkbook(stream);
             // get the first worksheet in the workbook
-            var worksheet = xlPackage.Workbook.Worksheets.FirstOrDefault();
+            var worksheet = workboox.Worksheets.FirstOrDefault();
             if (worksheet == null)
                 throw new NopException("No worksheet found");
 
@@ -2097,7 +2090,7 @@ namespace Nop.Services.ExportImport
             while (true)
             {
                 var allColumnsAreEmpty = manager.GetProperties
-                    .Select(property => worksheet.Cells[iRow, property.PropertyOrderPosition])
+                    .Select(property => worksheet.Row(iRow).Cell(property.PropertyOrderPosition))
                     .All(cell => string.IsNullOrEmpty(cell?.Value?.ToString()));
 
                 if (allColumnsAreEmpty)
@@ -2187,13 +2180,13 @@ namespace Nop.Services.ExportImport
 
         public class CategoryKey
         {
-        /// <returns>A task that represents the asynchronous operation</returns>
+            /// <returns>A task that represents the asynchronous operation</returns>
             public static async Task<CategoryKey> CreateCategoryKeyAsync(Category category, ICategoryService categoryService, IList<Category> allCategories, IStoreMappingService storeMappingService)
             {
-                var categoryKey = new CategoryKey(await categoryService.GetFormattedBreadCrumbAsync(category, allCategories), category.LimitedToStores ? (await storeMappingService.GetStoresIdsWithAccessAsync(category)).ToList() : new List<int>());
-                categoryKey.Category = category;
-
-                return categoryKey;
+                return new CategoryKey(await categoryService.GetFormattedBreadCrumbAsync(category, allCategories), category.LimitedToStores ? (await storeMappingService.GetStoresIdsWithAccessAsync(category)).ToList() : new List<int>())
+                {
+                    Category = category
+                };
             }
 
             public CategoryKey(string key, List<int> storesIds = null)

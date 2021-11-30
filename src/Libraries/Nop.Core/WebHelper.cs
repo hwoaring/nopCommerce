@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Http.Features;
@@ -13,9 +12,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
-using Nop.Core.Configuration;
 using Nop.Core.Http;
-using Nop.Core.Infrastructure;
 
 namespace Nop.Core
 {
@@ -24,29 +21,29 @@ namespace Nop.Core
     /// </summary>
     public partial class WebHelper : IWebHelper
     {
-        #region Fields 
+        #region Fields  
 
-        private readonly AppSettings _appSettings;
         private readonly IActionContextAccessor _actionContextAccessor;
         private readonly IHostApplicationLifetime _hostApplicationLifetime;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUrlHelperFactory _urlHelperFactory;
+        private readonly Lazy<IStoreContext> _storeContext;
 
         #endregion
 
         #region Ctor
 
-        public WebHelper(AppSettings appSettings,
-            IActionContextAccessor actionContextAccessor,
+        public WebHelper(IActionContextAccessor actionContextAccessor,
             IHostApplicationLifetime hostApplicationLifetime,
             IHttpContextAccessor httpContextAccessor,
-            IUrlHelperFactory urlHelperFactory)
+            IUrlHelperFactory urlHelperFactory,
+            Lazy<IStoreContext> storeContext)
         {
-            _appSettings = appSettings;
             _actionContextAccessor = actionContextAccessor;
             _hostApplicationLifetime = hostApplicationLifetime;
             _httpContextAccessor = httpContextAccessor;
             _urlHelperFactory = urlHelperFactory;
+            _storeContext = storeContext;
         }
 
         #endregion
@@ -206,11 +203,8 @@ namespace Nop.Core
 
             //if host is empty (it is possible only when HttpContext is not available), use URL of a store entity configured in admin area
             if (string.IsNullOrEmpty(storeHost))
-            {
-                //do not inject IWorkContext via constructor because it'll cause circular references
-                storeLocation = EngineContext.Current.Resolve<IStoreContext>().GetCurrentStoreAsync().Result?.Url
-                    ?? throw new Exception("Current store cannot be loaded");
-            }
+                storeLocation = _storeContext.Value.GetCurrentStore()?.Url
+                                ?? throw new Exception("Current store cannot be loaded");
 
             //ensure that URL is ended with slash
             storeLocation = $"{storeLocation.TrimEnd('/')}/";

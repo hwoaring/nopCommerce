@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Cms;
@@ -123,6 +124,7 @@ namespace Nop.Plugin.Misc.Sendinblue
                 await _scheduleTaskService.InsertTaskAsync(new ScheduleTask
                 {
                     Enabled = true,
+                    LastEnabledUtc = DateTime.UtcNow,
                     Seconds = SendinblueDefaults.DefaultSynchronizationPeriod * 60 * 60,
                     Name = SendinblueDefaults.SynchronizationTaskName,
                     Type = SendinblueDefaults.SynchronizationTask,
@@ -130,7 +132,7 @@ namespace Nop.Plugin.Misc.Sendinblue
             }
 
             //locales
-            await _localizationService.AddLocaleResourceAsync(new Dictionary<string, string>
+            await _localizationService.AddOrUpdateLocaleResourceAsync(new Dictionary<string, string>
             {
                 ["Plugins.Misc.Sendinblue.AccountInfo"] = "Account info",
                 ["Plugins.Misc.Sendinblue.AccountInfo.Hint"] = "Display account information.",

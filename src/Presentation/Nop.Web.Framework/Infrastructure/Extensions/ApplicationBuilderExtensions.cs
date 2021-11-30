@@ -28,9 +28,10 @@ using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Media.RoxyFileman;
 using Nop.Services.Plugins;
+using Nop.Services.ScheduleTasks;
 using Nop.Web.Framework.Globalization;
 using Nop.Web.Framework.Mvc.Routing;
-using WebMarkupMin.AspNetCore5;
+using WebMarkupMin.AspNetCore6;
 
 namespace Nop.Web.Framework.Infrastructure.Extensions
 {
@@ -69,6 +70,10 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                 migrationManager.ApplyUpMigrations(assembly, MigrationProcessType.Update);
                 assembly = Assembly.GetAssembly(typeof(IMigrationManager));
                 migrationManager.ApplyUpMigrations(assembly, MigrationProcessType.Update);
+
+                var taskScheduler = engine.Resolve<ITaskScheduler>();
+                taskScheduler.InitializeAsync().Wait();
+                taskScheduler.StartScheduler();
             }
         }
 
@@ -80,7 +85,7 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
         {
             var appSettings = EngineContext.Current.Resolve<AppSettings>();
             var webHostEnvironment = EngineContext.Current.Resolve<IWebHostEnvironment>();
-            var useDetailedExceptionPage = appSettings.CommonConfig.DisplayFullErrorStack || webHostEnvironment.IsDevelopment();
+            var useDetailedExceptionPage = appSettings.Get<CommonConfig>().DisplayFullErrorStack || webHostEnvironment.IsDevelopment();
             if (useDetailedExceptionPage)
             {
                 //get detailed exceptions for developing and testing purposes
@@ -104,7 +109,7 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                     try
                     {
                         //check whether database is installed
-                        if (await DataSettingsManager.IsDatabaseInstalledAsync())
+                        if (DataSettingsManager.IsDatabaseInstalled())
                         {
                             //get current customer
                             var currentCustomer = await EngineContext.Current.Resolve<IWorkContext>().GetCurrentCustomerAsync();
@@ -140,7 +145,7 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                         var originalPath = context.HttpContext.Request.Path;
                         var originalQueryString = context.HttpContext.Request.QueryString;
 
-                        if (await DataSettingsManager.IsDatabaseInstalledAsync())
+                        if (DataSettingsManager.IsDatabaseInstalled())
                         {
                             var commonSettings = EngineContext.Current.Resolve<CommonSettings>();
 
@@ -215,8 +220,8 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
 
             void staticFileResponse(StaticFileResponseContext context)
             {
-                if (!string.IsNullOrEmpty(appSettings.CommonConfig.StaticFilesCacheControl))
-                    context.Context.Response.Headers.Append(HeaderNames.CacheControl, appSettings.CommonConfig.StaticFilesCacheControl);
+                if (!string.IsNullOrEmpty(appSettings.Get<CommonConfig>().StaticFilesCacheControl))
+                    context.Context.Response.Headers.Append(HeaderNames.CacheControl, appSettings.Get<CommonConfig>().StaticFilesCacheControl);
             }
 
             //common static files
@@ -239,13 +244,13 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
             };
 
             //exclude files in blacklist
-            if (!string.IsNullOrEmpty(appSettings.CommonConfig.PluginStaticFileExtensionsBlacklist))
+            if (!string.IsNullOrEmpty(appSettings.Get<CommonConfig>().PluginStaticFileExtensionsBlacklist))
             {
                 var fileExtensionContentTypeProvider = new FileExtensionContentTypeProvider();
 
-                foreach (var ext in appSettings.CommonConfig.PluginStaticFileExtensionsBlacklist
+                foreach (var ext in appSettings.Get<CommonConfig>().PluginStaticFileExtensionsBlacklist
                     .Split(';', ',')
-                    .Select(e => e.Trim().ToLower())
+                    .Select(e => e.Trim().ToLowerInvariant())
                     .Select(e => $"{(e.StartsWith(".") ? string.Empty : ".")}{e}")
                     .Where(fileExtensionContentTypeProvider.Mappings.ContainsKey))
                 {
@@ -290,7 +295,7 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                 });
             }
 
-            if (appSettings.CommonConfig.ServeUnknownFileTypes)
+            if (appSettings.Get<CommonConfig>().ServeUnknownFileTypes)
             {
                 application.UseStaticFiles(new StaticFileOptions
                 {
@@ -340,7 +345,7 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
         {
             application.UseRequestLocalization(async options =>
             {
-                if (!await DataSettingsManager.IsDatabaseInstalledAsync())
+                if (!DataSettingsManager.IsDatabaseInstalled())
                     return;
 
                 //prepare supported cultures
@@ -382,7 +387,7 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
         {
             var appSettings = EngineContext.Current.Resolve<AppSettings>();
 
-            if (appSettings.HostingConfig.UseProxy)
+            if (appSettings.Get<HostingConfig>().UseProxy)
             {
                 var options = new ForwardedHeadersOptions
                 {
@@ -392,15 +397,15 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                     ForwardLimit = 2
                 };
 
-                if (!string.IsNullOrEmpty(appSettings.HostingConfig.ForwardedForHeaderName))
-                    options.ForwardedForHeaderName = appSettings.HostingConfig.ForwardedForHeaderName;
+                if (!string.IsNullOrEmpty(appSettings.Get<HostingConfig>().ForwardedForHeaderName))
+                    options.ForwardedForHeaderName = appSettings.Get<HostingConfig>().ForwardedForHeaderName;
 
-                if (!string.IsNullOrEmpty(appSettings.HostingConfig.ForwardedProtoHeaderName))
-                    options.ForwardedProtoHeaderName = appSettings.HostingConfig.ForwardedProtoHeaderName;
+                if (!string.IsNullOrEmpty(appSettings.Get<HostingConfig>().ForwardedProtoHeaderName))
+                    options.ForwardedProtoHeaderName = appSettings.Get<HostingConfig>().ForwardedProtoHeaderName;
 
-                if (!string.IsNullOrEmpty(appSettings.HostingConfig.KnownProxies))
+                if (!string.IsNullOrEmpty(appSettings.Get<HostingConfig>().KnownProxies))
                 {
-                    foreach (var strIp in appSettings.HostingConfig.KnownProxies.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList())
+                    foreach (var strIp in appSettings.Get<HostingConfig>().KnownProxies.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList())
                     {
                         if (IPAddress.TryParse(strIp, out var ip))
                             options.KnownProxies.Add(ip);

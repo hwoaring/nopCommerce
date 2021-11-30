@@ -28,7 +28,7 @@ namespace Nop.Web.Framework.UI
     {
         #region Fields
 
-        private static readonly object _lock = new object();
+        private static readonly object _lock = new();
 
         private readonly AppSettings _appSettings;
         private readonly CommonSettings _commonSettings;
@@ -105,7 +105,7 @@ namespace Nop.Web.Framework.UI
 
             //calculate hash
             var hash = "";
-            using (SHA256 sha = new SHA256Managed())
+            using (var sha = SHA256.Create())
             {
                 // string concatenation
                 var hashInput = "";
@@ -157,8 +157,8 @@ namespace Nop.Web.Framework.UI
         /// <returns>Generated string</returns>
         public virtual string GenerateTitle(bool addDefaultTitle)
         {
-            var result = "";
             var specificTitle = string.Join(_seoSettings.PageTitleSeparator, _titleParts.AsEnumerable().Reverse().ToArray());
+            string result;
             if (!string.IsNullOrEmpty(specificTitle))
             {
                 if (addDefaultTitle)
@@ -385,7 +385,7 @@ namespace Nop.Web.Framework.UI
                     //so if we have minification enabled, it could take up to several minutes to see changes in updated resource files (or just reset the cache or restart the site)
                     var cacheKey = new CacheKey($"Nop.minification.shouldrebuild.js-{outputFileName}")
                     {
-                        CacheTime = _appSettings.CacheConfig.BundledFilesCacheTime
+                        CacheTime = _appSettings.Get<CacheConfig>().BundledFilesCacheTime
                     };
 
                     var shouldRebuild = _staticCacheManager.GetAsync(_staticCacheManager.PrepareKey(cacheKey), () => true).Result;
@@ -615,7 +615,7 @@ namespace Nop.Web.Framework.UI
                     //so if we have minification enabled, it could take up to several minutes to see changes in updated resource files (or just reset the cache or restart the site)
                     var cacheKey = new CacheKey($"Nop.minification.shouldrebuild.css-{outputFileName}")
                     {
-                        CacheTime = _appSettings.CacheConfig.BundledFilesCacheTime
+                        CacheTime = _appSettings.Get<CacheConfig>().BundledFilesCacheTime
                     };
 
                     var shouldRebuild = _staticCacheManager.GetAsync(_staticCacheManager.PrepareKey(cacheKey), () => true).Result;

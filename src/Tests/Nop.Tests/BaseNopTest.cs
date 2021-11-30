@@ -34,6 +34,7 @@ using Nop.Core.Domain.Media;
 using Nop.Core.Events;
 using Nop.Core.Infrastructure;
 using Nop.Data;
+using Nop.Data.Configuration;
 using Nop.Data.Mapping;
 using Nop.Data.Migrations;
 using Nop.Services.Affiliates;
@@ -52,6 +53,7 @@ using Nop.Services.ExportImport;
 using Nop.Services.Forums;
 using Nop.Services.Gdpr;
 using Nop.Services.Helpers;
+using Nop.Services.Html;
 using Nop.Services.Installation;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
@@ -84,7 +86,6 @@ using Nop.Web.Infrastructure.Installation;
 using SkiaSharp;
 using IAuthenticationService = Nop.Services.Authentication.IAuthenticationService;
 using Task = System.Threading.Tasks.Task;
-using TaskScheduler = Nop.Services.ScheduleTasks.TaskScheduler;
 
 namespace Nop.Tests
 {
@@ -134,7 +135,7 @@ namespace Nop.Tests
             var typeFinder = new AppDomainTypeFinder();
             Singleton<ITypeFinder>.Instance = typeFinder;
 
-            Singleton<DataSettings>.Instance = new DataSettings
+            Singleton<DataConfig>.Instance = new DataConfig
             {
                 ConnectionString = "Data Source=nopCommerceTest.sqlite;Mode=Memory;Cache=Shared"
             };
@@ -144,10 +145,15 @@ namespace Nop.Tests
                 .Distinct()
                 .ToArray();
 
-            //add configuration parameters
-            var appSettings = new AppSettings();
-            services.AddSingleton(appSettings);
+            //create app settings
+            var configurations = typeFinder
+                .FindClassesOfType<IConfig>()
+                .Select(configType => (IConfig)Activator.CreateInstance(configType))
+                .ToList();
+            var appSettings = new AppSettings(configurations);
+            appSettings.Update(new List<IConfig> { Singleton<DataConfig>.Instance });
             Singleton<AppSettings>.Instance = appSettings;
+            services.AddSingleton(appSettings);
 
             var hostApplicationLifetime = new Mock<IHostApplicationLifetime>();
             services.AddSingleton(hostApplicationLifetime.Object);
@@ -198,6 +204,7 @@ namespace Nop.Tests
             services.AddSingleton(tempDataDictionaryFactory.Object);
 
             services.AddSingleton<ITypeFinder>(typeFinder);
+            Singleton<ITypeFinder>.Instance = typeFinder;
 
             //file provider
             services.AddTransient<INopFileProvider, NopFileProvider>();
@@ -324,6 +331,8 @@ namespace Nop.Tests
             services.AddTransient<IUploadService, UploadService>();
             services.AddTransient<IThemeProvider, ThemeProvider>();
             services.AddTransient<IExternalAuthenticationService, ExternalAuthenticationService>();
+            services.AddScoped<IBBCodeHelper, BBCodeHelper>();
+            services.AddScoped<INopHtmlHelper, NopHtmlHelper>();
 
             //slug route transformer
             services.AddSingleton<IReviewTypeService, ReviewTypeService>();
@@ -363,6 +372,7 @@ namespace Nop.Tests
             }
 
             services.AddSingleton<IInstallationService, InstallationService>();
+            services.AddTransient(p => new Lazy<IVersionLoader>(p.GetRequiredService<IVersionLoader>()));
 
             services
                 // add common FluentMigrator services
@@ -378,6 +388,7 @@ namespace Nop.Tests
                         .ScanIn(mAssemblies).For.Migrations());
 
             services.AddTransient<IStoreContext, WebStoreContext>();
+            services.AddTransient<Lazy<IStoreContext>>();
             services.AddTransient<IWorkContext, WebWorkContext>();
             services.AddTransient<IThemeContext, ThemeContext>();
 
@@ -488,7 +499,7 @@ namespace Nop.Tests
             _serviceProvider.GetService<IInstallationService>().InstallSampleDataAsync(NopTestsDefaults.AdminEmail).Wait();
 
             var provider = (IPermissionProvider)Activator.CreateInstance(typeof(StandardPermissionProvider));
-            EngineContext.Current.Resolve<IPermissionService>().InstallPermissionsAsync(provider).Wait();
+            _serviceProvider.GetService<IPermissionService>().InstallPermissionsAsync(provider).Wait();
         }
 
         public static T GetService<T>()

@@ -127,6 +127,7 @@
             <div class="card-body">
                 <p>
                     The AvaTax provides an easy way to manage exemption certificates - and they will automatically link to your CertCapture and CertExpress accounts!<br />
+                    <a href="https://avlr.co/3bA1P1X" target="_blank">Create a CertCapture account</a><br />
                     Please note that this feature only works if you have a <a href="https://help.avalara.com/0021_Avalara_CertCapture/All_about_CertCapture/Link_CertCapture_to_AvaTax" target="_blank">CertCapture linked to your AvaTax account</a>.<br />
                     <br />
                     Before you can use exemption certificates feature, you must set up your company for exemption certificate data storage.<br />
@@ -144,25 +145,17 @@
                     <script>
 	                    $(document).ready(function () {
                             $('#@Html.IdFor(model => model.EnableCertificates)').click(changeEnableCertificates);
-                            changeEnableCertificates();
 	                    });
 
                         function changeEnableCertificates() {
-                            var certificatesEnabled = $('#@Html.IdFor(model => model.EnableCertificates)').is(':checked');
-                            if (certificatesEnabled) {
-                                $('#pnlCertificates').showElement();
-                            } else {
-                                $('#pnlCertificates').hideElement();
-                            }
-
                             warningValidation(
                                 '@Url.Action("ChangeEnableCertificates", "Avalara")',
                                 '@Html.NameFor(model => model.EnableCertificates)',
-                                { enabled: certificatesEnabled });
+                                { enabled: $('#@Html.IdFor(model => model.EnableCertificates)').is(':checked') });
                         }
                     </script>
                 </div>
-                <nop-nested-setting asp-for="EnableCertificates" id="pnlCertificates">
+                <nop-nested-setting asp-for="EnableCertificates">
                     <div class="form-group row">
                         <div class="col-md-3">
                             <nop-label asp-for="SelectedCustomerRoleIds" />
