@@ -45,7 +45,7 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo450
             {
                 //#5696
                 ["Admin.ContentManagement.MessageTemplates.List.SearchKeywords"] = "Search keywords",
-                ["Admin.ContentManagement.MessageTemplates.List.SearchKeywords.Hint"] = "Search message template(s) by specific keywords.",
+                ["Admin.ContentManagement.MessageTemplates.List.SearchKeywords.Hint"] = "Keywords to search by name, body, or subject.",
 
 				//New configurations to forward proxied headers
                 ["Admin.Configuration.AppSettings.Hosting.ForwardedForHeaderName"] = "The header used to retrieve the originating client IP",
@@ -72,7 +72,7 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo450
                 ["Admin.Common.Alert.NothingSelected"] = "Please select at least one record.",
 
                 //#5316
-                ["Account.Login.AlreadyLogin"] = "You are already logged in as {0}. You may log in to another account.",
+                ["Account.Login.AlreadyLogin"] = "You are already logged in as {0}. You may log in with another account.",
 
                 //#5511
                 ["Admin.Configuration.AppSettings.Data"] = "Data configuration",
@@ -122,6 +122,16 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo450
                 ["Admin.Help.Documentation"] = "Documentation",
                 ["Admin.Help.SolutionPartners"] = "Solution partners",
 
+                //#2061
+                ["Admin.ReturnRequests.QuantityReturnedToStock"] = "{0} item(s) have been successfully returned to the stock.",
+                ["Admin.ReturnRequests.Fields.ReturnedQuantity"] = "Quantity returned to stock",
+                ["Admin.ReturnRequests.Fields.ReturnedQuantity.Hint"] = "The quantity already returned to stock.",
+                ["Admin.ReturnRequests.Fields.ReturnedQuantity.CannotBeLessThanQuantityAlreadyReturned"] = "The quantity to be returned to stock cannot be less than quantity already returned: {0}.",
+                ["Admin.ReturnRequests.Fields.ReturnedQuantity.MustBeEqualOrGreaterThanZero"] = "The quantity to be returned to stock must be equal or greater than zero.",
+                ["Admin.ReturnRequests.Fields.ReturnedQuantity.MustBeLessOrEqualQuantityField"] = "The quantity to be returned to stock must be less or equal the quantity field: {0}.",
+                ["Admin.ReturnRequests.Fields.Quantity.MustBeEqualOrGreaterThanReturnedQuantityField"] = "The quantity must be equal or greater than the quantity to be returned to stock: {0}.",
+                ["Admin.ReturnRequests.Fields.Quantity.Required"] = "The quantity is required.",
+                
                 //#5551
                 ["Admin.Configuration.Settings.Catalog.EnableSpecificationAttributeFiltering"] = "Enable specification attribute filtering",
                 ["Admin.Configuration.Settings.Catalog.EnableSpecificationAttributeFiltering.Hint"] = "Check to enable the specification attribute filtering on catalog pages.",
@@ -134,22 +144,52 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo450
 
                 //#5204
                 ["Admin.Configuration.Settings.Shipping.ShippingSorting"] = "Sort shipping methods by",
-                ["Admin.Configuration.Settings.Shipping.ShippingSorting.Hint"] = "Select the field to sort the shipping by.",
+                ["Admin.Configuration.Settings.Shipping.ShippingSorting.Hint"] = "Select the field to sort shipping methods by.",
                 ["Enums.Nop.Core.Domain.Shipping.ShippingSortingEnum.Position"] = "Position",
                 ["Enums.Nop.Core.Domain.Shipping.ShippingSortingEnum.ShippingCost"] = "Shipping Cost",
                 //#5138
                 ["PDFInvoice.FileName"] = "order",
-                
+
+                //#5834
+                ["Admin.Configuration.AppSettings.WebOptimizer"] = "Bundling & minimization",
+                ["Admin.Configuration.AppSettings.WebOptimizer.EnableDiskCache"] = "Enable disk cache",
+                ["Admin.Configuration.AppSettings.WebOptimizer.EnableDiskCache.Hint"] = "Check to store assets on disk.",
+                ["Admin.Configuration.AppSettings.WebOptimizer.CacheDirectory"] = "Cache directory",
+                ["Admin.Configuration.AppSettings.WebOptimizer.CacheDirectory.Hint"] = "Path of the directory where assets will be stored if disk cache is enabled.",
+                ["Admin.Configuration.AppSettings.WebOptimizer.JavaScriptBundleSuffix"] = "Suffix of JavaScript bundle files",
+                ["Admin.Configuration.AppSettings.WebOptimizer.JavaScriptBundleSuffix.Hint"] = "Enter the key that will be put to the end of the bundle name.",
+                ["Admin.Configuration.AppSettings.WebOptimizer.CssBundleSuffix"] = "Suffix of style bundle files",
+                ["Admin.Configuration.AppSettings.WebOptimizer.CssBundleSuffix.Hint"] = "Enter the key that will be put to the end of the bundle name.",
+
                 //#4905
                 ["Admin.Configuration.Settings.RewardPoints.MaximumRedeemedRate"] = "Maximum redeemed rate",
                 ["Admin.Configuration.Settings.RewardPoints.MaximumRedeemedRate.Hint"] = "Limit the maximum order total that could be paid by reward points (in percent). For example, if set to 0.6, then only 60% of order total could be paid using reward points, but not more than the 'Maximum reward points to use per order'. Set to 0 if you do not want to use this setting.",
-                ["Checkout.UseRewardPoints"] = "Use my reward points, {0} of {1} reward points ({2}) available for this order"
+                ["Checkout.UseRewardPoints"] = "Use my reward points, {0} of {1} reward points ({2}) available for this order",
+
+                //#6007
+                ["Admin.System.Templates.NotDeleteOnlyOne"] = "It's not allowed to delete the only one template.",
+
+                //#6034
+                ["Checkout.EditAddress"] = "Edit address",
+
+                //#6052
+                ["Account.Login.NewCustomerText"] = "By creating an account on our website, you will be able to shop faster, be up to date on an order's status, and keep track of the orders you have previously made.",
+
+                ["Permission.SalesSummaryReport"] = "Admin area. Access sales summary report",
+                ["Permission.ManageAppSettings"] = "Admin area. Manage App Setting",
+                ["Permission.ManageExternalAuthenticationMethods"] = "Admin area. Manage External Authentication Methods",
+                ["Permission.ManageMultifactorAuthenticationMethods"] = "Admin area. Manage Multifactor Authentication Methods",
+                ["Permission.AccessProfiling"] = "Public store. Access MiniProfiler results"
             }, languageId).Wait();
 
             // rename locales
             var localesToRename = new[]
             {
-                new { Name = "", NewName = "" }
+                //#5834
+                new { Name = "Admin.Configuration.Settings.GeneralCommon.EnableJsBundling", NewName = "Admin.Configuration.AppSettings.WebOptimizer.EnableJavaScriptBundling" },
+                new { Name = "Admin.Configuration.Settings.GeneralCommon.EnableJsBundling.Hint", NewName = "Admin.Configuration.AppSettings.WebOptimizer.EnableJavaScriptBundling.Hint" },
+                new { Name = "Admin.Configuration.Settings.GeneralCommon.EnableCssBundling", NewName = "Admin.Configuration.AppSettings.WebOptimizer.EnableCssBundling" },
+                new { Name = "Admin.Configuration.Settings.GeneralCommon.EnableCssBundling.Hint", NewName = "Admin.Configuration.AppSettings.WebOptimizer.EnableCssBundling.Hint" }
             };
 
             foreach (var lang in languages)

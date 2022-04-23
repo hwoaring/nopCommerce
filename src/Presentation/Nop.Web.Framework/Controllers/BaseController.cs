@@ -37,13 +37,13 @@ namespace Nop.Web.Framework.Controllers
         /// <summary>
         /// Render component to string
         /// </summary>
-        /// <param name="componentName">Component name</param>
+        /// <param name="componentType">Component type</param>
         /// <param name="arguments">Arguments</param>
         /// <returns>
         /// A task that represents the asynchronous operation
         /// The task result contains the result
         /// </returns>
-        protected virtual async Task<string> RenderViewComponentToStringAsync(string componentName, object arguments = null)
+        protected virtual async Task<string> RenderViewComponentToStringAsync(Type componentType, object arguments = null)
         {
             var helper = new DefaultViewComponentHelper(
                 EngineContext.Current.Resolve<IViewComponentDescriptorCollectionProvider>(),
@@ -55,7 +55,7 @@ namespace Nop.Web.Framework.Controllers
             using var writer = new StringWriter();
             var context = new ViewContext(ControllerContext, NullView.Instance, ViewData, TempData, writer, new HtmlHelperOptions());
             helper.Contextualize(context);
-            var result = await helper.InvokeAsync(componentName, arguments);
+            var result = await helper.InvokeAsync(componentType, arguments);
             result.WriteTo(writer, HtmlEncoder.Default);
             await writer.FlushAsync();
             return writer.ToString();
@@ -136,9 +136,9 @@ namespace Nop.Web.Framework.Controllers
         /// <param name="editPageUrl">Edit page URL</param>
         protected virtual void DisplayEditLink(string editPageUrl)
         {
-            var pageHeadBuilder = EngineContext.Current.Resolve<IPageHeadBuilder>();
+            var nopHtmlHelper = EngineContext.Current.Resolve<INopHtmlHelper>();
 
-            pageHeadBuilder.AddEditPageUrl(editPageUrl);
+            nopHtmlHelper.AddEditPageUrl(editPageUrl);
         }
 
         #endregion

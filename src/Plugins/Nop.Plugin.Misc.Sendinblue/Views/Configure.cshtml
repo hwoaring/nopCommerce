@@ -5,10 +5,11 @@
 
 @{
     Layout = "_ConfigurePlugin";
-    Html.AddCssFileParts("~/Plugins/Misc.Sendinblue/Content/styles.css", excludeFromBundle: true);
 }
 
-@await Component.InvokeAsync("StoreScopeConfiguration")
+<link rel="stylesheet" href="~/Plugins/Misc.Sendinblue/Content/styles.css" />
+
+@await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent))
 
 <form asp-controller="Sendinblue" asp-action="Configure" method="post">
     <nop-cards id="sendinblue-cards">

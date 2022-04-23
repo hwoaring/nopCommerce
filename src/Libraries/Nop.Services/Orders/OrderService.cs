@@ -25,7 +25,7 @@ namespace Nop.Services.Orders
     {
         #region Fields
 
-        private readonly INopHtmlHelper _htmlHelper;
+        private readonly IHtmlFormatter _htmlFormatter;
         private readonly IProductService _productService;
         private readonly IRepository<Address> _addressRepository;
         private readonly IRepository<Customer> _customerRepository;
@@ -42,7 +42,7 @@ namespace Nop.Services.Orders
 
         #region Ctor
 
-        public OrderService(INopHtmlHelper htmlHelper,
+        public OrderService(IHtmlFormatter htmlFormatter,
             IProductService productService,
             IRepository<Address> addressRepository,
             IRepository<Customer> customerRepository,
@@ -55,7 +55,7 @@ namespace Nop.Services.Orders
             IRepository<RecurringPaymentHistory> recurringPaymentHistoryRepository,
             IShipmentService shipmentService)
         {
-            _htmlHelper = htmlHelper;
+            _htmlFormatter = htmlFormatter;
             _productService = productService;
             _addressRepository = addressRepository;
             _customerRepository = customerRepository;
@@ -174,6 +174,27 @@ namespace Nop.Services.Orders
         public virtual async Task<IList<Order>> GetOrdersByIdsAsync(int[] orderIds) 
         {
             return await _orderRepository.GetByIdsAsync(orderIds, includeDeleted: false);
+        }
+
+        /// <summary>
+        /// Get orders by guids
+        /// </summary>
+        /// <param name="orderGuids">Order guids</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the orders
+        /// </returns>
+        public virtual async Task<IList<Order>> GetOrdersByGuidsAsync(Guid[] orderGuids)
+        {
+            if (orderGuids == null)
+                return null;
+
+            var query = from o in _orderRepository.Table
+                        where orderGuids.Contains(o.OrderGuid)
+                        select o;
+            var orders = await query.ToListAsync();
+
+            return orders;
         }
 
         /// <summary>
@@ -823,7 +844,7 @@ namespace Nop.Services.Orders
             if (string.IsNullOrEmpty(text))
                 return string.Empty;
 
-            text = _htmlHelper.FormatText(text, false, true, false, false, false, false);
+            text = _htmlFormatter.FormatText(text, false, true, false, false, false, false);
 
             return text;
         }

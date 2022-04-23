@@ -8,25 +8,23 @@
 
 @{
     var stores = await storeService.GetAllStoresAsync();
-
-    //resources for product tags input
-    Html.AppendCssFileParts("~/lib_npm/jquery-tageditor/jquery.tag-editor.css");
-    Html.AppendScriptParts("~/lib_npm/jquery-tageditor/jquery.tag-editor.min.js");
-    Html.AppendScriptParts("~/lib_npm/jquery-tageditor/jquery.caret.min.js");
 }
+    @* resources for product tags input *@
+    <script src="~/lib_npm/jquery-tageditor/jquery.caret.min.js"></script>
+    <script src="~/lib_npm/jquery-tageditor/jquery.tag-editor.min.js"></script>
+    <link rel="stylesheet" href="~/lib_npm/jquery-tageditor/jquery.tag-editor.css">
 
-    <script>
+
+    <script asp-location="Footer">
     $(document).ready(function() {
         @if (!Model.IsLoggedInAsVendor)
         {
-            <text>$("#@Html.IdFor(model => model.ShowOnHomepage)").click(toggleShowOnHomepage);</text>
+            <text>
+            $("#@Html.IdFor(model => model.ShowOnHomepage)").click(toggleShowOnHomepage);
+            toggleShowOnHomepage();
+            </text>
         }
         $("#@Html.IdFor(model => model.ProductTypeId)").change(toggleProductType);
-
-        @if (!Model.IsLoggedInAsVendor)
-        {
-            <text>toggleShowOnHomepage();</text>
-        }
         toggleProductType();
     });
 
@@ -522,7 +520,7 @@
                     </script>
                 </div>
                 <div class="col-md-8">
-                    @await Component.InvokeAsync("AclDisabledWarning")
+                    @await Component.InvokeAsync(typeof(AclDisabledWarningViewComponent))
                 </div>
             </div>
         </div>
@@ -558,7 +556,7 @@
                     </script>
                 </div>
                 <div class="col-md-8">
-                    @await Component.InvokeAsync("MultistoreDisabledWarning")
+                    @await Component.InvokeAsync(typeof(MultistoreDisabledWarningViewComponent))
                 </div>
             </div>
         </div>

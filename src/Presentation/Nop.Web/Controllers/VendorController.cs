@@ -34,8 +34,8 @@ namespace Nop.Web.Controllers
         private readonly ICustomerService _customerService;
         private readonly IDownloadService _downloadService;
         private readonly IGenericAttributeService _genericAttributeService;
+        private readonly IHtmlFormatter _htmlFormatter;
         private readonly ILocalizationService _localizationService;
-        private readonly INopHtmlHelper _nopHtmlHelper;
         private readonly IPictureService _pictureService;
         private readonly IUrlRecordService _urlRecordService;
         private readonly IVendorAttributeParser _vendorAttributeParser;
@@ -55,8 +55,8 @@ namespace Nop.Web.Controllers
             ICustomerService customerService,
             IDownloadService downloadService,
             IGenericAttributeService genericAttributeService,
+            IHtmlFormatter htmlFormatter,
             ILocalizationService localizationService,
-            INopHtmlHelper nopHtmlHelper,
             IPictureService pictureService,
             IUrlRecordService urlRecordService,
             IVendorAttributeParser vendorAttributeParser,
@@ -72,8 +72,8 @@ namespace Nop.Web.Controllers
             _customerService = customerService;
             _downloadService = downloadService;
             _genericAttributeService = genericAttributeService;
+            _htmlFormatter = htmlFormatter;
             _localizationService = localizationService;
-            _nopHtmlHelper = nopHtmlHelper;
             _pictureService = pictureService;
             _urlRecordService = urlRecordService;
             _vendorAttributeParser = vendorAttributeParser;
@@ -220,12 +220,18 @@ namespace Nop.Web.Controllers
             {
                 try
                 {
-                    var contentType = uploadedFile.ContentType;
-                    var vendorPictureBinary = await _downloadService.GetDownloadBitsAsync(uploadedFile);
-                    var picture = await _pictureService.InsertPictureAsync(vendorPictureBinary, contentType, null);
+                    var contentType = uploadedFile.ContentType.ToLowerInvariant();
 
-                    if (picture != null)
-                        pictureId = picture.Id;
+                    if(!contentType.StartsWith("image/"))
+                        ModelState.AddModelError("", await _localizationService.GetResourceAsync("Vendors.ApplyAccount.Picture.ErrorMessage"));
+                    else
+                    {
+                        var vendorPictureBinary = await _downloadService.GetDownloadBitsAsync(uploadedFile);
+                        var picture = await _pictureService.InsertPictureAsync(vendorPictureBinary, contentType, null);
+
+                        if (picture != null)
+                            pictureId = picture.Id;
+                    }
                 }
                 catch (Exception)
                 {
@@ -240,7 +246,7 @@ namespace Nop.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var description = _nopHtmlHelper.FormatText(model.Description, false, false, true, false, false, false);
+                var description = _htmlFormatter.FormatText(model.Description, false, false, true, false, false, false);
                 //disabled by default
                 var vendor = new Vendor
                 {
@@ -314,9 +320,15 @@ namespace Nop.Web.Controllers
             {
                 try
                 {
-                    var contentType = uploadedFile.ContentType;
-                    var vendorPictureBinary = await _downloadService.GetDownloadBitsAsync(uploadedFile);
-                    picture = await _pictureService.InsertPictureAsync(vendorPictureBinary, contentType, null);
+                    var contentType = uploadedFile.ContentType.ToLowerInvariant();
+
+                    if (!contentType.StartsWith("image/"))
+                        ModelState.AddModelError("", await _localizationService.GetResourceAsync("Account.VendorInfo.Picture.ErrorMessage"));
+                    else
+                    {
+                        var vendorPictureBinary = await _downloadService.GetDownloadBitsAsync(uploadedFile);
+                        picture = await _pictureService.InsertPictureAsync(vendorPictureBinary, contentType, null);
+                    }
                 }
                 catch (Exception)
                 {
@@ -333,7 +345,7 @@ namespace Nop.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var description = _nopHtmlHelper.FormatText(model.Description, false, false, true, false, false, false);
+                var description = _htmlFormatter.FormatText(model.Description, false, false, true, false, false, false);
 
                 vendor.Name = model.Name;
                 vendor.Email = model.Email;

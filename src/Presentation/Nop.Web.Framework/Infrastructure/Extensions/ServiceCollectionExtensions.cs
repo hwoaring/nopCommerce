@@ -25,6 +25,7 @@ using Nop.Services.Authentication;
 using Nop.Services.Authentication.External;
 using Nop.Services.Common;
 using Nop.Services.Security;
+using Nop.Web.Framework.Configuration;
 using Nop.Web.Framework.Mvc.ModelBinding;
 using Nop.Web.Framework.Mvc.ModelBinding.Binders;
 using Nop.Web.Framework.Mvc.Routing;
@@ -33,6 +34,7 @@ using Nop.Web.Framework.Themes;
 using Nop.Web.Framework.Validators;
 using StackExchange.Profiling.Storage;
 using WebMarkupMin.AspNetCore6;
+using WebMarkupMin.Core;
 using WebMarkupMin.NUglify;
 
 namespace Nop.Web.Framework.Infrastructure.Extensions
@@ -66,8 +68,12 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
             builder.Configuration.GetSection(nameof(PluginConfig)).Bind(pluginConfig, options => options.BindNonPublicProperties = true);
             mvcCoreBuilder.PartManager.InitializePlugins(pluginConfig);
 
-            //add configuration parameters
+            //register type finder
             var typeFinder = new WebAppTypeFinder();
+            Singleton<ITypeFinder>.Instance = typeFinder;
+            services.AddSingleton<ITypeFinder>(typeFinder);
+
+            //add configuration parameters
             var configurations = typeFinder
                 .FindClassesOfType<IConfig>()
                 .Select(configType => (IConfig)Activator.CreateInstance(configType))
@@ -83,7 +89,6 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
             var engine = EngineContext.Create();
 
             engine.ConfigureServices(services, builder.Configuration);
-            engine.RegisterDependencies(services, appSettings);
         }
 
         /// <summary>
@@ -244,7 +249,7 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
             });
 
             //register and configure external authentication plugins now
-            var typeFinder = new WebAppTypeFinder();
+            var typeFinder = Singleton<ITypeFinder>.Instance;
             var externalAuthConfigurations = typeFinder.FindClassesOfType<IExternalAuthenticationRegistrar>();
             var externalAuthInstances = externalAuthConfigurations
                 .Select(x => (IExternalAuthenticationRegistrar)Activator.CreateInstance(x));
@@ -374,6 +379,8 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                 })
                 .AddHtmlMinification(options =>
                 {
+                    options.MinificationSettings.AttributeQuotesRemovalMode = HtmlAttributeQuotesRemovalMode.KeepQuotes;
+
                     options.CssMinifierFactory = new NUglifyCssMinifierFactory();
                     options.JsMinifierFactory = new NUglifyJsMinifierFactory();
                 })
@@ -383,6 +390,32 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                     settings.RenderEmptyTagsWithSpace = true;
                     settings.CollapseTagsWithoutContent = true;
                 });
+        }
+
+        /// <summary>
+        /// Adds WebOptimizer to the specified <see cref="IServiceCollection"/> and enables CSS and JavaScript minification.
+        /// </summary>
+        /// <param name="services">Collection of service descriptors</param>
+        public static void AddNopWebOptimizer(this IServiceCollection services)
+        {
+            var appSettings = Singleton<AppSettings>.Instance;
+            var cssBundling = appSettings.Get<WebOptimizerConfig>().EnableCssBundling;
+            var jsBundling = appSettings.Get<WebOptimizerConfig>().EnableJavaScriptBundling;
+
+            //add minification & bundling
+            var cssSettings = new CssBundlingSettings
+            {
+                FingerprintUrls = false,
+                Minify = cssBundling
+            };
+
+            var codeSettings = new CodeBundlingSettings
+            {
+                Minify = jsBundling,
+                AdjustRelativePaths = false //disable this feature because it breaks function names that have "Url(" at the end
+            };
+
+            services.AddWebOptimizer(null, cssSettings, codeSettings);
         }
 
         /// <summary>

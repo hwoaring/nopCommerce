@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Nop.Core.Domain.Cms;
 using Nop.Core.Domain.Tax;
+using Nop.Plugin.Tax.Avalara.Components;
 using Nop.Plugin.Tax.Avalara.Domain;
 using Nop.Plugin.Tax.Avalara.Services;
 using Nop.Services.Cms;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;
 using Nop.Services.Plugins;
+using Nop.Services.ScheduleTasks;
 using Nop.Services.Tax;
 using Nop.Web.Framework.Infrastructure;
 
@@ -28,6 +30,7 @@ namespace Nop.Plugin.Tax.Avalara
         private readonly AvalaraTaxManager _avalaraTaxManager;
         private readonly IActionContextAccessor _actionContextAccessor;
         private readonly ILocalizationService _localizationService;
+        private readonly IScheduleTaskService _scheduleTaskService;
         private readonly ISettingService _settingService;
         private readonly ITaxPluginManager _taxPluginManager;
         private readonly IUrlHelperFactory _urlHelperFactory;
@@ -41,6 +44,7 @@ namespace Nop.Plugin.Tax.Avalara
         public AvalaraTaxProvider(AvalaraTaxManager avalaraTaxManager,
             IActionContextAccessor actionContextAccessor,
             ILocalizationService localizationService,
+            IScheduleTaskService scheduleTaskService,
             ISettingService settingService,
             ITaxPluginManager taxPluginManager,
             IUrlHelperFactory urlHelperFactory,
@@ -50,6 +54,7 @@ namespace Nop.Plugin.Tax.Avalara
             _avalaraTaxManager = avalaraTaxManager;
             _actionContextAccessor = actionContextAccessor;
             _localizationService = localizationService;
+            _scheduleTaskService = scheduleTaskService;
             _settingService = settingService;
             _taxPluginManager = taxPluginManager;
             _urlHelperFactory = urlHelperFactory;
@@ -150,29 +155,25 @@ namespace Nop.Plugin.Tax.Avalara
         }
 
         /// <summary>
-        /// Gets a name of a view component for displaying widget
+        /// Gets a type of a view component for displaying widget
         /// </summary>
         /// <param name="widgetZone">Name of the widget zone</param>
-        /// <returns>View component name</returns>
-        public string GetWidgetViewComponentName(string widgetZone)
+        /// <returns>View component type</returns>
+        public Type GetWidgetViewComponent(string widgetZone)
         {
             if (widgetZone.Equals(AdminWidgetZones.CustomerDetailsBlock) ||
                 widgetZone.Equals(AdminWidgetZones.CustomerRoleDetailsTop))
-            {
-                return AvalaraTaxDefaults.ENTITY_USE_CODE_VIEW_COMPONENT_NAME;
-            }
+                return typeof(EntityUseCodeViewComponent);
 
             if (widgetZone.Equals(AdminWidgetZones.ProductListButtons))
-                return AvalaraTaxDefaults.EXPORT_ITEMS_VIEW_COMPONENT_NAME;
+                return typeof(ExportItemsViewComponent);
 
             if (widgetZone.Equals(PublicWidgetZones.CheckoutConfirmTop) ||
                 widgetZone.Equals(PublicWidgetZones.OpCheckoutConfirmTop))
-            {
-                return AvalaraTaxDefaults.ADDRESS_VALIDATION_VIEW_COMPONENT_NAME;
-            }
+                return typeof(AddressValidationViewComponent);
 
             if (widgetZone.Equals(PublicWidgetZones.OrderSummaryContentBefore))
-                return AvalaraTaxDefaults.APPLIED_CERTIFICATE_VIEW_COMPONENT_NAME;
+                return typeof(AppliedCertificateViewComponent);
 
             return null;
         }
@@ -191,6 +192,7 @@ namespace Nop.Plugin.Tax.Avalara
                 CommitTransactions = true,
                 TaxOriginAddressType = TaxOriginAddressType.DefaultTaxAddress,
                 EnableLogging = true,
+                UseTaxRateTables = true,
                 GetTaxRateByAddressOnly = true,
                 TaxRateByAddressCacheTime = 480,
                 AutoValidateCertificate = true,
@@ -202,6 +204,19 @@ namespace Nop.Plugin.Tax.Avalara
             {
                 _widgetSettings.ActiveWidgetSystemNames.Add(AvalaraTaxDefaults.SystemName);
                 await _settingService.SaveSettingAsync(_widgetSettings);
+            }
+
+            //schedule task
+            if (await _scheduleTaskService.GetTaskByTypeAsync(AvalaraTaxDefaults.DownloadTaxRatesTask.Type) is null)
+            {
+                await _scheduleTaskService.InsertTaskAsync(new()
+                {
+                    Enabled = true,
+                    LastEnabledUtc = DateTime.UtcNow,
+                    Seconds = AvalaraTaxDefaults.DownloadTaxRatesTask.Days * 24 * 60 * 60,
+                    Name = AvalaraTaxDefaults.DownloadTaxRatesTask.Name,
+                    Type = AvalaraTaxDefaults.DownloadTaxRatesTask.Type
+                });
             }
 
             //locales
@@ -287,6 +302,8 @@ namespace Nop.Plugin.Tax.Avalara
                 ["Plugins.Tax.Avalara.Fields.TaxOriginAddressType.ShippingOrigin.Warning"] = "Ensure that you have correctly filled in the 'Shipping origin' under <a href=\"{0}\" target=\"_blank\">Shipping settings</a>",
                 ["Plugins.Tax.Avalara.Fields.UseSandbox"] = "Use sandbox",
                 ["Plugins.Tax.Avalara.Fields.UseSandbox.Hint"] = "Determine whether to use sandbox (testing environment).",
+                ["Plugins.Tax.Avalara.Fields.UseTaxRateTables"] = "Use tax rate tables to estimate ",
+                ["Plugins.Tax.Avalara.Fields.UseTaxRateTables.Hint"] = "Determine whether to use tax rate tables to estimate. This will be used as a default tax calculation for catalog pages and will be adjusted and reconciled to the final transaction tax during checkout. Tax rates are looked up by zip code (US only) in a file that will be periodically updated from the Avalara (see Schedule tasks).",
                 ["Plugins.Tax.Avalara.Fields.ValidateAddress"] = "Validate address",
                 ["Plugins.Tax.Avalara.Fields.ValidateAddress.Hint"] = "Determine whether to validate entered by customer addresses before the tax calculation.",
                 ["Plugins.Tax.Avalara.Items.Export"] = "Export to Avalara (selected)",
@@ -351,6 +368,11 @@ namespace Nop.Plugin.Tax.Avalara
             _widgetSettings.ActiveWidgetSystemNames.Remove(AvalaraTaxDefaults.SystemName);
             await _settingService.SaveSettingAsync(_widgetSettings);
             await _settingService.DeleteSettingAsync<AvalaraTaxSettings>();
+
+            //schedule task
+            var task = await _scheduleTaskService.GetTaskByTypeAsync(AvalaraTaxDefaults.DownloadTaxRatesTask.Type);
+            if (task is not null)
+                await _scheduleTaskService.DeleteTaskAsync(task);
 
             //locales
             await _localizationService.DeleteLocaleResourcesAsync("Enums.Nop.Plugin.Tax.Avalara.Domain");

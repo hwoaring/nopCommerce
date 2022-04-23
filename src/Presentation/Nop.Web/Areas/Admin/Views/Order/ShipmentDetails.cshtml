@@ -5,7 +5,7 @@
     ViewBag.PageTitle = T("Admin.Orders.Shipments.ViewDetails").Text;
 
     //active menu item (system name)
-    Html.SetActiveMenuItemSystemName("Shipments");
+    NopHtml.SetActiveMenuItemSystemName("Shipments");
 }
 
 
@@ -83,7 +83,7 @@
                 <i class="far fa-trash-alt"></i>
                 @T("Admin.Common.Delete")
             </span>
-            @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.OrderShipmentDetailsButtons, additionalData = Model })
+            @await Component.InvokeAsync(typeof(AdminWidgetViewComponent), new { widgetZone = AdminWidgetZones.OrderShipmentDetailsButtons, additionalData = Model })
         </div>
     </div>
 

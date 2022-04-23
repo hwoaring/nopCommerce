@@ -66,11 +66,13 @@ namespace Nop.Services.Catalog
         /// Gets products which marked as new
         /// </summary>
         /// <param name="storeId">Store identifier; 0 if you want to get all records</param>
+        /// <param name="pageIndex">Page index</param>
+        /// <param name="pageSize">Page size</param>
         /// <returns>
         /// A task that represents the asynchronous operation
         /// The task result contains the list of new products
         /// </returns>
-        Task<IList<Product>> GetProductsMarkedAsNewAsync(int storeId = 0);
+        Task<IPagedList<Product>> GetProductsMarkedAsNewAsync(int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue);
 
         /// <summary>
         /// Gets product
@@ -424,6 +426,16 @@ namespace Nop.Services.Catalog
         /// </returns>
         Task<bool> HasAnyRecurringProductAsync(int[] productIds);
 
+        /// <summary>
+        /// Returns a list of sku of not existing products
+        /// </summary>
+        /// <param name="productSku">The sku of the products to check</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the list of sku not existing products
+        /// </returns>
+        Task<string[]> GetNotExistingProductsAsync(string[] productSku);
+
         #endregion
 
         #region Inventory management methods
@@ -707,6 +719,51 @@ namespace Nop.Services.Catalog
 
         #endregion
 
+        #region Product videos
+
+        /// <summary>
+        /// Deletes a product video
+        /// </summary>
+        /// <param name="productVideo">Product video</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        Task DeleteProductVideoAsync(ProductVideo productVideo);
+
+        /// <summary>
+        /// Gets a product videos by product identifier
+        /// </summary>
+        /// <param name="productId">The product identifier</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the product videos
+        /// </returns>
+        Task<IList<ProductVideo>> GetProductVideosByProductIdAsync(int productId);
+
+        /// <summary>
+        /// Gets a product video
+        /// </summary>
+        /// <param name="productPictureId">Product video identifier</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the product video
+        /// </returns>
+        Task<ProductVideo> GetProductVideoByIdAsync(int productVideoId);
+
+        /// <summary>
+        /// Inserts a product video
+        /// </summary>
+        /// <param name="productVideo">Product picture</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        Task InsertProductVideoAsync(ProductVideo productVideo);
+
+        /// <summary>
+        /// Updates a product video
+        /// </summary>
+        /// <param name="productVideo">Product video</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        Task UpdateProductVideoAsync(ProductVideo productVideo);
+
+        #endregion
+
         #region Product reviews
 
         /// <summary>
@@ -828,7 +885,7 @@ namespace Nop.Services.Catalog
         /// A task that represents the asynchronous operation
         /// The task result contains the result
         /// </returns>
-        Task<Warehouse> GetWarehousesByIdAsync(int warehouseId);
+        Task<Warehouse> GetWarehouseByIdAsync(int warehouseId);
 
         /// <summary>
         /// Deletes a ProductWarehouseInventory

@@ -7,9 +7,9 @@
     Layout = "_ColumnsOne";
 
     //title
-    Html.AddTitleParts(T("PageTitle.Wishlist").Text);
+    NopHtml.AddTitleParts(T("PageTitle.Wishlist").Text);
     //page class
-    Html.AppendPageCssClassParts("html-wishlist-page");
+    NopHtml.AppendPageCssClassParts("html-wishlist-page");
 }
 <div class="page wishlist-page">
     <div class="page-title">
@@ -25,6 +25,7 @@
         </h1>
     </div>
     <div class="page-body">
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.WishlistTop, additionalData = Model })
         @if (Model.Items.Count > 0)
         {
             <div class="wishlist-content">
@@ -162,7 +163,7 @@
                                                     <ul>
                                                         @foreach (var warning in item.Warnings)
                                                         {
-                                                            <li>@warning</li>
+                                                            <li>@Html.Raw(warning)</li>
                                                         }
                                                     </ul>
                                                 </div>
@@ -263,5 +264,6 @@
                 <a href="@wishlistUrl" class="share-link">@wishlistUrl</a>
             </div>
         }
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.WishlistBottom, additionalData = Model })
     </div>
 </div>

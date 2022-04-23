@@ -4,7 +4,7 @@
     //page title
     ViewBag.PageTitle = T("Admin.Affiliates").Text;
     //active menu item (system name)
-    Html.SetActiveMenuItemSystemName("Affiliates");
+    NopHtml.SetActiveMenuItemSystemName("Affiliates");
 }
 
 @{
@@ -21,7 +21,7 @@
             <i class="fas fa-plus-square"></i>
             @T("Admin.Common.AddNew")
         </a>
-        @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.AffiliateListButtons, additionalData = Model })
+        @await Component.InvokeAsync(typeof(AdminWidgetViewComponent), new { widgetZone = AdminWidgetZones.AffiliateListButtons, additionalData = Model })
     </div>
 </div>
 

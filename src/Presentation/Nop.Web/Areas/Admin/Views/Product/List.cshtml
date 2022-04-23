@@ -6,7 +6,7 @@
     //page title
     ViewBag.PageTitle = T("Admin.Catalog.Products").Text;
     //active menu item (system name)
-    Html.SetActiveMenuItemSystemName("Products");
+    NopHtml.SetActiveMenuItemSystemName("Products");
 }
 
 @{
@@ -80,7 +80,7 @@
                     @T("Admin.Common.Delete.Selected")
                 </button>
                 <nop-action-confirmation asp-button-id="delete-selected" />
-                @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.ProductListButtons, additionalData = Model })
+                @await Component.InvokeAsync(typeof(AdminWidgetViewComponent), new { widgetZone = AdminWidgetZones.ProductListButtons, additionalData = Model })
             </div>
         </div>
 
