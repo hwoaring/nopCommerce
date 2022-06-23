@@ -81,6 +81,7 @@ using Nop.Web.Areas.Admin.Factories;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Factories;
 using Nop.Web.Framework.Models;
+using Nop.Web.Framework.Mvc.Routing;
 using Nop.Web.Framework.Themes;
 using Nop.Web.Framework.UI;
 using Nop.Web.Infrastructure.Installation;
@@ -351,7 +352,6 @@ namespace Nop.Tests
             services.AddTransient<ITopicService, TopicService>();
             services.AddTransient<INewsService, NewsService>();
             services.AddTransient<IDateTimeHelper, DateTimeHelper>();
-            services.AddTransient<ISitemapGenerator, SitemapGenerator>();
             services.AddTransient<IScheduleTaskService, ScheduleTaskService>();
             services.AddTransient<IExportManager, ExportManager>();
             services.AddTransient<IImportManager, ImportManager>();
@@ -381,6 +381,7 @@ namespace Nop.Tests
 
             services.AddTransient<IPictureService, TestPictureService>();
             services.AddScoped<IVideoService, VideoService>();
+            services.AddScoped<INopUrlHelper, NopUrlHelper>();
 
             //register all settings
             var settings = typeFinder.FindClassesOfType(typeof(ISettings), false).ToList();
@@ -513,6 +514,7 @@ namespace Nop.Tests
             services.AddTransient<Web.Factories.IProfileModelFactory, Web.Factories.ProfileModelFactory>();
             services.AddTransient<Web.Factories.IReturnRequestModelFactory, Web.Factories.ReturnRequestModelFactory>();
             services.AddTransient<Web.Factories.IShoppingCartModelFactory, Web.Factories.ShoppingCartModelFactory>();
+            services.AddTransient<Web.Factories.ISitemapModelFactory, Web.Factories.SitemapModelFactory>();
             services.AddTransient<Web.Factories.ITopicModelFactory, Web.Factories.TopicModelFactory>();
             services.AddTransient<Web.Factories.IVendorModelFactory, Web.Factories.VendorModelFactory>();
             services.AddTransient<Web.Factories.IWidgetModelFactory, Web.Factories.WidgetModelFactory>();

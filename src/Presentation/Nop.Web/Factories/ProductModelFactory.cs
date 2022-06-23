@@ -555,7 +555,7 @@ namespace Nop.Web.Factories
                     {
                         //calculate price for the maximum quantity if we have tier prices, and choose minimal
                         tmpMinPossiblePrice = Math.Min(tmpMinPossiblePrice,
-                            (await _priceCalculationService.GetFinalPriceAsync(associatedProduct, customer, quantity: int.MaxValue)).priceWithoutDiscounts);
+                            (await _priceCalculationService.GetFinalPriceAsync(associatedProduct, customer, quantity: int.MaxValue)).finalPrice);
                     }
 
                     if (minPossiblePrice.HasValue && tmpMinPossiblePrice >= minPossiblePrice.Value)
@@ -628,20 +628,11 @@ namespace Nop.Web.Factories
 
             var cachedPictures = await _staticCacheManager.GetAsync(cacheKey, async () =>
             {
-                var pictures = await _pictureService.GetPicturesByProductIdAsync(product.Id,
-                    _catalogSettings.DisplayAllPicturesOnCatalogPages ? 0 : 1);
-                string fullSizeImageUrl, imageUrl;
-
-                //all pictures
-                var pictureModels = new List<PictureModel>();
-                for (var i = 0; i < pictures.Count; i++)
+                async Task<PictureModel> preparePictureModelAsync(Picture picture)
                 {
-                    var picture = pictures[i];
-
-                    (imageUrl, picture) = await _pictureService.GetPictureUrlAsync(picture, pictureSize);
-                    (fullSizeImageUrl, picture) = await _pictureService.GetPictureUrlAsync(picture);
-
-                    var pictureModel = new PictureModel
+                    var (imageUrl, _) = await _pictureService.GetPictureUrlAsync(picture, pictureSize);
+                    var (fullSizeImageUrl, _) = await _pictureService.GetPictureUrlAsync(picture);
+                    return new PictureModel
                     {
                         ImageUrl = imageUrl,
                         FullSizeImageUrl = fullSizeImageUrl,
@@ -656,10 +647,15 @@ namespace Nop.Web.Factories
                             : string.Format(await _localizationService.GetResourceAsync("Media.Product.ImageAlternateTextFormat"),
                                 productName)
                     };
-
-                    pictureModels.Add(pictureModel);
                 }
 
+                //all pictures
+                var pictures = (await _pictureService
+                    .GetPicturesByProductIdAsync(product.Id,  _catalogSettings.DisplayAllPicturesOnCatalogPages ? 0 : 1))
+                    .DefaultIfEmpty(null);
+                var pictureModels = await pictures
+                    .SelectAwait(async picture => await preparePictureModelAsync(picture))
+                    .ToListAsync();
                 return pictureModels;
             });
 
@@ -1161,7 +1157,7 @@ namespace Nop.Web.Factories
                 {
                     var priceBase = (await _taxService.GetProductPriceAsync(product, (await _priceCalculationService.GetFinalPriceAsync(product,
                         customer, decimal.Zero, _catalogSettings.DisplayTierPricesWithDiscounts,
-                        tierPrice.Quantity)).priceWithoutDiscounts)).price;
+                        tierPrice.Quantity)).finalPrice)).price;
 
                        var price = await _currencyService.ConvertFromPrimaryStoreCurrencyAsync(priceBase, await _workContext.GetWorkingCurrencyAsync());
 

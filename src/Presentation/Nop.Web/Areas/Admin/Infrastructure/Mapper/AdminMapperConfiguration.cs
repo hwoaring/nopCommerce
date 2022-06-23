@@ -63,8 +63,8 @@ using Nop.Web.Areas.Admin.Models.Tax;
 using Nop.Web.Areas.Admin.Models.Templates;
 using Nop.Web.Areas.Admin.Models.Topics;
 using Nop.Web.Areas.Admin.Models.Vendors;
-using Nop.Web.Framework.Configuration;
 using Nop.Web.Framework.Models;
+using Nop.Web.Framework.WebOptimizer;
 
 namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
 {
@@ -403,7 +403,9 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
                 .ForMember(model => model.PrimaryStoreCurrencyCode, options => options.Ignore())
                 .ForMember(model => model.AllowCustomersToSearchWithManufacturerName_OverrideForStore, options => options.Ignore())
                 .ForMember(model => model.AllowCustomersToSearchWithCategoryName_OverrideForStore, options => options.Ignore())
-                .ForMember(model => model.DisplayAllPicturesOnCatalogPages_OverrideForStore, options => options.Ignore());
+                .ForMember(model => model.DisplayAllPicturesOnCatalogPages_OverrideForStore, options => options.Ignore())
+                .ForMember(model => model.ProductUrlStructureTypeId_OverrideForStore, mo => mo.Ignore())
+                .ForMember(model => model.ProductUrlStructureTypes, mo => mo.Ignore());
             CreateMap<CatalogSettingsModel, CatalogSettings>()
                 .ForMember(settings => settings.AjaxProcessAttributeChange, options => options.Ignore())
                 .ForMember(settings => settings.CompareProductsNumber, options => options.Ignore())
@@ -1128,7 +1130,8 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
                 .ForMember(model => model.ProductDetailsPictureSize_OverrideForStore, options => options.Ignore())
                 .ForMember(model => model.ProductThumbPictureSizeOnProductDetailsPage_OverrideForStore, options => options.Ignore())
                 .ForMember(model => model.ProductThumbPictureSize_OverrideForStore, options => options.Ignore())
-                .ForMember(model => model.VendorThumbPictureSize_OverrideForStore, options => options.Ignore());
+                .ForMember(model => model.VendorThumbPictureSize_OverrideForStore, options => options.Ignore())
+                .ForMember(model => model.ProductDefaultImageId_OverrideForStore, options => options.Ignore());
             CreateMap<MediaSettingsModel, MediaSettings>()
                 .ForMember(settings => settings.AutoCompleteSearchThumbPictureSize, options => options.Ignore())
                 .ForMember(settings => settings.AzureCacheControlHeader, options => options.Ignore())
@@ -1474,6 +1477,7 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
                 .ForMember(model => model.ShowOnRegistrationPage_OverrideForStore, options => options.Ignore())
                 .ForMember(model => model.ShowOnForgotPasswordPage_OverrideForStore, options => options.Ignore())
                 .ForMember(model => model.ShowOnForum_OverrideForStore, options => options.Ignore())
+                .ForMember(model => model.ShowOnCheckoutPageForGuests_OverrideForStore, options => options.Ignore())
                 .ForMember(model => model.CaptchaType_OverrideForStore, options => options.Ignore())
                 .ForMember(model => model.ReCaptchaV3ScoreThreshold_OverrideForStore, options => options.Ignore())
                 .ForMember(model => model.CaptchaTypeValues, options => options.Ignore());

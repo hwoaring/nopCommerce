@@ -47,6 +47,9 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo460
                 //#7
                 "Admin.Catalog.Products.Pictures.SaveBeforeEdit",
                 "Admin.Catalog.Products.Pictures.AddButton",
+
+                "Admin.Configuration.AppSettings.Common.SupportPreviousNopcommerceVersions",
+                "Admin.Configuration.AppSettings.Common.SupportPreviousNopcommerceVersions.Hint",
             }).Wait();
 
             #endregion
@@ -55,6 +58,14 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo460
 
             var localesToRename = new[]
             {
+                //#6255
+                new { Name = "Forum.BreadCrumb.HomeTitle", NewName = "Forum.Breadcrumb.HomeTitle" },
+                new { Name = "Forum.BreadCrumb.ForumHomeTitle", NewName = "Forum.Breadcrumb.ForumHomeTitle" },
+                new { Name = "Forum.BreadCrumb.ForumGroupTitle", NewName = "Forum.Breadcrumb.ForumGroupTitle" },
+                new { Name = "Forum.BreadCrumb.ForumTitle", NewName = "Forum.Breadcrumb.ForumTitle" },
+                new { Name = "Forum.BreadCrumb.TopicTitle", NewName = "Forum.Breadcrumb.TopicTitle" },
+
+                
                 //#3511
                 new { Name = "Admin.Configuration.Settings.Catalog.NewProductsNumber", NewName = "Admin.Configuration.Settings.Catalog.NewProductsPageSize" },
                 new { Name = "Admin.Configuration.Settings.Catalog.NewProductsNumber.Hint", NewName = "Admin.Configuration.Settings.Catalog.NewProductsPageSize.Hint" },
@@ -139,7 +150,7 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo460
                 ["Admin.Customers.Customers.List.SearchRegistrationDateFrom.Hint"] = "The registration from date for the search.",
                 ["Admin.Customers.Customers.List.SearchRegistrationDateTo"] = "Registration date to",
                 ["Admin.Customers.Customers.List.SearchRegistrationDateTo.Hint"] = "The registration to date for the search.",
-                
+
                 //#5313
                 ["ActivityLog.ImportOrders"] = "{0} orders were imported",
                 ["Admin.Orders.Import.CustomersDontExist"] = "Customers with the following guids don't exist: {0}",
@@ -168,7 +179,7 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo460
                 //#29
                 ["Admin.Configuration.Settings.Catalog.DisplayFromPrices"] = "Display 'From' prices",
                 ["Admin.Configuration.Settings.Catalog.DisplayFromPrices.Hint"] = "Check to display 'From' prices on catalog pages. This will display the minimum possible price of a product based on price adjustments of attributes and combinations instead of the fixed base price. If enabled, it is also recommended to enable setting 'Cache product prices'. But please note that it can affect performance if you use some complex discounts, discount requirement rules, etc.",
-                
+
                 //#5089
                 ["Products.Availability.LowStock"] = "Low stock",
                 ["Products.Availability.LowStockWithQuantity"] = "{0} low stock",
@@ -176,6 +187,10 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo460
 
                 //#6101
                 ["Admin.System.Warnings.PluginNotInstalled.HelpText"] = "You may delete the plugins you don't use in order to decrease startup time",
+
+                //#6182
+                ["Admin.Configuration.Settings.GeneralCommon.CaptchaShowOnCheckoutPageForGuests"] = "Show on checkout page for guests",
+                ["Admin.Configuration.Settings.GeneralCommon.CaptchaShowOnCheckoutPageForGuests.Hint"] = "Check to show CAPTCHA on checkout page for guests.",
 
                 //#6111
                 ["Admin.ReturnRequests.Fields.ReturnedQuantity.Hint"] = "The quantity to be returned to the stock.",
@@ -210,6 +225,34 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo460
                 ["Account.CustomerAddresses.Added"] = "The new address has been added successfully.",
                 ["Account.CustomerAddresses.Updated"] = "The address has been updated successfully.",
                 ["Account.CustomerInfo.Updated"] = "The customer info has been updated successfully.",
+
+                //#385
+                ["Admin.Configuration.Settings.Catalog.ProductUrlStructureType"] = "Product URL structure type",
+                ["Admin.Configuration.Settings.Catalog.ProductUrlStructureType.Hint"] = "Select the product URL structure type (e.g. '/product-seo-name' or '/category-seo-name/product-seo-name' or '/manufacturer-seo-name/product-seo-name').",
+                ["Enums.Nop.Core.Domain.Catalog.ProductUrlStructureType.CategoryProduct"] = "/Category/Product",
+                ["Enums.Nop.Core.Domain.Catalog.ProductUrlStructureType.ManufacturerProduct"] = "/Manufacturer/Product",
+                ["Enums.Nop.Core.Domain.Catalog.ProductUrlStructureType.Product"] = "/Product",
+
+                //#5261
+                ["Admin.Configuration.Settings.GeneralCommon.BlockTitle.RobotsTxt"] ="robots.txt",
+                ["Admin.Configuration.Settings.GeneralCommon.RobotsAdditionsInstruction"] = "You also may extend the robots.txt data by adding the {0} file on the wwwroot directory of your site.",
+                ["Admin.Configuration.Settings.GeneralCommon.RobotsAdditionsRules"] = "Additions rules",
+                ["Admin.Configuration.Settings.GeneralCommon.RobotsAdditionsRules.Hint"] = "Put here an additional rules for robots.txt file",
+                ["Admin.Configuration.Settings.GeneralCommon.RobotsAllowSitemapXml"] = "Allow sitemap.xml",
+                ["Admin.Configuration.Settings.GeneralCommon.RobotsAllowSitemapXml.Hint"] = "Check to allow robots use the sitemap.xml file",
+                ["Admin.Configuration.Settings.GeneralCommon.RobotsCustomFileExists"] = "robots.txt file data overridden by {0} file in site root.",
+                ["Admin.Configuration.Settings.GeneralCommon.RobotsDisallowLanguages"] = "Disallow languages",
+                ["Admin.Configuration.Settings.GeneralCommon.RobotsDisallowLanguages.Hint"] = "The list of languages which prohibit to use by robots",
+                ["Admin.Configuration.Settings.GeneralCommon.RobotsDisallowPaths"] = "Disallow paths",
+                ["Admin.Configuration.Settings.GeneralCommon.RobotsDisallowPaths.Hint"] = "The list of paths which prohibit to use by robots",
+                ["Admin.Configuration.Settings.GeneralCommon.RobotsLocalizableDisallowPaths"] = "Localizable disallow paths",
+                ["Admin.Configuration.Settings.GeneralCommon.RobotsLocalizableDisallowPaths.Hint"] = "The list of localizable paths which prohibit to use by robots",
+
+                //#5753
+                ["Admin.Configuration.Settings.Media.ProductDefaultImage"] = "Default image",
+                ["Admin.Configuration.Settings.Media.ProductDefaultImage.Hint"] = "Upload a picture to be used as the default image. If nothing is uploaded, {0} will be used.",
+
+                ["Admin.Help.Training"] = "Training",
 
             }, languageId).Wait();
 

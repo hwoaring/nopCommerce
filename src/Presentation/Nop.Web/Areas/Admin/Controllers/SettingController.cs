@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -48,11 +49,11 @@ using Nop.Web.Areas.Admin.Factories;
 using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
 using Nop.Web.Areas.Admin.Models.Settings;
 using Nop.Web.Framework;
-using Nop.Web.Framework.Configuration;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework.Mvc.ModelBinding;
+using Nop.Web.Framework.WebOptimizer;
 
 namespace Nop.Web.Areas.Admin.Controllers
 {
@@ -774,6 +775,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 await _settingService.SaveSettingOverridablePerStoreAsync(catalogSettings, x => x.AllowCustomersToSearchWithManufacturerName, model.AllowCustomersToSearchWithManufacturerName_OverrideForStore, storeScope, false);
                 await _settingService.SaveSettingOverridablePerStoreAsync(catalogSettings, x => x.AllowCustomersToSearchWithCategoryName, model.AllowCustomersToSearchWithCategoryName_OverrideForStore, storeScope, false);
                 await _settingService.SaveSettingOverridablePerStoreAsync(catalogSettings, x => x.DisplayAllPicturesOnCatalogPages, model.DisplayAllPicturesOnCatalogPages_OverrideForStore, storeScope, false);
+                await _settingService.SaveSettingOverridablePerStoreAsync(catalogSettings, x => x.ProductUrlStructureTypeId, model.ProductUrlStructureTypeId_OverrideForStore, storeScope, false);
 
                 //now settings not overridable per store
                 await _settingService.SaveSettingAsync(catalogSettings, x => x.IgnoreDiscounts, 0, false);
@@ -1099,7 +1101,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 await _settingService.SaveSettingOverridablePerStoreAsync(mediaSettings, x => x.DefaultImageQuality, model.DefaultImageQuality_OverrideForStore, storeScope, false);
                 await _settingService.SaveSettingOverridablePerStoreAsync(mediaSettings, x => x.ImportProductImagesUsingHash, model.ImportProductImagesUsingHash_OverrideForStore, storeScope, false);
                 await _settingService.SaveSettingOverridablePerStoreAsync(mediaSettings, x => x.DefaultPictureZoomEnabled, model.DefaultPictureZoomEnabled_OverrideForStore, storeScope, false);
-
+                await _settingService.SaveSettingOverridablePerStoreAsync(mediaSettings, x => x.ProductDefaultImageId, model.ProductDefaultImageId_OverrideForStore, storeScope, false);
+                
                 //now clear settings cache
                 await _settingService.ClearCacheAsync();
 
@@ -1577,6 +1580,26 @@ namespace Nop.Web.Areas.Admin.Controllers
                 securitySettings.HoneypotEnabled = model.SecuritySettings.HoneypotEnabled;
                 await _settingService.SaveSettingAsync(securitySettings);
 
+                //robots.txt settings
+                var robotsTxtSettings = await _settingService.LoadSettingAsync<RobotsTxtSettings>(storeScope);
+                robotsTxtSettings.AllowSitemapXml = model.RobotsTxtSettings.AllowSitemapXml;
+                robotsTxtSettings.AdditionsRules = model.RobotsTxtSettings.AdditionsRules?.Split(Environment.NewLine).ToList(); ;
+                robotsTxtSettings.DisallowLanguages = model.RobotsTxtSettings.DisallowLanguages.ToList();
+                robotsTxtSettings.DisallowPaths = model.RobotsTxtSettings.DisallowPaths?.Split(Environment.NewLine).ToList();
+                robotsTxtSettings.LocalizableDisallowPaths = model.RobotsTxtSettings.LocalizableDisallowPaths?.Split(Environment.NewLine).ToList();
+
+                //we do not clear cache after each setting update.
+                //this behavior can increase performance because cached settings will not be cleared 
+                //and loaded from database after each update
+                await _settingService.SaveSettingOverridablePerStoreAsync(robotsTxtSettings, x => x.AllowSitemapXml, model.RobotsTxtSettings.AllowSitemapXml_OverrideForStore, storeScope, false);
+                await _settingService.SaveSettingOverridablePerStoreAsync(robotsTxtSettings, x => x.AdditionsRules, model.RobotsTxtSettings.AdditionsRules_OverrideForStore, storeScope, false);
+                await _settingService.SaveSettingOverridablePerStoreAsync(robotsTxtSettings, x => x.DisallowLanguages, model.RobotsTxtSettings.DisallowLanguages_OverrideForStore, storeScope, false);
+                await _settingService.SaveSettingOverridablePerStoreAsync(robotsTxtSettings, x => x.DisallowPaths, model.RobotsTxtSettings.DisallowPaths_OverrideForStore, storeScope, false);
+                await _settingService.SaveSettingOverridablePerStoreAsync(robotsTxtSettings, x => x.LocalizableDisallowPaths, model.RobotsTxtSettings.LocalizableDisallowPaths_OverrideForStore, storeScope, false);
+                
+                // now clear settings cache
+                await _settingService.ClearCacheAsync();
+
                 //captcha settings
                 var captchaSettings = await _settingService.LoadSettingAsync<CaptchaSettings>(storeScope);
                 captchaSettings.Enabled = model.CaptchaSettings.Enabled;
@@ -1591,6 +1614,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 captchaSettings.ShowOnForgotPasswordPage = model.CaptchaSettings.ShowOnForgotPasswordPage;
                 captchaSettings.ShowOnApplyVendorPage = model.CaptchaSettings.ShowOnApplyVendorPage;
                 captchaSettings.ShowOnForum = model.CaptchaSettings.ShowOnForum;
+                captchaSettings.ShowOnCheckoutPageForGuests = model.CaptchaSettings.ShowOnCheckoutPageForGuests;
                 captchaSettings.ReCaptchaPublicKey = model.CaptchaSettings.ReCaptchaPublicKey;
                 captchaSettings.ReCaptchaPrivateKey = model.CaptchaSettings.ReCaptchaPrivateKey;
                 captchaSettings.CaptchaType = (CaptchaType)model.CaptchaSettings.CaptchaType;
@@ -1611,6 +1635,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 await _settingService.SaveSettingOverridablePerStoreAsync(captchaSettings, x => x.ShowOnApplyVendorPage, model.CaptchaSettings.ShowOnApplyVendorPage_OverrideForStore, storeScope, false);
                 await _settingService.SaveSettingOverridablePerStoreAsync(captchaSettings, x => x.ShowOnForgotPasswordPage, model.CaptchaSettings.ShowOnForgotPasswordPage_OverrideForStore, storeScope, false);
                 await _settingService.SaveSettingOverridablePerStoreAsync(captchaSettings, x => x.ShowOnForum, model.CaptchaSettings.ShowOnForum_OverrideForStore, storeScope, false);
+                await _settingService.SaveSettingOverridablePerStoreAsync(captchaSettings, x => x.ShowOnCheckoutPageForGuests, model.CaptchaSettings.ShowOnCheckoutPageForGuests_OverrideForStore, storeScope, false);
                 await _settingService.SaveSettingOverridablePerStoreAsync(captchaSettings, x => x.ReCaptchaPublicKey, model.CaptchaSettings.ReCaptchaPublicKey_OverrideForStore, storeScope, false);
                 await _settingService.SaveSettingOverridablePerStoreAsync(captchaSettings, x => x.ReCaptchaPrivateKey, model.CaptchaSettings.ReCaptchaPrivateKey_OverrideForStore, storeScope, false);
                 await _settingService.SaveSettingOverridablePerStoreAsync(captchaSettings, x => x.ReCaptchaV3ScoreThreshold, model.CaptchaSettings.ReCaptchaV3ScoreThreshold_OverrideForStore, storeScope, false);
@@ -1842,7 +1867,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             try
             {
-                _uploadService.UploadLocalePattern();
+                await _uploadService.UploadLocalePatternAsync();
                 _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Configuration.Settings.GeneralCommon.LocalePattern.SuccessUpload"));
             }
             catch (Exception exc)
@@ -1874,13 +1899,13 @@ namespace Nop.Web.Areas.Admin.Controllers
                 switch (_fileProvider.GetFileExtension(iconsFile.FileName))
                 {
                     case ".ico":
-                        _uploadService.UploadFavicon(iconsFile);
+                        await _uploadService.UploadFaviconAsync(iconsFile);
                         commonSettings.FaviconAndAppIconsHeadCode = string.Format(NopCommonDefaults.SingleFaviconHeadLink, storeScope, iconsFile.FileName);
 
                         break;
 
                     case ".zip":
-                        _uploadService.UploadIconsArchive(iconsFile);
+                        await _uploadService.UploadIconsArchiveAsync(iconsFile);
 
                         var headCodePath = _fileProvider.GetAbsolutePath(string.Format(NopCommonDefaults.FaviconAndAppIconsPath, storeScope), NopCommonDefaults.HeadCodeFileName);
                         if (!_fileProvider.FileExists(headCodePath))

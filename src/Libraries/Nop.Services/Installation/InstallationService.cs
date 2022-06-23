@@ -268,7 +268,7 @@ namespace Nop.Services.Installation
             //max length
             seName = CommonHelper.EnsureMaximumLength(seName, NopSeoDefaults.SearchEngineNameLength);
 
-            //ensure this sename is not reserved yet
+            //ensure this seName is not reserved yet
             var i = 2;
             var tempSeName = seName;
             while (true)
@@ -2959,7 +2959,8 @@ namespace Nop.Services.Installation
                 AttributeValueOutOfStockDisplayType = AttributeValueOutOfStockDisplayType.AlwaysDisplay,
                 AllowCustomersToSearchWithCategoryName = true,
                 AllowCustomersToSearchWithManufacturerName = true,
-                DisplayAllPicturesOnCatalogPages = false
+                DisplayAllPicturesOnCatalogPages = false,
+                ProductUrlStructureTypeId = (int)ProductUrlStructureType.Product
             });
 
             await settingService.SaveSettingAsync(new LocalizationSettings
@@ -3451,6 +3452,7 @@ namespace Nop.Services.Installation
                 ShowOnNewsCommentPage = false,
                 ShowOnProductReviewPage = false,
                 ShowOnRegistrationPage = false,
+                ShowOnCheckoutPageForGuests = false,
             });
 
             await settingService.SaveSettingAsync(new MessagesSettings

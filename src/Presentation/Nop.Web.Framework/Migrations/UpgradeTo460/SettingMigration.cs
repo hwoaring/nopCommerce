@@ -5,6 +5,7 @@ using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Gdpr;
 using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Orders;
+using Nop.Core.Domain.Security;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Data.Migrations;
@@ -137,6 +138,15 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo460
                 settingService.SaveSettingAsync(gdprSettings, settings => settings.DeleteInactiveCustomersAfterMonths).Wait();
             }
 
+            var captchaSettings = settingService.LoadSettingAsync<CaptchaSettings>().Result;
+
+            //#6182
+            if (!settingService.SettingExistsAsync(captchaSettings, settings => settings.ShowOnCheckoutPageForGuests).Result)
+            {
+                captchaSettings.ShowOnCheckoutPageForGuests = false;
+                settingService.SaveSettingAsync(captchaSettings, settings => settings.ShowOnCheckoutPageForGuests).Wait();
+            }
+            
             //#7
             if (!settingService.SettingExistsAsync(mediaSettings, settings => settings.VideoIframeAllow).Result)
             {
@@ -156,6 +166,121 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo460
             {
                 mediaSettings.VideoIframeHeight = 150;
                 settingService.SaveSettingAsync(mediaSettings, settings => settings.VideoIframeHeight).Wait();
+            }
+
+            //#385
+            if (!settingService.SettingExistsAsync(catalogSettings, settings => settings.ProductUrlStructureTypeId).Result)
+            {
+                catalogSettings.ProductUrlStructureTypeId = (int)ProductUrlStructureType.Product;
+                settingService.SaveSettingAsync(catalogSettings, settings => settings.ProductUrlStructureTypeId).Wait();
+            }
+
+            //#5261
+            var robotsTxtSettings = settingService.LoadSettingAsync<RobotsTxtSettings>().Result;
+
+            if (!settingService.SettingExistsAsync(robotsTxtSettings, settings => settings.DisallowPaths).Result)
+            {
+                robotsTxtSettings.DisallowPaths.AddRange(new[]
+                {
+                    "/admin",
+                    "/bin/",
+                    "/files/",
+                    "/files/exportimport/",
+                    "/country/getstatesbycountryid",
+                    "/install",
+                    "/setproductreviewhelpfulness",
+                    "/*?*returnUrl="
+                });
+
+                settingService.SaveSettingAsync(robotsTxtSettings, settings => settings.DisallowPaths).Wait();
+            }
+
+            if (!settingService.SettingExistsAsync(robotsTxtSettings, settings => settings.LocalizableDisallowPaths).Result)
+            {
+                robotsTxtSettings.LocalizableDisallowPaths.AddRange(new[]
+                {
+                    "/addproducttocart/catalog/",
+                    "/addproducttocart/details/",
+                    "/backinstocksubscriptions/manage",
+                    "/boards/forumsubscriptions",
+                    "/boards/forumwatch",
+                    "/boards/postedit",
+                    "/boards/postdelete",
+                    "/boards/postcreate",
+                    "/boards/topicedit",
+                    "/boards/topicdelete",
+                    "/boards/topiccreate",
+                    "/boards/topicmove",
+                    "/boards/topicwatch",
+                    "/cart$",
+                    "/changecurrency",
+                    "/changelanguage",
+                    "/changetaxtype",
+                    "/checkout",
+                    "/checkout/billingaddress",
+                    "/checkout/completed",
+                    "/checkout/confirm",
+                    "/checkout/shippingaddress",
+                    "/checkout/shippingmethod",
+                    "/checkout/paymentinfo",
+                    "/checkout/paymentmethod",
+                    "/clearcomparelist",
+                    "/compareproducts",
+                    "/compareproducts/add/*",
+                    "/customer/avatar",
+                    "/customer/activation",
+                    "/customer/addresses",
+                    "/customer/changepassword",
+                    "/customer/checkusernameavailability",
+                    "/customer/downloadableproducts",
+                    "/customer/info",
+                    "/customer/productreviews",
+                    "/deletepm",
+                    "/emailwishlist",
+                    "/eucookielawaccept",
+                    "/inboxupdate",
+                    "/newsletter/subscriptionactivation",
+                    "/onepagecheckout",
+                    "/order/history",
+                    "/orderdetails",
+                    "/passwordrecovery/confirm",
+                    "/poll/vote",
+                    "/privatemessages",
+                    "/recentlyviewedproducts",
+                    "/returnrequest",
+                    "/returnrequest/history",
+                    "/rewardpoints/history",
+                    "/search?",
+                    "/sendpm",
+                    "/sentupdate",
+                    "/shoppingcart/*",
+                    "/storeclosed",
+                    "/subscribenewsletter",
+                    "/topic/authenticate",
+                    "/viewpm",
+                    "/uploadfilecheckoutattribute",
+                    "/uploadfileproductattribute",
+                    "/uploadfilereturnrequest",
+                    "/wishlist"
+                });
+
+                settingService.SaveSettingAsync(robotsTxtSettings, settings => settings.LocalizableDisallowPaths).Wait();
+            }
+
+            if (!settingService.SettingExistsAsync(robotsTxtSettings, settings => settings.DisallowLanguages).Result) 
+                settingService.SaveSettingAsync(robotsTxtSettings, settings => settings.DisallowLanguages).Wait();
+            
+            if (!settingService.SettingExistsAsync(robotsTxtSettings, settings => settings.AdditionsRules).Result)
+                settingService.SaveSettingAsync(robotsTxtSettings, settings => settings.AdditionsRules).Wait();
+
+            if (!settingService.SettingExistsAsync(robotsTxtSettings, settings => settings.AllowSitemapXml).Result)
+                settingService.SaveSettingAsync(robotsTxtSettings, settings => settings.AllowSitemapXml).Wait();
+
+            //#5753
+            if (!settingService.SettingExistsAsync(mediaSettings, settings => settings.ProductDefaultImageId).Result)
+            {
+                mediaSettings.ProductDefaultImageId = 0;
+                settingService.SaveSettingAsync(mediaSettings, settings => settings.ProductDefaultImageId).Wait();
             }
         }
 
