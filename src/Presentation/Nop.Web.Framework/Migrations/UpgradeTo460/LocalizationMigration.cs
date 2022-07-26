@@ -253,7 +253,25 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo460
                 ["Admin.Configuration.Settings.Media.ProductDefaultImage.Hint"] = "Upload a picture to be used as the default image. If nothing is uploaded, {0} will be used.",
 
                 ["Admin.Help.Training"] = "Training",
+                
+                //5607
+                ["Admin.Configuration.Settings.CustomerUser.ForceMultifactorAuthentication.Hint"] = "Force activation of multi-factor authentication for customer roles specified in Access control list (at least one MFA provider must be active).",
+                ["Permission.Authentication.EnableMultiFactorAuthentication"] = "Security. Enable Multi-factor authentication",
 
+                //#3651
+                ["Admin.ContentManagement.MessageTemplates.Description.OrderProcessing.CustomerNotification"] = "This message template is used to notify a customer that the certain order is processing. Orders can be viewed by a customer on the account page.",
+                ["Admin.Configuration.Settings.Order.AttachPdfInvoiceToOrderProcessingEmail"] = "Attach PDF invoice (\"order processing\" email)",
+                ["Admin.Configuration.Settings.Order.AttachPdfInvoiceToOrderProcessingEmail.Hint"] = "Check to attach PDF invoice to the \"order processing\" email sent to a customer.",
+
+                //5705
+                ["Admin.Promotions.Discounts.Fields.IsActive"] = "Is active",
+                ["Admin.Promotions.Discounts.Fields.IsActive.Hint"] = "Indicating whether the discount is active.",
+                ["Admin.Promotions.Discounts.List.IsActive"] = "Is Active",
+                ["Admin.Promotions.Discounts.List.IsActive.ActiveOnly"] = "Active only",
+                ["Admin.Promotions.Discounts.List.IsActive.All"] = "All",
+                ["Admin.Promotions.Discounts.List.IsActive.Hint"] = "Search by \"IsActive\" property.",
+                ["Admin.Promotions.Discounts.List.IsActive.InactiveOnly"] = "Inactive only",
+                
             }, languageId).Wait();
 
             #endregion
