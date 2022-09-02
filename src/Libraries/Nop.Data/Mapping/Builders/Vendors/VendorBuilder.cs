@@ -19,9 +19,25 @@ namespace Nop.Data.Mapping.Builders.Vendors
             table
                 .WithColumn(nameof(Vendor.Name)).AsString(400).NotNullable()
                 .WithColumn(nameof(Vendor.Email)).AsString(400).Nullable()
+                .WithColumn(nameof(Vendor.VendorNumber)).AsString(32).Nullable()
+                .WithColumn(nameof(Vendor.InviteCode)).AsString(32).Nullable()
+                .WithColumn(nameof(Vendor.StoreName)).AsString(512).Nullable()
+                .WithColumn(nameof(Vendor.ContactNumber)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(Vendor.ContactAddress)).AsString(1024).Nullable()
+                .WithColumn(nameof(Vendor.ShoppingMallLink)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Vendor.ShoppingMallLink2)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Vendor.OpenHours)).AsString(512).Nullable()
                 .WithColumn(nameof(Vendor.MetaKeywords)).AsString(400).Nullable()
                 .WithColumn(nameof(Vendor.MetaTitle)).AsString(400).Nullable()
-                .WithColumn(nameof(Vendor.PageSizeOptions)).AsString(200).Nullable();
+                .WithColumn(nameof(Vendor.MetaImageUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Vendor.MetaLinkUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Vendor.ShareImageUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Vendor.ShareLinkUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Vendor.PageSizeOptions)).AsString(200).Nullable()
+                .WithColumn(nameof(Vendor.Latitude)).AsDecimal(9, 6)
+                .WithColumn(nameof(Vendor.Longitude)).AsDecimal(9, 6)
+                .WithColumn(nameof(Vendor.Precision)).AsDecimal(9, 6)
+                ;
         }
 
         #endregion

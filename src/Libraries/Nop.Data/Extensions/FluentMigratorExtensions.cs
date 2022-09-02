@@ -28,6 +28,7 @@ namespace Nop.Data.Extensions
 
         private static Dictionary<Type, Action<ICreateTableColumnAsTypeSyntax>> TypeMapping { get; } = new Dictionary<Type, Action<ICreateTableColumnAsTypeSyntax>>
         {
+            [typeof(short)] = c => c.AsInt16(), //HT
             [typeof(int)] = c => c.AsInt32(),
             [typeof(long)] = c => c.AsInt64(),
             [typeof(string)] = c => c.AsString(int.MaxValue).Nullable(),
@@ -35,6 +36,7 @@ namespace Nop.Data.Extensions
             [typeof(decimal)] = c => c.AsDecimal(18, 4),
             [typeof(DateTime)] = c => c.AsNopDateTime2(),
             [typeof(byte[])] = c => c.AsBinary(int.MaxValue),
+            [typeof(byte)] = c => c.AsByte(), //HT
             [typeof(Guid)] = c => c.AsGuid()
         };
 

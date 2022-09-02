@@ -236,6 +236,48 @@ namespace Nop.Services.Customers
         }
 
         /// <summary>
+        /// 获取推荐用户
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <param name="ignoreState">忽略用户是否有效</param>
+        /// <returns></returns>
+        public virtual async Task<Customer> GetReferrerCustomerAsync(Customer customer, bool ignoreState = false)
+        {
+            if (customer == null)
+                return null;
+
+            //推荐人ID
+            var referrerId = 0;
+            //获取临时推荐ID
+            if (customer.TempReferrerCustomerId > 0
+                && _customerSettings.RefereeIdAvailableMinutes > 0
+                && customer.TempReferrerDateUtc.HasValue
+                && customer.TempReferrerDateUtc.Value.AddMinutes(_customerSettings.RefereeIdAvailableMinutes) > DateTime.UtcNow
+                )
+            {
+                referrerId = customer.TempReferrerCustomerId;
+            }
+
+            //获取永久推荐ID
+            if (referrerId == 0 && customer.ReferrerCustomerId > 0)
+                referrerId = customer.ReferrerCustomerId;
+
+            //获取推荐人信息
+            var referrerCustomer = await GetCustomerByIdAsync(referrerId);
+            if (referrerCustomer == null)
+                return null;
+
+            //忽略Customer状态
+            if (!ignoreState)
+            {
+                if (referrerCustomer.Deleted || !referrerCustomer.Active)
+                    return null;
+            }
+
+            return referrerCustomer;
+        }
+
+        /// <summary>
         /// Gets customers with shopping carts
         /// </summary>
         /// <param name="shoppingCartType">Shopping cart type; pass null to load all records</param>
@@ -560,6 +602,25 @@ namespace Nop.Services.Customers
         }
 
         /// <summary>
+        /// Gets a customer by openId
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        public virtual async Task<Customer> GetCustomerByOpenIdAsync(string openId)
+        {
+            if (string.IsNullOrWhiteSpace(openId))
+                return null;
+
+            var query = from c in _customerRepository.Table
+                        orderby c.Id
+                        where c.OpenId == openId
+                        select c;
+            var customer = await query.FirstOrDefaultAsync();
+
+            return customer;
+        }
+
+        /// <summary>
         /// Insert a guest customer
         /// </summary>
         /// <returns>
@@ -572,6 +633,8 @@ namespace Nop.Services.Customers
             {
                 CustomerGuid = Guid.NewGuid(),
                 Active = true,
+                ReferrerEnable = true,
+                AsTempReferrerEnable =true,
                 CreatedOnUtc = DateTime.UtcNow,
                 LastActivityDateUtc = DateTime.UtcNow
             };
@@ -691,6 +754,7 @@ namespace Nop.Services.Customers
                                      order == null && blogComment == null && newsComment == null && productReview == null && productReviewHelpfulness == null &&
                                      pollVotingRecord == null && forumTopic == null && forumPost == null &&
                                      !guest.IsSystemAccount &&
+                                     (!string.IsNullOrWhiteSpace(guest.OpenId)) &&
                                      (createdFromUtc == null || guest.CreatedOnUtc > createdFromUtc) &&
                                      (createdToUtc == null || guest.CreatedOnUtc < createdToUtc)
                                  select new { CustomerId = guest.Id };

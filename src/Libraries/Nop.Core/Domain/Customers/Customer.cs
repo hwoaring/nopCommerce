@@ -20,6 +20,26 @@ namespace Nop.Core.Domain.Customers
         public Guid CustomerGuid { get; set; }
 
         /// <summary>
+        /// 当前用户OpenId
+        /// </summary>
+        public string OpenId { get; set; }
+
+        /// <summary>
+        /// 永久推荐用户ID
+        /// </summary>
+        public int ReferrerCustomerId { get; set; }
+
+        /// <summary>
+        /// 临时推荐用户ID
+        /// </summary>
+        public int TempReferrerCustomerId { get; set; }
+
+        /// <summary>
+        /// 临时推荐用户更新时间（更新时间+系统设置的过期市场=过期时间，超出时间属于默认推荐人）
+        /// </summary>
+        public DateTime? TempReferrerDateUtc { get; set; }
+
+        /// <summary>
         /// Gets or sets the username
         /// </summary>
         public string Username { get; set; }
@@ -95,6 +115,11 @@ namespace Nop.Core.Domain.Customers
         public string Phone { get; set; }
 
         /// <summary>
+        /// 绑定的手机号（用于账号登录或找回）
+        /// </summary>
+        public string BindPhoneNumber { get; set; }
+
+        /// <summary>
         /// Gets or sets the fax
         /// </summary>
         public string Fax { get; set; }
@@ -160,6 +185,11 @@ namespace Nop.Core.Domain.Customers
         public int VendorId { get; set; }
 
         /// <summary>
+        /// 供应商
+        /// </summary>
+        public int SupplierId { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this customer has some products in the shopping cart
         /// <remarks>The same as if we run ShoppingCartItems.Count > 0
         /// We use this property for performance optimization:
@@ -198,6 +228,21 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets a value indicating whether the customer account is system
         /// </summary>
         public bool IsSystemAccount { get; set; }
+
+        /// <summary>
+        /// 是否允许推荐用户，默认true，不允许时，该用户不会传递推荐参数
+        /// </summary>
+        public bool ReferrerEnable { get; set; }
+
+        /// <summary>
+        /// 是否允许成为临时推荐人（是否允许覆盖历史的临时推荐人）
+        /// </summary>
+        public bool AsTempReferrerEnable { get; set; }
+
+        /// <summary>
+        /// 是否禁止下单
+        /// </summary>
+        public bool DisallowOrder { get; set; }
 
         /// <summary>
         /// Gets or sets the customer system name

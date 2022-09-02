@@ -9,7 +9,9 @@ using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Vendors;
+using Nop.Core.Domain.Weixin;
 using Nop.Core.Http;
+using Nop.Core.Http.Extensions;
 using Nop.Core.Security;
 using Nop.Services.Authentication;
 using Nop.Services.Common;
@@ -20,6 +22,7 @@ using Nop.Services.Localization;
 using Nop.Services.ScheduleTasks;
 using Nop.Services.Stores;
 using Nop.Services.Vendors;
+using Nop.Services.Weixin;
 using Nop.Web.Framework.Globalization;
 
 namespace Nop.Web.Framework
@@ -46,10 +49,14 @@ namespace Nop.Web.Framework
         private readonly IWebHelper _webHelper;
         private readonly LocalizationSettings _localizationSettings;
         private readonly TaxSettings _taxSettings;
+        private readonly CustomerSettings _customerSettings;
+        private readonly VendorSettings _vendorSettings;
 
         private Customer _cachedCustomer;
+        private Customer _cachedReferrerForCustomer;
         private Customer _originalCustomerIfImpersonated;
         private Vendor _cachedVendor;
+        private Vendor _cachedVendorForCustomer;
         private Language _cachedLanguage;
         private Currency _cachedCurrency;
         private TaxDisplayType? _cachedTaxDisplayType;
@@ -72,7 +79,9 @@ namespace Nop.Web.Framework
             IVendorService vendorService,
             IWebHelper webHelper,
             LocalizationSettings localizationSettings,
-            TaxSettings taxSettings)
+            TaxSettings taxSettings,
+            CustomerSettings customerSettings,
+            VendorSettings vendorSettings)
         {
             _cookieSettings = cookieSettings;
             _currencySettings = currencySettings;
@@ -89,6 +98,8 @@ namespace Nop.Web.Framework
             _webHelper = webHelper;
             _localizationSettings = localizationSettings;
             _taxSettings = taxSettings;
+            _customerSettings = customerSettings;
+            _vendorSettings = vendorSettings;
         }
 
         #endregion
@@ -190,6 +201,237 @@ namespace Nop.Web.Framework
             return requestLanguage;
         }
 
+        /// <summary>
+        /// 设置Customer绑定的OpenId
+        /// </summary>
+        /// <param name="openId">当前用户OpenId</param>
+        /// <param name="customer">当前用户</param>
+        /// <returns></returns>
+        public virtual async Task SetCustomerOpenIdAsync(string openId, Customer customer = null)
+        {
+            if (string.IsNullOrEmpty(openId) && customer != null)
+            {
+                //Weixin oauth2 session user
+                var oauthSession = _httpContextAccessor.HttpContext.Session.Get<OauthSession>(NopWeixinDefaults.WeixinOauthSession);
+                if (oauthSession != null && !string.IsNullOrEmpty(oauthSession.OpenId))
+                    openId = oauthSession.OpenId;
+            }
+
+            if (string.IsNullOrEmpty(openId))
+                return;
+
+            //Customer为空，是从API接入
+            if (customer == null)
+            {
+                customer = await _customerService.GetCustomerByOpenIdAsync(openId);
+                if (customer == null)
+                    customer = await _customerService.InsertGuestCustomerAsync();
+            }
+
+            if (string.IsNullOrEmpty(customer.OpenId) && !string.IsNullOrEmpty(openId))
+            {
+                customer.OpenId = openId;
+                customer.AdminComment = "Weixin Guest.";
+                //customer.RegisteredInStoreId = (await _storeContext.GetCurrentStoreAsync()).Id;
+
+                //update customer
+                await _customerService.UpdateCustomerAsync(customer);
+            }
+        }
+
+        /// <summary>
+        /// 设置Customer绑定的推荐人
+        /// </summary>
+        /// <param name="referrerParam">推荐人参数：OpenId或Gid</param>
+        /// <param name="customer">当前用户</param>
+        /// <param name="openIdParamFixed">referrerParam固定为OpenId（不检查传入参数名称）</param>
+        /// <param name="forceUpdateReferrerCustomerId">是否强制更新永久推荐人Id</param>
+        /// <param name="refreshCache">刷新Customer缓存</param>
+        /// <returns></returns>
+        public virtual async Task SetCustomerReferrerIdAsync(string referrerParam, Customer currentCustomer, bool openIdParamFixed = false, bool forceUpdateReferrerCustomerId = false, bool refreshCache = false)
+        {
+            if (string.IsNullOrEmpty(referrerParam))
+                return;
+
+            if (currentCustomer == null)
+                return;
+
+            //获取推荐人
+            var referrerCustomer = openIdParamFixed ?
+                await _customerService.GetCustomerByOpenIdAsync(referrerParam) :
+                (_customerSettings.UseGidForReferrerParam ?
+                (Guid.TryParse(referrerParam, out var customerGuid) ? await _customerService.GetCustomerByGuidAsync(customerGuid) : null) :
+                await _customerService.GetCustomerByOpenIdAsync(referrerParam));
+
+            if (referrerCustomer == null
+                || referrerCustomer.Deleted
+                || !referrerCustomer.Active
+                || !referrerCustomer.ReferrerEnable)
+                return;
+
+            //自己不能推荐自己
+            if (referrerCustomer.Id == currentCustomer.Id)
+                return;
+
+            if (currentCustomer.ReferrerCustomerId == 0 || forceUpdateReferrerCustomerId)
+            {
+                //没有第一推荐人或强制更新
+                currentCustomer.ReferrerCustomerId = referrerCustomer.Id;
+                if (referrerCustomer.AsTempReferrerEnable)
+                {
+                    currentCustomer.TempReferrerCustomerId = referrerCustomer.Id;
+                    currentCustomer.TempReferrerDateUtc = DateTime.UtcNow;
+                }
+
+                //update Customer
+                await _customerService.UpdateCustomerAsync(currentCustomer);
+
+                if (refreshCache)
+                    await SetCurrentCustomerAsync(currentCustomer);
+            }
+            else if (_customerSettings.RefereeIdAvailableMinutes > 0 && referrerCustomer.AsTempReferrerEnable)
+            {
+                //启用临时推荐人过时
+                currentCustomer.TempReferrerCustomerId = referrerCustomer.Id;
+                currentCustomer.TempReferrerDateUtc = DateTime.UtcNow;
+
+                //update Customer
+                await _customerService.UpdateCustomerAsync(currentCustomer);
+
+                if (refreshCache)
+                    await SetCurrentCustomerAsync(currentCustomer);
+            }
+        }
+
+        /// <summary>
+        /// 设置Customer绑定的推荐人
+        /// </summary>
+        /// <param name="referrerCustomerId">Customer Id</param>
+        /// <param name="customer">当前用户</param>
+        /// <param name="forceUpdateReferrerCustomerId">是否强制更新永久推荐人Id</param>
+        /// <param name="refreshCache">刷新Customer缓存</param>
+        /// <returns></returns>
+        public virtual async Task SetCustomerReferrerIdAsync(int referrerCustomerId, Customer currentCustomer, bool forceUpdateReferrerCustomerId = false, bool refreshCache = false)
+        {
+            if (referrerCustomerId <= 0)
+                return;
+
+            if (currentCustomer == null)
+                return;
+
+            //获取推荐人
+            var referrerCustomer = await _customerService.GetCustomerByIdAsync(referrerCustomerId);
+
+            if (referrerCustomer == null
+                || referrerCustomer.Deleted
+                || !referrerCustomer.Active
+                || !referrerCustomer.ReferrerEnable)
+                return;
+
+            //自己不能推荐自己
+            if (referrerCustomer.Id == currentCustomer.Id)
+                return;
+
+            if (currentCustomer.ReferrerCustomerId == 0 || forceUpdateReferrerCustomerId)
+            {
+                //没有第一推荐人或强制更新
+                currentCustomer.ReferrerCustomerId = referrerCustomer.Id;
+                if (referrerCustomer.AsTempReferrerEnable)
+                {
+                    currentCustomer.TempReferrerCustomerId = referrerCustomer.Id;
+                    currentCustomer.TempReferrerDateUtc = DateTime.UtcNow;
+                }
+
+                //update Customer
+                await _customerService.UpdateCustomerAsync(currentCustomer);
+
+                if (refreshCache)
+                    await SetCurrentCustomerAsync(currentCustomer);
+            }
+            else if (_customerSettings.RefereeIdAvailableMinutes > 0 && referrerCustomer.AsTempReferrerEnable)
+            {
+                //启用临时推荐人过时
+                //未过期，不设置临时推荐人
+                if (currentCustomer.TempReferrerDateUtc.HasValue &&
+                    currentCustomer.TempReferrerDateUtc.Value.AddMinutes(_customerSettings.RefereeIdAvailableMinutes) > DateTime.UtcNow
+                    )
+                    return;
+
+                currentCustomer.TempReferrerCustomerId = referrerCustomer.Id;
+                currentCustomer.TempReferrerDateUtc = DateTime.UtcNow;
+
+                //update Customer
+                await _customerService.UpdateCustomerAsync(currentCustomer);
+
+                if (refreshCache)
+                    await SetCurrentCustomerAsync(currentCustomer);
+            }
+        }
+
+        /// <summary>
+        /// 获取当前用户的Vendor（自己或父级）
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task<Vendor> GetVendorForCurrentCustomerAsync()
+        {
+            //whether there is a cached value
+            if (_cachedVendorForCustomer != null)
+                return _cachedVendorForCustomer;
+
+            var customer = await GetCurrentCustomerAsync();
+            if (customer == null)
+                return null;
+
+            //自己是Vendor，不再往上找
+            var vendor = await GetCurrentVendorAsync();
+
+            //向上查找父级Vendor
+            if (vendor == null)
+            {
+                //至少查一级
+                var vendorParentLevel = _vendorSettings.VendorParentLevel > 0 ?
+                    _vendorSettings.VendorParentLevel : 1;
+
+                for (var i = 0; i < vendorParentLevel; i++)
+                {
+                    customer = await _customerService.GetReferrerCustomerAsync(customer, true);
+                    if (customer != null && customer.Active && !customer.Deleted)
+                    {
+                        vendor = await _vendorService.GetVendorByIdAsync(customer.VendorId);
+                        if (vendor != null && vendor.Active && !vendor.Deleted)
+                            break;
+                    }
+                }
+            }
+
+            //cache the found Vendor
+            _cachedVendorForCustomer = vendor;
+
+            return _cachedVendorForCustomer;
+        }
+
+        /// <summary>
+        /// 获取当前用户的Referrer(临时或永久)
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task<Customer> GetReferrerForCurrentCustomerAsync()
+        {
+            //whether there is a cached value
+            if (_cachedReferrerForCustomer != null)
+                return _cachedReferrerForCustomer;
+
+            var customer = await GetCurrentCustomerAsync();
+            if (customer == null)
+                return null;
+
+            var referrerCustomer = await _customerService.GetReferrerCustomerAsync(customer);
+
+            //cache the found Referrer
+            _cachedReferrerForCustomer = referrerCustomer;
+
+            return _cachedReferrerForCustomer;
+        }
+
         #endregion
 
         #region Properties
@@ -261,6 +503,18 @@ namespace Nop.Web.Framework
 
                 if (customer == null || customer.Deleted || !customer.Active || customer.RequireReLogin)
                 {
+                    //微信 oauth2 session user
+                    var customerSession = _httpContextAccessor.HttpContext.Session.Get<OauthSession>(NopWeixinDefaults.WeixinOauthSession);
+                    if (customerSession != null && !string.IsNullOrEmpty(customerSession.OpenId))
+                    {
+                        var customerBySession = await _customerService.GetCustomerByOpenIdAsync(customerSession.OpenId);
+                        if (customerBySession != null)
+                            customer = customerBySession;
+                    }
+                }
+
+                if (customer == null || customer.Deleted || !customer.Active || customer.RequireReLogin)
+                {
                     //get guest customer
                     var customerCookie = GetCustomerCookie();
                     if (Guid.TryParse(customerCookie, out var customerGuid))
@@ -277,6 +531,12 @@ namespace Nop.Web.Framework
                     //create guest if not exists
                     customer = await _customerService.InsertGuestCustomerAsync();
                 }
+            }
+
+            //Customer与OpenId绑定
+            if (string.IsNullOrEmpty(customer.OpenId))
+            {
+                await SetCustomerOpenIdAsync(customer.OpenId, customer);
             }
 
             if (!customer.Deleted && customer.Active && !customer.RequireReLogin)

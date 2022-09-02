@@ -2988,6 +2988,9 @@ namespace Nop.Services.Installation
 
             await settingService.SaveSettingAsync(new CustomerSettings
             {
+                RefereeIdAvailableMinutes = 0, //7天
+                AutoDetectCity = false,  //自动检测城市
+                UseGidForReferrerParam = false,  //使用Gid参数
                 UsernamesEnabled = false,
                 CheckUsernameAvailabilityEnabled = false,
                 AllowUsersToChangeUsernames = false,
@@ -3035,6 +3038,8 @@ namespace Nop.Services.Installation
                 StateProvinceEnabled = false,
                 StateProvinceRequired = false,
                 PhoneEnabled = false,
+                PhoneNumberLogin = false,  //允许手机号登录
+                PhoneNumberValidationBySMS = false,  //使用SMS验证
                 FaxEnabled = false,
                 AcceptPrivacyPolicyEnabled = false,
                 NewsletterEnabled = true,

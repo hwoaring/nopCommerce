@@ -22,6 +22,7 @@ namespace Nop.Data.Mapping.Builders.Customers
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
+                .WithColumn(nameof(Customer.OpenId)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(Customer.Username)).AsString(1000).Nullable()
                 .WithColumn(nameof(Customer.Email)).AsString(1000).Nullable()
                 .WithColumn(nameof(Customer.EmailToRevalidate)).AsString(1000).Nullable()
@@ -35,11 +36,13 @@ namespace Nop.Data.Mapping.Builders.Customers
                 .WithColumn(nameof(Customer.City)).AsString(1000).Nullable()
                 .WithColumn(nameof(Customer.County)).AsString(1000).Nullable()
                 .WithColumn(nameof(Customer.Phone)).AsString(1000).Nullable()
+                .WithColumn(nameof(Customer.BindPhoneNumber)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(Customer.Fax)).AsString(1000).Nullable()
                 .WithColumn(nameof(Customer.VatNumber)).AsString(1000).Nullable()
                 .WithColumn(nameof(Customer.TimeZoneId)).AsString(1000).Nullable()
                 .WithColumn(nameof(Customer.CustomCustomerAttributesXML)).AsString(int.MaxValue).Nullable()
                 .WithColumn(nameof(Customer.DateOfBirth)).AsDateTime2().Nullable()
+                .WithColumn(nameof(Customer.TempReferrerDateUtc)).AsDateTime2().Nullable()
                 .WithColumn(nameof(Customer.SystemName)).AsString(400).Nullable()
                 .WithColumn(nameof(Customer.CurrencyId)).AsInt32().ForeignKey<Currency>(onDelete: Rule.SetNull).Nullable()
                 .WithColumn(nameof(Customer.LanguageId)).AsInt32().ForeignKey<Language>(onDelete: Rule.SetNull).Nullable()

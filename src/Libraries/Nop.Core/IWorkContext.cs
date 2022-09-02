@@ -37,6 +37,37 @@ namespace Nop.Core
         Task<Vendor> GetCurrentVendorAsync();
 
         /// <summary>
+        /// 绑定OpenId
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <param name="customer"></param>
+        /// <returns></returns>
+        Task SetCustomerOpenIdAsync(string openId, Customer customer = null);
+
+        /// <summary>
+        /// 绑定RefferrerCustomerId
+        /// </summary>
+        /// <param name="referrerOpenId"></param>
+        /// <param name="customer"></param>
+        /// <param name="forceUpdateReferrerCustomerId"></param>
+        /// <returns></returns>
+        Task SetCustomerReferrerIdAsync(string referrerOpenId, Customer currentCustomer, bool openIdParamFixed = false, bool forceUpdateReferrerCustomerId = false, bool refreshCache = false);
+
+        Task SetCustomerReferrerIdAsync(int referrerCustomerId, Customer currentCustomer, bool forceUpdateReferrerCustomerId = false, bool refreshCache = false);
+
+        /// <summary>
+        /// 获取当前用户的Vendor（自己或父级）
+        /// </summary>
+        /// <returns></returns>
+        Task<Vendor> GetVendorForCurrentCustomerAsync();
+
+        /// <summary>
+        /// 获取当前用户的Referrer(临时或永久)
+        /// </summary>
+        /// <returns></returns>
+        Task<Customer> GetReferrerForCurrentCustomerAsync();
+
+        /// <summary>
         /// Gets current user working language
         /// </summary>
         /// <returns>A task that represents the asynchronous operation</returns>
