@@ -5,7 +5,7 @@ namespace Nop.Core.Domain.Customers
     /// <summary>
     /// Customer settings
     /// </summary>
-    public class CustomerSettings : ISettings
+    public partial class CustomerSettings : ISettings
     {
         /// <summary>
         /// 推荐人ID可用过期分钟数。最新推荐用户信息保存在customer中，多少秒之内使用customer保存的临时推荐用户ID

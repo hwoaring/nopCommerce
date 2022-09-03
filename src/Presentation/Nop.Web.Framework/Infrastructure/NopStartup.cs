@@ -61,7 +61,7 @@ namespace Nop.Web.Framework.Infrastructure
     /// <summary>
     /// Represents the registering services on application startup
     /// </summary>
-    public class NopStartup : INopStartup
+    public partial class NopStartup : INopStartup
     {
         /// <summary>
         /// Add and configure any of the middleware
@@ -78,14 +78,6 @@ namespace Nop.Web.Framework.Infrastructure
 
             //user agent helper
             services.AddScoped<IUserAgentHelper, UserAgentHelper>();
-
-            //data layer
-            services.AddTransient<IDataProviderManager, DataProviderManager>();
-            services.AddTransient(serviceProvider =>
-                serviceProvider.GetRequiredService<IDataProviderManager>().DataProvider);
-
-            //repositories
-            services.AddScoped(typeof(IRepository<>), typeof(EntityRepository<>));
 
             //plugins
             services.AddScoped<IPluginService, PluginService>();
