@@ -3154,7 +3154,7 @@
     <Value>Minimum stock qty</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.MinStockQuantity.Hint">
-    <Value>If you have enabled 'Manage Stock' you can perform a number of different actions when the current stock quantity falls below (reaches) your minimum stock quantity.</Value>
+    <Value>If you track inventory, you can perform a number of different actions when the current stock quantity falls below (reaches) your minimum stock quantity.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.Name">
     <Value>Product name</Value>
@@ -3643,7 +3643,7 @@
     <Value>Minimum stock qty</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.MinStockQuantity.Hint">
-    <Value>If you have enabled 'Manage stock by attributes' you can perform a number of different actions when the current stock quantity falls below (reaches) your minimum stock quantity (e.g. Low stock report).</Value>
+    <Value>If you track inventory by product attributes, you can perform a number of different actions when the current stock quantity falls below (reaches) your minimum stock quantity (e.g. Low stock report).</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.NotifyAdminForQuantityBelow">
     <Value>Notify admin for quantity below</Value>
@@ -7838,6 +7838,12 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Media">
     <Value>Media settings</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Media.AllowSVGUploads">
+    <Value>Allow SVG uploads in admin area</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Media.AllowSVGUploads.Hint">
+    <Value>Check to allow uploading of SVG files in admin area</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Media.AssociatedProductPictureSize">
     <Value>Associated product image size</Value>
@@ -12075,6 +12081,9 @@
   <LocaleResource Name="Admin.Customers.Customers.RewardPoints.Fields.PointsValidity">
     <Value>Points validity</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Customers.Customers.RewardPoints.Fields.AddNegativePointsValidity">
+    <Value>Points validity is not allowed for point reduction.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Customers.Customers.RewardPoints.Fields.PointsValidity.Hint">
     <Value>Specify number of days when the awarded points will be valid (only for positive amount of points).</Value>
   </LocaleResource>
@@ -13935,6 +13944,9 @@
   <LocaleResource Name="Admin.Promotions.Discounts.Fields.CouponCode.Hint">
     <Value>The discount coupon code.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Promotions.Discounts.Fields.CouponCode.Reserved">
+    <Value>The entered coupon code is already reserved for the discount '{0}'</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Promotions.Discounts.Fields.Discount">
     <Value>Discount</Value>
   </LocaleResource>
@@ -15090,6 +15102,9 @@
   <LocaleResource Name="Admin.StockQuantityHistory.Messages.PlaceOrder">
     <Value>The stock quantity has been reduced by placing the order #{0}</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.StockQuantityHistory.Messages.ReadyForPickupByCustomer">
+    <Value>The stock quantity has been reduced when an order item of the order #{0} became a ready for pickup by customer</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.StockQuantityHistory.Messages.Ship">
     <Value>The stock quantity has been reduced when an order item of the order #{0} was shipped</Value>
   </LocaleResource>
@@ -15305,6 +15320,15 @@
   </LocaleResource>
   <LocaleResource Name="Admin.System.Maintenance.DeleteGuests.TotalDeleted">
     <Value>{0} customers were deleted</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.System.Maintenance.DeleteMinificationFiles">
+    <Value>Delete minification files</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.System.Maintenance.DeleteMinificationFiles.Text">
+    <Value>Clear the bundles directory.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.System.Maintenance.DeleteMinificationFiles.TotalDeleted">
+    <Value>{0} files were deleted</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.System.Maintenance.ReIndexTables">
     <Value>Re-index database tables</Value>

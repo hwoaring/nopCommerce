@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Hosting;
@@ -110,16 +111,22 @@ namespace Nop.Web.Framework.UI
             return asset;
         }
 
-        private string GetAssetKey(string key, ResourceLocation location)
+        private static string GetAssetKey(string[] keys, string suffix)
         {
-            var keyPrefix = Enum.GetName(location) + key;
+            if (keys is null || keys.Length == 0)
+                throw new ArgumentNullException(nameof(keys));
 
-            var routeKey = GetRouteName(handleDefaultRoutes: true);
+            var hashInput = string.Join(',', keys);
 
-            if (string.IsNullOrEmpty(routeKey))
-                return keyPrefix;
+            using var sha = MD5.Create();
+            var input = sha.ComputeHash(Encoding.Unicode.GetBytes(hashInput));
 
-            return string.Concat(routeKey, ".", keyPrefix);
+            var key = string.Concat(WebEncoders.Base64UrlEncode(input));
+
+            if (!string.IsNullOrEmpty(suffix))
+                key += suffix;
+
+            return key.ToLower();
         }
 
         /// <summary>
@@ -205,15 +212,15 @@ namespace Nop.Web.Framework.UI
                     switch (_seoSettings.PageTitleSeoAdjustment)
                     {
                         case PageTitleSeoAdjustment.PagenameAfterStorename:
-                        {
-                            result = string.Join(_seoSettings.PageTitleSeparator, _seoSettings.DefaultTitle, specificTitle);
-                        }
+                            {
+                                result = string.Join(_seoSettings.PageTitleSeparator, _seoSettings.DefaultTitle, specificTitle);
+                            }
                             break;
                         case PageTitleSeoAdjustment.StorenameAfterPagename:
                         default:
-                        {
-                            result = string.Join(_seoSettings.PageTitleSeparator, specificTitle, _seoSettings.DefaultTitle);
-                        }
+                            {
+                                result = string.Join(_seoSettings.PageTitleSeparator, specificTitle, _seoSettings.DefaultTitle);
+                            }
                             break;
                     }
                 else
@@ -387,18 +394,18 @@ namespace Nop.Web.Framework.UI
 
             if (woConfig.EnableJavaScriptBundling && _scriptParts[location].Any(item => !item.ExcludeFromBundle))
             {
-                var bundleKey = string.Concat("/js/", GetAssetKey(woConfig.JavaScriptBundleSuffix, location), ".js");
-
                 var sources = _scriptParts[location]
-                    .Where(item => !item.ExcludeFromBundle && item.IsLocal)
-                    .Select(item => item.Src)
-                    .Distinct().ToArray();
+                   .Where(item => !item.ExcludeFromBundle && item.IsLocal)
+                   .Select(item => item.Src)
+                   .Distinct().ToArray();
+
+                var bundleKey = string.Concat("/js/", GetAssetKey(sources, woConfig.JavaScriptBundleSuffix), ".js");
 
                 var bundleAsset = GetOrCreateBundle(bundleKey, CreateJavaScriptAsset, sources);
 
                 var pathBase = _actionContextAccessor.ActionContext?.HttpContext.Request.PathBase ?? PathString.Empty;
                 result.AppendFormat("<script type=\"{0}\" src=\"{1}{2}?v={3}\"></script>",
-                    MimeTypes.TextJavascript, pathBase, bundleAsset.Route, bundleAsset.GenerateCacheKey(httpContext));
+                    MimeTypes.TextJavascript, pathBase, bundleAsset.Route, bundleAsset.GenerateCacheKey(httpContext, woConfig));
             }
 
             var scripts = _scriptParts[location]
@@ -417,7 +424,7 @@ namespace Nop.Web.Framework.UI
                 var asset = GetOrCreateBundle(item.Src, CreateJavaScriptAsset);
 
                 result.AppendFormat("<script type=\"{0}\" src=\"{1}?v={2}\"></script>",
-                    MimeTypes.TextJavascript, asset.Route, asset.GenerateCacheKey(httpContext));
+                    MimeTypes.TextJavascript, asset.Route, asset.GenerateCacheKey(httpContext, woConfig));
 
                 result.Append(Environment.NewLine);
             }
@@ -560,19 +567,19 @@ namespace Nop.Web.Framework.UI
                 if (CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft)
                     bundleSuffix += ".rtl";
 
-                var bundleKey = string.Concat("/css/", GetAssetKey(bundleSuffix, ResourceLocation.Head), ".css");
-
                 var sources = _cssParts
                     .Where(item => !item.ExcludeFromBundle && item.IsLocal)
                     .Distinct()
                     //remove the application path from the generated URL if exists
                     .Select(item => item.Src).ToArray();
 
+                var bundleKey = string.Concat("/css/", GetAssetKey(sources, bundleSuffix), ".css");
+
                 var bundleAsset = GetOrCreateBundle(bundleKey, CreateCssAsset, sources);
 
                 var pathBase = _actionContextAccessor.ActionContext?.HttpContext.Request.PathBase ?? PathString.Empty;
                 result.AppendFormat("<link rel=\"stylesheet\" type=\"{0}\" href=\"{1}{2}?v={3}\" />",
-                    MimeTypes.TextCss, pathBase, bundleAsset.Route, bundleAsset.GenerateCacheKey(httpContext));
+                    MimeTypes.TextCss, pathBase, bundleAsset.Route, bundleAsset.GenerateCacheKey(httpContext, woConfig));
             }
 
             var styles = _cssParts
@@ -594,7 +601,7 @@ namespace Nop.Web.Framework.UI
                 var asset = GetOrCreateBundle(item.Src, CreateCssAsset);
 
                 result.AppendFormat("<link rel=\"stylesheet\" type=\"{0}\" href=\"{1}?v={2}\" />",
-                    MimeTypes.TextCss, asset.Route, asset.GenerateCacheKey(httpContext));
+                    MimeTypes.TextCss, asset.Route, asset.GenerateCacheKey(httpContext, woConfig));
                 result.AppendLine();
             }
 
@@ -806,7 +813,7 @@ namespace Nop.Web.Framework.UI
         }
 
         #endregion
-        
+
         #region Nested classes
 
         /// <summary>

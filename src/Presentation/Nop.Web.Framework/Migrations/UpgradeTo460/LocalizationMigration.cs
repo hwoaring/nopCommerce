@@ -288,6 +288,28 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo460
 
                 ["Admin.Reports.SalesSummary.Vendor"] = "Vendor",
                 ["Admin.Reports.SalesSummary.Vendor.Hint"] = "Search by a specific vendor.",
+
+                //#6353
+                ["Admin.Promotions.Discounts.Fields.CouponCode.Reserved"] = "The entered coupon code is already reserved for the discount '{0}'",
+
+                //#6378
+                ["Admin.Configuration.Settings.Media.AllowSVGUploads"] = "Allow SVG uploads in admin area",
+                ["Admin.Configuration.Settings.Media.AllowSVGUploads.Hint"] = "Check to allow uploading of SVG files in admin area",
+
+                //#6396
+                ["Admin.Catalog.Products.Fields.MinStockQuantity.Hint"] = "If you track inventory, you can perform a number of different actions when the current stock quantity falls below (reaches) your minimum stock quantity.",
+                ["Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Fields.MinStockQuantity.Hint"] = "If you track inventory by product attributes, you can perform a number of different actions when the current stock quantity falls below (reaches) your minimum stock quantity (e.g. Low stock report).",
+                
+                //#6213
+                ["Admin.System.Maintenance.DeleteMinificationFiles"] = "Delete minification files",
+                ["Admin.System.Maintenance.DeleteMinificationFiles.Text"] = "Clear the bundles directory.",
+                ["Admin.System.Maintenance.DeleteMinificationFiles.TotalDeleted"] = "{0} files were deleted",
+
+                //#6336
+                ["Admin.Customers.Customers.RewardPoints.Fields.AddNegativePointsValidity"] = "Points validity is not allowed for point reduction.",
+
+                //#6411
+                ["Admin.StockQuantityHistory.Messages.ReadyForPickupByCustomer"] = "The stock quantity has been reduced when an order item of the order #{0} became a ready for pickup by customer",
             }, languageId).Wait();
 
             #endregion

@@ -1,5 +1,5 @@
 # create the build instance 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 
 WORKDIR /src                                                                    
 COPY ./src ./
@@ -31,8 +31,6 @@ WORKDIR /src/Plugins/Nop.Plugin.Payments.Manual
 RUN dotnet build Nop.Plugin.Payments.Manual.csproj -c Release
 WORKDIR /src/Plugins/Nop.Plugin.Payments.PayPalCommerce
 RUN dotnet build Nop.Plugin.Payments.PayPalCommerce.csproj -c Release
-WORKDIR /src/Plugins/Nop.Plugin.Payments.PayPalStandard
-RUN dotnet build Nop.Plugin.Payments.PayPalStandard.csproj -c Release
 WORKDIR /src/Plugins/Nop.Plugin.Pickup.PickupInStore
 RUN dotnet build Nop.Plugin.Pickup.PickupInStore.csproj -c Release
 WORKDIR /src/Plugins/Nop.Plugin.Shipping.EasyPost
@@ -79,7 +77,7 @@ RUN chmod 775 wwwroot/images/thumbs
 RUN chmod 775 wwwroot/images/uploaded
 
 # create the runtime instance 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS runtime 
+FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine AS runtime 
 
 # add globalization support
 RUN apk add --no-cache icu-libs
@@ -97,5 +95,7 @@ RUN chmod 755 /entrypoint.sh
 WORKDIR /app
 
 COPY --from=build /app/published .
+
+EXPOSE 80
                             
 ENTRYPOINT "/entrypoint.sh"

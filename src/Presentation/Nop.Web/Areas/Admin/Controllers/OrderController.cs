@@ -66,6 +66,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly IShipmentService _shipmentService;
         private readonly IShippingService _shippingService;
         private readonly IShoppingCartService _shoppingCartService;
+        private readonly IStoreContext _storeContext;
         private readonly IWorkContext _workContext;
         private readonly IWorkflowMessageService _workflowMessageService;
         private readonly OrderSettings _orderSettings;
@@ -101,6 +102,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             IShipmentService shipmentService,
             IShippingService shippingService,
             IShoppingCartService shoppingCartService,
+            IStoreContext storeContext,
             IWorkContext workContext,
             IWorkflowMessageService workflowMessageService,
             OrderSettings orderSettings)
@@ -132,6 +134,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             _shipmentService = shipmentService;
             _shippingService = shippingService;
             _shoppingCartService = shoppingCartService;
+            _storeContext = storeContext;
             _workContext = workContext;
             _workflowMessageService = workflowMessageService;
             _orderSettings = orderSettings;
@@ -924,13 +927,13 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
 
+            //a vendor should have access only to their orders
+            if (!await HasAccessToOrderAsync(orderId))
+                return RedirectToAction("List");
+
             //a vendor should have access only to his products
             var currentVendor = await _workContext.GetCurrentVendorAsync();
-            var vendorId = 0;
-            if (currentVendor != null)
-            {
-                vendorId = currentVendor.Id;
-            }
+            var vendorId = currentVendor?.Id ?? 0;
 
             var order = await _orderService.GetOrderByIdAsync(orderId);
             var orders = new List<Order>
@@ -1684,9 +1687,10 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (!warnings.Any())
             {
                 //no errors
-
+                var currentStore = await _storeContext.GetCurrentStoreAsync();
+                
                 //attributes
-                var attributeDescription = await _productAttributeFormatter.FormatAttributesAsync(product, attributesXml, customer);
+                var attributeDescription = await _productAttributeFormatter.FormatAttributesAsync(product, attributesXml, customer, currentStore);
 
                 //weight
                 var itemWeight = await _shippingService.GetShoppingCartItemWeightAsync(product, attributesXml);

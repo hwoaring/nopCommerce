@@ -1551,6 +1551,7 @@ namespace Nop.Web.Areas.Admin.Factories
             model.DefaultImageQuality_OverrideForStore = await _settingService.SettingExistsAsync(mediaSettings, x => x.DefaultImageQuality, storeId);
             model.ImportProductImagesUsingHash_OverrideForStore = await _settingService.SettingExistsAsync(mediaSettings, x => x.ImportProductImagesUsingHash, storeId);
             model.DefaultPictureZoomEnabled_OverrideForStore = await _settingService.SettingExistsAsync(mediaSettings, x => x.DefaultPictureZoomEnabled, storeId);
+            model.AllowSVGUploads_OverrideForStore = await _settingService.SettingExistsAsync(mediaSettings, x => x.AllowSVGUploads, storeId);
             model.ProductDefaultImageId_OverrideForStore = await _settingService.SettingExistsAsync(mediaSettings, x => x.ProductDefaultImageId, storeId);
 
             return model;
@@ -1740,7 +1741,7 @@ namespace Nop.Web.Areas.Admin.Factories
             //prepare PDF settings model
             model.PdfSettings = await PreparePdfSettingsModelAsync();
 
-            //prepare PDF settings model
+            //prepare localization settings model
             model.LocalizationSettings = await PrepareLocalizationSettingsModelAsync();
 
             //prepare admin area settings model

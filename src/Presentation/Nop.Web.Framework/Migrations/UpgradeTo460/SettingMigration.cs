@@ -4,6 +4,7 @@ using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Gdpr;
 using Nop.Core.Domain.Media;
+using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Tax;
@@ -313,6 +314,22 @@ namespace Nop.Web.Framework.Migrations.UpgradeTo460
             {
                 sitemapXmlSettings.SitemapBuildOperationDelay = 60;
                 settingService.SaveSettingAsync(sitemapXmlSettings, settings => settings.SitemapBuildOperationDelay).Wait();
+            }
+
+            //#6378
+            if (!settingService.SettingExistsAsync(mediaSettings, settings => settings.AllowSVGUploads).Result)
+            {
+                mediaSettings.AllowSVGUploads = false;
+                settingService.SaveSettingAsync(mediaSettings, settings => settings.AllowSVGUploads).Wait();
+            }
+
+            //#5599
+            var messagesSettings = settingService.LoadSettingAsync<MessagesSettings>().Result;
+
+            if (!settingService.SettingExistsAsync(messagesSettings, settings => settings.UseDefaultEmailAccountForSendStoreOwnerEmails).Result)
+            {
+                messagesSettings.UseDefaultEmailAccountForSendStoreOwnerEmails = false;
+                settingService.SaveSettingAsync(messagesSettings, settings => settings.UseDefaultEmailAccountForSendStoreOwnerEmails).Wait();
             }
         }
 
