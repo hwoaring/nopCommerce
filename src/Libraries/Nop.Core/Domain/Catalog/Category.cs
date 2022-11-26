@@ -19,6 +19,23 @@ namespace Nop.Core.Domain.Catalog
         public string Name { get; set; }
 
         /// <summary>
+        /// 短名称
+        /// </summary>
+        public string SubTitle { get; set; }
+        /// <summary>
+        /// 调用别名
+        /// </summary>
+        public string IndexName { get; set; }
+        /// <summary>
+        /// 交叉栏目Ids
+        /// </summary>
+        public string CrossCategories { get; set; }
+        /// <summary>
+        /// 摘要
+        /// </summary>
+        public string Summary { get; set; }
+
+        /// <summary>
         /// Gets or sets the description
         /// </summary>
         public string Description { get; set; }
@@ -44,6 +61,26 @@ namespace Nop.Core.Domain.Catalog
         public string MetaTitle { get; set; }
 
         /// <summary>
+        /// 微信使用图片链接
+        /// </summary>
+        public string MetaImageUrl { get; set; }
+
+        /// <summary>
+        /// 微信使用分享链接
+        /// </summary>
+        public string MetaLinkUrl { get; set; }
+
+        /// <summary>
+        /// 微信使用大图链接
+        /// </summary>
+        public string ShareImageUrl { get; set; }
+
+        /// <summary>
+        /// 跳转URL
+        /// </summary>
+        public string Url { get; set; }
+
+        /// <summary>
         /// Gets or sets the parent category identifier
         /// </summary>
         public int ParentCategoryId { get; set; }
@@ -52,6 +89,39 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the picture identifier
         /// </summary>
         public int PictureId { get; set; }
+
+        /// <summary>
+        /// 供应商ID（隔离展示信息）
+        /// </summary>
+        public int SupplierId { get; set; }
+
+        /// <summary>
+        /// VendorId用于指定到个人（隔离展示信息）
+        /// </summary>
+        public int VendorId { get; set; }
+
+        /// <summary>
+        /// 栏目首页模板名称
+        /// </summary>
+        public string IndexTemplateName { get; set; }
+        /// <summary>
+        /// 栏目列表模板名称
+        /// </summary>
+        public string ListTemplateName { get; set; }
+        /// <summary>
+        /// 栏目详情页模板名称
+        /// </summary>
+        public string ItemTemplateName { get; set; }
+
+        /// <summary>
+        /// 分类是否允许分享
+        /// </summary>
+        public bool AllowSharing { get; set; }
+
+        /// <summary>
+        /// 仅对允许的Vendor共享显示产品信息（自己添加的默认显示）-对应到CatrgoryVendorMapping中
+        /// </summary>
+        public bool VendorLimitDisplay { get; set; }
 
         /// <summary>
         /// Gets or sets the page size

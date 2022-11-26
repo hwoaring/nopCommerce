@@ -23,6 +23,31 @@ namespace Nop.Core.Domain.Catalog
         public decimal PriceAdjustment { get; set; }
 
         /// <summary>
+        /// 分销价
+        /// </summary>
+        public decimal DistributorPriceAdjustment { get; set; }
+
+        /// <summary>
+        /// 代理价
+        /// </summary>
+        public decimal AgentPriceAdjustment { get; set; }
+
+        /// <summary>
+        /// 会员价
+        /// </summary>
+        public decimal MemberPriceAdjustment { get; set; }
+
+        /// <summary>
+        /// 划线价
+        /// </summary>
+        public decimal OldPriceAdjustment { get; set; }
+
+        /// <summary>
+        /// 多数量
+        /// </summary>
+        public bool UseQtyMultiple { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether "price adjustment" is specified as percentage
         /// </summary>
         public bool PriceAdjustmentUsePercentage { get; set; }

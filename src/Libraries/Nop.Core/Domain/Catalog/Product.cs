@@ -36,6 +36,33 @@ namespace Nop.Core.Domain.Catalog
         public string Name { get; set; }
 
         /// <summary>
+        /// 推广名称，用于长标题加推广信息一起展示在前台
+        /// </summary>
+        public string PromotionName { get; set; }
+        /// <summary>
+        /// 副标题
+        /// </summary>
+        public string SubTitle { get; set; }
+        /// <summary>
+        /// 封面图(长图或大图)
+        /// </summary>
+        public string CoverImageUrl { get; set; }
+        /// <summary>
+        /// 缩微图（方图或小图）
+        /// </summary>
+        public string CoverThumbImageUrl { get; set; }
+
+        /// <summary>
+        /// 跳转链接，在列表页点击详情链接跳转
+        /// </summary>
+        public string Url { get; set; }
+
+        /// <summary>
+        /// 购买链接：用于分享购买其他平台发布的产品，点击购买按钮跳转
+        /// </summary>
+        public string PurchaseUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the short description
         /// </summary>
         public string ShortDescription { get; set; }
@@ -44,6 +71,71 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the full description
         /// </summary>
         public string FullDescription { get; set; }
+
+        /// <summary>
+        /// 是否允许评论
+        /// </summary>
+        public bool AllowComment { get; set; }
+        /// <summary>
+        /// 是否特价商品
+        /// </summary>
+        public bool SpecialPrice { get; set; }
+        /// <summary>
+        /// 是否折扣商品
+        /// </summary>
+        public bool DiscountPrice { get; set; }
+        /// <summary>
+        /// 是否置顶
+        /// </summary>
+        public bool IsTop { get; set; }
+        /// <summary>
+        /// 是否推荐
+        /// </summary>
+        public bool IsRecommend { get; set; }
+        /// <summary>
+        /// 是否热门
+        /// </summary>
+        public bool IsHot { get; set; }
+        /// <summary>
+        /// 是否幻灯片
+        /// </summary>
+        public bool IsSlide { get; set; }
+        /// <summary>
+        /// 是否图片
+        /// </summary>
+        public bool IsImage { get; set; }
+
+        /// <summary>
+        /// 是否显示供应商Supplier联系方式
+        /// </summary>
+        public bool DisplaySupplierContact { get; set; }
+
+        /// <summary>
+        /// 是否允许Vendor屏蔽本产品的供应商联系方式
+        /// </summary>
+        public bool AllowVendorShieldSupplierContact { get; set; }
+
+        /// <summary>
+        /// 是否延迟加载详情内容中的图片
+        /// </summary>
+        public bool LazyLoadImages { get; set; }
+        /// <summary>
+        /// 部分类型产品需要后台验证后才能付款
+        /// </summary>
+        public bool OrdersNeedVerify { get; set; }
+        /// <summary>
+        /// 订单支付过期秒数（过期前支付，主要用于抢购商品）
+        /// </summary>
+        public int OrderExpireSeconds { get; set; }
+        /// <summary>
+        /// 积分：正为返还，负数为消费
+        /// </summary>
+        public int Points { get; set; }
+        /// <summary>
+        /// 虚拟币：正为返还，负数为消费
+        /// </summary>
+        public decimal VirtualCurrency { get; set; }
+
 
         /// <summary>
         /// Gets or sets the admin comment
@@ -59,6 +151,42 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets a vendor identifier
         /// </summary>
         public int VendorId { get; set; }
+
+        /// <summary>
+        /// 供应商ID
+        /// </summary>
+        public int SupplierId { get; set; }
+
+        /// <summary>
+        /// 文章或产品发布人ID
+        /// </summary>
+        public int PublisherId { get; set; }
+
+
+        /// <summary>
+        /// 供应商提供的兑换券Id
+        /// </summary>
+        public int VoucherCardId { get; set; }
+
+        /// <summary>
+        /// 是否供应商提供的兑换券/代金券卡产品（是则绑定指定的VoucherCardId）
+        /// </summary>
+        public bool IsVoucherCard { get; set; }
+
+        /// <summary>
+        /// 是否需要联系人信息（不用邮寄的虚拟物品或卡券等，订单保存是否需要联系人信息：姓名，电话）
+        /// </summary>
+        public bool ContactInfoRequired { get; set; }
+
+        /// <summary>
+        /// 是否需要实名制购买（获取身份证号信息）
+        /// </summary>
+        public bool RealNameRequired { get; set; }
+
+        /// <summary>
+        /// 是否每个商品都需要不同的实名信息（否则只需1个订单一条实名信息即可）
+        /// </summary>
+        public bool RealNamePerItem { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to show the product on home page
@@ -79,6 +207,26 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the meta title
         /// </summary>
         public string MetaTitle { get; set; }
+
+        /// <summary>
+        /// Seo图片
+        /// </summary>
+        public string MetaImageUrl { get; set; }
+
+        /// <summary>
+        /// 分享链接
+        /// </summary>
+        public string MetaLinkUrl { get; set; }
+
+        /// <summary>
+        /// 分享大图
+        /// </summary>
+        public string ShareImageUrl { get; set; }
+
+        /// <summary>
+        /// 是否允许分享
+        /// </summary>
+        public bool AllowSharing { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the product allows customer reviews
@@ -144,6 +292,126 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets gift card amount that can be used after purchase. If not specified, then product price will be used.
         /// </summary>
         public decimal? OverriddenGiftCardAmount { get; set; }
+
+        /// <summary>
+        /// 卡片从购买开始有效期天数，设置0表示以GiftCardEndUseDateTimeUtc值为准
+        /// </summary>
+        public int GiftCardValidDays { get; set; }
+
+        /// <summary>
+        /// 有效期开始日期
+        /// </summary>
+        public DateTime? GiftCardStartUseDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 最大有效期结束日期
+        /// </summary>
+        public DateTime? GiftCardEndUseDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 购买成功产品最早使用时间
+        /// </summary>
+        public DateTime? AvailableUseStartDateUtc { get; set; }
+
+        /// <summary>
+        /// 购买成功产品最晚使用时间
+        /// </summary>
+        public DateTime? AvailableUseEndDateUtc { get; set; }
+
+        /// <summary>
+        /// 是否支持自提
+        /// </summary>
+        public bool PickUpSupport { get; set; }
+
+        /// <summary>
+        /// 是否支持货到付款（cash on delivery）
+        /// </summary>
+        public bool CODSupport { get; set; }
+
+        /// <summary>
+        /// 在线支付免邮
+        /// </summary>
+        public bool OnlinePayFreeShipping { get; set; }
+
+        /// <summary>
+        /// 满金额免邮是否支持店铺内商品价格总合计
+        /// </summary>
+        public bool TotalAmountSupport { get; set; }
+
+        /// <summary>
+        /// 满额免邮金额
+        /// </summary>
+        public decimal FreeShippingAmount { get; set; }
+
+        /// <summary>
+        /// 产品可用最大积分数量
+        /// </summary>
+        public int MaxPointsAvailable { get; set; }
+
+        /// <summary>
+        /// 【价格保护】使用免费的折扣券最大折扣比例（超出比例不显示可用折扣卡或取最小折扣比例）
+        /// </summary>
+        public decimal? MaxDiscountPercentage { get; set; }
+
+        /// <summary>
+        /// 【价格保护】使用免费的现金抵用券/虚拟币/这算后的低佣金等最大使用金额（超出金额的券不显示或取最小限定值）
+        /// </summary>
+        public decimal? MaxDiscountAmount { get; set; }
+
+        /// <summary>
+        /// 是否开启分销
+        /// </summary>
+        public bool AllowDistribute { get; set; }
+
+        /// <summary>
+        /// 分销商价格
+        /// </summary>
+        public decimal DistributorPrice { get; set; }
+
+        /// <summary>
+        /// 代理商价格
+        /// </summary>
+        public decimal AgentPrice { get; set; }
+
+        /// <summary>
+        /// 会员价
+        /// </summary>
+        public decimal MemberPrice { get; set; }
+
+        /// <summary>
+        /// 产品允许使用的优惠券最大金额
+        /// </summary>
+        public decimal MaxCouponAmountAvailable { get; set; }
+
+        /// <summary>
+        /// 仅新用户可购买
+        /// </summary>
+        public bool OnlyForNewUser { get; set; }
+
+        /// <summary>
+        /// 产品是否允许退款
+        /// </summary>
+        public bool RefundAllowed { get; set; }
+
+        /// <summary>
+        /// 仅对允许的Vendor共享显示自己的产品信息（自己添加的默认显示）-对应到ProductVendorMapping中
+        /// </summary>
+        public bool VendorLimitDisplay { get; set; }
+
+        /// <summary>
+        /// 是否通过审核（编辑或其他商家上的产品需要先通过审核）
+        /// </summary>
+        public bool Audited { get; set; }
+
+        /// <summary>
+        /// 关注人数（设置关注人数基数）
+        /// </summary>
+        public int FollowCount { get; set; }
+
+        /// <summary>
+        /// 浏览次数
+        /// </summary>
+        public int ViewCount { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the product requires that other products are added to the cart (Product X requires Product Y)

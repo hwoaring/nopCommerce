@@ -23,6 +23,21 @@ namespace Nop.Core.Domain.Directory
         public string Abbreviation { get; set; }
 
         /// <summary>
+        /// 区划代码
+        /// </summary>
+        public string AreaCode { get; set; }
+
+        /// <summary>
+        /// 是否开通邮寄
+        /// </summary>
+        public bool AllowShipping { get; set; }
+
+        /// <summary>
+        /// 是否热门
+        /// </summary>
+        public bool HotArea { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the entity is published
         /// </summary>
         public bool Published { get; set; }

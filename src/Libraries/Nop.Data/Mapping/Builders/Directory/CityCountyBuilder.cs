@@ -5,9 +5,9 @@ using Nop.Data.Extensions;
 namespace Nop.Data.Mapping.Builders.Directory
 {
     /// <summary>
-    /// Represents a state and province entity builder
+    /// Represents a City County entity builder
     /// </summary>
-    public partial class StateProvinceBuilder : NopEntityBuilder<StateProvince>
+    public partial class CityCountyBuilder : NopEntityBuilder<CityCounty>
     {
         #region Methods
 
@@ -18,10 +18,10 @@ namespace Nop.Data.Mapping.Builders.Directory
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(StateProvince.Name)).AsString(100).NotNullable()
-                .WithColumn(nameof(StateProvince.Abbreviation)).AsString(100).Nullable()
-                .WithColumn(nameof(StateProvince.AreaCode)).AsAnsiString(15).Nullable()
-                .WithColumn(nameof(StateProvince.CountryId)).AsInt32().ForeignKey<Country>();
+                .WithColumn(nameof(CityCounty.Name)).AsString(100).NotNullable()
+                .WithColumn(nameof(CityCounty.Abbreviation)).AsString(100).Nullable()
+                .WithColumn(nameof(CityCounty.AreaCode)).AsAnsiString(15).Nullable()
+                .WithColumn(nameof(CityCounty.StateProvinceId)).AsInt32().ForeignKey<StateProvince>();
         }
 
         #endregion

@@ -20,6 +20,10 @@ namespace Nop.Core.Domain.Customers
         public Guid CustomerGuid { get; set; }
 
         /// <summary>
+        /// 用户随机Id，用于隐藏真实Id长度为11位
+        /// </summary>
+        public long CustomerRandomId { get; set; }
+        /// <summary>
         /// 当前用户OpenId
         /// </summary>
         public string OpenId { get; set; }

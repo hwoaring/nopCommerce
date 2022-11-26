@@ -44,6 +44,21 @@ namespace Nop.Core.Domain.Catalog
         public string MetaTitle { get; set; }
 
         /// <summary>
+        /// 图片链接
+        /// </summary>
+        public string MetaImageUrl { get; set; }
+
+        /// <summary>
+        /// 微信分享链接
+        /// </summary>
+        public string MetaLinkUrl { get; set; }
+
+        /// <summary>
+        /// 微信分享图片
+        /// </summary>
+        public string ShareImageUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the parent picture identifier
         /// </summary>
         public int PictureId { get; set; }

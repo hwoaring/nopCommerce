@@ -23,6 +23,8 @@ namespace Nop.Data.Mapping.Builders.Blogs
                 .WithColumn(nameof(BlogPost.Body)).AsString(int.MaxValue).NotNullable()
                 .WithColumn(nameof(BlogPost.MetaKeywords)).AsString(400).Nullable()
                 .WithColumn(nameof(BlogPost.MetaTitle)).AsString(400).Nullable()
+                .WithColumn(nameof(BlogPost.MetaImageUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(BlogPost.MetaLinkUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(BlogPost.LanguageId)).AsInt32().ForeignKey<Language>();
         }
 

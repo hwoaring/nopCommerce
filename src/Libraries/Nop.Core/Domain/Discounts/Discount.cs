@@ -13,6 +13,16 @@ namespace Nop.Core.Domain.Discounts
         public string Name { get; set; }
 
         /// <summary>
+        /// 短名称（用于前台展示，为空则取Name值）
+        /// </summary>
+        public string ShortName { get; set; }
+
+        /// <summary>
+        /// 折扣描述
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets or sets the admin comment
         /// </summary>
         public string AdminComment { get; set; }
@@ -21,6 +31,31 @@ namespace Nop.Core.Domain.Discounts
         /// Gets or sets the discount type identifier
         /// </summary>
         public int DiscountTypeId { get; set; }
+
+        /// <summary>
+        /// 启用推荐人数要求
+        /// </summary>
+        public bool EnableRefereeRequirement { get; set; }
+
+        /// <summary>
+        /// 活动是否允许退款
+        /// </summary>
+        public bool RefundAllowed { get; set; }
+
+        /// <summary>
+        /// 最低推荐人数（达到推荐人数可以使用，默认为0）
+        /// </summary>
+        public int MinReferralsNumber { get; set; }
+
+        /// <summary>
+        /// 邀请人数统计开始日期
+        /// </summary>
+        public DateTime? ReferralsNumberStartDateUtc { get; set; }
+
+        /// <summary>
+        /// 邀请人数统计结束日期
+        /// </summary>
+        public DateTime? ReferralsNumberEndDateUtc { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to use percentage
@@ -36,6 +71,11 @@ namespace Nop.Core.Domain.Discounts
         /// Gets or sets the discount amount
         /// </summary>
         public decimal DiscountAmount { get; set; }
+
+        /// <summary>
+        /// 订单总额满多少金额可以使用折扣券
+        /// </summary>
+        public decimal? MinOrderTotalAmount { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum discount amount (used with "UsePercentage")
@@ -68,6 +108,11 @@ namespace Nop.Core.Domain.Discounts
         public bool IsCumulative { get; set; }
 
         /// <summary>
+        /// 折扣信息是否在产品列表页面或详情页面展示
+        /// </summary>
+        public bool FrontDisplay { get; set; }
+
+        /// <summary>
         /// Gets or sets the discount limitation identifier
         /// </summary>
         public int DiscountLimitationId { get; set; }
@@ -76,6 +121,11 @@ namespace Nop.Core.Domain.Discounts
         /// Gets or sets the discount limitation times (used when Limitation is set to "N Times Only" or "N Times Per Customer")
         /// </summary>
         public int LimitationTimes { get; set; }
+
+        /// <summary>
+        /// 最大发行数量（可以配合limit user times使用）
+        /// </summary>
+        public int MaximumNumbers { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum product quantity which could be discounted
@@ -93,6 +143,46 @@ namespace Nop.Core.Domain.Discounts
         /// Gets or sets a value indicating whether the discount is active
         /// </summary>
         public bool IsActive { get; set; }
+
+        /// <summary>
+        /// 仅新用户可用
+        /// </summary>
+        public bool NewUserOnly { get; set; }
+
+        /// <summary>
+        /// 可以使用多少积分兑换，0=不能兑换
+        /// </summary>
+        public int Points { get; set; }
+
+        /// <summary>
+        /// 开始使用时间0=领取马上可以使用，x=领取后几天开始使用
+        /// </summary>
+        public int StartUseTimeDay { get; set; }
+
+        /// <summary>
+        /// 结束使用时间从领取开始x天内，0=不限制（计算的结束使用时间应小于指定的最晚使用时间）
+        /// </summary>
+        public int EndUseTimeDay { get; set; }
+
+        /// <summary>
+        /// 开始使用时间
+        /// </summary>
+        public DateTime? StartUseTimeUtc { get; set; }
+
+        /// <summary>
+        /// 最晚使用时间
+        /// </summary>
+        public DateTime? EndUseTimeUtc { get; set; }
+
+        /// <summary>
+        /// 更新时间
+        /// </summary>
+        public DateTime UpdatedOnUtc { get; set; }
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreatedOnUtc { get; set; }
 
         /// <summary>
         /// Gets or sets the discount type
