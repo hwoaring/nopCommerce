@@ -21,8 +21,10 @@ namespace Nop.Services.Caching
 
         #region Ctor
 
-        public MsSqlServerCacheManager(AppSettings appSettings, IDistributedCache distributedCache) : base(appSettings,
-            distributedCache)
+        public MsSqlServerCacheManager(AppSettings appSettings,
+            IDistributedCache distributedCache,
+            ICacheKeyManager cacheKeyManager)
+            : base(appSettings, distributedCache, cacheKeyManager)
         {
             _distributedCacheConfig = appSettings.Get<DistributedCacheConfig>();
         }
@@ -36,7 +38,7 @@ namespace Nop.Services.Caching
             var conn = new SqlConnection(_distributedCacheConfig.ConnectionString);
             try
             {
-                conn.Open();
+                await conn.OpenAsync();
                 command.Connection = conn;
                 if (parameters.Any())
                     command.Parameters.AddRange(parameters);
@@ -45,7 +47,7 @@ namespace Nop.Services.Caching
             }
             finally
             {
-                conn.Close();
+                await conn.CloseAsync();
             }
         }
 
@@ -69,7 +71,7 @@ namespace Nop.Services.Caching
 
             await PerformActionAsync(command, new SqlParameter("Prefix", SqlDbType.NVarChar) { Value = prefix });
 
-            await RemoveByPrefixInstanceDataAsync(prefix);
+            RemoveByPrefixInstanceData(prefix);
         }
 
         /// <summary>

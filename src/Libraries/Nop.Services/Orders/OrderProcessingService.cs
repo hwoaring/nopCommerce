@@ -1007,7 +1007,7 @@ namespace Nop.Services.Orders
                 await AddOrderNoteAsync(order, $"\"Order placed\" email (to store owner) has been queued. Queued email identifiers: {string.Join(", ", orderPlacedStoreOwnerNotificationQueuedEmailIds)}.");
 
             var orderPlacedAttachmentFilePath = _orderSettings.AttachPdfInvoiceToOrderPlacedEmail ?
-                (await _pdfService.PrintOrderToPdfAsync(order)) : null;
+                (await _pdfService.SaveOrderPdfToDiskAsync(order)) : null;
             var orderPlacedAttachmentFileName = _orderSettings.AttachPdfInvoiceToOrderPlacedEmail ?
                 (string.Format(await _localizationService.GetResourceAsync("PDFInvoice.FileName"), order.CustomOrderNumber) + ".pdf") : null;
             var orderPlacedCustomerNotificationQueuedEmailIds = await _workflowMessageService
@@ -1213,7 +1213,7 @@ namespace Nop.Services.Orders
             {
                 //notification
                 var orderProcessingAttachmentFilePath = _orderSettings.AttachPdfInvoiceToOrderProcessingEmail ?
-                    await _pdfService.PrintOrderToPdfAsync(order) : null;
+                    await _pdfService.SaveOrderPdfToDiskAsync(order) : null;
                 var orderProcessingAttachmentFileName = _orderSettings.AttachPdfInvoiceToOrderProcessingEmail ?
                     (string.Format(await _localizationService.GetResourceAsync("PDFInvoice.FileName"), order.CustomOrderNumber) + ".pdf") : null;
                 var orderProcessingCustomerNotificationQueuedEmailIds = await _workflowMessageService
@@ -1229,7 +1229,7 @@ namespace Nop.Services.Orders
             {
                 //notification
                 var orderCompletedAttachmentFilePath = _orderSettings.AttachPdfInvoiceToOrderCompletedEmail ?
-                    await _pdfService.PrintOrderToPdfAsync(order) : null;
+                    await _pdfService.SaveOrderPdfToDiskAsync(order) : null;
                 var orderCompletedAttachmentFileName = _orderSettings.AttachPdfInvoiceToOrderCompletedEmail ?
                     (string.Format(await _localizationService.GetResourceAsync("PDFInvoice.FileName"), order.CustomOrderNumber) + ".pdf") : null;
                 var orderCompletedCustomerNotificationQueuedEmailIds = await _workflowMessageService
@@ -1285,7 +1285,7 @@ namespace Nop.Services.Orders
                 //remove this "if" statement if you want to send it in this case
 
                 var orderPaidAttachmentFilePath = _orderSettings.AttachPdfInvoiceToOrderPaidEmail ?
-                    await _pdfService.PrintOrderToPdfAsync(order) : null;
+                    await _pdfService.SaveOrderPdfToDiskAsync(order) : null;
                 var orderPaidAttachmentFileName = _orderSettings.AttachPdfInvoiceToOrderPaidEmail ?
                     (string.Format(await _localizationService.GetResourceAsync("PDFInvoice.FileName"), order.CustomOrderNumber) + ".pdf") : null;
                 var orderPaidCustomerNotificationQueuedEmailIds = await _workflowMessageService.SendOrderPaidCustomerNotificationAsync(order, order.CustomerLanguageId,
@@ -1813,7 +1813,7 @@ namespace Nop.Services.Orders
             {
                 var product = await _productService.GetProductByIdAsync(updatedShoppingCartItem.ProductId);
                 var store = await _storeService.GetStoreByIdAsync(updatedShoppingCartItem.StoreId);
-                
+
                 updateOrderParameters.Warnings.AddRange(await _shoppingCartService.GetShoppingCartItemWarningsAsync(customer, updatedShoppingCartItem.ShoppingCartType,
                     product, updatedOrder.StoreId, updatedShoppingCartItem.AttributesXml, updatedShoppingCartItem.CustomerEnteredPrice,
                     updatedShoppingCartItem.RentalStartDateUtc, updatedShoppingCartItem.RentalEndDateUtc, updatedShoppingCartItem.Quantity, false, updatedShoppingCartItem.Id));
@@ -2128,7 +2128,7 @@ namespace Nop.Services.Orders
                 {
                     //cancel recurring payment
                     var errors = (await CancelRecurringPaymentAsync(recurringPayment)).ToList();
-                    foreach(var error in errors)
+                    foreach (var error in errors)
                     {
                         await _logger.ErrorAsync(error);
                     }
@@ -3210,29 +3210,36 @@ namespace Nop.Services.Orders
         /// Place order items in current user shopping cart.
         /// </summary>
         /// <param name="order">The order</param>
-        /// <returns>A task that represents the asynchronous operation</returns>
-        public virtual async Task ReOrderAsync(Order order)
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the warnings
+        /// </returns>
+        public virtual async Task<IList<string>> ReOrderAsync(Order order)
         {
             if (order == null)
                 throw new ArgumentNullException(nameof(order));
 
             var customer = await _customerService.GetCustomerByIdAsync(order.CustomerId);
 
+            var warnings = new List<string>();
+
             //move shopping cart items (if possible)
             foreach (var orderItem in await _orderService.GetOrderItemsAsync(order.Id))
             {
                 var product = await _productService.GetProductByIdAsync(orderItem.ProductId);
 
-                await _shoppingCartService.AddToCartAsync(customer, product,
+                warnings.AddRange(await _shoppingCartService.AddToCartAsync(customer, product,
                     ShoppingCartType.ShoppingCart, order.StoreId,
                     orderItem.AttributesXml, orderItem.UnitPriceExclTax,
                     orderItem.RentalStartDateUtc, orderItem.RentalEndDateUtc,
-                    orderItem.Quantity, false);
+                    orderItem.Quantity, false));
             }
 
             //set checkout attributes
             //comment the code below if you want to disable this functionality
             await _genericAttributeService.SaveAttributeAsync(customer, NopCustomerDefaults.CheckoutAttributes, order.CheckoutAttributesXml, order.StoreId);
+
+            return warnings;
         }
 
         /// <summary>

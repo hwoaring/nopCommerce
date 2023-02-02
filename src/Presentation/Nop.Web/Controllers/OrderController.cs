@@ -10,6 +10,8 @@ using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
 using Nop.Services.Common;
 using Nop.Services.Customers;
+using Nop.Services.Localization;
+using Nop.Services.Messages;
 using Nop.Services.Orders;
 using Nop.Services.Payments;
 using Nop.Services.Shipping;
@@ -25,6 +27,8 @@ namespace Nop.Web.Controllers
         #region Fields
 
         private readonly ICustomerService _customerService;
+        private readonly ILocalizationService _localizationService;
+        private readonly INotificationService _notificationService;
         private readonly IOrderModelFactory _orderModelFactory;
         private readonly IOrderProcessingService _orderProcessingService;
         private readonly IOrderService _orderService;
@@ -40,6 +44,8 @@ namespace Nop.Web.Controllers
 		#region Ctor
 
         public OrderController(ICustomerService customerService,
+            ILocalizationService localizationService,
+            INotificationService notificationService,
             IOrderModelFactory orderModelFactory,
             IOrderProcessingService orderProcessingService, 
             IOrderService orderService, 
@@ -51,6 +57,8 @@ namespace Nop.Web.Controllers
             RewardPointsSettings rewardPointsSettings)
         {
             _customerService = customerService;
+            _localizationService = localizationService;
+            _notificationService = notificationService;
             _orderModelFactory = orderModelFactory;
             _orderProcessingService = orderProcessingService;
             _orderService = orderService;
@@ -190,14 +198,10 @@ namespace Nop.Web.Controllers
             if (order == null || order.Deleted || customer.Id != order.CustomerId)
                 return Challenge();
 
-            var orders = new List<Order>
-            {
-                order
-            };
             byte[] bytes;
             await using (var stream = new MemoryStream())
             {
-                await _pdfService.PrintOrdersToPdfAsync(stream, orders, (await _workContext.GetWorkingLanguageAsync()).Id);
+                await _pdfService.PrintOrderToPdfAsync(stream, order, await _workContext.GetWorkingLanguageAsync());
                 bytes = stream.ToArray();
             }
             return File(bytes, MimeTypes.ApplicationPdf, $"order_{order.CustomOrderNumber}.pdf");
@@ -211,7 +215,11 @@ namespace Nop.Web.Controllers
             if (order == null || order.Deleted || customer.Id != order.CustomerId)
                 return Challenge();
 
-            await _orderProcessingService.ReOrderAsync(order);
+            var warnings = await _orderProcessingService.ReOrderAsync(order);
+
+            if (warnings.Any())
+                _notificationService.WarningNotification(await _localizationService.GetResourceAsync("ShoppingCart.ReorderWarning"));
+
             return RedirectToRoute("ShoppingCart");
         }
 

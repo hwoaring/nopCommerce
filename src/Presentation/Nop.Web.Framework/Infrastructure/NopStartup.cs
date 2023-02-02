@@ -87,27 +87,35 @@ namespace Nop.Web.Framework.Infrastructure
             //static cache manager
             var appSettings = Singleton<AppSettings>.Instance;
             var distributedCacheConfig = appSettings.Get<DistributedCacheConfig>();
+  
+            services.AddSingleton<ICacheKeyManager, CacheKeyManager>();
+
             if (distributedCacheConfig.Enabled)
             {
                 switch (distributedCacheConfig.DistributedCacheType)
                 {
                     case DistributedCacheType.Memory:
-                        services.AddScoped<ILocker, MemoryDistributedCacheManager>();
                         services.AddScoped<IStaticCacheManager, MemoryDistributedCacheManager>();
                         break;
                     case DistributedCacheType.SqlServer:
-                        services.AddScoped<ILocker, MsSqlServerCacheManager>();
                         services.AddScoped<IStaticCacheManager, MsSqlServerCacheManager>();
                         break;
                     case DistributedCacheType.Redis:
-                        services.AddScoped<ILocker, RedisCacheManager>();
+                        services.AddSingleton<IRedisConnectionWrapper, RedisConnectionWrapper>();
                         services.AddScoped<IStaticCacheManager, RedisCacheManager>();
                         break;
+                    case DistributedCacheType.RedisSynchronizedMemory:
+                        services.AddSingleton<IRedisConnectionWrapper, RedisConnectionWrapper>();
+                        services.AddSingleton<ISynchronizedMemoryCache, RedisSynchronizedMemoryCache>();
+                        services.AddSingleton<IStaticCacheManager, SynchronizedMemoryCacheManager>();
+                        break;
                 }
+
+                services.AddSingleton<ILocker, DistributedCacheLocker>();
             }
             else
             {
-                services.AddSingleton<ILocker, MemoryCacheManager>();
+                services.AddSingleton<ILocker, MemoryCacheLocker>();
                 services.AddSingleton<IStaticCacheManager, MemoryCacheManager>();
             }
 
@@ -238,6 +246,7 @@ namespace Nop.Web.Framework.Infrastructure
             services.AddScoped<IPickupPluginManager, PickupPluginManager>();
             services.AddScoped<IShippingPluginManager, ShippingPluginManager>();
             services.AddScoped<ITaxPluginManager, TaxPluginManager>();
+            services.AddScoped<ISearchPluginManager, SearchPluginManager>();
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
@@ -263,16 +272,9 @@ namespace Nop.Web.Framework.Infrastructure
             else
                 services.AddScoped<IPictureService, PictureService>();
 
-            //roxy file manager service
-            services.AddTransient<DatabaseRoxyFilemanService>();
-            services.AddTransient<FileRoxyFilemanService>();
-
-            services.AddScoped<IRoxyFilemanService>(serviceProvider =>
-            {
-                return serviceProvider.GetRequiredService<IPictureService>().IsStoreInDbAsync().Result
-                    ? serviceProvider.GetRequiredService<DatabaseRoxyFilemanService>()
-                    : serviceProvider.GetRequiredService<FileRoxyFilemanService>();
-            });
+            //roxy file manager
+            services.AddScoped<IRoxyFilemanService, RoxyFilemanService>();
+            services.AddScoped<IRoxyFilemanFileProvider, RoxyFilemanFileProvider>();
 
             //installation service
             services.AddScoped<IInstallationService, InstallationService>();
@@ -297,9 +299,14 @@ namespace Nop.Web.Framework.Infrastructure
 
             //XML sitemap
             services.AddScoped<IXmlSiteMap, XmlSiteMap>();
+
+            //register the Lazy resolver for .Net IoC
+            var useAutofac = appSettings.Get<CommonConfig>().UseAutofac;
+            if (!useAutofac)
+                services.AddScoped(typeof(Lazy<>), typeof(LazyInstance<>));
         }
 
-        // <summary>
+        /// <summary>
         /// Configure the using of added middleware
         /// </summary>
         /// <param name="application">Builder for configuring an application's request pipeline</param>

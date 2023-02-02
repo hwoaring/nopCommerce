@@ -703,7 +703,7 @@ namespace Nop.Services.Plugins
         /// Get names of incompatible plugins
         /// </summary>
         /// <returns>List of plugin names</returns>
-        public virtual IList<string> GetIncompatiblePlugins()
+        public virtual IDictionary<string, PluginIncompatibleType> GetIncompatiblePlugins()
         {
             return _pluginsInfo.IncompatiblePlugins;
         }
