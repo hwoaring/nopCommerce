@@ -20,6 +20,26 @@ namespace Nop.Core.Domain.Customers
         public Guid CustomerGuid { get; set; }
 
         /// <summary>
+        /// 永久推荐用户ID
+        /// </summary>
+        public int ReferrerCustomerId { get; set; }
+
+        /// <summary>
+        /// 临时推荐用户ID
+        /// </summary>
+        public int TempReferrerCustomerId { get; set; }
+
+        /// <summary>
+        /// 临时推荐用户更新时间（更新时间+系统设置的过期市场=过期时间，超出时间属于默认推荐人）
+        /// </summary>
+        public DateTime? TempReferrerDateUtc { get; set; }
+
+        /// <summary>
+        /// 用户微信OpenId
+        /// </summary>
+        public string CustomerOpenId { get; set; }
+
+        /// <summary>
         /// Gets or sets the username
         /// </summary>
         public string Username { get; set; }
@@ -38,6 +58,11 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets the last name
         /// </summary>
         public string LastName { get; set; }
+
+        /// <summary>
+        /// 后台自主备注名称
+        /// </summary>
+        public string Remark { get; set; }
 
         /// <summary>
         /// Gets or sets the gender
@@ -93,6 +118,11 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets the phone number
         /// </summary>
         public string Phone { get; set; }
+
+        /// <summary>
+        /// 用于客户已注册并希望更改电话号码的情况。
+        /// </summary>
+        public string PhoneToRevalidate { get; set; }
 
         /// <summary>
         /// Gets or sets the fax
@@ -160,6 +190,16 @@ namespace Nop.Core.Domain.Customers
         public int VendorId { get; set; }
 
         /// <summary>
+        /// 供应商ID
+        /// </summary>
+        public int SupplierId { get; set; }
+
+        /// <summary>
+        /// 销售员ID
+        /// </summary>
+        public int SalerId { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this customer has some products in the shopping cart
         /// <remarks>The same as if we run ShoppingCartItems.Count > 0
         /// We use this property for performance optimization:
@@ -173,6 +213,31 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets a value indicating whether the customer is required to re-login
         /// </summary>
         public bool RequireReLogin { get; set; }
+
+        /// <summary>
+        /// 邮箱地址是否通过验证
+        /// </summary>
+        public bool EmailValidated { get; set; }
+
+        /// <summary>
+        /// 电话号码是否通过SMS验证
+        /// </summary>
+        public bool PhoneValidated { get; set; }
+
+        /// <summary>
+        /// 是否允许推荐用户，默认true，不允许时，该用户不会传递推荐参数
+        /// </summary>
+        public bool ReferrerEnable { get; set; }
+
+        /// <summary>
+        /// 是否允许成为临时推荐人（是否允许覆盖历史的临时推荐人）
+        /// </summary>
+        public bool AsTempReferrerEnable { get; set; }
+
+        /// <summary>
+        /// 是否允许下单
+        /// </summary>
+        public bool AllowOrder { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating number of failed login attempts (wrong password)

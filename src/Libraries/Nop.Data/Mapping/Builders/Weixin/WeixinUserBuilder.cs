@@ -1,17 +1,17 @@
 ﻿using System.Data;
 using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Common;
-using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Weixin;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Localization;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Customers
+namespace Nop.Data.Mapping.Builders.Weixin
 {
     /// <summary>
     /// Represents a customer entity builder
     /// </summary>
-    public partial class CustomerBuilder : NopEntityBuilder<Customer>
+    public partial class WeixinUserBuilder : NopEntityBuilder<WeixinUser>
     {
         #region Methods
 
@@ -28,7 +28,6 @@ namespace Nop.Data.Mapping.Builders.Customers
                 .WithColumn(nameof(Customer.EmailToRevalidate)).AsString(1000).Nullable()
                 .WithColumn(nameof(Customer.FirstName)).AsString(1000).Nullable()
                 .WithColumn(nameof(Customer.LastName)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.Remark)).AsString(1000).Nullable()
                 .WithColumn(nameof(Customer.Gender)).AsString(1000).Nullable()
                 .WithColumn(nameof(Customer.Company)).AsString(1000).Nullable()
                 .WithColumn(nameof(Customer.StreetAddress)).AsString(1000).Nullable()
