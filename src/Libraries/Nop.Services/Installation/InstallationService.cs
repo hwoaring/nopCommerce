@@ -2879,7 +2879,7 @@ namespace Nop.Services.Installation
                 CategoryBreadcrumbEnabled = true,
                 ShowShareButton = true,
                 PageShareCode =
-                    "<!-- AddThis Button BEGIN --><div class=\"addthis_toolbox addthis_default_style \"><a class=\"addthis_button_preferred_1\"></a><a class=\"addthis_button_preferred_2\"></a><a class=\"addthis_button_preferred_3\"></a><a class=\"addthis_button_preferred_4\"></a><a class=\"addthis_button_compact\"></a><a class=\"addthis_counter addthis_bubble_style\"></a></div><script src=\"http://s7.addthis.com/js/250/addthis_widget.js#pubid=nopsolutions\"></script><!-- AddThis Button END -->",
+                    "<!-- ShareThis Button BEGIN --><div class=\"sharethis-inline-share-buttons\"></div><script type=\"text/javascript\" src=\"https://platform-api.sharethis.com/js/sharethis.js#property=64428a0865e28d00193ae8a9&product=inline-share-buttons&source=nopcommerce\" async=\"async\"></script><!-- ShareThis Button END -->",
                 ProductReviewsMustBeApproved = false,
                 OneReviewPerProductFromCustomer = false,
                 DefaultProductRatingValue = 5,
@@ -3050,7 +3050,8 @@ namespace Nop.Services.Installation
                 DeleteGuestTaskOlderThanMinutes = 1440,
                 PhoneNumberValidationEnabled = false,
                 PhoneNumberValidationUseRegex = false,
-                PhoneNumberValidationRule = "^[0-9]{1,14}?$"
+                PhoneNumberValidationRule = "^[0-9]{1,14}?$",
+                DefaultCountryId = _countryRepository.Table.FirstOrDefault(c => c.ThreeLetterIsoCode == regionInfo.ThreeLetterISORegionName)?.Id
             });
 
             await settingService.SaveSettingAsync(new MultiFactorAuthenticationSettings
@@ -3074,7 +3075,8 @@ namespace Nop.Services.Installation
                 StateProvinceEnabled = true,
                 PhoneEnabled = true,
                 PhoneRequired = true,
-                FaxEnabled = true
+                FaxEnabled = true,
+                DefaultCountryId = _countryRepository.Table.FirstOrDefault(c => c.ThreeLetterIsoCode == regionInfo.ThreeLetterISORegionName)?.Id
             });
 
             await settingService.SaveSettingAsync(new MediaSettings
@@ -3244,7 +3246,8 @@ namespace Nop.Services.Installation
                 HoneypotEnabled = false,
                 HoneypotInputName = "hpinput",
                 AllowNonAsciiCharactersInHeaders = true,
-                UseAesEncryptionAlgorithm = true
+                UseAesEncryptionAlgorithm = true,
+                AllowStoreOwnerExportImportCustomersWithHashedPassword = true
             });
 
             await settingService.SaveSettingAsync(new ShippingSettings
@@ -3270,7 +3273,7 @@ namespace Nop.Services.Installation
                 BypassShippingMethodSelectionIfOnlyOne = false,
                 UseCubeRootMethod = true,
                 ConsiderAssociatedProductsDimensions = true,
-                ShipSeparatelyOneItemEach = true,
+                ShipSeparatelyOneItemEach = false,
                 RequestDelay = 300,
                 ShippingSorting = ShippingSortingEnum.Position,
             });
@@ -6184,24 +6187,37 @@ namespace Nop.Services.Installation
                     IsRequired = true
                 });
 
-            await InsertInstallationDataAsync(
+            var pavNatural = await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamPrint.Id,
-                    PictureId = picProductNikeFloralShoe1Id,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "Natural",
                     DisplayOrder = 1,
                     ImageSquaresPictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "p_attribute_print_2.jpg")), MimeTypes.ImagePJpeg, await pictureService.GetPictureSeNameAsync("Natural Print"))).Id
-                },
+                });
+
+            await InsertInstallationDataAsync(new ProductAttributeValuePicture
+            {
+                PictureId = picProductNikeFloralShoe1Id,
+                ProductAttributeValueId = pavNatural.Id
+            });
+
+            var pavFresh = await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamPrint.Id,
-                    PictureId = picProductNikeFloralShoe2Id,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "Fresh",
                     DisplayOrder = 2,
                     ImageSquaresPictureId = (await pictureService.InsertPictureAsync(await _fileProvider.ReadAllBytesAsync(_fileProvider.Combine(sampleImagesPath, "p_attribute_print_1.jpg")), MimeTypes.ImagePJpeg, await pictureService.GetPictureSeNameAsync("Fresh Print"))).Id
+                });
+
+            await InsertInstallationDataAsync(
+                new ProductAttributeValuePicture
+                {
+                    PictureId = picProductNikeFloralShoe2Id,
+                    ProductAttributeValueId = pavFresh.Id
                 });
 
             await AddProductTagAsync(productNikeFloral, "cool");
@@ -6331,34 +6347,55 @@ namespace Nop.Services.Installation
                     IsRequired = true
                 });
 
-            await InsertInstallationDataAsync(
+            var pavRed = await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamAdidasColor.Id,
-                    PictureId = picProductAdidasId,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "Red",
                     IsPreSelected = true,
                     ColorSquaresRgb = "#663030",
                     DisplayOrder = 1
-                },
-                new ProductAttributeValue
+                });
+
+            await InsertInstallationDataAsync(
+                new ProductAttributeValuePicture
+                {
+                    PictureId = picProductAdidasId,
+                    ProductAttributeValueId = pavRed.Id
+                });
+
+            var pavBlue = await InsertInstallationDataAsync(new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamAdidasColor.Id,
-                    PictureId = picProductAdidas2Id,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "Blue",
                     ColorSquaresRgb = "#363656",
                     DisplayOrder = 2
-                },
+                });
+
+            await InsertInstallationDataAsync(
+                new ProductAttributeValuePicture
+                {
+                    PictureId = picProductAdidas2Id,
+                    ProductAttributeValueId = pavBlue.Id
+                });
+
+            var pavSilver = await InsertInstallationDataAsync(
                 new ProductAttributeValue
                 {
                     ProductAttributeMappingId = pamAdidasColor.Id,
-                    PictureId = picProductAdidas3Id,
                     AttributeValueType = AttributeValueType.Simple,
                     Name = "Silver",
                     ColorSquaresRgb = "#c5c5d5",
                     DisplayOrder = 3
+                });
+
+            await InsertInstallationDataAsync(
+                new ProductAttributeValuePicture
+                {
+                    PictureId = picProductAdidas3Id,
+                    ProductAttributeValueId = pavSilver.Id
                 });
 
             await AddProductTagAsync(productAdidas, "cool");
@@ -8907,6 +8944,12 @@ namespace Nop.Services.Installation
                 },
                 new ActivityLogType
                 {
+                    SystemKeyword = "ImportCustomers",
+                    Enabled = true,
+                    Name = "Customers were imported"
+                },
+                new ActivityLogType
+                {
                     SystemKeyword = "ImportNewsLetterSubscriptions",
                     Enabled = true,
                     Name = "Newsletter subscriptions were imported"
@@ -8970,6 +9013,12 @@ namespace Nop.Services.Installation
                     SystemKeyword = "UninstallPlugin",
                     Enabled = true,
                     Name = "Uninstall a plugin"
+                },
+                new ActivityLogType
+                {
+                    SystemKeyword = "UpdatePlugin",
+                    Enabled = true,
+                    Name = "Update a plugin"
                 },
                 //public store activities
                 new ActivityLogType

@@ -15,6 +15,7 @@ using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Payments;
+using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Seo;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Tax;
@@ -52,15 +53,16 @@ namespace Nop.Services.ExportImport
 
         protected readonly AddressSettings _addressSettings;
         protected readonly CatalogSettings _catalogSettings;
+        protected readonly SecuritySettings _securitySettings;
+        protected readonly ICustomerActivityService _customerActivityService;
         protected readonly CustomerSettings _customerSettings;
         protected readonly DateTimeSettings _dateTimeSettings;
         protected readonly ForumSettings _forumSettings;
         protected readonly IAddressService _addressService;
-        protected readonly IAttributeFormatter<CustomerAttribute, CustomerAttributeValue> _customerAttributeFormatter;
         protected readonly ICategoryService _categoryService;
         protected readonly ICountryService _countryService;
         protected readonly ICurrencyService _currencyService;
-        protected readonly ICustomerActivityService _customerActivityService;
+        protected readonly IAttributeFormatter<CustomerAttribute, CustomerAttributeValue> _customerAttributeFormatter;
         protected readonly ICustomerService _customerService;
         protected readonly IDateRangeService _dateRangeService;
         protected readonly IDateTimeHelper _dateTimeHelper;
@@ -99,6 +101,7 @@ namespace Nop.Services.ExportImport
 
         public ExportManager(AddressSettings addressSettings,
             CatalogSettings catalogSettings,
+            SecuritySettings securitySettings,
             CustomerSettings customerSettings,
             DateTimeSettings dateTimeSettings,
             ForumSettings forumSettings,
@@ -142,6 +145,7 @@ namespace Nop.Services.ExportImport
         {
             _addressSettings = addressSettings;
             _catalogSettings = catalogSettings;
+            _securitySettings = securitySettings;
             _customerSettings = customerSettings;
             _dateTimeSettings = dateTimeSettings;
             _addressService = addressService;
@@ -486,6 +490,7 @@ namespace Nop.Services.ExportImport
                 {
                     DropDownElements = await AttributeValueType.Simple.ToSelectListAsync(useLocalization: false)
                 },
+
                 new PropertyByName<ExportProductAttribute, Language>("AssociatedProductId", (p, l) => p.AssociatedProductId),
                 new PropertyByName<ExportProductAttribute, Language>("ColorSquaresRgb", (p, l) => p.ColorSquaresRgb),
                 new PropertyByName<ExportProductAttribute, Language>("ImageSquaresPictureId", (p, l) => p.ImageSquaresPictureId),
@@ -497,7 +502,8 @@ namespace Nop.Services.ExportImport
                 new PropertyByName<ExportProductAttribute, Language>("Quantity", (p, l) => p.Quantity),
                 new PropertyByName<ExportProductAttribute, Language>("IsPreSelected", (p, l) => p.IsPreSelected),
                 new PropertyByName<ExportProductAttribute, Language>("DisplayOrder", (p, l) => p.DisplayOrder),
-                new PropertyByName<ExportProductAttribute, Language>("PictureId", (p, l) => p.PictureId)
+                new PropertyByName<ExportProductAttribute, Language>("PictureIds", async (p, l) => string.Join(",",
+                                    (await _productAttributeService.GetProductAttributeValuePicturesAsync(p.Id)).Select(vp => vp.PictureId)))
             };
 
             var localizedProperties = new[]
@@ -618,7 +624,8 @@ namespace Nop.Services.ExportImport
                     var values = await _productAttributeService.GetProductAttributeValuesAsync(pam.Id);
 
                     if (values?.Any() ?? false)
-                        return values.Select(pav =>
+                    {
+                        IEnumerable<ExportProductAttribute> productAttributes = await values.SelectAwait(async pav =>
                             new ExportProductAttribute
                             {
                                 AttributeId = productAttribute.Id,
@@ -642,8 +649,12 @@ namespace Nop.Services.ExportImport
                                 Quantity = pav.Quantity,
                                 IsPreSelected = pav.IsPreSelected,
                                 DisplayOrder = pav.DisplayOrder,
-                                PictureId = pav.PictureId
-                            });
+                                PictureIds = string.Join(";",
+                                    (await _productAttributeService.GetProductAttributeValuePicturesAsync(pav.Id)).Select(vp => vp.PictureId))
+                            }).ToListAsync();
+
+                        return productAttributes;
+                    }
 
                     var attribute = new ExportProductAttribute
                     {
@@ -1363,7 +1374,8 @@ namespace Nop.Services.ExportImport
                             await xmlWriter.WriteStringAsync("Quantity", productAttributeValue.Quantity);
                             await xmlWriter.WriteStringAsync("IsPreSelected", productAttributeValue.IsPreSelected);
                             await xmlWriter.WriteStringAsync("DisplayOrder", productAttributeValue.DisplayOrder);
-                            await xmlWriter.WriteStringAsync("PictureId", productAttributeValue.PictureId);
+                            await xmlWriter.WriteStringAsync("PictureIds", string.Join(",", 
+                                (await _productAttributeService.GetProductAttributeValuePicturesAsync(productAttributeValue.Id)).Select(vp => vp.PictureId)));
                             await xmlWriter.WriteEndElementAsync();
                         }
 
@@ -1647,6 +1659,7 @@ namespace Nop.Services.ExportImport
                 new PropertyByName<Product, Language>("ProductTags", async (p, l) =>  await GetProductTagsAsync(p), await IgnoreExportProductPropertyAsync(p => p.ProductTags)),
                 new PropertyByName<Product, Language>("IsLimitedToStores", (p, l) => p.LimitedToStores, await IgnoreExportLimitedToStoreAsync()),
                 new PropertyByName<Product, Language>("LimitedToStores",async (p, l) =>  await GetLimitedToStoresAsync(p), await IgnoreExportLimitedToStoreAsync()),
+                new PropertyByName<Product, Language>("DisplayAttributeCombinationImagesOnly",(p, l) =>  p.DisplayAttributeCombinationImagesOnly, !_productEditorSettings.DisplayAttributeCombinationImagesOnly),
                 new PropertyByName<Product, Language>("Picture1", async (p, l) => await GetPictureAsync(p, 0)),
                 new PropertyByName<Product, Language>("Picture2", async (p, l) => await GetPictureAsync(p, 1)),
                 new PropertyByName<Product, Language>("Picture3", async (p, l) => await GetPictureAsync(p, 2))
@@ -1994,7 +2007,6 @@ namespace Nop.Services.ExportImport
                 new PropertyByName<Customer, Language>("Phone", (p, l) => p.Phone, !_customerSettings.PhoneEnabled),
                 new PropertyByName<Customer, Language>("Fax", (p, l) => p.Fax, !_customerSettings.FaxEnabled),
                 new PropertyByName<Customer, Language>("VatNumber", (p, l) => p.VatNumber),
-                new PropertyByName<Customer, Language>("VatNumberStatusId", (p, l) => p.VatNumberStatusId),
                 new PropertyByName<Customer, Language>("VatNumberStatus", (p, l) => p.VatNumberStatusId)
                 {
                     DropDownElements = await VatNumberStatus.Unknown.ToSelectListAsync(useLocalization: false)
@@ -2003,9 +2015,42 @@ namespace Nop.Services.ExportImport
                 new PropertyByName<Customer, Language>("AvatarPictureId", async (p, l) => await _genericAttributeService.GetAttributeAsync<int>(p, NopCustomerDefaults.AvatarPictureIdAttribute), !_customerSettings.AllowCustomersToUploadAvatars),
                 new PropertyByName<Customer, Language>("ForumPostCount", async (p, l) => await _genericAttributeService.GetAttributeAsync<int>(p, NopCustomerDefaults.ForumPostCountAttribute)),
                 new PropertyByName<Customer, Language>("Signature", async (p, l) => await _genericAttributeService.GetAttributeAsync<string>(p, NopCustomerDefaults.SignatureAttribute)),
-                new PropertyByName<Customer, Language>("CustomCustomerAttributes", async (p, l) => await GetCustomCustomerAttributesAsync(p))
-            }, _catalogSettings);
+                new PropertyByName<Customer, Language>("CustomCustomerAttributes", async (p, l) => await GetCustomCustomerAttributesAsync(p)),
+                new PropertyByName<Customer, Language>("CustomCustomerAttributesXML", (p, l) => p.CustomCustomerAttributesXML),
+                new PropertyByName<Customer, Language>("Password", async (p, l) =>
+                {
+                    if (!_securitySettings.AllowStoreOwnerExportImportCustomersWithHashedPassword)
+                        return string.Empty;
 
+                    var password = await _customerService.GetCurrentPasswordAsync(p.Id);
+
+                    if(password == null) 
+                        return string.Empty;
+
+                    if (password.PasswordFormat == PasswordFormat.Hashed)
+                        return password.Password;
+
+                    return string.Empty;
+                },  !_securitySettings.AllowStoreOwnerExportImportCustomersWithHashedPassword),
+                new PropertyByName<Customer, Language>("PasswordSalt", async (p, l) =>
+                {
+                    if (!_securitySettings.AllowStoreOwnerExportImportCustomersWithHashedPassword)
+                        return string.Empty;
+
+                    var password = await _customerService.GetCurrentPasswordAsync(p.Id);
+
+                    if(password == null)
+                        return string.Empty;
+
+                    if (password.PasswordFormat == PasswordFormat.Hashed)
+                        return password.PasswordSalt;
+
+                    return string.Empty;
+
+                }, !_securitySettings.AllowStoreOwnerExportImportCustomersWithHashedPassword),
+
+            }, _catalogSettings);
+            
             //activity log
             await _customerActivityService.InsertActivityAsync("ExportCustomers",
                 string.Format(await _localizationService.GetResourceAsync("ActivityLog.ExportCustomers"), customers.Count));

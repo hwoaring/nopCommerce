@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Globalization;
 using System.Resources;
 using FluentAssertions;
 using FluentMigrator;
@@ -108,8 +109,11 @@ namespace Nop.Tests
 
             var languagePackInfo = (DownloadUrl: string.Empty, Progress: 0);
 
+            var cultureInfo = new CultureInfo(NopCommonDefaults.DefaultLanguageCulture);
+            var regionInfo = new RegionInfo(NopCommonDefaults.DefaultLanguageCulture);
+
             _serviceProvider.GetService<IInstallationService>()
-                .InstallRequiredDataAsync(NopTestsDefaults.AdminEmail, NopTestsDefaults.AdminPassword, languagePackInfo, null, null).Wait();
+                .InstallRequiredDataAsync(NopTestsDefaults.AdminEmail, NopTestsDefaults.AdminPassword, languagePackInfo, regionInfo, cultureInfo).Wait();
             _serviceProvider.GetService<IInstallationService>().InstallSampleDataAsync(NopTestsDefaults.AdminEmail).Wait();
 
             var provider = (IPermissionProvider)Activator.CreateInstance(typeof(StandardPermissionProvider));
@@ -257,6 +261,8 @@ namespace Nop.Tests
             services.AddSingleton<IStaticCacheManager, MemoryCacheManager>();
             services.AddSingleton<ILocker, MemoryCacheLocker>();
             services.AddSingleton<MemoryCacheLocker>();
+
+            services.AddTransient(typeof(IConcurrentCollection<>), typeof(ConcurrentTrie<>));
 
             var memoryDistributedCache = new MemoryDistributedCache(new TestMemoryDistributedCacheoptions());
             services.AddSingleton<IDistributedCache>(memoryDistributedCache);
@@ -675,11 +681,11 @@ namespace Nop.Tests
         {
             public TestPictureService(IDownloadService downloadService,
                 IHttpContextAccessor httpContextAccessor, ILogger logger, INopFileProvider fileProvider,
-                IProductAttributeParser productAttributeParser, IRepository<Picture> pictureRepository,
-                IRepository<PictureBinary> pictureBinaryRepository,
+                IProductAttributeParser productAttributeParser, IProductAttributeService productAttributeService,
+                IRepository<Picture> pictureRepository, IRepository<PictureBinary> pictureBinaryRepository,
                 IRepository<ProductPicture> productPictureRepository, ISettingService settingService,
                 IUrlRecordService urlRecordService, IWebHelper webHelper, MediaSettings mediaSettings) : base(
-                downloadService, httpContextAccessor, logger, fileProvider, productAttributeParser,
+                downloadService, httpContextAccessor, logger, fileProvider, productAttributeParser, productAttributeService,
                 pictureRepository, pictureBinaryRepository, productPictureRepository, settingService, urlRecordService,
                 webHelper, mediaSettings)
             {

@@ -327,7 +327,14 @@ namespace Nop.Services.Catalog
         /// <remarks>
         /// {0} : product ID
         /// </remarks>
-        public static CacheKey ProductAttributeMappingsByProductCacheKey => new("Nop.productattributemapping.byproduct.{0}");
+        public static CacheKey ProductAttributeMappingsByProductCacheKey => new("Nop.productattributemapping.byproduct.{0}", ProductAttributeMappingsByProductPrefix);
+
+        /// <summary>
+        /// Gets a key pattern to clear cache
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        public static string ProductAttributeMappingsByProductPrefix => new("Nop.productattributemapping.byproduct.");
 
         /// <summary>
         /// Gets a key for caching
@@ -352,6 +359,22 @@ namespace Nop.Services.Catalog
         /// {0} : Product attribute ID
         /// </remarks>
         public static CacheKey PredefinedProductAttributeValuesByAttributeCacheKey => new("Nop.predefinedproductattributevalue.byattribute.{0}");
+
+        /// <summary>
+        /// Gets a key for caching
+        /// </summary>
+        /// <remarks>
+        /// {0} : combination ID
+        /// </remarks>
+        public static CacheKey ProductAttributeCombinationPicturesByCombinationCacheKey => new("Nop.productattributecombinationpicture.bycombination.{0}");
+
+        /// <summary>
+        /// Gets a key for caching
+        /// </summary>
+        /// <remarks>
+        /// {0} : value ID
+        /// </remarks>
+        public static CacheKey ProductAttributeValuePicturesByValueCacheKey => new("Nop.productattributevaluepicture.byvalue.{0}");
 
         #endregion
 

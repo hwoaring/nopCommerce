@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core;
 using Nop.Web.Framework.Models;
+using Nop.Web.Framework.Mvc;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace Nop.Web.Models.Customer
@@ -32,10 +33,12 @@ namespace Nop.Web.Models.Customer
 
         public bool CheckUsernameAvailabilityEnabled { get; set; }
 
+        [NoTrim]
         [DataType(DataType.Password)]
         [NopResourceDisplayName("Account.Fields.Password")]
         public string Password { get; set; }
 
+        [NoTrim]
         [DataType(DataType.Password)]
         [NopResourceDisplayName("Account.Fields.ConfirmPassword")]
         public string ConfirmPassword { get; set; }
@@ -102,7 +105,7 @@ namespace Nop.Web.Models.Customer
         [NopResourceDisplayName("Account.Fields.Country")]
         public int CountryId { get; set; }
         public IList<SelectListItem> AvailableCountries { get; set; }
-
+        
         public bool StateProvinceEnabled { get; set; }
         public bool StateProvinceRequired { get; set; }
         [NopResourceDisplayName("Account.Fields.StateProvince")]
