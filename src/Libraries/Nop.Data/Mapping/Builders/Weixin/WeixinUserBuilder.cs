@@ -5,6 +5,7 @@ using Nop.Core.Domain.Weixin;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Localization;
 using Nop.Data.Extensions;
+using Nop.Core.Domain.Customers;
 
 namespace Nop.Data.Mapping.Builders.Weixin
 {
@@ -22,32 +23,26 @@ namespace Nop.Data.Mapping.Builders.Weixin
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(Customer.CustomerOpenId)).AsAnsiString(64).Nullable()
-                .WithColumn(nameof(Customer.Username)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.Email)).AsAnsiString(128).Nullable()
-                .WithColumn(nameof(Customer.EmailToRevalidate)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.FirstName)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.LastName)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.Gender)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.Company)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.StreetAddress)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.StreetAddress2)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.ZipPostalCode)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.City)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.County)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.Phone)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.PhoneToRevalidate)).AsAnsiString(64).Nullable()
-                .WithColumn(nameof(Customer.Fax)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.VatNumber)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.TimeZoneId)).AsString(1000).Nullable()
-                .WithColumn(nameof(Customer.CustomCustomerAttributesXML)).AsString(int.MaxValue).Nullable()
-                .WithColumn(nameof(Customer.DateOfBirth)).AsDateTime2().Nullable()
-                .WithColumn(nameof(Customer.TempReferrerDateUtc)).AsDateTime2().Nullable()
-                .WithColumn(nameof(Customer.SystemName)).AsString(400).Nullable()
-                .WithColumn(nameof(Customer.CurrencyId)).AsInt32().ForeignKey<Currency>(onDelete: Rule.SetNull).Nullable()
-                .WithColumn(nameof(Customer.LanguageId)).AsInt32().ForeignKey<Language>(onDelete: Rule.SetNull).Nullable()
-                .WithColumn(NameCompatibilityManager.GetColumnName(typeof(Customer), nameof(Customer.BillingAddressId))).AsInt32().ForeignKey<Address>(onDelete: Rule.None).Nullable()
-                .WithColumn(NameCompatibilityManager.GetColumnName(typeof(Customer), nameof(Customer.ShippingAddressId))).AsInt32().ForeignKey<Address>(onDelete: Rule.None).Nullable();
+                .WithColumn(nameof(WeixinUser.OpenId)).AsAnsiString(64).NotNullable()
+                .WithColumn(nameof(WeixinUser.NickName)).AsString(64).Nullable()
+                .WithColumn(nameof(WeixinUser.Province)).AsString(15).Nullable()
+                .WithColumn(nameof(WeixinUser.City)).AsString(15).Nullable()
+                .WithColumn(nameof(WeixinUser.Country)).AsString(15).Nullable()
+                .WithColumn(nameof(WeixinUser.HeadimgUrl)).AsAnsiString(512).Nullable()
+                .WithColumn(nameof(WeixinUser.Privilege)).AsString(32).Nullable()
+                .WithColumn(nameof(WeixinUser.Language)).AsAnsiString(16).Nullable()
+                .WithColumn(nameof(WeixinUser.SubscribeTime)).AsDateTime2().Nullable()
+                .WithColumn(nameof(WeixinUser.UnSubscribeTime)).AsDateTime2().Nullable()
+                .WithColumn(nameof(WeixinUser.UnionId)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(WeixinUser.Remark)).AsString(64).Nullable()
+                .WithColumn(nameof(WeixinUser.SystemRemark)).AsString(512).Nullable()
+                .WithColumn(nameof(WeixinUser.GroupId)).AsAnsiString(16).Nullable()
+                .WithColumn(nameof(WeixinUser.TagidList)).AsAnsiString(128).Nullable()
+                .WithColumn(nameof(WeixinUser.CustomSceneValue)).AsString(512).Nullable()
+                .WithColumn(nameof(WeixinUser.QrScene)).AsAnsiString(128).Nullable()
+                .WithColumn(nameof(WeixinUser.QrSceneStr)).AsAnsiString(128).Nullable()
+                .WithColumn(nameof(WeixinUser.CustomerId)).AsInt32().ForeignKey<Customer>(onDelete: Rule.SetNull).Nullable()
+                ;
         }
 
         #endregion

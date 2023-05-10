@@ -41,6 +41,12 @@
         /// <summary>
         /// Type
         /// </summary>
+        public static string ApplicationXFontWoff => "application/x-font-woff";
+
+
+        /// <summary>
+        /// Type
+        /// </summary>
         public static string ApplicationXml => "application/xml";
 
         /// <summary>

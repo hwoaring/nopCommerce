@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using Microsoft.IdentityModel.Tokens;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Blogs;
@@ -403,6 +404,25 @@ namespace Nop.Services.Customers
 
             var key = _staticCacheManager.PrepareKeyForShortTermCache(NopCustomerServicesDefaults.CustomerByGuidCacheKey, customerGuid);
 
+            return await _staticCacheManager.GetAsync(key, async () => await query.FirstOrDefaultAsync());
+        }
+
+        /// <summary>
+        /// OpenId 获取用户信息
+        /// </summary>
+        /// <param name="customerOpenId"></param>
+        /// <returns></returns>
+        public virtual async Task<Customer> GetCustomerByOpenIdAsync(string customerOpenId)
+        {
+            if (string.IsNullOrWhiteSpace(customerOpenId))
+                return null;
+
+            var query = from c in _customerRepository.Table
+                        where c.CustomerOpenId == customerOpenId
+                        orderby c.Id
+                        select c;
+
+            var key = _staticCacheManager.PrepareKeyForShortTermCache(NopCustomerServicesDefaults.CustomerByOpenIdCacheKey, customerOpenId);
             return await _staticCacheManager.GetAsync(key, async () => await query.FirstOrDefaultAsync());
         }
 

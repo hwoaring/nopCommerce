@@ -1,18 +1,18 @@
 ﻿namespace Nop.Core.Domain.Customers
 {
     /// <summary>
-    /// Represents a customer-微信用户 mapping class
+    /// 产品收藏（普通用户对产品的收藏）
     /// </summary>
-    public partial class CustomerWeixinUserMapping : BaseEntity
+    public partial class CustomerProductMapping : BaseEntity
     {
         /// <summary>
-        /// 访客ID
+        /// 用户ID
         /// </summary>
         public int CustomerId { get; set; }
 
         /// <summary>
-        /// 微信用户信息ID
+        /// 收藏的产品ID
         /// </summary>
-        public int WeixinUserId { get; set; }
+        public int ProductId { get; set; }   
     }
 }

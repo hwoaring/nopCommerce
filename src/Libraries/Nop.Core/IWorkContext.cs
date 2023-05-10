@@ -25,6 +25,15 @@ namespace Nop.Core
         Task SetCurrentCustomerAsync(Customer customer = null);
 
         /// <summary>
+        /// 绑定Openid到Customer
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <param name="openId"></param>
+        /// <param name="isSnapshotuser"></param>
+        /// <returns></returns>
+        Task<Customer> SetCurrentCustomerOpenIdAsync(Customer customer, string openId, int? isSnapshotuser);
+
+        /// <summary>
         /// Gets the original customer (in case the current one is impersonated)
         /// </summary>
         Customer OriginalCustomerIfImpersonated { get; }

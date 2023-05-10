@@ -13,6 +13,10 @@ namespace Nop.Core.Domain.Catalog
     public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAclSupported, IStoreMappingSupported, IDiscountSupported<DiscountProductMapping>, ISoftDeletedEntity
     {
         /// <summary>
+        /// 16位安全URL参数ID
+        /// </summary>
+        public string ProductSecretId { get; set; }
+        /// <summary>
         /// Gets or sets the product type identifier
         /// </summary>
         public int ProductTypeId { get; set; }
@@ -33,6 +37,21 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the name
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// 产品标语
+        /// </summary>
+        public string Slogan { get; set; }
+
+        /// <summary>
+        /// 产品标语链接地址
+        /// </summary>
+        public string SloganUrl { get; set; }
+
+        /// <summary>
+        /// 产品标语链接文字
+        /// </summary>
+        public string SloganUrlText { get; set; }
 
         /// <summary>
         /// Gets or sets the short description
@@ -60,6 +79,11 @@ namespace Nop.Core.Domain.Catalog
         public int VendorId { get; set; }
 
         /// <summary>
+        /// 是否允许其他Vendor分销
+        /// </summary>
+        public bool AllowVendorSell { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to show the product on home page
         /// </summary>
         public bool ShowOnHomepage { get; set; }
@@ -78,6 +102,26 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the meta title
         /// </summary>
         public string MetaTitle { get; set; }
+
+        /// <summary>
+        /// 微信分享标题
+        /// </summary>
+        public string ShareTitle { get; set; }
+
+        /// <summary>
+        /// 微信分享描述
+        /// </summary>
+        public string ShareDesc { get; set; }
+
+        /// <summary>
+        /// 微信分享链接
+        /// </summary>
+        public string ShareLink { get; set; }
+
+        /// <summary>
+        /// 微信分享图片
+        /// </summary>
+        public string ShareImgUrl { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the product allows customer reviews
@@ -406,6 +450,11 @@ namespace Nop.Core.Domain.Catalog
         public decimal OldPrice { get; set; }
 
         /// <summary>
+        /// 会员价/VIP价
+        /// </summary>
+        public decimal VipPrice { get; set; }
+
+        /// <summary>
         /// Gets or sets the product cost
         /// </summary>
         public decimal ProductCost { get; set; }
@@ -464,6 +513,36 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the end date and time of the new product (set product as "New" to date). Leave empty to ignore this property
         /// </summary>
         public DateTime? MarkAsNewEndDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 设置为热卖
+        /// </summary>
+        public bool MarkAsHot { get; set; }
+
+        /// <summary>
+        /// 热卖开始时间
+        /// </summary>
+        public DateTime? MarkAsHotStartDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 热卖结束时间
+        /// </summary>
+        public DateTime? MarkAsHotEndDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 设置为推荐
+        /// </summary>
+        public bool MarkAsRecommend { get; set; }
+
+        /// <summary>
+        /// 推荐开始时间
+        /// </summary>
+        public DateTime? MarkAsRecommendStartDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 推荐结束时间
+        /// </summary>
+        public DateTime? MarkAsRecommendEndDateTimeUtc { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this product has tier prices configured

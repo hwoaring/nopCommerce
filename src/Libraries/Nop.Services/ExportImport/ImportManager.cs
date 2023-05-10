@@ -2847,6 +2847,9 @@ namespace Nop.Services.ExportImport
                         case "AffiliateId":
                             order.AffiliateId = property.IntValue;
                             break;
+                        case "ReferrerCustomerId":
+                            order.ReferrerCustomerId = property.IntValue;
+                            break;
                         case "PaymentMethodSystemName":
                             order.PaymentMethodSystemName = property.StringValue;
                             break;

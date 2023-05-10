@@ -7,6 +7,7 @@ using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Vendors;
 using Nop.Core.Http;
+using Nop.Core.Http.Extensions;
 using Nop.Core.Security;
 using Nop.Services.Authentication;
 using Nop.Services.Common;
@@ -17,6 +18,7 @@ using Nop.Services.Localization;
 using Nop.Services.ScheduleTasks;
 using Nop.Services.Stores;
 using Nop.Services.Vendors;
+using Nop.Services.Weixin;
 using Nop.Web.Framework.Globalization;
 
 namespace Nop.Web.Framework
@@ -237,6 +239,18 @@ namespace Nop.Web.Framework
                     customer = await _authenticationService.GetAuthenticatedCustomerAsync();
                 }
 
+                if (customer == null || customer.Deleted || !customer.Active || customer.RequireReLogin)
+                {
+                    //微信认证登录获取用户
+                    var customerSession = await _httpContextAccessor.HttpContext.Session.GetAsync<WeixinOAuthSession>(NopWeixinDefaults.WeixinOAuthSession);
+                    if (customerSession != null && !string.IsNullOrEmpty(customerSession.OpenId))
+                    {
+                        var customerBySession = await _customerService.GetCustomerByOpenIdAsync(customerSession.OpenId);
+                        if (customerBySession != null)
+                            customer = customerBySession;
+                    }
+                }
+
                 if (customer != null && !customer.Deleted && customer.Active && !customer.RequireReLogin)
                 {
                     //get impersonate user if required
@@ -444,6 +458,39 @@ namespace Nop.Web.Framework
             _cachedCurrency = customerCurrency;
 
             return _cachedCurrency;
+        }
+
+        /// <summary>
+        /// 从WeixinSession绑定用户OpenId
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <param name="customer"></param>
+        /// <returns></returns>
+        /// public virtual async Task<Customer> SetCurrentCustomerOpenIdAsync(string openId, Customer customer)
+        public virtual async Task<Customer> SetCurrentCustomerOpenIdAsync(Customer customer, string openId, int? isSnapshotuser)
+        {
+            //空值不绑定
+            if (string.IsNullOrEmpty(openId) || customer == null)
+                return customer;
+
+            //已经绑定OpenId
+            if (!string.IsNullOrWhiteSpace(customer.CustomerOpenId))
+                return customer;
+
+            //虚拟账号不进行绑定
+            if (isSnapshotuser.HasValue && isSnapshotuser.Value == 1)
+                return customer;
+
+            //绑定
+            customer.CustomerOpenId = openId;
+            customer.AdminComment = "Weixin Guest.";
+            //更新数据库
+            await _customerService.UpdateCustomerAsync(customer);
+
+            //重置缓存
+            _cachedCustomer = null;
+
+            return customer;
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Seo;
+using Nop.Core.Domain.Tax;
 using StackExchange.Redis;
 
 namespace Nop.Core.Domain.Weixin
@@ -13,11 +14,25 @@ namespace Nop.Core.Domain.Weixin
     /// </summary>
     public partial class WeixinUser : BaseEntity, ISoftDeletedEntity
     {
+        /// <summary>
+        /// 用户CustomerId
+        /// </summary>
+        public int CustomerId { get; set; }
+
+        /// <summary>
+        /// StoreId
+        /// </summary>
+        public int StoreId { get; set; }
 
         /// <summary>
         /// 用户OpenId
         /// </summary>
         public string OpenId { get; set; }
+
+        /// <summary>
+        /// 统一ID
+        /// </summary>
+        public string UnionId { get; set; }
 
         /// <summary>
         /// 昵称
@@ -62,22 +77,22 @@ namespace Nop.Core.Domain.Weixin
         /// <summary>
         /// 关注时间
         /// </summary>
-        public string SubscribeTime { get; set; }
+        public DateTime? SubscribeTime { get; set; }
 
         /// <summary>
         /// 取消关注时间
         /// </summary>
-        public string UnSubscribeTime { get; set; }
-
-        /// <summary>
-        /// 统一ID
-        /// </summary>
-        public string UnionId { get; set; }
+        public DateTime? UnSubscribeTime { get; set; }
 
         /// <summary>
         /// 微信平台备注名称
         /// </summary>
         public string Remark { get; set; }
+
+        /// <summary>
+        /// 网站系统后台备注名称
+        /// </summary>
+        public string SystemRemark { get; set; }
 
         /// <summary>
         /// 分组ID
@@ -105,12 +120,12 @@ namespace Nop.Core.Domain.Weixin
         public string CustomSceneValue { get; set; }
 
         /// <summary>
-        /// 二维码扫码场景
+        /// 二维码扫码场景(开发者自定义)
         /// </summary>
         public string QrScene { get; set; }
 
         /// <summary>
-        /// 二维码扫码场景描述
+        /// 二维码扫码场景(开发者自定义)
         /// </summary>
         public string QrSceneStr { get; set; }
 
@@ -118,6 +133,11 @@ namespace Nop.Core.Domain.Weixin
         /// 用户状态，可用于管理是否屏蔽用户请求信息
         /// </summary>
         public byte Status { get; set; }
+
+        /// <summary>
+        /// 是否允许平台返回交互信息给用户默认true。不允许交互时全部返回success
+        /// </summary>
+        public bool AllowResponse { get; set; }
 
         /// <summary>
         /// 是否关注
@@ -140,8 +160,29 @@ namespace Nop.Core.Domain.Weixin
         public bool Deleted { get; set; }
 
         /// <summary>
+        /// 更新时间
+        /// </summary>
+        public DateTime UpdatedOnUtc { get; set; }
+
+        /// <summary>
         /// 创建时间
         /// </summary>
         public DateTime CreatedOnUtc { get; set; }
+
+        #region Custom properties
+
+        public CustomSceneType CustomSceneType
+        {
+            get => (CustomSceneType)CustomSceneTypeId;
+            set => CustomSceneTypeId = (int)value;
+        }
+
+        public SubscribeSceneType SubscribeSceneType
+        {
+            get => (SubscribeSceneType)SubscribeSceneTypeId;
+            set => SubscribeSceneTypeId = (int)value;
+        }
+
+        #endregion
     }
 }

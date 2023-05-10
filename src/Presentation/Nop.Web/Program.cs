@@ -38,7 +38,7 @@ namespace Nop.Web
 
             //add services to the application and configure service provider
             builder.Services.ConfigureApplicationServices(builder);
-
+            
             var app = builder.Build();
 
             //configure the application HTTP request pipeline

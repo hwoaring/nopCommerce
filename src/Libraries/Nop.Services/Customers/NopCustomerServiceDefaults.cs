@@ -28,6 +28,19 @@ namespace Nop.Services.Customers
         /// </summary>
         public static string CustomerAttributePrefix => "customer_attribute_";
 
+        /// <summary>
+        /// 获取推荐人URL参数Id
+        /// </summary>
+        public static string CustomerQueryReferrerId => "refid";
+        /// <summary>
+        /// 获取推荐人URL参数OpenId
+        /// </summary>
+        public static string CustomerQueryReferrerOpenId => "refopenid";
+        /// <summary>
+        /// 获取推荐人URL参数Guid
+        /// </summary>
+        public static string CustomerQueryReferrerGuid => "refgid";
+
         #region Caching defaults
 
         #region Customer
@@ -47,6 +60,14 @@ namespace Nop.Services.Customers
         /// {0} : customer GUID
         /// </remarks>
         public static CacheKey CustomerByGuidCacheKey => new("Nop.customer.byguid.{0}");
+
+        /// <summary>
+        /// Gets a key for caching
+        /// </summary>
+        /// <remarks>
+        /// {0} : customer OpenId
+        /// </remarks>
+        public static CacheKey CustomerByOpenIdCacheKey => new("Nop.customer.byopenid.{0}");
 
         #endregion
 

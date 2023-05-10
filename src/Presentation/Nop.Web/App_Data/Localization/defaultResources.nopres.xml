@@ -9213,6 +9213,29 @@
   <LocaleResource Name="Admin.Configuration.Settings.Vendor.VendorsBlockItemsToDisplay.Hint">
     <Value>Enter the number of vendors to display in vendor navigation block.</Value>
   </LocaleResource>
+
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.OAuthEnable.Hint">
+        <Value>微信登录验证</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.CheckWeChatBrowser.Hint">
+        <Value>检查微信浏览器</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.UseSnsapiBase.Hint">
+        <Value>前端页面使用SnsapiBase</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.Debug.Hint">
+        <Value>调试状态</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.TraceLog.Hint">
+        <Value>启用日志</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.JSSDKDebug.Hint">
+        <Value>JSSDK调试</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.JsApiList.Hint">
+        <Value>JsApi列表</Value>
+    </LocaleResource>
+    
   <LocaleResource Name="Admin.Configuration.Shipping">
     <Value>Shipping</Value>
   </LocaleResource>

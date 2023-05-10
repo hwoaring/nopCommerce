@@ -176,6 +176,10 @@ namespace Nop.Web.Areas.Admin.Models.Orders
         public bool PickupInStore { get; set; }
         [NopResourceDisplayName("Admin.Orders.Fields.PickupAddress")]
         public AddressModel PickupAddress { get; set; }
+
+        public string PickupAddressQQMapsUrl { get; set; }
+        public string PickupAddressBaiduMapsUrl { get; set; }
+        public string PickupAddressAMapMapsUrl { get; set; }
         public string PickupAddressGoogleMapsUrl { get; set; }
         [NopResourceDisplayName("Admin.Orders.Fields.ShippingStatus")]
         public string ShippingStatus { get; set; }
@@ -185,6 +189,9 @@ namespace Nop.Web.Areas.Admin.Models.Orders
         public AddressModel ShippingAddress { get; set; }
         [NopResourceDisplayName("Admin.Orders.Fields.ShippingMethod")]
         public string ShippingMethod { get; set; }
+        public string ShippingAddressQQMapsUrl { get; set; }
+        public string ShippingAddressBaiduMapsUrl { get; set; }
+        public string ShippingAddressAMapMapsUrl { get; set; }
         public string ShippingAddressGoogleMapsUrl { get; set; }
         public bool CanAddNewShipments { get; set; }
 

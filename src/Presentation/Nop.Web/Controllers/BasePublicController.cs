@@ -10,6 +10,7 @@ namespace Nop.Web.Controllers
     [CheckAccessClosedStore]
     [CheckDiscountCoupon]
     [CheckAffiliate]
+    [CheckReferrerCustomer]
     public abstract partial class BasePublicController : BaseController
     {
         protected virtual IActionResult InvokeHttp404()

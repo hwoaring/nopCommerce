@@ -76,10 +76,6 @@ namespace Nop.Web.Framework.Mvc.Filters
                 if (affiliate.Id == customer.AffiliateId)
                     return;
 
-                //ignore search engines
-                if (customer.IsSearchEngineAccount())
-                    return;
-
                 //update affiliate identifier
                 customer.AffiliateId = affiliate.Id;
                 await _customerService.UpdateCustomerAsync(customer);
@@ -103,10 +99,14 @@ namespace Nop.Web.Framework.Mvc.Filters
                 if (!DataSettingsManager.IsDatabaseInstalled())
                     return;
 
-                //try to find by ID
                 var customer = await _workContext.GetCurrentCustomerAsync();
-                var affiliateIds = request.Query[AFFILIATE_ID_QUERY_PARAMETER_NAME];
 
+                //ignore search engines
+                if (customer.IsSearchEngineAccount() || customer.IsBackgroundTaskAccount())
+                    return;
+
+                //try to find by ID
+                var affiliateIds = request.Query[AFFILIATE_ID_QUERY_PARAMETER_NAME];
                 if (int.TryParse(affiliateIds.FirstOrDefault(), out var affiliateId) && affiliateId > 0 && affiliateId != customer.AffiliateId)
                 {
                     var affiliate = await _affiliateService.GetAffiliateByIdAsync(affiliateId);

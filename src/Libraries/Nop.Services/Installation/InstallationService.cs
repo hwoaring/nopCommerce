@@ -29,6 +29,7 @@ using Nop.Core.Domain.Stores;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Topics;
 using Nop.Core.Domain.Vendors;
+using Nop.Core.Domain.Weixin;
 using Nop.Core.Http;
 using Nop.Core.Infrastructure;
 using Nop.Core.Security;
@@ -807,6 +808,7 @@ namespace Nop.Services.Installation
                 LastActivityDateUtc = DateTime.UtcNow,
                 RegisteredInStoreId = storeId
             };
+
             var defaultSecondUserAddress = await InsertInstallationDataAsync(
                 new Address
                 {
@@ -907,6 +909,7 @@ namespace Nop.Services.Installation
                 LastActivityDateUtc = DateTime.UtcNow,
                 RegisteredInStoreId = storeId
             };
+
             var defaultFourthUserAddress = await InsertInstallationDataAsync(
                 new Address
                 {
@@ -956,6 +959,7 @@ namespace Nop.Services.Installation
                 LastActivityDateUtc = DateTime.UtcNow,
                 RegisteredInStoreId = storeId
             };
+
             var defaultFifthUserAddress = await InsertInstallationDataAsync(
                 new Address
                 {
@@ -1006,6 +1010,7 @@ namespace Nop.Services.Installation
                 LastActivityDateUtc = DateTime.UtcNow,
                 RegisteredInStoreId = storeId
             };
+
             var defaultSixthUserAddress = await InsertInstallationDataAsync(
                 new Address
                 {
@@ -1251,6 +1256,7 @@ namespace Nop.Services.Installation
                 CustomerCurrencyCode = "USD",
                 CurrencyRate = 1M,
                 AffiliateId = 0,
+                ReferrerCustomerId = 0,
                 OrderStatus = OrderStatus.Processing,
                 AllowStoringCreditCardNumber = false,
                 CardType = string.Empty,
@@ -1427,6 +1433,7 @@ namespace Nop.Services.Installation
                 CustomerCurrencyCode = "USD",
                 CurrencyRate = 1M,
                 AffiliateId = 0,
+                ReferrerCustomerId = 0,
                 OrderStatus = OrderStatus.Pending,
                 AllowStoringCreditCardNumber = false,
                 CardType = string.Empty,
@@ -1551,6 +1558,7 @@ namespace Nop.Services.Installation
                 CustomerCurrencyCode = "USD",
                 CurrencyRate = 1M,
                 AffiliateId = 0,
+                ReferrerCustomerId = 0,
                 OrderStatus = OrderStatus.Pending,
                 AllowStoringCreditCardNumber = false,
                 CardType = string.Empty,
@@ -1702,6 +1710,7 @@ namespace Nop.Services.Installation
                 CustomerCurrencyCode = "USD",
                 CurrencyRate = 1M,
                 AffiliateId = 0,
+                ReferrerCustomerId = 0,
                 OrderStatus = OrderStatus.Processing,
                 AllowStoringCreditCardNumber = false,
                 CardType = string.Empty,
@@ -1927,6 +1936,7 @@ namespace Nop.Services.Installation
                 CustomerCurrencyCode = "USD",
                 CurrencyRate = 1M,
                 AffiliateId = 0,
+                ReferrerCustomerId = 0,
                 OrderStatus = OrderStatus.Complete,
                 AllowStoringCreditCardNumber = false,
                 CardType = string.Empty,
@@ -3273,6 +3283,7 @@ namespace Nop.Services.Installation
                 ShipSeparatelyOneItemEach = true,
                 RequestDelay = 300,
                 ShippingSorting = ShippingSortingEnum.Position,
+                MapSupplier = "Google",
             });
 
             await settingService.SaveSettingAsync(new PaymentSettings
@@ -3566,6 +3577,17 @@ namespace Nop.Services.Installation
                     "/uploadfilereturnrequest",
                     "/wishlist"
                 }
+            });
+
+            await settingService.SaveSettingAsync(new WeixinSettings
+            {
+                OAuthEnable = true,
+                CheckWeChatBrowser = false,
+                UseSnsapiBase = true,
+                Debug = true,
+                TraceLog = true,
+                JSSDKDebug = true,
+                JsApiList = ""
             });
         }
 

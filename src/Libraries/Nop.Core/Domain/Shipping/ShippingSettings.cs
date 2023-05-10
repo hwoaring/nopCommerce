@@ -49,6 +49,11 @@ namespace Nop.Core.Domain.Shipping
         public string GoogleMapsApiKey { get; set; }
 
         /// <summary>
+        /// 地图供应商：Google（谷歌），QQ（腾讯），Baidu（百度），Amap（高德）
+        /// </summary>
+        public string MapSupplier { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the system should use warehouse location when requesting shipping rates
         /// This is useful when you ship from multiple warehouses
         /// </summary>

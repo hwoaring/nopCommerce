@@ -14,9 +14,9 @@ namespace Nop.Core.Domain.Customers
         public int RefereeIdAvailableMinutes { get; set; }
 
         /// <summary>
-        /// 使用Gid作为获取推荐人的Url参数（默认使用OpenId）
+        /// 启用过期时间内推荐人锁定（启用过期时间后，是否在过期时间内允许更新临时推荐人）
         /// </summary>
-        public bool UseGidForReferrerParam { get; set; }
+        public bool LockTempTime { get; set; }
 
         /// <summary>
         /// 通过Ip自动检测所在城市

@@ -5,11 +5,13 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
@@ -57,6 +59,9 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
 
             //create default file provider
             CommonHelper.DefaultFileProvider = new NopFileProvider(builder.Environment);
+
+            //register type IWebHostEnvironment
+            Singleton<IWebHostEnvironment>.Instance = builder.Environment;
 
             //register type finder
             var typeFinder = new WebAppTypeFinder();

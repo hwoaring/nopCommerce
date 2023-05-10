@@ -31,7 +31,12 @@ namespace Nop.Core.Domain.Customers
         /// <summary>
         /// 临时推荐用户更新时间（更新时间+系统设置的过期市场=过期时间，超出时间属于默认推荐人）
         /// </summary>
-        public DateTime? TempReferrerDateUtc { get; set; }
+        public DateTime? TempReferrerExpireDateUtc { get; set; }
+
+        /// <summary>
+        /// 用户8位推荐码
+        /// </summary>
+        public string CustomerReferrerCode { get; set; }
 
         /// <summary>
         /// 用户微信OpenId
@@ -122,6 +127,11 @@ namespace Nop.Core.Domain.Customers
         /// 用于客户已注册并希望更改电话号码的情况。
         /// </summary>
         public string PhoneToRevalidate { get; set; }
+
+        /// <summary>
+        /// 个人微信二维码
+        /// </summary>
+        public string QrcodeUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the fax
@@ -237,6 +247,11 @@ namespace Nop.Core.Domain.Customers
         /// 是否允许下单
         /// </summary>
         public bool AllowOrder { get; set; }
+
+        /// <summary>
+        /// 订单提醒，主要用于分销客户有库存情况下使用，提醒包括表单下单或正常下单。
+        /// </summary>
+        public bool AllowOrderNotice { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating number of failed login attempts (wrong password)

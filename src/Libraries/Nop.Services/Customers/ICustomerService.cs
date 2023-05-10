@@ -158,6 +158,13 @@ namespace Nop.Services.Customers
         Task<Customer> GetCustomerByGuidAsync(Guid customerGuid);
 
         /// <summary>
+        /// OpenId 获取用户信息
+        /// </summary>
+        /// <param name="customerOpenId"></param>
+        /// <returns></returns>
+        Task<Customer> GetCustomerByOpenIdAsync(string customerOpenId);
+
+        /// <summary>
         /// Get customer by email
         /// </summary>
         /// <param name="email">Email</param>

@@ -178,6 +178,11 @@ namespace Nop.Core.Domain.Orders
         public int AffiliateId { get; set; }
 
         /// <summary>
+        /// 推广人用户ID
+        /// </summary>
+        public int ReferrerCustomerId { get; set; }
+
+        /// <summary>
         /// Gets or sets the customer IP address
         /// </summary>
         public string CustomerIp { get; set; }

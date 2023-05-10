@@ -1733,6 +1733,7 @@ namespace Nop.Services.ExportImport
                 await xmlWriter.WriteStringAsync("CurrencyRate", order.CurrencyRate);
                 await xmlWriter.WriteStringAsync("CustomerCurrencyCode", order.CustomerCurrencyCode);
                 await xmlWriter.WriteStringAsync("AffiliateId", order.AffiliateId, ignore);
+                await xmlWriter.WriteStringAsync("ReferrerCustomerId", order.ReferrerCustomerId, ignore);
                 await xmlWriter.WriteStringAsync("AllowStoringCreditCardNumber", order.AllowStoringCreditCardNumber, ignore);
                 await xmlWriter.WriteStringAsync("CardType", order.CardType, ignore);
                 await xmlWriter.WriteStringAsync("CardName", order.CardName, ignore);
@@ -1871,6 +1872,7 @@ namespace Nop.Services.ExportImport
                 new PropertyByName<Order, Language>("CurrencyRate", (p, l) => p.CurrencyRate),
                 new PropertyByName<Order, Language>("CustomerCurrencyCode", (p, l) => p.CustomerCurrencyCode),
                 new PropertyByName<Order, Language>("AffiliateId", (p, l) => p.AffiliateId, ignore),
+                new PropertyByName<Order, Language>("ReferrerCustomerId", (p, l) => p.ReferrerCustomerId, ignore),
                 new PropertyByName<Order, Language>("PaymentMethodSystemName", (p, l) => p.PaymentMethodSystemName, ignore),
                 new PropertyByName<Order, Language>("ShippingPickupInStore", (p, l) => p.PickupInStore, ignore),
                 new PropertyByName<Order, Language>("ShippingMethod", (p, l) => p.ShippingMethod),
@@ -1969,6 +1971,7 @@ namespace Nop.Services.ExportImport
                 new PropertyByName<Customer, Language>("Username", (p, l) => p.Username),
                 new PropertyByName<Customer, Language>("IsTaxExempt", (p, l) => p.IsTaxExempt),
                 new PropertyByName<Customer, Language>("AffiliateId", (p, l) => p.AffiliateId),
+                new PropertyByName<Customer, Language>("ReferrerCustomerId", (p, l) => p.ReferrerCustomerId),
                 new PropertyByName<Customer, Language>("Vendor",  (p, l) => getVendor(p)),
                 new PropertyByName<Customer, Language>("Active", (p, l) => p.Active),
                 new PropertyByName<Customer, Language>("CustomerRoles",  async (p, l) =>  string.Join(", ",
@@ -2046,6 +2049,7 @@ namespace Nop.Services.ExportImport
 
                 await xmlWriter.WriteElementStringAsync("IsTaxExempt", null, customer.IsTaxExempt.ToString());
                 await xmlWriter.WriteElementStringAsync("AffiliateId", null, customer.AffiliateId.ToString());
+                await xmlWriter.WriteElementStringAsync("ReferrerCustomerId", null, customer.ReferrerCustomerId.ToString());
                 await xmlWriter.WriteElementStringAsync("VendorId", null, customer.VendorId.ToString());
                 await xmlWriter.WriteElementStringAsync("Active", null, customer.Active.ToString());
 

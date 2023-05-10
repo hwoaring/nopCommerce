@@ -21,9 +21,24 @@
         public int NewsItemId { get; set; }
 
         /// <summary>
+        /// 评论ID，针对评论下继续评论或留言
+        /// </summary>
+        public int NewsCommentId { get; set; }
+
+        /// <summary>
         /// Gets or sets the customer identifier
         /// </summary>
         public int CustomerId { get; set; }
+
+        /// <summary>
+        /// 评论人IP位置
+        /// </summary>
+        public string PublishArea { get; set; }
+
+        /// <summary>
+        /// 评论人IP
+        /// </summary>
+        public string PublisherIp { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the comment is approved
