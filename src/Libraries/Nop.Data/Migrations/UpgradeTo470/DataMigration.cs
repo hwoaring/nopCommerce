@@ -5,7 +5,7 @@ using Nop.Core.Domain.Media;
 
 namespace Nop.Data.Migrations.UpgradeTo470
 {
-    [NopUpdateMigration("2023-01-01 00:00:00", "4.70.0", UpdateMigrationType.Data)]
+    [NopUpdateMigration("2023-01-01 00:00:00", "4.70", UpdateMigrationType.Data)]
     public class DataMigration : Migration
     {
         private readonly INopDataProvider _dataProvider;
@@ -67,19 +67,25 @@ namespace Nop.Data.Migrations.UpgradeTo470
                     if (!combinations.Any())
                         break;
 
+                    #pragma warning disable CS0618
                     foreach (var combination in combinations)
+                    {
+                        if (!combination.PictureId.HasValue)
+                            continue;
+
                         _dataProvider.InsertEntity(new ProductAttributeCombinationPicture
                         {
-                            #pragma warning disable CS0618
-                            PictureId = combination.PictureId, ProductAttributeCombinationId = combination.Id
-                            #pragma warning restore CS0618
+                            PictureId = combination.PictureId.Value, ProductAttributeCombinationId = combination.Id
                         });
+
+                        combination.PictureId = null;
+                    }
+                    #pragma warning restore CS0618
+
+                    _dataProvider.UpdateEntitiesAsync(combinations);
 
                     pageIndex++;
                 }
-
-                // delete picture column after moving data to combination piture table
-                Delete.Column(columnName).FromTable(productAttributeCombinationTableName);
             }
 
             var productAttributeValueTableName = nameof(ProductAttributeValue);
@@ -103,19 +109,25 @@ namespace Nop.Data.Migrations.UpgradeTo470
                     if (!values.Any())
                         break;
 
+                    #pragma warning disable CS0618
                     foreach (var value in values)
+                    {
+                        if (!value.PictureId.HasValue)
+                            continue;
+
                         _dataProvider.InsertEntity(new ProductAttributeValuePicture
                         {
-                            #pragma warning disable CS0618
-                            PictureId = value.PictureId, ProductAttributeValueId = value.Id
-                            #pragma warning restore CS0618
+                            PictureId = value.PictureId.Value, ProductAttributeValueId = value.Id
                         });
+
+                        value.PictureId = null;
+                    }
+                    #pragma warning restore CS0618
+
+                    _dataProvider.UpdateEntitiesAsync(values);
 
                     pageIndex++;
                 }
-
-                // delete picture column after moving data to value piture table
-                Delete.Column(columnName).FromTable(productAttributeValueTableName);
             }
         }
 

@@ -526,7 +526,7 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
                 .ForMember(model => model.AddVideoModel, options => options.Ignore())
                 .ForMember(model => model.ProductSpecificationAttributeSearchModel, options => options.Ignore())
                 .ForMember(model => model.ProductsTypesSupportedByProductTemplates, options => options.Ignore())
-                .ForMember(model => model.ProductTags, options => options.Ignore())
+                .ForMember(model => model.AvailableProductTags, options => options.Ignore())
                 .ForMember(model => model.ProductTypeName, options => options.Ignore())
                 .ForMember(model => model.ProductWarehouseInventoryModels, options => options.Ignore())
                 .ForMember(model => model.RelatedProductSearchModel, options => options.Ignore())
@@ -537,7 +537,8 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
                 .ForMember(model => model.StockQuantityHistorySearchModel, options => options.Ignore())
                 .ForMember(model => model.StockQuantityStr, options => options.Ignore())
                 .ForMember(model => model.TierPriceSearchModel, options => options.Ignore())
-                .ForMember(model => model.InitialProductTags, options => options.Ignore());
+                .ForMember(model => model.SelectedProductTags, options => options.Ignore())
+                .ForMember(model => model.AvailableProductTags, options => options.Ignore());
             CreateMap<ProductModel, Product>()
                 .ForMember(entity => entity.ApprovedRatingSum, options => options.Ignore())
                 .ForMember(entity => entity.ApprovedTotalReviews, options => options.Ignore())
@@ -1085,7 +1086,8 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
         {
             CreateMap<Language, LanguageModel>()
                 .ForMember(model => model.AvailableCurrencies, options => options.Ignore())
-                .ForMember(model => model.LocaleResourceSearchModel, options => options.Ignore());
+                .ForMember(model => model.LocaleResourceSearchModel, options => options.Ignore())
+                .ForMember(model => model.AvailableFlagImages, options => options.Ignore());
             CreateMap<LanguageModel, Language>();
 
             CreateMap<LocaleResourceModel, LocaleStringResource>()
@@ -1487,6 +1489,7 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
                 .ForMember(model => model.ShowOnEmailWishlistToFriendPage_OverrideForStore, options => options.Ignore())
                 .ForMember(model => model.ShowOnLoginPage_OverrideForStore, options => options.Ignore())
                 .ForMember(model => model.ShowOnNewsCommentPage_OverrideForStore, options => options.Ignore())
+                .ForMember(model => model.ShowOnNewsletterPage_OverrideForStore, options => options.Ignore())
                 .ForMember(model => model.ShowOnProductReviewPage_OverrideForStore, options => options.Ignore())
                 .ForMember(model => model.ShowOnRegistrationPage_OverrideForStore, options => options.Ignore())
                 .ForMember(model => model.ShowOnForgotPasswordPage_OverrideForStore, options => options.Ignore())
@@ -1621,6 +1624,7 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
 
             CreateMap<TaxSettings, TaxSettingsModel>()
                 .ForMember(model => model.AllowCustomersToSelectTaxDisplayType_OverrideForStore, options => options.Ignore())
+                .ForMember(model => model.AutomaticallyDetectCountry_OverrideForStore, options => options.Ignore())
                 .ForMember(model => model.DefaultTaxAddress, options => options.Ignore())
                 .ForMember(model => model.DefaultTaxAddress_OverrideForStore, options => options.Ignore())
                 .ForMember(model => model.DefaultTaxCategoryId_OverrideForStore, options => options.Ignore())
