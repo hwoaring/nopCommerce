@@ -20,6 +20,7 @@ namespace Nop.Web.Factories
         #region Fields
 
         protected readonly AddressSettings _addressSettings;
+        protected readonly IAddressService _addressService;
         protected readonly IAttributeFormatter<AddressAttribute, AddressAttributeValue> _addressAttributeFormatter;
         protected readonly IAttributeParser<AddressAttribute, AddressAttributeValue> _addressAttributeParser;
         protected readonly IAttributeService<AddressAttribute, AddressAttributeValue> _addressAttributeService;
@@ -33,6 +34,7 @@ namespace Nop.Web.Factories
         #region Ctor
 
         public AddressModelFactory(AddressSettings addressSettings,
+            IAddressService addressService,
             IAttributeFormatter<AddressAttribute, AddressAttributeValue> addressAttributeFormatter,
             IAttributeParser<AddressAttribute, AddressAttributeValue> addressAttributeParser,
             IAttributeService<AddressAttribute, AddressAttributeValue> addressAttributeService,
@@ -42,6 +44,7 @@ namespace Nop.Web.Factories
             IWorkContext workContext)
         {
             _addressSettings = addressSettings;
+            _addressService = addressService;
             _addressAttributeFormatter = addressAttributeFormatter;
             _addressAttributeParser = addressAttributeParser;
             _addressAttributeService = addressAttributeService;
@@ -178,6 +181,8 @@ namespace Nop.Web.Factories
             if (addressSettings == null)
                 throw new ArgumentNullException(nameof(addressSettings));
 
+            var languageId = customer != null ? (customer?.LanguageId ?? 0) : (await _workContext.GetWorkingLanguageAsync()).Id;
+
             if (!excludeProperties && address != null)
             {
                 model.Id = address.Id;
@@ -229,6 +234,9 @@ namespace Nop.Web.Factories
                     model.AvailableCountries.Add(new SelectListItem { Text = await _localizationService.GetResourceAsync("Address.SelectCountry"), Value = "0" });
                 }
 
+                if (addressSettings.DefaultCountryId != null)
+                    model.CountryId = model.CountryId ?? addressSettings.DefaultCountryId;
+
                 foreach (var c in countries)
                 {
                     model.AvailableCountries.Add(new SelectListItem
@@ -241,7 +249,6 @@ namespace Nop.Web.Factories
 
                 if (addressSettings.StateProvinceEnabled)
                 {
-                    var languageId = (await _workContext.GetWorkingLanguageAsync()).Id;
                     var states = (await _stateProvinceService
                         .GetStateProvincesByCountryIdAsync(model.CountryId ?? 0, languageId))
                         .ToList();
@@ -290,6 +297,7 @@ namespace Nop.Web.Factories
             model.PhoneRequired = addressSettings.PhoneRequired;
             model.FaxEnabled = addressSettings.FaxEnabled;
             model.FaxRequired = addressSettings.FaxRequired;
+            model.DefaultCountryId = addressSettings.DefaultCountryId;
 
             //customer attribute services
             if (_addressAttributeService != null && _addressAttributeParser != null)
@@ -300,6 +308,8 @@ namespace Nop.Web.Factories
             {
                 model.FormattedCustomAddressAttributes = await _addressAttributeFormatter.FormatAttributesAsync(address.CustomAttributes);
             }
+
+            (model.AddressLine, model.AddressFields) = await _addressService.FormatAddressAsync(address, languageId);
         }
 
         #endregion

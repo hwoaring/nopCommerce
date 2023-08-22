@@ -1,4 +1,5 @@
 ﻿using System.IO.Compression;
+using System.Net;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
@@ -172,18 +173,23 @@ namespace Nop.Services.Common
             if (_addressSettings.StreetAddress2Enabled && !string.IsNullOrEmpty(billingAddress.Address2))
                 addressResult.Address2 = billingAddress.Address2;
 
-            if (_addressSettings.CityEnabled || _addressSettings.StateProvinceEnabled ||
-                _addressSettings.CountyEnabled || _addressSettings.ZipPostalCodeEnabled)
-            {
-                addressResult.AddressLine =
-                    $"{billingAddress.City}, " +
-                    $"{(!string.IsNullOrEmpty(billingAddress.County) ? $"{billingAddress.County}, " : string.Empty)}" +
-                    $"{(await _stateProvinceService.GetStateProvinceByAddressAsync(billingAddress) is StateProvince stateProvince ? await _localizationService.GetLocalizedAsync(stateProvince, x => x.Name, lang.Id) : string.Empty)} " +
-                    $"{billingAddress.ZipPostalCode}";
-            }
+            if (_addressSettings.CityEnabled && !string.IsNullOrEmpty(billingAddress.City))
+                addressResult.City = billingAddress.City;
+
+            if (_addressSettings.CountyEnabled && !string.IsNullOrEmpty(billingAddress.County))
+                addressResult.County = billingAddress.County;
+
+            if (_addressSettings.ZipPostalCodeEnabled && !string.IsNullOrEmpty(billingAddress.ZipPostalCode))
+                addressResult.ZipPostalCode = billingAddress.ZipPostalCode;
+
+            var stateProvince = await _stateProvinceService.GetStateProvinceByAddressAsync(billingAddress);
+            addressResult.StateProvinceName = stateProvince != null ? await _localizationService.GetLocalizedAsync(stateProvince, x => x.Name, lang.Id) : string.Empty;
 
             if (_addressSettings.CountryEnabled && await _countryService.GetCountryByAddressAsync(billingAddress) is Country country)
                 addressResult.Country = await _localizationService.GetLocalizedAsync(country, x => x.Name, lang.Id);
+
+            var (addressLine, _) = await _addressService.FormatAddressAsync(billingAddress, lang.Id);
+            addressResult.AddressLine = addressLine;
 
             //VAT number
             if (!string.IsNullOrEmpty(order.VatNumber))
@@ -255,19 +261,25 @@ namespace Nop.Services.Common
                     if (_addressSettings.StreetAddress2Enabled && !string.IsNullOrEmpty(shippingAddress.Address2))
                         addressResult.Address2 = shippingAddress.Address2;
 
-                    if (_addressSettings.CityEnabled || _addressSettings.StateProvinceEnabled ||
-                        _addressSettings.CountyEnabled || _addressSettings.ZipPostalCodeEnabled)
-                    {
-                        addressResult.AddressLine = $"{shippingAddress.City}, " +
-                            $"{(!string.IsNullOrEmpty(shippingAddress.County) ? $"{shippingAddress.County}, " : string.Empty)}" +
-                            $"{(await _stateProvinceService.GetStateProvinceByAddressAsync(shippingAddress) is StateProvince stateProvince ? await _localizationService.GetLocalizedAsync(stateProvince, x => x.Name, lang.Id) : string.Empty)} " +
-                            $"{shippingAddress.ZipPostalCode}";
-                    }
+                    if (_addressSettings.CityEnabled && !string.IsNullOrEmpty(shippingAddress.City))
+                        addressResult.City = shippingAddress.City;
+
+                    if (_addressSettings.CountyEnabled && !string.IsNullOrEmpty(shippingAddress.County))
+                        addressResult.County = shippingAddress.County;
+
+                    if (_addressSettings.ZipPostalCodeEnabled && !string.IsNullOrEmpty(shippingAddress.ZipPostalCode))
+                        addressResult.ZipPostalCode = shippingAddress.ZipPostalCode;
+
+                    var stateProvince = await _stateProvinceService.GetStateProvinceByAddressAsync(shippingAddress);
+                    addressResult.StateProvinceName = stateProvince != null ? await _localizationService.GetLocalizedAsync(stateProvince, x => x.Name, lang.Id) : string.Empty;
 
                     if (_addressSettings.CountryEnabled && await _countryService.GetCountryByAddressAsync(shippingAddress) is Country country)
                     {
                         addressResult.Country = await _localizationService.GetLocalizedAsync(country, x => x.Name, lang.Id);
                     }
+
+                    var (addressLine, _) = await _addressService.FormatAddressAsync(shippingAddress, lang.Id);
+                    addressResult.AddressLine = addressLine;
 
                     //custom attributes
                     var customShippingAddressAttributes = await _addressAttributeFormatter
@@ -283,14 +295,23 @@ namespace Nop.Services.Common
                     if (!string.IsNullOrEmpty(pickupAddress.Address1))
                         addressResult.Address = pickupAddress.Address1;
 
-                    if (_addressSettings.CityEnabled || _addressSettings.StateProvinceEnabled ||
-                        _addressSettings.CountyEnabled || _addressSettings.ZipPostalCodeEnabled)
-                    {
-                        addressResult.AddressLine = $"{pickupAddress.City}, " +
-                            $"{(!string.IsNullOrEmpty(pickupAddress.County) ? $"{pickupAddress.County}, " : string.Empty)}" +
-                            $"{(await _stateProvinceService.GetStateProvinceByAddressAsync(pickupAddress) is StateProvince stateProvince ? await _localizationService.GetLocalizedAsync(stateProvince, x => x.Name, lang.Id) : string.Empty)} " +
-                            $"{pickupAddress.ZipPostalCode}";
-                    }
+                    if (_addressSettings.StreetAddress2Enabled && !string.IsNullOrEmpty(pickupAddress.Address2))
+                        addressResult.Address2 = pickupAddress.Address2;
+
+                    if (_addressSettings.CityEnabled && !string.IsNullOrEmpty(pickupAddress.City))
+                        addressResult.City = pickupAddress.City;
+
+                    if (_addressSettings.CountyEnabled && !string.IsNullOrEmpty(pickupAddress.County))
+                        addressResult.County = pickupAddress.County;
+
+                    if (_addressSettings.ZipPostalCodeEnabled && !string.IsNullOrEmpty(pickupAddress.ZipPostalCode))
+                        addressResult.ZipPostalCode = pickupAddress.ZipPostalCode;
+
+                    var (addressLine, _) = await _addressService.FormatAddressAsync(pickupAddress, lang.Id);
+                    addressResult.AddressLine = addressLine;
+
+                    var stateProvince = await _stateProvinceService.GetStateProvinceByAddressAsync(pickupAddress);
+                    addressResult.StateProvinceName = stateProvince != null ? await _localizationService.GetLocalizedAsync(stateProvince, x => x.Name, lang.Id) : string.Empty;
 
                     if (await _countryService.GetCountryByAddressAsync(pickupAddress) is Country country)
                         addressResult.Country = await _localizationService.GetLocalizedAsync(country, x => x.Name, lang.Id);
@@ -695,7 +716,7 @@ namespace Nop.Services.Common
                 Products = await GetOrderProductItemsAsync(order, orderItems, language),
                 ShowSkuInProductList = _catalogSettings.ShowSkuOnProductDetailsPage,
                 ShowVendorInProductList = _vendorSettings.ShowVendorOnOrderDetailsPage,
-                CheckoutAttributes = vendor is null ? _htmlFormatter.ReplaceAnchorTags(order.CheckoutAttributeDescription) : string.Empty, //vendors cannot see checkout attributes
+                CheckoutAttributes = vendor is null ? _htmlFormatter.ConvertHtmlToPlainText(order.CheckoutAttributeDescription, true, true) : string.Empty, //vendors cannot see checkout attributes
                 Totals = vendor is null ? await GetTotalsAsync(language, order) : new(), //vendors cannot see totals
                 OrderNotes = await GetOrderNotesAsync(pdfSettingsByStore, order, language),
                 FooterTextColumn1 = column1Lines,

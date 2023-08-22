@@ -274,6 +274,9 @@ namespace Nop.Web.Factories
                 //shipping info
                 ShippingStatus = await _localizationService.GetLocalizedEnumAsync(order.ShippingStatus)
             };
+
+            var languageId = (await _workContext.GetWorkingLanguageAsync()).Id;
+
             if (order.ShippingStatus != ShippingStatus.ShippingNotRequired)
             {
                 model.IsShippable = true;
@@ -289,6 +292,7 @@ namespace Nop.Web.Factories
                 }
                 else if (order.PickupAddressId.HasValue && await _addressService.GetAddressByIdAsync(order.PickupAddressId.Value) is Address pickupAddress)
                 {
+                    var (addressLine, addressFields) = await _addressService.FormatAddressAsync(pickupAddress, languageId);
                     model.PickupAddress = new AddressModel
                     {
                         Address1 = pickupAddress.Address1,
@@ -300,7 +304,9 @@ namespace Nop.Web.Factories
                         CountryName = await _countryService.GetCountryByAddressAsync(pickupAddress) is Country country
                             ? await _localizationService.GetLocalizedAsync(country, entity => entity.Name)
                             : string.Empty,
-                        ZipPostalCode = pickupAddress.ZipPostalCode
+                        ZipPostalCode = pickupAddress.ZipPostalCode,
+                        AddressFields = addressFields,
+                        AddressLine = addressLine
                     };
                 }
 
@@ -335,8 +341,6 @@ namespace Nop.Web.Factories
 
             //VAT number
             model.VatNumber = order.VatNumber;
-
-            var languageId = (await _workContext.GetWorkingLanguageAsync()).Id;
 
             //payment method
             var customer = await _customerService.GetCustomerByIdAsync(order.CustomerId);
@@ -518,7 +522,7 @@ namespace Nop.Web.Factories
                     OrderItemGuid = orderItem.OrderItemGuid,
                     Sku = await _productService.FormatSkuAsync(product, orderItem.AttributesXml),
                     VendorName = (await _vendorService.GetVendorByIdAsync(product.VendorId))?.Name ?? string.Empty,
-                    ProductId = product.Id,
+                    ProductId = (product.ParentGroupedProductId > 0 && !product.VisibleIndividually) ? product.ParentGroupedProductId : product.Id,
                     ProductName = await _localizationService.GetLocalizedAsync(product, x => x.Name),
                     ProductSeName = await _urlRecordService.GetSeNameAsync(product),
                     Quantity = orderItem.Quantity,

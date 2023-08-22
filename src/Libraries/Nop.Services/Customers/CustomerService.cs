@@ -671,8 +671,6 @@ namespace Nop.Services.Customers
             //clear selected payment method
             if (clearPaymentMethod)
                 await _genericAttributeService.SaveAttributeAsync<string>(customer, NopCustomerDefaults.SelectedPaymentMethodAttribute, null, storeId);
-
-            await UpdateCustomerAsync(customer);
         }
 
         /// <summary>

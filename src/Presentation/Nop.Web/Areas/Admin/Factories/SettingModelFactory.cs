@@ -543,6 +543,7 @@ namespace Nop.Web.Areas.Admin.Factories
             model.ShowOnEmailProductToFriendPage_OverrideForStore = await _settingService.SettingExistsAsync(captchaSettings, x => x.ShowOnEmailProductToFriendPage, storeId);
             model.ShowOnBlogCommentPage_OverrideForStore = await _settingService.SettingExistsAsync(captchaSettings, x => x.ShowOnBlogCommentPage, storeId);
             model.ShowOnNewsCommentPage_OverrideForStore = await _settingService.SettingExistsAsync(captchaSettings, x => x.ShowOnNewsCommentPage, storeId);
+            model.ShowOnNewsletterPage_OverrideForStore = await _settingService.SettingExistsAsync(captchaSettings, x => x.ShowOnNewsletterPage, storeId);
             model.ShowOnProductReviewPage_OverrideForStore = await _settingService.SettingExistsAsync(captchaSettings, x => x.ShowOnProductReviewPage, storeId);
             model.ShowOnApplyVendorPage_OverrideForStore = await _settingService.SettingExistsAsync(captchaSettings, x => x.ShowOnApplyVendorPage, storeId);
             model.ShowOnForgotPasswordPage_OverrideForStore = await _settingService.SettingExistsAsync(captchaSettings, x => x.ShowOnForgotPasswordPage, storeId);
@@ -1129,6 +1130,7 @@ namespace Nop.Web.Areas.Admin.Factories
             //fill in overridden values
             if (storeId > 0)
             {
+                model.AutomaticallyDetectCountry_OverrideForStore = await _settingService.SettingExistsAsync(taxSettings, x => x.AutomaticallyDetectCountry, storeId);
                 model.PricesIncludeTax_OverrideForStore = await _settingService.SettingExistsAsync(taxSettings, x => x.PricesIncludeTax, storeId);
                 model.AllowCustomersToSelectTaxDisplayType_OverrideForStore = await _settingService.SettingExistsAsync(taxSettings, x => x.AllowCustomersToSelectTaxDisplayType, storeId);
                 model.TaxDisplayType_OverrideForStore = await _settingService.SettingExistsAsync(taxSettings, x => x.TaxDisplayType, storeId);
@@ -1562,11 +1564,17 @@ namespace Nop.Web.Areas.Admin.Factories
             //prepare customer settings model
             model.CustomerSettings = await PrepareCustomerSettingsModelAsync();
 
+            //prepare CustomerSettings list availableCountries
+            await _baseAdminModelFactory.PrepareCountriesAsync(model.CustomerSettings.AvailableCountries);
+            
             //prepare multi-factor authentication settings model
             model.MultiFactorAuthenticationSettings = await PrepareMultiFactorAuthenticationSettingsModelAsync();
 
             //prepare address settings model
             model.AddressSettings = await PrepareAddressSettingsModelAsync();
+
+            //prepare AddressSettings list availableCountries
+            await _baseAdminModelFactory.PrepareCountriesAsync(model.AddressSettings.AvailableCountries);
 
             //prepare date time settings model
             model.DateTimeSettings = await PrepareDateTimeSettingsModelAsync();
