@@ -25,6 +25,11 @@ namespace Nop.Core.Domain.Vendors
         public string Name { get; set; }
 
         /// <summary>
+        /// 昵称
+        /// </summary>
+        public string NickName { get; set; }
+
+        /// <summary>
         /// Gets or sets the email
         /// </summary>
         public string Email { get; set; }
@@ -45,6 +50,11 @@ namespace Nop.Core.Domain.Vendors
         public int PictureId { get; set; }
 
         /// <summary>
+        /// 供应商模板ID
+        /// </summary>
+        public int VendoeTemplateId { get; set; }
+
+        /// <summary>
         /// Gets or sets the address identifier
         /// </summary>
         public int AddressId { get; set; }
@@ -53,21 +63,6 @@ namespace Nop.Core.Domain.Vendors
         /// Gets or sets the admin comment
         /// </summary>
         public string AdminComment { get; set; }
-
-        /// <summary>
-        /// 是否有线下门店
-        /// </summary>
-        public bool HasVendorStore { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the entity is active
-        /// </summary>
-        public bool Active { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the entity has been deleted
-        /// </summary>
-        public bool Deleted { get; set; }
 
         /// <summary>
         /// Gets or sets the display order
@@ -110,6 +105,21 @@ namespace Nop.Core.Domain.Vendors
         public string ShareImgUrl { get; set; }
 
         /// <summary>
+        /// 微信二维码
+        /// </summary>
+        public string QrcodeUrl { get; set; }
+
+        /// <summary>
+        /// 暂停营业提示文字
+        /// </summary>
+        public string StoreCloseNotice { get; set; }
+
+        /// <summary>
+        /// 供应商等级
+        /// </summary>
+        public int VendorLevel { get; set; }
+
+        /// <summary>
         /// 浏览次数
         /// </summary>
         public int ViewCount { get; set; }
@@ -125,14 +135,59 @@ namespace Nop.Core.Domain.Vendors
         public int Likes { get; set; }
 
         /// <summary>
-        /// 锁定
+        /// 是否有线下门店
         /// </summary>
-        public bool Locked { get; set; }
+        public bool HasVendorStore { get; set; }
+
+        /// <summary>
+        /// 会员卡功能
+        /// </summary>
+        public bool MembershipCardFun { get; set; }
+
+        /// <summary>
+        /// 跟单回访功能
+        /// </summary>
+        public bool ReVisitFun { get; set; }
+
+        /// <summary>
+        /// 直接显示供应商联系方式,客户可以直接联系
+        /// </summary>
+        public bool ShowVendorContact { get; set; }
+
+        /// <summary>
+        /// 是否暂停营业
+        /// </summary>
+        public bool StoreClosed { get; set; }
+
+        /// <summary>
+        /// 允许添加新闻
+        /// </summary>
+        public bool AllowAddNews { get; set; }
+
+        /// <summary>
+        /// 允许发布博客
+        /// </summary>
+        public bool AllowAddBlogs { get; set; }
+
+        /// <summary>
+        /// 前台展示，公开选择和关注
+        /// </summary>
+        public bool AllowChoose { get; set; }
 
         /// <summary>
         /// 审核通过
         /// </summary>
         public bool Approved { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the entity is active
+        /// </summary>
+        public bool Active { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the entity has been deleted
+        /// </summary>
+        public bool Deleted { get; set; }
 
         /// <summary>
         /// Gets or sets the page size

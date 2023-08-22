@@ -2975,6 +2975,8 @@ namespace Nop.Services.Installation
                 AllowCustomersToSearchWithCategoryName = true,
                 AllowCustomersToSearchWithManufacturerName = true,
                 DisplayAllPicturesOnCatalogPages = false,
+                EnableRegionalProduct = false,
+                AllowSharing = true,
                 ProductUrlStructureTypeId = (int)ProductUrlStructureType.Product,
                 ActiveSearchProviderSystemName = string.Empty
             });
@@ -2995,6 +2997,11 @@ namespace Nop.Services.Installation
 
             await settingService.SaveSettingAsync(new CustomerSettings
             {
+                RefereeIdAvailableMinutes=0,
+                LockTempTime=true,
+                AutoDetectCity=true,
+                PhoneNumberLogin=false,
+                PhoneNumberValidationBySMS=false,
                 UsernamesEnabled = false,
                 CheckUsernameAvailabilityEnabled = false,
                 AllowUsersToChangeUsernames = false,
@@ -3070,6 +3077,10 @@ namespace Nop.Services.Installation
 
             await settingService.SaveSettingAsync(new AddressSettings
             {
+                LastNameEnabled = true,
+                LastNameRequired = true,
+                EmailEnabled = true,
+                EmailRequired = true,
                 CompanyEnabled = true,
                 StreetAddressEnabled = true,
                 StreetAddressRequired = true,

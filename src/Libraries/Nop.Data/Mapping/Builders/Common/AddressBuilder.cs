@@ -19,7 +19,10 @@ namespace Nop.Data.Mapping.Builders.Common
         /// <param name="table">Create table expression builder</param>
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
-            table
+            table.WithColumn(nameof(Address.AddressLable)).AsString(16).Nullable()
+                .WithColumn(nameof(Address.DivisionsCode)).AsAnsiString(32).Nullable()
+                .WithColumn(nameof(Address.Latitude)).AsDecimal(10, 6)
+                .WithColumn(nameof(Address.Longitude)).AsDecimal(10, 6)
                 .WithColumn(nameof(Address.CountryId)).AsInt32().Nullable().ForeignKey<Country>(onDelete: Rule.None)
                 .WithColumn(nameof(Address.StateProvinceId)).AsInt32().Nullable().ForeignKey<StateProvince>(onDelete: Rule.None);
         }

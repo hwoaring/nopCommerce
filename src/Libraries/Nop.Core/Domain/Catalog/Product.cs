@@ -54,6 +54,25 @@ namespace Nop.Core.Domain.Catalog
         public string SloganUrlText { get; set; }
 
         /// <summary>
+        /// 封面图(长图或大图)
+        /// </summary>
+        public string CoverImageUrl { get; set; }
+        /// <summary>
+        /// 缩微图（方图或小图）
+        /// </summary>
+        public string CoverThumbImageUrl { get; set; }
+
+        /// <summary>
+        /// 跳转链接，在列表页点击详情链接跳转
+        /// </summary>
+        public string Url { get; set; }
+
+        /// <summary>
+        /// 购买链接：用于分享购买其他平台发布的产品，点击购买按钮跳转
+        /// </summary>
+        public string PurchaseUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the short description
         /// </summary>
         public string ShortDescription { get; set; }
@@ -159,6 +178,11 @@ namespace Nop.Core.Domain.Catalog
         public bool LimitedToStores { get; set; }
 
         /// <summary>
+        /// 自营产品（拥有自主定价权和促销活动策划权）
+        /// </summary>
+        public bool SelfSupport { get; set; }
+
+        /// <summary>
         /// Gets or sets the SKU
         /// </summary>
         public string Sku { get; set; }
@@ -174,6 +198,16 @@ namespace Nop.Core.Domain.Catalog
         public string Gtin { get; set; }
 
         /// <summary>
+        /// 是否供应商提供的兑换券/代金券卡产品（是则绑定指定的VoucherCardId）
+        /// </summary>
+        public bool IsVoucherCard { get; set; }
+
+        /// <summary>
+        /// 供应商提供的兑换券Id
+        /// </summary>
+        public int VoucherCardId { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the product is gift card
         /// </summary>
         public bool IsGiftCard { get; set; }
@@ -182,6 +216,31 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the gift card type identifier
         /// </summary>
         public int GiftCardTypeId { get; set; }
+
+        /// <summary>
+        /// 卡片从购买开始有效期天数，设置0表示以GiftCardEndUseDateTimeUtc值为准
+        /// </summary>
+        public int GiftCardValidDays { get; set; }
+
+        /// <summary>
+        /// 有效期开始日期
+        /// </summary>
+        public DateTime? GiftCardStartUseDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 最大有效期结束日期
+        /// </summary>
+        public DateTime? GiftCardEndUseDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 购买成功产品最早使用时间
+        /// </summary>
+        public DateTime? AvailableUseStartDateUtc { get; set; }
+
+        /// <summary>
+        /// 购买成功产品最晚使用时间
+        /// </summary>
+        public DateTime? AvailableUseEndDateUtc { get; set; }
 
         /// <summary>
         /// Gets or sets gift card amount that can be used after purchase. If not specified, then product price will be used.
@@ -304,6 +363,31 @@ namespace Nop.Core.Domain.Catalog
         public bool ShipSeparately { get; set; }
 
         /// <summary>
+        /// 是否支持自提
+        /// </summary>
+        public bool PickUpSupport { get; set; }
+
+        /// <summary>
+        /// 是否支持货到付款（cash on delivery）
+        /// </summary>
+        public bool CODSupport { get; set; }
+
+        /// <summary>
+        /// 在线支付免邮
+        /// </summary>
+        public bool OnlinePayFreeShipping { get; set; }
+
+        /// <summary>
+        /// 满金额免邮是否支持店铺内商品价格总合计
+        /// </summary>
+        public bool TotalAmountSupport { get; set; }
+
+        /// <summary>
+        /// 满额免邮金额
+        /// </summary>
+        public decimal FreeShippingAmount { get; set; }
+
+        /// <summary>
         /// Gets or sets the additional shipping charge
         /// </summary>
         public decimal AdditionalShippingCharge { get; set; }
@@ -399,6 +483,21 @@ namespace Nop.Core.Domain.Catalog
         public int OrderMaximumQuantity { get; set; }
 
         /// <summary>
+        /// 【价格保护】产品可用最大积分数量
+        /// </summary>
+        public int MaxPointsAvailable { get; set; }
+
+        /// <summary>
+        /// 【价格保护】使用免费的折扣券最大折扣比例（超出比例不显示可用折扣卡或取最小折扣比例）
+        /// </summary>
+        public decimal MaxDiscountPercentage { get; set; }
+
+        /// <summary>
+        /// 【价格保护】使用免费的现金抵用券/虚拟币/这算后的低佣金等最大使用金额（超出金额的券不显示或取最小限定值）
+        /// </summary>
+        public decimal MaxDiscountAmount { get; set; }
+
+        /// <summary>
         /// Gets or sets the comma separated list of allowed quantities. null or empty if any quantity is allowed
         /// </summary>
         public string AllowedQuantities { get; set; }
@@ -455,6 +554,21 @@ namespace Nop.Core.Domain.Catalog
         public decimal VipPrice { get; set; }
 
         /// <summary>
+        /// 是否开启分销
+        /// </summary>
+        public bool AllowDistribute { get; set; }
+
+        /// <summary>
+        /// 分销商价格
+        /// </summary>
+        public decimal DistributorPrice { get; set; }
+
+        /// <summary>
+        /// 代理商价格
+        /// </summary>
+        public decimal AgentPrice { get; set; }
+
+        /// <summary>
         /// Gets or sets the product cost
         /// </summary>
         public decimal ProductCost { get; set; }
@@ -500,6 +614,36 @@ namespace Nop.Core.Domain.Catalog
         public int BasepriceBaseUnitId { get; set; }
 
         /// <summary>
+        /// 仅新用户可购买
+        /// </summary>
+        public bool OnlyForNewUser { get; set; }
+
+        /// <summary>
+        /// 产品是否允许退款
+        /// </summary>
+        public bool RefundAllowed { get; set; }
+
+        /// <summary>
+        /// 是否允许评论
+        /// </summary>
+        public bool AllowComment { get; set; }
+
+        /// <summary>
+        /// 是否特价商品
+        /// </summary>
+        public bool SpecialOfferProduct { get; set; }
+
+        /// <summary>
+        /// 是否折扣商品
+        /// </summary>
+        public bool DiscountedProduct { get; set; }
+
+        /// <summary>
+        /// 置顶显示
+        /// </summary>
+        public bool ShowTop { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this product is marked as new
         /// </summary>
         public bool MarkAsNew { get; set; }
@@ -543,6 +687,46 @@ namespace Nop.Core.Domain.Catalog
         /// 推荐结束时间
         /// </summary>
         public DateTime? MarkAsRecommendEndDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 是否延迟加载详情内容中的图片
+        /// </summary>
+        public bool LazyLoadImages { get; set; }
+
+        /// <summary>
+        /// 是否需要联系人信息（不用邮寄的虚拟物品或卡券等，订单保存是否需要联系人信息：姓名，电话）
+        /// </summary>
+        public bool ContactInfoRequired { get; set; }
+
+        /// <summary>
+        /// 是否需要实名制购买（获取身份证号信息）
+        /// </summary>
+        public bool RealNameRequired { get; set; }
+
+        /// <summary>
+        /// 是否每个商品都需要不同的实名信息（否则只需1个订单一条实名信息即可）
+        /// </summary>
+        public bool RealNamePerItem { get; set; }
+
+        /// <summary>
+        /// 部分类型产品需要后台验证后才能付款
+        /// </summary>
+        public bool OrdersNeedVerify { get; set; }
+
+        /// <summary>
+        /// 订单支付过期秒数（过期前支付，主要用于抢购商品）
+        /// </summary>
+        public int OrderExpireSeconds { get; set; }
+
+        /// <summary>
+        /// 积分：正为返还，负数为消费
+        /// </summary>
+        public int Points { get; set; }
+
+        /// <summary>
+        /// 虚拟币：正为返还，负数为消费
+        /// </summary>
+        public decimal VirtualCurrency { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this product has tier prices configured
@@ -591,6 +775,21 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the available end date and time
         /// </summary>
         public DateTime? AvailableEndDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 是否通过审核（编辑或其他商家上的产品需要先通过审核）
+        /// </summary>
+        public bool Audited { get; set; }
+
+        /// <summary>
+        /// 关注人数（设置关注人数基数）
+        /// </summary>
+        public int FollowCount { get; set; }
+
+        /// <summary>
+        /// 浏览次数
+        /// </summary>
+        public int ViewCount { get; set; }
 
         /// <summary>
         /// Gets or sets a display order.

@@ -199,11 +199,6 @@ namespace Nop.Core.Domain.Customers
         public int VendorId { get; set; }
 
         /// <summary>
-        /// 供应商ID
-        /// </summary>
-        public int SupplierId { get; set; }
-
-        /// <summary>
         /// 销售员ID
         /// </summary>
         public int SalerId { get; set; }

@@ -55,5 +55,45 @@
         /// A customer is added to this customer role once a specified product is purchased.
         /// </summary>
         public int PurchasedWithProductId { get; set; }
+
+        /// <summary>
+        /// 自动升级
+        /// </summary>
+        public bool AutoUpdate { get; set; }
+
+        /// <summary>
+        /// 是否默认角色
+        /// </summary>
+        public bool DefaultRole { get; set; }
+
+        /// <summary>
+        /// 购物折扣
+        /// </summary>
+        public decimal Discount { get; set; }
+
+        /// <summary>
+        /// 预存款
+        /// </summary>
+        public decimal PreDeposits { get; set; }
+
+        /// <summary>
+        /// 最小经验值
+        /// </summary>
+        public int MinExp { get; set; }
+
+        /// <summary>
+        /// 最大经验值
+        /// </summary>
+        public int MaxExp { get; set; }
+
+        /// <summary>
+        /// 更新时间
+        /// </summary>
+        public DateTime? UpdatedOnUtc { get; set; }
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreatedOnUtc { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using FluentMigrator.Builders.Create.Table;
+﻿using System.Data;
+using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.SecureCode;
 using Nop.Data.Extensions;
 
@@ -24,6 +25,8 @@ namespace Nop.Data.Mapping.Builders.SecureCode
                 .WithColumn(nameof(SecureCodeProductBatch.ManufactureDateUtc)).AsDateTime2().Nullable()
                 .WithColumn(nameof(SecureCodeProductBatch.ExpireDateUtc)).AsDateTime2().Nullable()
                 .WithColumn(nameof(SecureCodeProductBatch.ActiveDateUtc)).AsDateTime2().Nullable()
+                .WithColumn(nameof(SecureCodeProductBatch.SecureCodeSellerId)).AsInt32().ForeignKey<SecureCodeSeller>(onDelete: Rule.None)
+                .WithColumn(nameof(SecureCodeProductBatch.SecureCodeProductId)).AsInt32().ForeignKey<SecureCodeProduct>(onDelete: Rule.None)
                 ;
 
         }

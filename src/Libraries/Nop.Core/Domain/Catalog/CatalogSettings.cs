@@ -570,6 +570,16 @@ namespace Nop.Core.Domain.Catalog
         public bool AllowCustomersToSearchWithCategoryName { get; set; }
 
         /// <summary>
+        /// 开启区域商品功能（浏览人在区域范围内页面才显示商品，或才能邮寄）
+        /// </summary>
+        public bool EnableRegionalProduct { get; set; }
+
+        /// <summary>
+        /// 分类是否允许分享（分类总控）
+        /// </summary>
+        public bool AllowSharing { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether all pictures will be displayed on catalog pages
         /// </summary>
         public bool DisplayAllPicturesOnCatalogPages { get; set; }

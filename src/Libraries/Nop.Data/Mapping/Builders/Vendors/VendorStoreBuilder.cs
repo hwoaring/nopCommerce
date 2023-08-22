@@ -21,6 +21,7 @@ namespace Nop.Data.Mapping.Builders.Vendors
                 .WithColumn(nameof(VendorStore.RelatedStoreIds)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(VendorStore.Name)).AsString(16).Nullable()
                 .WithColumn(nameof(VendorStore.Slogan)).AsString(32).Nullable()
+                .WithColumn(nameof(VendorStore.DomainUrl)).AsAnsiString(32).Nullable()
                 .WithColumn(nameof(VendorStore.Address)).AsString(128).Nullable()
                 .WithColumn(nameof(VendorStore.ContractNumber)).AsAnsiString(32).Nullable()
                 .WithColumn(nameof(VendorStore.ImageUrl)).AsAnsiString(1024).Nullable()

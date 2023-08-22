@@ -43,6 +43,11 @@ namespace Nop.Core.Domain.Catalog
         public bool IsPreSelected { get; set; }
 
         /// <summary>
+        /// 多数量
+        /// </summary>
+        public bool UseQtyMultiple { get; set; }
+
+        /// <summary>
         /// Gets or sets the display order
         /// </summary>
         public int DisplayOrder { get; set; }

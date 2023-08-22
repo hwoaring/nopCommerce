@@ -5,7 +5,7 @@ namespace Nop.Core.Domain.SecureCode
     /// <summary>
     /// 产品批次信息
     /// </summary>
-    public partial class SecureCodeProductBatch : BaseEntity,ISoftDeletedEntity
+    public partial class SecureCodeProductBatch : BaseEntity, ISoftDeletedEntity
     {
         /// <summary>
         /// 产品信息

@@ -19,6 +19,10 @@ namespace Nop.Data.Mapping.Builders.Vendors
         {
             table
                 .WithColumn(nameof(VendorCategory.Name)).AsString(16).NotNullable()
+                .WithColumn(nameof(VendorCategory.Description)).AsString(1024).Nullable()
+                .WithColumn(nameof(VendorCategory.MetaTitle)).AsString(128).Nullable()
+                .WithColumn(nameof(VendorCategory.MetaKeywords )).AsString(512).Nullable()
+                .WithColumn(nameof(VendorCategory.MetaDescription)).AsString(1024).Nullable()
                 .WithColumn(nameof(VendorCategory.VendorId)).AsInt32().ForeignKey<Vendor>();
         }
 

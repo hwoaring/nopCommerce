@@ -18,7 +18,8 @@ namespace Nop.Data.Mapping.Builders.Catalog
         /// <param name="table">Create table expression builder</param>
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
-            table
+            table.WithColumn(nameof(TierPrice.Name)).AsString(64).Nullable()
+                .WithColumn(nameof(TierPrice.ShortName)).AsString(64).Nullable()
                 .WithColumn(nameof(TierPrice.CustomerRoleId)).AsInt32().Nullable().ForeignKey<CustomerRole>()
                 .WithColumn(nameof(TierPrice.ProductId)).AsInt32().ForeignKey<Product>();
         }

@@ -28,6 +28,21 @@ namespace Nop.Core.Domain.Catalog
         public string Name { get; set; }
 
         /// <summary>
+        ///短名称
+        /// </summary>
+        public string ShortName { get; set; }
+
+        /// <summary>
+        /// 描述
+        /// </summary>
+        public string Discription { get; set; }
+
+        /// <summary>
+        /// 内容
+        /// </summary>
+        public string Content { get; set; }
+
+        /// <summary>
         /// Gets or sets the color RGB value (used with "Color squares" attribute type)
         /// </summary>
         public string ColorSquaresRgb { get; set; }
@@ -36,6 +51,16 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the picture ID for image square (used with "Image squares" attribute type)
         /// </summary>
         public int ImageSquaresPictureId { get; set; }
+
+        /// <summary>
+        /// 会员价调整
+        /// </summary>
+        public decimal VipPriceAdjustment { get; set; }
+
+        /// <summary>
+        /// 原价、划线价
+        /// </summary>
+        public decimal OldPriceAdjustment { get; set; }
 
         /// <summary>
         /// Gets or sets the price adjustment (used only with AttributeValueType.Simple)
@@ -66,6 +91,16 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the quantity of associated product (used only with AttributeValueType.AssociatedToProduct)
         /// </summary>
         public int Quantity { get; set; }
+
+        /// <summary>
+        /// 最小购买数量
+        /// </summary>
+        public int OrderMinimumQuantity { get; set; }
+
+        /// <summary>
+        /// 最大购买数量
+        /// </summary>
+        public int OrderMaximumQuantity { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the value is pre-selected

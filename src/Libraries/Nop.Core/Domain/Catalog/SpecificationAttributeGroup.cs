@@ -16,5 +16,10 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the display order
         /// </summary>
         public int DisplayOrder { get; set; }
+
+        /// <summary>
+        /// 用于CSS格式
+        /// </summary>
+        public string CssName { get; set; }
     }
 }

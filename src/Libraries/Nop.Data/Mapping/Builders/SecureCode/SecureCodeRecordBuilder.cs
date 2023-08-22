@@ -1,4 +1,5 @@
-﻿using FluentMigrator.Builders.Create.Table;
+﻿using System.Data;
+using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.SecureCode;
 using Nop.Data.Extensions;
 
@@ -19,6 +20,7 @@ namespace Nop.Data.Mapping.Builders.SecureCode
         {
             table
                 .WithColumn(nameof(SecureCodeRecord.ImageUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(SecureCodeRecord.SecureCodeProductBatchId)).AsInt32().ForeignKey<SecureCodeProductBatch>(onDelete: Rule.None)
                 ;
         }
 

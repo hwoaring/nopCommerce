@@ -20,6 +20,7 @@ namespace Nop.Data.Mapping.Builders.Customers
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
+                .WithColumn(nameof(CustomerVendorMapping.Remark)).AsString(64).Nullable()
                 .WithColumn(nameof(CustomerVendorMapping.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(CustomerVendorMapping.VendorId)).AsInt32().ForeignKey<Vendor>()
                 ;

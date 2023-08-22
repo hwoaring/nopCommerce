@@ -1,4 +1,5 @@
-﻿using FluentMigrator.Builders.Create.Table;
+﻿using System.Data;
+using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.SecureCode;
 using Nop.Data.Extensions;
 
@@ -17,7 +18,9 @@ namespace Nop.Data.Mapping.Builders.SecureCode
         /// <param name="table">Create table expression builder</param>
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
-
+            table
+                .WithColumn(nameof(SecureCodeOuterRecord.SecureCodeRegionSellerId)).AsInt32().ForeignKey<SecureCodeRegionSeller>(onDelete: Rule.None)
+                ;
         }
 
         #endregion

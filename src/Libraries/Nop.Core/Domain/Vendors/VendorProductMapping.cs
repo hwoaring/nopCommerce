@@ -11,6 +11,11 @@
         public int VendorId { get; set; }
 
         /// <summary>
+        /// 用于获取从哪个经销商获取的销售产品信息
+        /// </summary>
+        public int ParentVendorId { get; set; }
+
+        /// <summary>
         /// 选择要代理的产品ID
         /// </summary>
         public int ProductId { get; set; }
@@ -41,8 +46,13 @@
         public int DisplayOrder { get; set; }
 
         /// <summary>
-        /// 锁定
+        /// Vendor自己控制是否发布
         /// </summary>
-        public bool Locked { get; set; }
+        public bool Published { get; set; }
+
+        /// <summary>
+        /// 平台管理员控制是否通过审核，允许发布
+        /// </summary>
+        public bool Approved { get; set; }
     }
 }

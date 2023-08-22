@@ -24,5 +24,15 @@
         /// 排序
         /// </summary>
         public int DisplayOrder { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Remark { get; set; }
+
+        /// <summary>
+        /// 添加时间
+        /// </summary>
+        public DateTime CreatedDate { get; set; }
     }
 }

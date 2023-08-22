@@ -19,8 +19,10 @@ namespace Nop.Data.Mapping.Builders.Vendors
         {
             table
                 .WithColumn(nameof(Vendor.Name)).AsString(400).NotNullable()
+                .WithColumn(nameof(Vendor.NickName)).AsString(64).Nullable()
                 .WithColumn(nameof(Vendor.VendorSecretId)).AsAnsiString(16).Nullable()
                 .WithColumn(nameof(Vendor.Email)).AsString(400).Nullable()
+                .WithColumn(nameof(Vendor.PhoneNumber)).AsAnsiString(32).Nullable()
                 .WithColumn(nameof(Vendor.MetaKeywords)).AsString(400).Nullable()
                 .WithColumn(nameof(Vendor.MetaTitle)).AsString(400).Nullable()
 
@@ -28,6 +30,9 @@ namespace Nop.Data.Mapping.Builders.Vendors
                 .WithColumn(nameof(Vendor.ShareDesc)).AsString(512).Nullable()
                 .WithColumn(nameof(Vendor.ShareLink)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Vendor.ShareImgUrl)).AsAnsiString(1024).Nullable()
+                .WithColumn(nameof(Vendor.QrcodeUrl)).AsAnsiString(1024).Nullable()
+
+                .WithColumn(nameof(Vendor.StoreCloseNotice)).AsString(128).Nullable()
 
                 .WithColumn(nameof(Vendor.PageSizeOptions)).AsString(200).Nullable();
         }

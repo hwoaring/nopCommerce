@@ -34,5 +34,25 @@
         /// Product creation date
         /// </summary>
         CreatedOn = 15,
+
+        /// <summary>
+        /// 销量：从低到高
+        /// </summary>
+        SalesAsc = 20,
+
+        /// <summary>
+        /// 销量：从高到低
+        /// </summary>
+        SalesDesc = 21,
+
+        /// <summary>
+        /// 关注量：从低到高
+        /// </summary>
+        FocusAsc = 30,
+
+        /// <summary>
+        /// 关注量：从高到低
+        /// </summary>
+        FocusDesc = 31,
     }
 }

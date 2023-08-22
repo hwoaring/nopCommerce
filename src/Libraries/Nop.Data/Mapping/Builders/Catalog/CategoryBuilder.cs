@@ -18,6 +18,14 @@ namespace Nop.Data.Mapping.Builders.Catalog
         {
             table
                 .WithColumn(nameof(Category.Name)).AsString(400).NotNullable()
+                .WithColumn(nameof(Category.IndexName)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(Category.CrossCategories)).AsAnsiString(400).Nullable()
+                .WithColumn(nameof(Category.Summary)).AsString(400).Nullable()
+
+                .WithColumn(nameof(Category.IndexTemplateName)).AsAnsiString(512).Nullable()
+                .WithColumn(nameof(Category.ListTemplateName)).AsAnsiString(512).Nullable()
+                .WithColumn(nameof(Category.ItemTemplateName)).AsAnsiString(512).Nullable()
+
                 .WithColumn(nameof(Category.MetaKeywords)).AsString(400).Nullable()
                 .WithColumn(nameof(Category.MetaTitle)).AsString(400).Nullable()
                 .WithColumn(nameof(Category.PageSizeOptions)).AsString(200).Nullable();

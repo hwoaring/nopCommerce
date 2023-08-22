@@ -15,9 +15,19 @@ namespace Nop.Core.Domain.Vendors
         public string VendorId { get; set; }
 
         /// <summary>
+        /// 供应商编号（8位）-会员卡前8位使用到供应商编号
+        /// </summary>
+        public int VendorStoreNumber { get; set; }
+
+        /// <summary>
         /// 相关店铺ID（针对一个城市自己有多个门店的关联展示）
         /// </summary>
         public string RelatedStoreIds { get; set; }
+
+        /// <summary>
+        /// 供应商店铺域名
+        /// </summary>
+        public string DomainUrl { get; set; }
 
         /// <summary>
         /// 商店名称
@@ -138,6 +148,16 @@ namespace Nop.Core.Domain.Vendors
         /// 微信分享图片
         /// </summary>
         public string ShareImgUrl { get; set; }
+
+        /// <summary>
+        /// 店铺类型
+        /// </summary>
+        public int StoreTypeId { get; set; }
+
+        /// <summary>
+        /// 合作模式
+        /// </summary>
+        public int CooperationTypeId { get; set; }
 
         /// <summary>
         /// 锁定

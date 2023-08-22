@@ -9,6 +9,7 @@ using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Logging;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.Orders;
+using Nop.Core.Domain.SecureCode;
 using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Seo;
 using Nop.Core.Domain.Stores;
@@ -292,6 +293,14 @@ namespace Nop.Data.Migrations.Installation
             Create.Index("IX_AclRecord_EntityId_EntityName").OnTable(nameof(AclRecord))
                 .OnColumn(nameof(AclRecord.EntityId)).Ascending()
                 .OnColumn(nameof(AclRecord.EntityName)).Ascending()
+                .WithOptions().NonClustered();
+
+            Create.Index("IX_SecureCodeRecord_InnerCode").OnTable(nameof(SecureCodeRecord))
+                .OnColumn(nameof(SecureCodeRecord.InnerCode)).Descending()
+                .WithOptions().NonClustered();
+
+            Create.Index("IX_SecureCodeRecord_OuterCode").OnTable(nameof(SecureCodeRecord))
+                .OnColumn(nameof(SecureCodeRecord.OuterCode)).Descending()
                 .WithOptions().NonClustered();
         }
 

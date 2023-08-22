@@ -1,4 +1,5 @@
-﻿using FluentMigrator.Builders.Create.Table;
+﻿using System.Data;
+using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.SecureCode;
 using Nop.Data.Extensions;
 
@@ -25,6 +26,7 @@ namespace Nop.Data.Mapping.Builders.SecureCode
                 .WithColumn(nameof(SecureCodeRegionSeller.Description)).AsString(1024).Nullable()
                 .WithColumn(nameof(SecureCodeRegionSeller.Longitude)).AsDecimal(10, 6)
                 .WithColumn(nameof(SecureCodeRegionSeller.Latitude)).AsDecimal(10, 6)
+                .WithColumn(nameof(SecureCodeRegionSeller.SecureCodeSellerId)).AsInt32().ForeignKey<SecureCodeSeller>(onDelete: Rule.None)
                 ;
         }
 

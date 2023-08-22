@@ -21,5 +21,16 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the specification attribute group identifier
         /// </summary>
         public int? SpecificationAttributeGroupId { get; set; }
+
+        /// <summary>
+        /// 用于CSS格式
+        /// </summary>
+        public string CssName { get; set; }
+
+        /// <summary>
+        /// 内容
+        /// </summary>
+        public string Content { get; set; }
+
     }
 }

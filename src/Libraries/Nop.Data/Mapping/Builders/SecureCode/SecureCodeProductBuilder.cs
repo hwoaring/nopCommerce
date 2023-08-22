@@ -1,4 +1,7 @@
-﻿using FluentMigrator.Builders.Create.Table;
+﻿using System.Data;
+using System.Text;
+using FluentMigrator.Builders.Create.Table;
+using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.SecureCode;
 using Nop.Data.Extensions;
 
@@ -23,6 +26,7 @@ namespace Nop.Data.Mapping.Builders.SecureCode
                 .WithColumn(nameof(SecureCodeProduct.SubTitle)).AsString(512).Nullable()
                 .WithColumn(nameof(SecureCodeProduct.ImagesUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(SecureCodeProduct.Description)).AsString(1024).Nullable()
+                .WithColumn(nameof(SecureCodeProduct.ManufacturerId)).AsInt32().ForeignKey<Manufacturer>(onDelete: Rule.None)
                 ;
         }
 
