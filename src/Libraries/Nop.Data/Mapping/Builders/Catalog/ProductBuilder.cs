@@ -20,7 +20,6 @@ namespace Nop.Data.Mapping.Builders.Catalog
             table
                 .WithColumn(nameof(Product.Name)).AsString(400).NotNullable()
                 .WithColumn(nameof(Product.Slogan)).AsString(128).Nullable()
-                .WithColumn(nameof(Product.ProductModel)).AsString(64).Nullable()
                 .WithColumn(nameof(Product.SloganUrl)).AsString(128).Nullable()
                 .WithColumn(nameof(Product.SloganUrlText)).AsString(32).Nullable()
                 .WithColumn(nameof(Product.CoverImageUrl)).AsAnsiString(512).Nullable()

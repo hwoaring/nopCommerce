@@ -11,5 +11,7 @@ namespace Nop.Core.Domain.Memberships
         /// 发放公司ID
         /// </summary>
         public int VendorStoreId { get; set; }
+
+        public bool Deleted { get; set; }
     }
 }
