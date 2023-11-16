@@ -366,6 +366,9 @@
   <LocaleResource Name="Account.Fields.Gender.Male">
     <Value>Male</Value>
   </LocaleResource>
+  <LocaleResource Name="Account.Fields.Gender.Neutral">
+      <Value>Neutral</Value>
+  </LocaleResource>
   <LocaleResource Name="Account.Fields.LastName">
     <Value>Last name</Value>
   </LocaleResource>
@@ -3066,12 +3069,6 @@
   <LocaleResource Name="Admin.Catalog.Products.Fields.IsTaxExempt.Hint">
     <Value>Determines whether this product is tax exempt (tax will not be applied to this product at checkout).</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.IsTelecommunicationsOrBroadcastingOrElectronicServices">
-    <Value>Telecommunications, broadcasting and electronic services</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Catalog.Products.Fields.IsTelecommunicationsOrBroadcastingOrElectronicServices.Hint">
-    <Value>Check if it's telecommunications, broadcasting and electronic services. It's used for tax calculation in Europe Union.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.Length">
     <Value>Length</Value>
   </LocaleResource>
@@ -4499,12 +4496,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.AppSettings.Common.DisplayFullErrorStack.Hint">
     <Value>Enable this setting to display the full error in production environment. It's ignored (always enabled) in development environment.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.AppSettings.Common.MiniProfilerEnabled">
-    <Value>Enable MiniProfiler</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.AppSettings.Common.MiniProfilerEnabled.Hint">
-    <Value>Enable this setting to display the performance indicator by MiniProfiler. By default, the performance indicator can see only Administrators, to change this behavior set ACL rules in the admin area.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.AppSettings.Common.PluginStaticFileExtensionsBlacklist">
     <Value>Plugin static file extensions blacklist</Value>
@@ -6704,9 +6695,15 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.GenderEnabled">
     <Value>'Gender' enabled</Value>
-  </LocaleResource>
+  </LocaleResource>  
   <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.GenderEnabled.Hint">
     <Value>Set if 'Gender' is enabled.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.NeutralGenderEnabled">
+      <Value>'Neutral' option enabled</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.NeutralGenderEnabled.Hint">
+      <Value>Set if you need three gender options available - Male, female, neutral (as per German laws).</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.HideBackInStockSubscriptionsTab">
     <Value>Hide 'Back in stock subscriptions' tab</Value>
@@ -8600,9 +8597,6 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.Stores">
     <Value>Stores</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.TelecommunicationsBroadcastingElectronicServices">
-    <Value>Telecommunications, broadcasting and electronic services</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.ProductEditor.TierPrices">
     <Value>Tier prices</Value>
@@ -11876,6 +11870,9 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Customers.Customers.Fields.Gender.Male">
     <Value>Male</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Customers.Customers.Fields.Gender.Neutral">
+      <Value>Neutral</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Customers.Customers.Fields.IPAddress">
     <Value>IP Address</Value>
@@ -18614,9 +18611,6 @@
   </LocaleResource>
   <LocaleResource Name="Permission.AccessAdminPanel">
     <Value>Access admin area</Value>
-  </LocaleResource>
-  <LocaleResource Name="Permission.AccessProfiling">
-    <Value>Public store. Access MiniProfiler results</Value>
   </LocaleResource>
   <LocaleResource Name="Permission.AccessWebService">
     <Value>Plugins. Access Web Service</Value>

@@ -131,8 +131,9 @@ namespace Nop.Services.Authentication
 
             //get the latest password
             var customerPassword = await _customerService.GetCurrentPasswordAsync(customer.Id);
-            //required a customer to re-login after password changing
-            if (trimMilliseconds(customerPassword.CreatedOnUtc).CompareTo(trimMilliseconds(authenticateResult.Properties.IssuedUtc?.DateTime ?? DateTime.UtcNow)) > 0)
+            //require a customer to re-login after password changing
+            var isPasswordChange = trimMilliseconds(customerPassword.CreatedOnUtc).CompareTo(trimMilliseconds(authenticateResult.Properties.IssuedUtc?.DateTime ?? DateTime.UtcNow)) > 0;
+            if (_customerSettings.RequiredReLoginAfterPasswordChange && isPasswordChange)
                 return null;
 
             //cache authenticated customer

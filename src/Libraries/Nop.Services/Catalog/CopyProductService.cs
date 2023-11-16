@@ -87,7 +87,6 @@ namespace Nop.Services.Catalog
             foreach (var discountMapping in await _productService.GetAllDiscountsAppliedToProductAsync(product.Id))
             {
                 await _productService.InsertDiscountProductMappingAsync(new DiscountProductMapping { EntityId = productCopy.Id, DiscountId = discountMapping.DiscountId });
-                await _productService.UpdateProductAsync(productCopy);
             }
         }
 
@@ -511,8 +510,6 @@ namespace Nop.Services.Catalog
                 var message = $"{await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.MultipleWarehouses")} {string.Format(await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.CopyProduct"), product.Id)}";
                 await _productService.AddStockQuantityHistoryEntryAsync(productCopy, pwi.StockQuantity, pwi.StockQuantity, pwi.WarehouseId, message);
             }
-
-            await _productService.UpdateProductAsync(productCopy);
         }
 
         /// <summary>
@@ -733,8 +730,6 @@ namespace Nop.Services.Catalog
                 DeliveryDateId = product.DeliveryDateId,
                 IsTaxExempt = product.IsTaxExempt,
                 TaxCategoryId = product.TaxCategoryId,
-                IsTelecommunicationsOrBroadcastingOrElectronicServices =
-                    product.IsTelecommunicationsOrBroadcastingOrElectronicServices,
                 ManageInventoryMethod = product.ManageInventoryMethod,
                 ProductAvailabilityRangeId = product.ProductAvailabilityRangeId,
                 UseMultipleWarehouses = product.UseMultipleWarehouses,
@@ -825,8 +820,6 @@ namespace Nop.Services.Catalog
             //copy product tags
             foreach (var productTag in await _productTagService.GetAllProductTagsByProductIdAsync(product.Id))
                 await _productTagService.InsertProductProductTagMappingAsync(new ProductProductTagMapping { ProductTagId = productTag.Id, ProductId = productCopy.Id });
-
-            await _productService.UpdateProductAsync(productCopy);
 
             //copy product pictures
             var originalNewPictureIdentifiers = await CopyProductPicturesAsync(product, newName, copyMultimedia, productCopy);

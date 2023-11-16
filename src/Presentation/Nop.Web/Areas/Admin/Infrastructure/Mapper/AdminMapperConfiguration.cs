@@ -785,7 +785,8 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
                 .ForMember(settings => settings.HashedPasswordFormat, options => options.Ignore())
                 .ForMember(settings => settings.OnlineCustomerMinutes, options => options.Ignore())
                 .ForMember(settings => settings.SuffixDeletedCustomers, options => options.Ignore())
-                .ForMember(settings => settings.LastActivityMinutes, options => options.Ignore());
+                .ForMember(settings => settings.LastActivityMinutes, options => options.Ignore())
+                .ForMember(settings => settings.RequiredReLoginAfterPasswordChange, options => options.Ignore());
 
             CreateMap<MultiFactorAuthenticationSettings, MultiFactorAuthenticationSettingsModel>();
             CreateMap<MultiFactorAuthenticationSettingsModel, MultiFactorAuthenticationSettings>()
@@ -833,6 +834,7 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
                 .ForMember(model => model.Password, options => options.Ignore())
                 .ForMember(model => model.AvailableVendors, options => options.Ignore())
                 .ForMember(model => model.GenderEnabled, options => options.Ignore())
+                .ForMember(model => model.NeutralGenderEnabled, options => options.Ignore())
                 .ForMember(model => model.Gender, options => options.Ignore())
                 .ForMember(model => model.FirstNameEnabled, options => options.Ignore())
                 .ForMember(model => model.FirstName, options => options.Ignore())

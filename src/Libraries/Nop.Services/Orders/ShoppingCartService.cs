@@ -53,6 +53,7 @@ namespace Nop.Services.Orders
         protected readonly IProductService _productService;
         protected readonly IRepository<ShoppingCartItem> _sciRepository;
         protected readonly IShippingService _shippingService;
+        protected readonly IShortTermCacheManager _shortTermCacheManager;
         protected readonly IStaticCacheManager _staticCacheManager;
         protected readonly IStoreContext _storeContext;
         protected readonly IStoreService _storeService;
@@ -87,6 +88,7 @@ namespace Nop.Services.Orders
             IProductService productService,
             IRepository<ShoppingCartItem> sciRepository,
             IShippingService shippingService,
+            IShortTermCacheManager shortTermCacheManager,
             IStaticCacheManager staticCacheManager,
             IStoreContext storeContext,
             IStoreService storeService,
@@ -117,6 +119,7 @@ namespace Nop.Services.Orders
             _productService = productService;
             _sciRepository = sciRepository;
             _shippingService = shippingService;
+            _shortTermCacheManager = shortTermCacheManager;
             _staticCacheManager = staticCacheManager;
             _storeContext = storeContext;
             _storeService = storeService;
@@ -603,8 +606,12 @@ namespace Nop.Services.Orders
             await _sciRepository.DeleteAsync(shoppingCartItem);
 
             //reset "HasShoppingCartItems" property used for performance optimization
-            customer.HasShoppingCartItems = !IsCustomerShoppingCartEmpty(customer);
-            await _customerService.UpdateCustomerAsync(customer);
+            var hasShoppingCartItems = !IsCustomerShoppingCartEmpty(customer);
+            if (hasShoppingCartItems != customer.HasShoppingCartItems)
+            {
+                customer.HasShoppingCartItems = hasShoppingCartItems;
+                await _customerService.UpdateCustomerAsync(customer);
+            }
 
             //validate checkout attributes
             if (ensureOnlyActiveCheckoutAttributes &&
@@ -665,8 +672,12 @@ namespace Nop.Services.Orders
             await _eventPublisher.PublishAsync(new ClearShoppingCartEvent(cart));
 
             //reset "HasShoppingCartItems" property used for performance optimization
-            customer.HasShoppingCartItems = !IsCustomerShoppingCartEmpty(customer);
-            await _customerService.UpdateCustomerAsync(customer);
+            var hasShoppingCartItems = !IsCustomerShoppingCartEmpty(customer);
+            if (hasShoppingCartItems != customer.HasShoppingCartItems)
+            {
+                customer.HasShoppingCartItems = hasShoppingCartItems;
+                await _customerService.UpdateCustomerAsync(customer);
+            }
         }
 
         /// <summary>
@@ -774,9 +785,7 @@ namespace Nop.Services.Orders
             if (createdToUtc.HasValue)
                 items = items.Where(item => createdToUtc.Value >= item.CreatedOnUtc);
 
-            var key = _staticCacheManager.PrepareKeyForShortTermCache(NopOrderDefaults.ShoppingCartItemsAllCacheKey, customer, shoppingCartType, storeId, productId, createdFromUtc, createdToUtc);
-
-            return await _staticCacheManager.GetAsync(key, async () => await items.ToListAsync());
+            return await _shortTermCacheManager.GetAsync(async () => await items.ToListAsync(), NopOrderDefaults.ShoppingCartItemsAllCacheKey, customer, shoppingCartType, storeId, productId, createdFromUtc, createdToUtc);
         }
 
         /// <summary>
@@ -1601,15 +1610,16 @@ namespace Nop.Services.Orders
             {
                 //update existing shopping cart item
                 var newQuantity = shoppingCartItem.Quantity + quantity;
-                warnings.AddRange(await GetShoppingCartItemWarningsAsync(customer, shoppingCartType, product,
-                    storeId, attributesXml,
-                    customerEnteredPrice, rentalStartDate, rentalEndDate,
-                    newQuantity, addRequiredProducts, shoppingCartItem.Id));
+
+                await addRequiredProductsToCartAsync(newQuantity);
 
                 if (warnings.Any())
                     return warnings;
 
-                await addRequiredProductsToCartAsync();
+                warnings.AddRange(await GetShoppingCartItemWarningsAsync(customer, shoppingCartType, product,
+                    storeId, attributesXml,
+                    customerEnteredPrice, rentalStartDate, rentalEndDate,
+                    newQuantity, addRequiredProducts, shoppingCartItem.Id));
 
                 if (warnings.Any())
                     return warnings;
@@ -1678,14 +1688,17 @@ namespace Nop.Services.Orders
                 await _sciRepository.InsertAsync(shoppingCartItem);
 
                 //updated "HasShoppingCartItems" property used for performance optimization
-                customer.HasShoppingCartItems = !IsCustomerShoppingCartEmpty(customer);
-
-                await _customerService.UpdateCustomerAsync(customer);
+                var hasShoppingCartItems = !IsCustomerShoppingCartEmpty(customer);
+                if (hasShoppingCartItems != customer.HasShoppingCartItems)
+                {
+                    customer.HasShoppingCartItems = hasShoppingCartItems;
+                    await _customerService.UpdateCustomerAsync(customer);
+                }
             }
 
             return warnings;
 
-            async Task addRequiredProductsToCartAsync()
+            async Task addRequiredProductsToCartAsync(int qty = 0)
             {
                 //get these required products
                 var requiredProducts = await _productService.GetProductsByIdsAsync(_productService.ParseRequiredProductIds(product));
@@ -1697,7 +1710,7 @@ namespace Nop.Services.Orders
                     var productsRequiringRequiredProduct = await GetProductsRequiringProductAsync(cart, requiredProduct);
 
                     //get the required quantity of the required product
-                    var requiredProductRequiredQuantity = quantity +
+                    var requiredProductRequiredQuantity = (qty > 0 ? qty : quantity) +
                         cart.Where(ci => productsRequiringRequiredProduct.Any(p => p.Id == ci.ProductId))
                             .Where(item => item.Id != (shoppingCartItem?.Id ?? 0))
                             .Sum(item => item.Quantity);
@@ -1781,7 +1794,6 @@ namespace Nop.Services.Orders
                 shoppingCartItem.UpdatedOnUtc = DateTime.UtcNow;
 
                 await _sciRepository.UpdateAsync(shoppingCartItem);
-                await _customerService.UpdateCustomerAsync(customer);
             }
             else
             {
@@ -1844,9 +1856,6 @@ namespace Nop.Services.Orders
                 //gift card
                 foreach (var code in await _customerService.ParseAppliedGiftCardCouponCodesAsync(fromCustomer))
                     await _customerService.ApplyGiftCardCouponCodeAsync(toCustomer, code);
-
-                //save customer
-                await _customerService.UpdateCustomerAsync(toCustomer);
             }
 
             //move selected checkout attributes
@@ -1905,18 +1914,14 @@ namespace Nop.Services.Orders
             RecurringProductCyclePeriod? cyclePeriod = null;
             int? totalCycles = null;
 
+            var conflictError = await _localizationService.GetResourceAsync("ShoppingCart.ConflictingShipmentSchedules");
+
             foreach (var sci in shoppingCart)
             {
-                var product = await _productService.GetProductByIdAsync(sci.ProductId);
-                if (product == null)
-                {
-                    throw new NopException($"Product (Id={sci.ProductId}) cannot be loaded");
-                }
+                var product = await _productService.GetProductByIdAsync(sci.ProductId) ?? throw new NopException($"Product (Id={sci.ProductId}) cannot be loaded");
 
                 if (!product.IsRecurring)
                     continue;
-
-                var conflictError = await _localizationService.GetResourceAsync("ShoppingCart.ConflictingShipmentSchedules");
 
                 //cycle length
                 if (cycleLength.HasValue && cycleLength.Value != product.RecurringCycleLength)
