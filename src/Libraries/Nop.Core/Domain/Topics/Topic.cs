@@ -1,4 +1,4 @@
-using Nop.Core.Domain.Localization;
+﻿using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Seo;
 using Nop.Core.Domain.Stores;
@@ -104,5 +104,20 @@ namespace Nop.Core.Domain.Topics
         /// Gets or sets a value indicating whether the entity is limited/restricted to certain stores
         /// </summary>
         public bool LimitedToStores { get; set; }
+
+        #region
+
+        /// <summary>
+        /// 开启浏览统计
+        /// </summary>
+        public bool EnableViewsCount { get; set; }
+
+        /// <summary>
+        /// 浏览量
+        /// </summary>
+        public int ViewsCount { get; set; }
+
+        #endregion
+
     }
 }

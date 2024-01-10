@@ -647,5 +647,24 @@ namespace Nop.Services.Customers
         Task InsertCustomerAddressAsync(Customer customer, Address address);
 
         #endregion
+
+
+        #region === 扩展方法 ===
+
+        /// <summary>
+        /// ReferrerCode 获取用户信息
+        /// </summary>
+        /// <param name="ReferrerCode"></param>
+        /// <returns></returns>
+        Task<Customer> GetCustomerByReferrerCodeAsync(long referrerCode);
+
+        /// <summary>
+        /// OpenId 获取用户信息
+        /// </summary>
+        /// <param name="customerOpenId"></param>
+        /// <returns></returns>
+        Task<Customer> GetCustomerByOpenIdAsync(string customerOpenId);
+
+        #endregion
     }
 }

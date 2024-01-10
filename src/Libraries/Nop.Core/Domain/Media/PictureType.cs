@@ -1,4 +1,4 @@
-namespace Nop.Core.Domain.Media
+﻿namespace Nop.Core.Domain.Media
 {
     /// <summary>
     /// Represents a picture item type
@@ -13,6 +13,6 @@ namespace Nop.Core.Domain.Media
         /// <summary>
         /// Avatar
         /// </summary>
-        Avatar = 10
+        Avatar = 10,
     }
 }

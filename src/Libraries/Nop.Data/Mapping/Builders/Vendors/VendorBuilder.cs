@@ -21,7 +21,12 @@ namespace Nop.Data.Mapping.Builders.Vendors
                 .WithColumn(nameof(Vendor.Email)).AsString(400).Nullable()
                 .WithColumn(nameof(Vendor.MetaKeywords)).AsString(400).Nullable()
                 .WithColumn(nameof(Vendor.MetaTitle)).AsString(400).Nullable()
-                .WithColumn(nameof(Vendor.PageSizeOptions)).AsString(200).Nullable();
+                .WithColumn(nameof(Vendor.PageSizeOptions)).AsString(200).Nullable()
+
+                //新增属性
+                .WithColumn(nameof(Vendor.NickName)).AsString(16).Nullable()
+                .WithColumn(nameof(Vendor.PhoneNumber)).AsAnsiString(32).Nullable()
+                ;
         }
 
         #endregion

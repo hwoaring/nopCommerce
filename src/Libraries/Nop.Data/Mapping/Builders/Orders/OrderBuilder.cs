@@ -26,7 +26,14 @@ namespace Nop.Data.Mapping.Builders.Orders
                 .WithColumn(nameof(Order.CustomerId)).AsInt32().ForeignKey<Customer>(onDelete: Rule.None)
                 .WithColumn(nameof(Order.PickupAddressId)).AsInt32().Nullable().ForeignKey<Address>(onDelete: Rule.None)
                 .WithColumn(nameof(Order.ShippingAddressId)).AsInt32().Nullable().ForeignKey<Address>(onDelete: Rule.None)
-                .WithColumn(nameof(Order.CustomerIp)).AsString(100).Nullable();
+                .WithColumn(nameof(Order.CustomerIp)).AsString(100).Nullable()
+
+                //新增属性
+                .WithColumn(nameof(Order.Notes)).AsString(128).Nullable()
+                .WithColumn(nameof(Order.OrderShippingNumber)).AsString(64).Nullable()
+                .WithColumn(nameof(Order.TradeType)).AsString(64).Nullable()
+                .WithColumn(nameof(Order.TradeNumber)).AsString(64).Nullable()
+                ;
         }
 
         #endregion

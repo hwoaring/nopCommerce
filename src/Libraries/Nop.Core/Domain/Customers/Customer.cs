@@ -238,6 +238,97 @@ namespace Nop.Core.Domain.Customers
         /// </summary>
         public int? ShippingAddressId { get; set; }
 
+
+        #region === 扩展字段 ===
+
+        /// <summary>
+        /// 在平台上的等级
+        /// </summary>
+        public int Level { get; set; }
+
+        /// <summary>
+        /// 永久推荐人ID
+        /// </summary>
+        public int ReferrerCustomerId { get; set; }
+
+        /// <summary>
+        /// 临时推荐人ID
+        /// </summary>
+        public int TempReferrerCustomerId { get; set; }
+
+        /// <summary>
+        /// 临时推荐人过期时间（更新时间+系统设置的过期市场=过期时间，超出时间属于默认推荐人）
+        /// </summary>
+        public DateTime? TempReferrerExpireDateUtc { get; set; }
+
+        /// <summary>
+        /// 推荐场景值
+        /// </summary>
+        public string ReferrerSceneStr { get; set; }
+
+        /// <summary>
+        /// 微信OpenId
+        /// </summary>
+        public string OpenId { get; set; }
+
+        /// <summary>
+        /// 用户微信UnionID
+        /// </summary>
+        public string UnionId { get; set; }
+
+        /// <summary>
+        /// 8位个人推荐码
+        /// </summary>
+        public long ReferrerCode { get; set; }
+
+        /// <summary>
+        /// 个人微信二维码
+        /// </summary>
+        public int QrcodePictureId { get; set; }
+
+        /// <summary>
+        /// 系统备注名称
+        /// </summary>
+        public string Remark { get; set; }
+
+        /// <summary>
+        /// 个人微信二维码是否已审核通过（防止个人添加非法二维码链接）
+        /// </summary>
+        public bool QrcodeValidated { get; set; }
+
+        /// <summary>
+        /// 邮箱地址是否通过验证（能正常接收邮件）
+        /// </summary>
+        public bool EmailValidated { get; set; }
+
+        /// <summary>
+        /// 电话号码是否通过SMS验证（能正常接收短信，修改手机号或找回密码等）
+        /// </summary>
+        public bool PhoneValidated { get; set; }
+
+        /// <summary>
+        /// 用于客户已注册并希望更改电话号码的情况。
+        /// </summary>
+        public string PhoneToRevalidate { get; set; }
+
+        /// <summary>
+        /// 是否允许成为推荐人，默认true，不允许时，该用户发布推荐链接时，不会让其他用户成为他的客户
+        /// </summary>
+        public bool AsReferrerEnable { get; set; }
+
+        /// <summary>
+        /// 是否允许被推荐人，不允许时，该用户不会成为其他用户的推荐客户或临时推荐客户
+        /// </summary>
+        public bool AsRecommendedEnable { get; set; }
+
+        /// <summary>
+        /// 允许成为临时推荐人（False=不允许覆盖临时推荐信ID）
+        /// </summary>
+        public bool AsTempReferrerEnable { get; set; }
+
+
+        #endregion
+
         #region Custom properties
 
         /// <summary>

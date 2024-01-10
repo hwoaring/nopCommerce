@@ -21,5 +21,20 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the specification attribute group identifier
         /// </summary>
         public int? SpecificationAttributeGroupId { get; set; }
+
+
+        #region
+
+        /// <summary>
+        /// 描述
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// 内容
+        /// </summary>
+        public string Content { get; set; }
+
+        #endregion
     }
 }

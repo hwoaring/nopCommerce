@@ -9,5 +9,14 @@
         /// Admin area
         /// </summary>
         public const string Admin = "Admin";
+
+        #region === 扩展属性 ===
+
+        /// <summary>
+        /// 普通用户 area
+        /// </summary>
+        public const string User = "User";
+
+        #endregion
     }
 }

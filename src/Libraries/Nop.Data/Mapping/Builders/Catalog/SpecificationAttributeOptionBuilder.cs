@@ -20,7 +20,12 @@ namespace Nop.Data.Mapping.Builders.Catalog
             table
                 .WithColumn(nameof(SpecificationAttributeOption.Name)).AsString(int.MaxValue).NotNullable()
                 .WithColumn(nameof(SpecificationAttributeOption.ColorSquaresRgb)).AsString(100).Nullable()
-                .WithColumn(nameof(SpecificationAttributeOption.SpecificationAttributeId)).AsInt32().ForeignKey<SpecificationAttribute>();
+                .WithColumn(nameof(SpecificationAttributeOption.SpecificationAttributeId)).AsInt32().ForeignKey<SpecificationAttribute>()
+
+                //新属性
+                .WithColumn(nameof(SpecificationAttributeOption.ShortName)).AsString(100).Nullable()
+
+                ;
         }
 
         #endregion

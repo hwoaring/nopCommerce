@@ -34,5 +34,15 @@
         /// Product creation date
         /// </summary>
         CreatedOn = 15,
+
+        /// <summary>
+        /// 销量：从低到高
+        /// </summary>
+        SalesAsc = 20,
+
+        /// <summary>
+        /// 销量：从高到低
+        /// </summary>
+        SalesDesc = 21,
     }
 }

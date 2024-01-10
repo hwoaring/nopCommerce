@@ -56,5 +56,61 @@ namespace Nop.Core.Domain.Polls
         /// Gets or sets the poll end date and time
         /// </summary>
         public DateTime? EndDateUtc { get; set; }
+
+
+
+        #region
+
+        /// <summary>
+        /// 备用：组织人/主办方
+        /// </summary>
+        public string Organizer { get; set; }
+
+        /// <summary>
+        /// 主题
+        /// </summary>
+        public string Subject { get; set; }
+
+        /// <summary>
+        /// 备用：投票描述
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// 备用：内容
+        /// </summary>
+        public string Content { get; set; }
+
+        /// <summary>
+        /// 投票提醒文字
+        /// </summary>
+        public string Notice { get; set; }
+
+        /// <summary>
+        /// 图片ID
+        /// </summary>
+        public int PictureId { get; set; }
+
+        /// <summary>
+        /// 一个计数周期内最大投票数
+        /// </summary>
+        public int VoteCycleMaxCount { get; set; }
+
+        /// <summary>
+        /// 计数周期天数
+        /// </summary>
+        public int VoteCycleDays { get; set; }
+
+        /// <summary>
+        /// 上次投票计数结束时间
+        /// </summary>
+        public DateTime? LastCycleEndDateUtc { get; set; }
+
+        /// <summary>
+        /// 本轮次投票计数结束时间
+        /// </summary>
+        public DateTime? CurrentCycleEndDateUtc { get; set; }
+
+        #endregion
     }
 }

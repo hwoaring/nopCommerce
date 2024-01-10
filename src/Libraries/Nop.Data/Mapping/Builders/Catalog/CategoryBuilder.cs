@@ -20,7 +20,12 @@ namespace Nop.Data.Mapping.Builders.Catalog
                 .WithColumn(nameof(Category.Name)).AsString(400).NotNullable()
                 .WithColumn(nameof(Category.MetaKeywords)).AsString(400).Nullable()
                 .WithColumn(nameof(Category.MetaTitle)).AsString(400).Nullable()
-                .WithColumn(nameof(Category.PageSizeOptions)).AsString(200).Nullable();
+                .WithColumn(nameof(Category.PageSizeOptions)).AsString(200).Nullable()
+
+                //新增加
+                .WithColumn(nameof(Category.Summary)).AsString(512).Nullable()
+
+                ;
         }
 
         #endregion

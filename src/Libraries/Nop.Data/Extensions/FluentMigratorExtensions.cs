@@ -32,7 +32,9 @@ namespace Nop.Data.Extensions
             [typeof(decimal)] = c => c.AsDecimal(18, 4),
             [typeof(DateTime)] = c => c.AsNopDateTime2(),
             [typeof(byte[])] = c => c.AsBinary(int.MaxValue),
-            [typeof(Guid)] = c => c.AsGuid()
+            [typeof(Guid)] = c => c.AsGuid(),
+            [typeof(short)] = c => c.AsInt16(),  //byte
+            [typeof(byte)] = c => c.AsByte()  //tinyint
         };
 
         private static void DefineByOwnType(string columnName, Type propType, CreateTableExpressionBuilder create, bool canBeNullable = false)

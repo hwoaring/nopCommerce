@@ -702,6 +702,7 @@ namespace Nop.Services.Customers
                                      order == null && blogComment == null && newsComment == null && productReview == null && productReviewHelpfulness == null &&
                                      pollVotingRecord == null && forumTopic == null && forumPost == null &&
                                      !guest.IsSystemAccount &&
+                                     string.IsNullOrWhiteSpace(guest.OpenId) && //对应的OpenId为空时删除
                                      (createdFromUtc == null || guest.CreatedOnUtc > createdFromUtc) &&
                                      (createdToUtc == null || guest.CreatedOnUtc < createdToUtc)
                                  select new { CustomerId = guest.Id };
@@ -1702,6 +1703,47 @@ namespace Nop.Services.Customers
         }
 
         #endregion
+
+        #endregion
+
+
+        #region === 扩展方法 ===
+
+        /// <summary>
+        /// ReferrerCode 获取用户信息
+        /// </summary>
+        /// <param name="ReferrerCode"></param>
+        /// <returns></returns>
+        public virtual async Task<Customer> GetCustomerByReferrerCodeAsync(long referrerCode)
+        {
+            if (referrerCode <= 0)
+                return null;
+
+            var query = from c in _customerRepository.Table
+                        where c.ReferrerCode == referrerCode
+                        orderby c.Id
+                        select c;
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// OpenId 获取用户信息
+        /// </summary>
+        /// <param name="customerOpenId"></param>
+        /// <returns></returns>
+        public virtual async Task<Customer> GetCustomerByOpenIdAsync(string customerOpenId)
+        {
+            if (string.IsNullOrWhiteSpace(customerOpenId))
+                return null;
+
+            var query = from c in _customerRepository.Table
+                        where c.OpenId == customerOpenId
+                        orderby c.Id
+                        select c;
+
+            return await _shortTermCacheManager.GetAsync(async () => await query.FirstOrDefaultAsync(), NopCustomerServicesDefaults.CustomerByOpenidCacheKey, customerOpenId);
+        }
 
         #endregion
     }

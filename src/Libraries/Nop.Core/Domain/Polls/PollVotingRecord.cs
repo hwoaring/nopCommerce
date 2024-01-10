@@ -19,5 +19,14 @@
         /// Gets or sets the date and time of instance creation
         /// </summary>
         public DateTime CreatedOnUtc { get; set; }
+
+        #region
+
+        /// <summary>
+        /// 计数统计（同一用户同一答案的计数，少占用内存空间）
+        /// </summary>
+        public int NumberOfVotes { get; set; }
+
+        #endregion
     }
 }

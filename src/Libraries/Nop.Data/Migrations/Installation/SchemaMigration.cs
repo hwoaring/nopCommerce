@@ -26,6 +26,18 @@ using Nop.Core.Domain.Topics;
 using Nop.Core.Domain.Vendors;
 using Nop.Data.Extensions;
 
+using Nop.Core.Domain.Brands;
+using Nop.Core.Domain.Weixins;
+using Nop.Core.Domain.FriendCircles;
+using Nop.Core.Domain.Shares;
+using Nop.Core.Domain.Publics;
+using Nop.Core.Domain.AntiFake;
+using Nop.Core.Domain.Assets;
+using Nop.Core.Domain.Forms;
+using Nop.Core.Domain.RelationShips;
+using Nop.Core.Domain.SMS;
+
+
 namespace Nop.Data.Migrations.Installation
 {
     [NopSchemaMigration("2020/01/31 11:24:16:2551771", "Nop.Data base schema", MigrationProcessType.Installation)]
@@ -165,6 +177,173 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<VendorAttribute>();
             Create.TableFor<VendorAttributeValue>();
             Create.TableFor<VendorNote>();
+
+
+            //扩展订单相关 Orders
+            Create.TableFor<OrderInvoice>(); //订单发票
+
+
+            //扩展媒体相关 Media
+            Create.TableFor<MediaServer>(); //媒体服务器
+
+
+            //扩展微信相关 Weixins
+            Create.TableFor<WeixinUser>();  //微信用户信息
+            Create.TableFor<WeixinAccount>();  //公众号账号配置信息
+
+            
+
+            //扩展产品及分类 Catalog
+            Create.TableFor<Product3rdSalePlatform>();
+            Create.TableFor<Product3rdSalePlatformMapping>();
+            Create.TableFor<ProductComment>();
+            Create.TableFor<ProductCouponsAttribute>();
+            Create.TableFor<ProductCustomerPriceRules>();
+            Create.TableFor<ProductCustomerShareRules>();
+            Create.TableFor<ProductDatePrice>();
+            Create.TableFor<ProductFavoriteMapping>();  //产品收藏、点赞
+            Create.TableFor<ProductOrderNotice>();
+            Create.TableFor<ProductProductOrderNoticeMapping>();
+            Create.TableFor<ProductVendorCommissionRules>();
+            Create.TableFor<ProductCustomerViews>();
+            
+
+            //扩展新闻相关 News
+            Create.TableFor<NewsPicture>();  //新闻图片
+            Create.TableFor<NewsVideo>();   //新闻视频
+            Create.TableFor<NewsItemFavoriteMapping>(); //新闻收藏
+            Create.TableFor<NewsCommentFavoriteMapping>();  //评论点赞
+            Create.TableFor<NewsTag>();  //新闻标签
+            Create.TableFor<NewsItemNewsTagMapping>();  //新闻标签映射
+            Create.TableFor<NewsItemProductMapping>();  //新闻产品映射
+            Create.TableFor<NewsCreator>(); //新闻创作者
+            Create.TableFor<NewsTemplate>(); //新闻页面模板（如：微信模板，视频模板，新闻模板……）
+
+
+
+            //扩展区划表相关 Directory
+            Create.TableFor<ChinaRegionCode>(); //中国区划表
+
+
+            //扩展朋友圈 FriendCircles
+            Create.TableFor<FriendCircle>();
+            Create.TableFor<FriendCircleComment>();
+            Create.TableFor<FriendCircleFavoriteMapping>();
+            Create.TableFor<FriendCirclePicture>();
+            Create.TableFor<FriendCircleVideo>();
+            Create.TableFor<FriendRelatedProduct>();
+            Create.TableFor<FriendCircleTag>();
+            Create.TableFor<FriendCircleTagMapping>();
+
+
+            //扩展供应商相关 Vendors
+            Create.TableFor<VendorStore>();
+            Create.TableFor<VendorStoreCategory>();
+            Create.TableFor<VendorProductGroup>();
+            Create.TableFor<VendorProductGroupSellProduct>();
+            Create.TableFor<RelateVendorStoreMapping>();
+            Create.TableFor<Vendor3rdSaleOrder>();
+            Create.TableFor<VendorFavoriteMapping>();
+            Create.TableFor<VendorSaleProduct>();
+            Create.TableFor<VendorSaleUrl>();
+            Create.TableFor<VendorScene>();
+            Create.TableFor<VendorSms>();
+            Create.TableFor<VendorStoreBlackList>();
+            Create.TableFor<VendorStoreBookingProduct>();
+            Create.TableFor<VendorStoreBookingSeat>();
+            Create.TableFor<VendorStoreCustomerAuthority>();
+            Create.TableFor<VendorStoreFavoriteMapping>();
+            Create.TableFor<VendorStoreMemberCardLevel>();
+            Create.TableFor<VendorStoreMemberFollowup>();
+            Create.TableFor<VendorStoreMembers>();
+            Create.TableFor<VendorStorePicture>();
+            Create.TableFor<VendorStoreRegionalAgent>();
+            Create.TableFor<VendorStoreSaleProduct>();
+            Create.TableFor<VendorStoreSeat>();
+            Create.TableFor<VendorStoreSeatOrder>();
+            Create.TableFor<VendorStoreSeatPicture>();
+            Create.TableFor<VendorStoreTemplate>();
+            Create.TableFor<VendorTag>();
+            Create.TableFor<VendorWarehouse>();
+
+
+            //扩展投票相关 Polls
+            Create.TableFor<PollVotingLimit>();
+
+
+            //扩展品牌相关 Brand
+            Create.TableFor<Brand>();  //产品商标
+            Create.TableFor<BrandAuthorize>();
+            Create.TableFor<BrandPicture>();
+            Create.TableFor<BrandVideo>();
+            Create.TableFor<BrandTemplate>();
+            Create.TableFor<BrandTag>();
+            Create.TableFor<BrandBrandTagMapping>();
+            Create.TableFor<BrandFavoriteMapping>();
+
+
+            //扩展分享相关 Shares
+            Create.TableFor<SharePage>();
+            Create.TableFor<SharePicture>();
+            Create.TableFor<SharePageRecords>();
+            Create.TableFor<SharePageViews>();
+            Create.TableFor<SharePageSharePictureMapping>();
+
+            //公共相关 Publics
+            Create.TableFor<PublicTag>();
+            Create.TableFor<PublicTagMapping>();
+
+            //专题扩展 Topics
+            Create.TableFor<TopicFavoriteMapping>();
+
+            //防伪扩展 AntiFake
+            Create.TableFor<AntiFakeCompany>();
+            Create.TableFor<AntiFakeVendorCompany>();
+            Create.TableFor<AntiFakeVendorCompanyMapping>();
+            Create.TableFor<AntiFakeCompanyMapping>();
+            Create.TableFor<AntiFakeProduct>();
+            Create.TableFor<AntiFakeProductTemplate>();
+            Create.TableFor<AntiFakeBoxCode>();
+            Create.TableFor<AntiFakeCode>();
+            Create.TableFor<AntiFakeBottleCode>();
+            Create.TableFor<AntiFakeCoverCode>();
+            Create.TableFor<AntiFakeCashRewardsConfig>();
+            Create.TableFor<AntiFakeCashRewards>();
+            Create.TableFor<AntiFakeCodeScanRecords>();
+            Create.TableFor<AntiFakeProductRelatedNews>();
+
+            //资产扩展 Assets
+            Create.TableFor<AssetsBank>();
+            Create.TableFor<AssetsBankAccount>();
+            Create.TableFor<AssetsCashsHistory>();
+            Create.TableFor<AssetsCouponsHistory>();
+            Create.TableFor<AssetsMemberCard>();
+            Create.TableFor<AssetsPointsHistory>();
+            Create.TableFor<AssetsSharesHistory>();
+
+            //表单扩展 Forms
+            Create.TableFor<Form>();
+            Create.TableFor<FormCustomerMapping>();
+            Create.TableFor<FormExtendValues>();
+            Create.TableFor<FormFixedValues>();
+            Create.TableFor<FormRecord>();
+
+            //个人关系扩展 RelationShips
+            Create.TableFor<PersonalRelationCooperater>();
+            Create.TableFor<PersonalRelationFollowup>();
+            Create.TableFor<PersonalRelationShip>();
+            Create.TableFor<PersonalRelationTag>();
+            Create.TableFor<PersonalRelationTagMapping>();
+
+            //短信扩展 SMS
+            Create.TableFor<SmsAccount>();
+            Create.TableFor<SmsPlatform>();
+            Create.TableFor<SmsPublicCombination>();
+            Create.TableFor<SmsSendBlackList>();
+            Create.TableFor<SmsSendRecords>();
+            Create.TableFor<SmsSign>();
+            Create.TableFor<SmsTemplate>();
+
         }
     }
 }

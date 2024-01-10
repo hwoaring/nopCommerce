@@ -1,4 +1,4 @@
-using Nop.Core.Domain.Localization;
+﻿using Nop.Core.Domain.Localization;
 
 namespace Nop.Core.Domain.Catalog
 {
@@ -16,5 +16,15 @@ namespace Nop.Core.Domain.Catalog
         /// Gets or sets the description
         /// </summary>
         public string Description { get; set; }
+
+
+        #region
+
+        /// <summary>
+        /// 短名称
+        /// </summary>
+        public string ShortName { get; set; }
+
+        #endregion
     }
 }

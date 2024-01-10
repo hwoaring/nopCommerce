@@ -72,5 +72,29 @@ namespace Nop.Core
         /// </summary>
         /// <returns>A task that represents the asynchronous operation</returns>
         Task SetTaxDisplayTypeAsync(TaxDisplayType taxDisplayType);
+
+
+
+        #region === 扩展方法 ===
+
+        /// <summary>
+        /// 绑定Openid到Customer
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <param name="openId"></param>
+        /// <param name="isSnapshotuser"></param>
+        /// <returns></returns>
+        Task<Customer> SetCurrentCustomerOpenIdAsync(Customer customer, string openId, int? isSnapshotuser);
+
+
+        /// <summary>
+        /// 获取当前用户的推荐人信息（已经判断临时推荐人和永久推荐人）
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns></returns>
+        Task<Customer> GetCurrentReferrerCustomerAsync(Customer customer = null);
+
+        #endregion
+
     }
 }

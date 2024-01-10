@@ -51,5 +51,25 @@ namespace Nop.Core.Domain.News
         /// Gets or sets a value indicating whether news comments will be filtered per store
         /// </summary>
         public bool ShowNewsCommentsPerStore { get; set; }
+
+
+        #region === 扩展属性 ===
+
+        /// <summary>
+        /// 开启文章创建人贡献文章
+        /// </summary>
+        public bool EnableCreators { get; set; }
+
+        /// <summary>
+        /// 开启文章阅读计数（文章阅读数统计总开关）
+        /// </summary>
+        public bool EnableViewsCount { get; set; }
+
+        /// <summary>
+        /// 每人每天最多评论次数
+        /// </summary>
+        public int MaxCommentsOneDay { get; set; }
+
+        #endregion
     }
 }

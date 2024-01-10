@@ -2,6 +2,7 @@
 using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Directory;
+using Nop.Core.Domain.FriendCircles;
 using Nop.Data.Extensions;
 
 namespace Nop.Data.Mapping.Builders.Common
@@ -21,7 +22,14 @@ namespace Nop.Data.Mapping.Builders.Common
         {
             table
                 .WithColumn(nameof(Address.CountryId)).AsInt32().Nullable().ForeignKey<Country>(onDelete: Rule.None)
-                .WithColumn(nameof(Address.StateProvinceId)).AsInt32().Nullable().ForeignKey<StateProvince>(onDelete: Rule.None);
+                .WithColumn(nameof(Address.StateProvinceId)).AsInt32().Nullable().ForeignKey<StateProvince>(onDelete: Rule.None)
+                
+                .WithColumn(nameof(Address.Province)).AsString(32).Nullable()
+                .WithColumn(nameof(Address.AddressLable)).AsString(32).Nullable()
+                .WithColumn(nameof(Address.Latitude)).AsDecimal(9, 6).Nullable()
+                .WithColumn(nameof(Address.Longitude)).AsDecimal(9, 6).Nullable()
+
+                ;
         }
 
         #endregion

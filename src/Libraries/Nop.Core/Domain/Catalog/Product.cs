@@ -540,6 +540,316 @@ namespace Nop.Core.Domain.Catalog
         /// </summary>
         public DateTime UpdatedOnUtc { get; set; }
 
+
+        #region === 扩展属性 ===
+
+        /// <summary>
+        /// 产品标语
+        /// </summary>
+        public string Slogan { get; set; }
+
+        /// <summary>
+        /// 产品标语链接地址
+        /// </summary>
+        public string SloganUrl { get; set; }
+
+        /// <summary>
+        /// 产品标语链接文字
+        /// </summary>
+        public string SloganUrlText { get; set; }
+
+        /// <summary>
+        /// 封面图(长图或大图)
+        /// </summary>
+        public int CoverImagePictureId { get; set; }
+
+        /// <summary>
+        /// 缩微图（方图或小图）
+        /// </summary>
+        public int CoverThumbImagePictureId { get; set; }
+
+        /// <summary>
+        /// 跳转链接，在列表页点击详情链接跳转（可用于三方购买链接使用）
+        /// </summary>
+        public string Url { get; set; }
+
+        /// <summary>
+        /// 是否支持货到付款（cash on delivery）
+        /// </summary>
+        public bool CODSupport { get; set; }
+
+        /// <summary>
+        /// 产品是否通过审核（编辑或其他商家上的产品需要先通过审核）
+        /// </summary>
+        public bool Audited { get; set; }
+
+        /// <summary>
+        /// 是否公开展示
+        /// </remarks>
+        /// </summary>
+        public bool PublicDisplay { get; set; }
+
+        /// <summary>
+        /// 限制供应商展示或使用（不对外公开）
+        /// </summary>
+        public bool LimitToVendor { get; set; }
+
+        /// <summary>
+        /// 自营产品（拥有自主定价权和促销活动策划权）
+        /// </summary>
+        public bool SelfSupport { get; set; }
+
+        /// <summary>
+        /// 产品是否参与积分策略
+        /// </summary>
+        public bool EnablePoints { get; set; }
+
+        /// <summary>
+        /// 设置为热卖
+        /// </summary>
+        public bool MarkAsHot { get; set; }
+
+        /// <summary>
+        /// 设置为推荐
+        /// </summary>
+        public bool MarkAsRecommend { get; set; }
+
+        /// <summary>
+        /// 是否特价商品
+        /// </summary>
+        public bool SpecialOfferProduct { get; set; }
+
+        /// <summary>
+        /// 是否允许评论
+        /// </summary>
+        public bool AllowComments { get; set; }
+
+        /// <summary>
+        /// 是否折扣商品
+        /// </summary>
+        public bool DiscountedProduct { get; set; }
+
+        /// <summary>
+        /// 仅新用户可购买
+        /// </summary>
+        public bool OnlyForNewUser { get; set; }
+
+        /// <summary>
+        /// 产品需要后台验证后才能付款
+        /// </summary>
+        public bool RequireVerify { get; set; }
+
+        /// <summary>
+        /// 使用规则（使用限制信息）
+        /// </summary>
+        public string UsageRules { get; set; }
+
+        /// <summary>
+        /// 延时支付分钟数（默认=0未单独设置，默认为3天，如果产品单独设置后，采用产品设置）
+        /// 订单支付过期秒数（过期前支付，产品单独设置主要用于抢购商品）
+        /// </summary>
+        public int DelayPaymentMinutes { get; set; }
+
+        /// <summary>
+        /// 进货底价
+        /// </summary>
+        public decimal BuyBasePrice { get; set; }
+
+        /// <summary>
+        /// 分销底价
+        /// </summary>
+        public decimal ShareBasePrice { get; set; }
+
+        /// <summary>
+        /// 产品条码号
+        /// </summary>
+        public long ProductBarCode { get; set; }
+
+        /// <summary>
+        /// 对外展示统一加密id（URL参数）
+        /// </summary>
+        public long UnifiedId { get; set; }
+
+        /// <summary>
+        /// 开启浏览统计
+        /// </summary>
+        public bool EnableViewsCount { get; set; }
+
+        /// <summary>
+        /// 浏览量
+        /// </summary>
+        public int ViewsCount { get; set; }
+
+        /// <summary>
+        /// 初始销售量（增加数据销量效果，并非实际销量）
+        /// </summary>
+        public int InitialSalesCount { get; set; }
+
+        /// <summary>
+        /// 商标ID
+        /// </summary>
+        public int BrandId { get; set; }
+
+        /// <summary>
+        /// 库存减少方式：是否支付减少库存（否则为下单减库存）
+        /// </summary>
+        public bool PaymentReduceInventory { get; set; }
+
+        /// <summary>
+        /// 预售：预约期间价格采用日期价格（不同日期不同价格）
+        /// </remarks>
+        /// </summary>
+        public bool PreOrderHasDatePrices { get; set; }
+
+        /// <summary>
+        /// 预售：预售结束时间
+        /// </summary>
+        public DateTime? PreOrderAvailabilityEndDateTimeUtc { get; set; }
+
+        /// <summary>
+        /// 退款：是否使用固定天数内可退
+        /// </summary>
+        public bool EnableReturnFixDays { get; set; }
+
+        /// <summary>
+        /// 退款：固定天数内可退
+        /// </summary>
+        public int ReturnFixDays { get; set; }
+
+        /// <summary>
+        /// 退款：手续费按百分比（否则按固定金额）
+        /// </summary>
+        public bool ReturnFeeByPercent { get; set; }
+
+        /// <summary>
+        /// 退款：手续费
+        /// </summary>
+        public decimal ReturnFee { get; set; }
+
+        /// <summary>
+        /// 退款：未使用是否需要提前退（以订单使用日期向前推）
+        /// </summary>
+        public bool EnableLatestReturn { get; set; }
+
+        /// <summary>
+        /// 退款：未使用提前退款天数
+        /// </summary>
+        public int LatestReturnDays { get; set; }
+
+        /// <summary>
+        /// 退款：未使用提前退款准确时间(具体到小时)
+        /// </summary>
+        public DateTime? LatestReturnTimeUtc { get; set; }
+
+        /// <summary>
+        /// 退款：过期可退（过期时间先后推）
+        /// </summary>
+        public bool EnableExpiredReturn { get; set; }
+
+        /// <summary>
+        /// 退款：未使用退款延迟天数（过期几天后可退）
+        /// </summary>
+        public int ExpiredReturnDates { get; set; }
+
+        /// <summary>
+        /// 卡券类型产品（需要填写卡券相关信息）
+        /// </remarks>
+        /// </summary>
+        public bool IsCouponCard { get; set; }
+
+        /// <summary>
+        /// 分销：开启销售佣金
+        /// </remarks>
+        /// </summary>
+        public bool EnabledVendorCommission { get; set; }
+
+        /// <summary>
+        /// 分销：是否按分销商等级分配佣金（使用等级分配规则）
+        /// </remarks>
+        /// </summary>
+        public bool EnabledVendorCommissionRules { get; set; }
+
+        /// <summary>
+        /// 分销：佣金是否按百分比（否则按估计金额）
+        /// </remarks>
+        /// </summary>
+        public bool PercentageCommissionRules { get; set; }
+
+        /// <summary>
+        /// 分销：佣金金额/或佣金比例
+        /// </remarks>
+        /// </summary>
+        public decimal CommissionAmount { get; set; }
+
+        /// <summary>
+        /// 会员价格：开启使用会员价格
+        /// </remarks>
+        /// </summary>
+        public bool EnabledCustomerPriceRules { get; set; }
+
+        /// <summary>
+        /// 广告分享金抵用：开启使用广告金抵用
+        /// </remarks>
+        /// </summary>
+        public bool EnabledCustomerShare { get; set; }
+
+        /// <summary>
+        /// 广告分享金抵用：开启使用不同等级用户的广告金抵用
+        /// </remarks>
+        /// </summary>
+        public bool EnabledCustomerShareRules { get; set; }
+
+        /// <summary>
+        /// 广告分享金抵用数量
+        /// </remarks>
+        /// </summary>
+        public decimal CustomerShareAmount { get; set; }
+
+        /// <summary>
+        /// 平台交易费率（成交后扣除费率，商品指定费率优先，其次时候分类指定的费率）
+        /// </summary>
+        public decimal PlatformRate { get; set; }
+
+        /// <summary>
+        /// 满额免邮金额
+        /// </summary>
+        public decimal FreeShippingAmount { get; set; }
+
+        /// <summary>
+        /// 超出库存销售最大数量（超出库存的订单作为延期发货订单，如果没有人退单，则可以退还）
+        /// 延期发货订单进入排队队列。
+        /// </summary>
+        public int MaxBackOrderStockQuantity { get; set; }
+
+        /// <summary>
+        /// 延期发货订单提醒客户的信息
+        /// </summary>
+        public string BackOrderNotice { get; set; }
+
+        /// <summary>
+        /// 购买是否需要扣除积分（可以用于积分兑换）
+        /// </summary>
+        public bool RequireConsumePoints { get; set; }
+
+        /// <summary>
+        /// 购买需要扣除积分数量（可以用于积分兑换）
+        /// </summary>
+        public int RequireConsumePointsCount { get; set; }
+
+        /// <summary>
+        /// 购买是否需要扣除广告费（可以用于广告费兑换）
+        /// </summary>
+        public bool RequireConsumeShares { get; set; }
+
+        /// <summary>
+        /// 购买需要扣除广告费数量（可以用于广告费兑换）
+        /// </summary>
+        public decimal RequireConsumeSharesAmount { get; set; }
+
+        #endregion
+
+
+
         /// <summary>
         /// Gets or sets the product type
         /// </summary>

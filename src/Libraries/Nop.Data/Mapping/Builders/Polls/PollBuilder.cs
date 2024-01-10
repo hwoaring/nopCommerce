@@ -1,4 +1,5 @@
 ﻿using FluentMigrator.Builders.Create.Table;
+using Microsoft.IdentityModel.Logging;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Polls;
 using Nop.Data.Extensions;
@@ -20,7 +21,12 @@ namespace Nop.Data.Mapping.Builders.Polls
         {
             table
                 .WithColumn(nameof(Poll.Name)).AsString(int.MaxValue).NotNullable()
-                .WithColumn(nameof(Poll.LanguageId)).AsInt32().ForeignKey<Language>();
+                .WithColumn(nameof(Poll.LanguageId)).AsInt32().ForeignKey<Language>()
+                
+                //新增属性
+                .WithColumn(nameof(Poll.LastCycleEndDateUtc)).AsDateTime2().Nullable()
+                .WithColumn(nameof(Poll.CurrentCycleEndDateUtc)).AsDateTime2().Nullable()
+                ;
         }
 
         #endregion

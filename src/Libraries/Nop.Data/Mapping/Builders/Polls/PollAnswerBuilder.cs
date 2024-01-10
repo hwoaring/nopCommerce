@@ -19,7 +19,15 @@ namespace Nop.Data.Mapping.Builders.Polls
         {
             table
                 .WithColumn(nameof(PollAnswer.Name)).AsString(int.MaxValue).NotNullable()
-                .WithColumn(nameof(PollAnswer.PollId)).AsInt32().ForeignKey<Poll>();
+                .WithColumn(nameof(PollAnswer.PollId)).AsInt32().ForeignKey<Poll>()
+
+
+                //新增属性
+                .WithColumn(nameof(PollAnswer.Code)).AsString(32).Nullable()
+                .WithColumn(nameof(PollAnswer.GroupName)).AsString(512).Nullable()
+                .WithColumn(nameof(PollAnswer.AreaName)).AsString(512).Nullable()
+
+                ;
         }
 
         #endregion

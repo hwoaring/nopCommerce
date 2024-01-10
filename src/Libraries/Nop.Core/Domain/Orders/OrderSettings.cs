@@ -187,5 +187,16 @@ namespace Nop.Core.Domain.Orders
         /// Gets or sets a value indicating whether "Summary" block should be displayed on the order list table
         /// </summary>
         public bool DisplayOrderSummary { get; set; }
+
+
+        #region === 扩展属性 ===
+
+        /// <summary>
+        /// 延时支付分钟数（默认=0未单独设置，默认为3天，如果产品单独设置后，采用产品设置）
+        /// 订单支付过期秒数（过期前支付，产品单独设置主要用于抢购商品）
+        /// </summary>
+        public int DelayPaymentMinutes { get; set; }
+
+        #endregion
     }
 }

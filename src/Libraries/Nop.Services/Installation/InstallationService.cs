@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Nop.Core;
 using Nop.Core.Domain;
 using Nop.Core.Domain.Affiliates;
+using Nop.Core.Domain.AntiFake;
+using Nop.Core.Domain.Assets;
 using Nop.Core.Domain.Blogs;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Cms;
@@ -11,7 +13,9 @@ using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Discounts;
+using Nop.Core.Domain.Forms;
 using Nop.Core.Domain.Forums;
+using Nop.Core.Domain.FriendCircles;
 using Nop.Core.Domain.Gdpr;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Logging;
@@ -24,11 +28,13 @@ using Nop.Core.Domain.Polls;
 using Nop.Core.Domain.ScheduleTasks;
 using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Seo;
+using Nop.Core.Domain.Shares;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Stores;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Topics;
 using Nop.Core.Domain.Vendors;
+using Nop.Core.Domain.Weixins;
 using Nop.Core.Http;
 using Nop.Core.Infrastructure;
 using Nop.Core.Security;
@@ -2966,7 +2972,11 @@ namespace Nop.Services.Installation
                 AllowCustomersToSearchWithManufacturerName = true,
                 DisplayAllPicturesOnCatalogPages = false,
                 ProductUrlStructureTypeId = (int)ProductUrlStructureType.Product,
-                ActiveSearchProviderSystemName = string.Empty
+                ActiveSearchProviderSystemName = string.Empty,
+                UnpricedText = string.Empty,  //新增加
+                MaxCommentTitleText = 50,  //新增加
+                MaxCommentContentText = 100,  //新增加
+                LazyLoadContentImage = false,  //新增加
             });
 
             await settingService.SaveSettingAsync(new LocalizationSettings
@@ -3078,6 +3088,10 @@ namespace Nop.Services.Installation
                 PhoneEnabled = true,
                 PhoneRequired = true,
                 FaxEnabled = true,
+                LastNameEnabled = true, //新增
+                LastNameRequired = true, //新增
+                EmailEnabled = true, //新增
+                EmailRequired = true, //新增
                 DefaultCountryId = _countryRepository.Table.FirstOrDefault(c => c.ThreeLetterIsoCode == regionInfo.ThreeLetterISORegionName)?.Id
             });
 
@@ -3238,7 +3252,8 @@ namespace Nop.Services.Installation
                 AllowAdminsToBuyCallForPriceProducts = true,
                 ShowProductThumbnailInOrderDetailsPage = true,
                 DisplayCustomerCurrencyOnOrders = false,
-                DisplayOrderSummary = true
+                DisplayOrderSummary = true,
+                DelayPaymentMinutes = 1440  //新增
             });
 
             await settingService.SaveSettingAsync(new SecuritySettings
@@ -3353,7 +3368,10 @@ namespace Nop.Services.Installation
                 NewsArchivePageSize = 10,
                 ShowHeaderRssUrl = false,
                 NewsCommentsMustBeApproved = false,
-                ShowNewsCommentsPerStore = false
+                ShowNewsCommentsPerStore = false,
+                EnableCreators = false,  //新增
+                EnableViewsCount = false,  //新增
+                MaxCommentsOneDay = 5  //新增
             });
 
             await settingService.SaveSettingAsync(new ForumSettings
@@ -3404,7 +3422,11 @@ namespace Nop.Services.Installation
                 AllowVendorsToEditInfo = false,
                 NotifyStoreOwnerAboutVendorInformationChange = true,
                 MaximumProductNumber = 3000,
-                AllowVendorsToImportProducts = true
+                AllowVendorsToImportProducts = true,
+                MaxVendorStoreCategoryCount = 10, //新增
+                MaxVendorSceneCount = 50, //新增
+                MaxVendorProductGroupCount = 50, //新增
+                MaxVendorSaleOrderCount = 50, //新增
             });
 
             var eaGeneral = _emailAccountRepository.Table.FirstOrDefault();
@@ -3492,6 +3514,74 @@ namespace Nop.Services.Installation
                 CompareProductsCookieExpires = 24 * 10,
                 RecentlyViewedProductsCookieExpires = 24 * 10,
                 CustomerCookieExpires = 24 * 365
+            });
+
+            //防伪设置
+            await settingService.SaveSettingAsync(new AntiFakeSettings
+            {
+                AntiFakeDomain = string.Empty,
+                AntiFakeProductDomain = string.Empty,
+                AntiFakeVendorDomain = string.Empty
+            });
+
+            //资产设置
+            await settingService.SaveSettingAsync(new AssetsSettings
+            {
+                PassWordExpireMinutes = 1,
+                ExpiredRefundDays = 3
+            });
+
+            //表单设置
+            await settingService.SaveSettingAsync(new FormSettings
+            {
+
+            });
+
+            //朋友圈设置
+            await settingService.SaveSettingAsync(new FriendCircleSettings
+            {
+                Enabled = false,
+                EnableCreators = false,
+                MaxCommentsOneDay = 5,
+                MaxTextLength = 120,
+                MaxPictureQuality = 1000,
+                MaxUnApprovedCounts = 5,
+                AllowNotRegisteredUsersToComments = false,
+                NotifyAboutNewComments = false,
+                RefreshCount = 10,
+                PageSize = 10,
+                MustBeApproved = true,
+                RemindContent = string.Empty,
+                ExternalVideoDomains = string.Empty,
+            });
+
+            //分享设置
+            await settingService.SaveSettingAsync(new ShareSettings
+            {
+                EnablePromotion = true,
+                EnableCreators = true,
+                PromotionUnit = "推广币",
+                MinViewsTime = 2,
+                PageViewSaveDays = 90,
+                PageShareSaveDays = 90,
+                MaxPictureQuality = 1024,
+                CreatorUnApprovedCounts = 5
+            });
+
+            //微信设置
+            await settingService.SaveSettingAsync(new WeixinSettings
+            {
+                WeChatOAuthEnable = true,
+                CheckWeChatBrowser = true,
+                PublicPageUseSnsapiBase = true,
+                GetLocation = false,
+                UseExcludePage = true,
+                Debug = true,
+                SaveRequestMessageLog = true,
+                SaveResponseMessageLog = true,
+                TraceLog = true,
+                JSSDKDebug = true,
+                JsApiList = string.Empty
             });
 
             await settingService.SaveSettingAsync(new RobotsTxtSettings

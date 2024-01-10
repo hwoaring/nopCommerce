@@ -20,7 +20,12 @@ namespace Nop.Data.Mapping.Builders.Catalog
         {
             table
                 .WithColumn(nameof(TierPrice.CustomerRoleId)).AsInt32().Nullable().ForeignKey<CustomerRole>()
-                .WithColumn(nameof(TierPrice.ProductId)).AsInt32().ForeignKey<Product>();
+                .WithColumn(nameof(TierPrice.ProductId)).AsInt32().ForeignKey<Product>()
+
+                //新属性
+                .WithColumn(nameof(TierPrice.Name)).AsString(128).Nullable()
+                .WithColumn(nameof(TierPrice.ShortName)).AsString(128).Nullable()
+                ;
         }
 
         #endregion

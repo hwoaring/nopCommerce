@@ -20,7 +20,13 @@ namespace Nop.Data.Mapping.Builders.Orders
         {
             table
                 .WithColumn(nameof(OrderItem.OrderId)).AsInt32().ForeignKey<Order>()
-                .WithColumn(nameof(OrderItem.ProductId)).AsInt32().ForeignKey<Product>();
+                .WithColumn(nameof(OrderItem.ProductId)).AsInt32().ForeignKey<Product>()
+
+                //新增属性
+                .WithColumn(nameof(OrderItem.Notes)).AsString(64).Nullable()
+                .WithColumn(nameof(OrderItem.OrderShippingNumber)).AsString(64).Nullable()
+                .WithColumn(nameof(OrderItem.ProductOrderNoticeIdList)).AsAnsiString(128).Nullable()
+                ;
         }
 
         #endregion

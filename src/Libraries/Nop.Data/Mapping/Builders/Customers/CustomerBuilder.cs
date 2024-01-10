@@ -45,7 +45,17 @@ namespace Nop.Data.Mapping.Builders.Customers
                 .WithColumn(nameof(Customer.CurrencyId)).AsInt32().ForeignKey<Currency>(onDelete: Rule.SetNull).Nullable()
                 .WithColumn(nameof(Customer.LanguageId)).AsInt32().ForeignKey<Language>(onDelete: Rule.SetNull).Nullable()
                 .WithColumn(NameCompatibilityManager.GetColumnName(typeof(Customer), nameof(Customer.BillingAddressId))).AsInt32().ForeignKey<Address>(onDelete: Rule.None).Nullable()
-                .WithColumn(NameCompatibilityManager.GetColumnName(typeof(Customer), nameof(Customer.ShippingAddressId))).AsInt32().ForeignKey<Address>(onDelete: Rule.None).Nullable();
+                .WithColumn(NameCompatibilityManager.GetColumnName(typeof(Customer), nameof(Customer.ShippingAddressId))).AsInt32().ForeignKey<Address>(onDelete: Rule.None).Nullable()
+
+                //扩展
+                .WithColumn(nameof(Customer.TempReferrerExpireDateUtc)).AsDateTime2().Nullable()
+                .WithColumn(nameof(Customer.ReferrerSceneStr)).AsString(64).Nullable()
+                .WithColumn(nameof(Customer.OpenId)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(Customer.UnionId)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(Customer.Remark)).AsString(64).Nullable()
+                .WithColumn(nameof(Customer.PhoneToRevalidate)).AsString(64).Nullable()
+
+                ;
         }
 
         #endregion

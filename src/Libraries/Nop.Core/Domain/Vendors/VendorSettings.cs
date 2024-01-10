@@ -66,5 +66,29 @@ namespace Nop.Core.Domain.Vendors
         /// Gets or sets a value indicating whether vendors are allowed to import products
         /// </summary>
         public bool AllowVendorsToImportProducts { get; set; }
+
+        #region
+
+        /// <summary>
+        /// 销售店铺自定义类别最大数量
+        /// </summary>
+        public int MaxVendorStoreCategoryCount { get; set; }
+
+        /// <summary>
+        /// 销售可以自定义场景数量
+        /// </summary>
+        public int MaxVendorSceneCount { get; set; }
+
+        /// <summary>
+        /// 销售可以自定义推广产品分组数量（便于和朋友圈分组隐私对应）
+        /// </summary>
+        public int MaxVendorProductGroupCount { get; set; }
+
+        /// <summary>
+        /// 销售提交第三方平台订单最大提交未审核订单量（防止恶意提交，审核后可以继续提交）
+        /// </summary>
+        public int MaxVendorSaleOrderCount { get; set; }
+
+        #endregion
     }
 }

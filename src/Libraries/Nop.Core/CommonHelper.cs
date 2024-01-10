@@ -326,5 +326,37 @@ namespace Nop.Core
         public static INopFileProvider DefaultFileProvider { get; set; }
 
         #endregion
+
+        #region === 扩展方法 ===
+
+        /// <summary>
+        /// 随机数字和字母
+        /// </summary>
+        /// <param name="length">长度</param>
+        /// <param name="digit">包含数字</param>
+        /// <param name="letter">包含字母（大写）</param>
+        /// <returns></returns>
+        public static string GenerateRandomDigitLetterCode(int length, bool digit = true, bool letter = true)
+        {
+            if (length < 1)
+                return string.Empty;
+
+            var pattern = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+            using var random = new SecureRandomNumberGenerator();
+            var str = string.Empty;
+
+            for (var i = 0; i < length; i++)
+            {
+                if (digit && !letter) //仅数字
+                    str = string.Concat(str, pattern[random.Next(0, 9)]);
+                else if (!digit && letter) //仅字母
+                    str = string.Concat(str, pattern[random.Next(10, 35)]);
+                else //数字和字母
+                    str = string.Concat(str, pattern[random.Next(0, 35)]);
+            }
+            return str;
+        }
+
+        #endregion
     }
 }

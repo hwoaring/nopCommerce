@@ -19,6 +19,10 @@ using Nop.Services.Stores;
 using Nop.Services.Vendors;
 using Nop.Web.Framework.Globalization;
 
+//=======
+using Nop.Services.Weixins;
+using Nop.Core.Http.Extensions;
+
 namespace Nop.Web.Framework
 {
     /// <summary>
@@ -235,6 +239,18 @@ namespace Nop.Web.Framework
                 {
                     //try to get registered user
                     customer = await _authenticationService.GetAuthenticatedCustomerAsync();
+                }
+
+                if (customer == null || customer.Deleted || !customer.Active || customer.RequireReLogin)
+                {
+                    //微信认证登录获取用户
+                    var customerSession = await _httpContextAccessor.HttpContext.Session.GetAsync<WeixinOAuthSession>(NopWeixinDefaults.WeixinOAuthSession);
+                    if (customerSession != null && !string.IsNullOrEmpty(customerSession.OpenId))
+                    {
+                        var customerBySession = await _customerService.GetCustomerByOpenIdAsync(customerSession.OpenId);
+                        if (customerBySession != null)
+                            customer = customerBySession;
+                    }
                 }
 
                 if (customer != null && !customer.Deleted && customer.Active && !customer.RequireReLogin)
@@ -504,6 +520,61 @@ namespace Nop.Web.Framework
         /// Gets or sets value indicating whether we're in admin area
         /// </summary>
         public virtual bool IsAdmin { get; set; }
+
+        #endregion
+
+        #region === 扩展方法 ===
+
+        /// <summary>
+        /// 获取当前用户推荐人信息（已经判断临时推荐人和永久推荐人）
+        /// </summary>
+        /// <returns></returns>
+        public virtual async Task<Customer> GetCurrentReferrerCustomerAsync(Customer customer = null)
+        {
+            customer ??= await GetCurrentCustomerAsync();
+
+            int referrerCustomerId;
+            if (customer.TempReferrerExpireDateUtc != null && customer.TempReferrerExpireDateUtc > DateTime.UtcNow)
+                referrerCustomerId = customer.TempReferrerCustomerId;
+            else
+                referrerCustomerId = customer.ReferrerCustomerId;
+
+            return await _customerService.GetCustomerByIdAsync(referrerCustomerId);
+        }
+
+        /// <summary>
+        /// 从WeixinSession绑定当前用户的OpenId
+        /// </summary>
+        /// <param name="customer">当前用户</param>
+        /// <param name="openId"></param>
+        /// <param name="isSnapshotuser"></param>
+        /// <returns></returns>
+        public virtual async Task<Customer> SetCurrentCustomerOpenIdAsync(Customer customer, string openId, int? isSnapshotuser)
+        {
+            //空值不绑定
+            if (string.IsNullOrEmpty(openId) || customer == null)
+                return customer;
+
+            //虚拟账号不进行绑定
+            if (isSnapshotuser.HasValue && isSnapshotuser.Value == 1)
+                return customer;
+
+            //已经绑定OpenId
+            if (!string.IsNullOrWhiteSpace(customer.OpenId))
+                return customer;
+
+            //绑定
+            customer.OpenId = openId;
+            customer.AdminComment = "Weixin Authorized Guest."; //微信授权进入的普通访客
+
+            //更新数据库
+            await _customerService.UpdateCustomerAsync(customer);
+
+            //重置缓存
+            await SetCurrentCustomerAsync(customer);
+
+            return customer;
+        }
 
         #endregion
     }

@@ -106,5 +106,29 @@ namespace Nop.Core.Domain.Common
         /// Gets or sets a value indicating whether we have to preselect a country if there's only one country available (public store)
         /// </summary>
         public bool PreselectCountryIfOnlyOne { get; set; }
+
+        #region === 扩展属性 ===
+
+        /// <summary>
+        /// 是否启用LastName
+        /// </summary>
+        public bool LastNameEnabled { get; set; }
+
+        /// <summary>
+        /// 是否必须LastName
+        /// </summary>
+        public bool LastNameRequired { get; set; }
+
+        /// <summary>
+        /// 是否启用Email
+        /// </summary>
+        public bool EmailEnabled { get; set; }
+
+        /// <summary>
+        /// 是否必须Email
+        /// </summary>
+        public bool EmailRequired { get; set; }
+
+        #endregion
     }
 }

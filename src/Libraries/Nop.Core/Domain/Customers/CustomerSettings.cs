@@ -405,5 +405,37 @@ namespace Nop.Core.Domain.Customers
         public bool AcceptPrivacyPolicyEnabled { get; set; }
 
         #endregion
+
+
+        #region === 扩展属性 ===
+        ///TempReferrerExpireDateUtc
+
+        /// <summary>
+        /// 临时推荐人过期分钟数
+        /// 0：表示不使用临时推荐人功能
+        /// </summary>
+        public int TempReferrerExpireMinutes { get; set; }
+
+        /// <summary>
+        /// 过期保护（临时推荐人过期前，不允许更新临时推荐人）
+        /// </summary>
+        public bool TempReferrerExpireProtect { get; set; }
+
+        /// <summary>
+        /// 通过Ip自动检测所在城市
+        /// </summary>
+        public bool AutoDetectCityName { get; set; }
+
+        /// <summary>
+        /// 是否使用手机号登录
+        /// </summary>
+        public bool UsePhoneNumberLogin { get; set; }
+
+        /// <summary>
+        /// 手机号需要通过短信(SMS)认证
+        /// </summary>
+        public bool PhoneNumberValidationBySMS { get; set; }
+
+        #endregion
     }
 }
