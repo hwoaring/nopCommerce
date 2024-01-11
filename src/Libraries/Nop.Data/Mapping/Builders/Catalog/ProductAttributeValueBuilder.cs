@@ -2,14 +2,14 @@
 using Nop.Core.Domain.Catalog;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Catalog
+namespace Nop.Data.Mapping.Builders.Catalog;
+
+/// <summary>
+/// Represents a product attribute value entity builder
+/// </summary>
+public partial class ProductAttributeValueBuilder : NopEntityBuilder<ProductAttributeValue>
 {
-    /// <summary>
-    /// Represents a product attribute value entity builder
-    /// </summary>
-    public partial class ProductAttributeValueBuilder : NopEntityBuilder<ProductAttributeValue>
-    {
-        #region Methods
+    #region Methods
 
         /// <summary>
         /// Apply entity configuration
@@ -27,6 +27,5 @@ namespace Nop.Data.Mapping.Builders.Catalog
                 ;
         }
 
-        #endregion
-    }
+    #endregion
 }

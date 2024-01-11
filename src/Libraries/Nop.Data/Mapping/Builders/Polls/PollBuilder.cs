@@ -4,14 +4,14 @@ using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Polls;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Polls
+namespace Nop.Data.Mapping.Builders.Polls;
+
+/// <summary>
+/// Represents a poll entity builder
+/// </summary>
+public partial class PollBuilder : NopEntityBuilder<Poll>
 {
-    /// <summary>
-    /// Represents a poll entity builder
-    /// </summary>
-    public partial class PollBuilder : NopEntityBuilder<Poll>
-    {
-        #region Methods
+    #region Methods
 
         /// <summary>
         /// Apply entity configuration
@@ -29,6 +29,5 @@ namespace Nop.Data.Mapping.Builders.Polls
                 ;
         }
 
-        #endregion
-    }
+    #endregion
 }

@@ -3,14 +3,14 @@ using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.News;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.News
+namespace Nop.Data.Mapping.Builders.News;
+
+/// <summary>
+/// Represents a news item entity builder
+/// </summary>
+public partial class NewsItemBuilder : NopEntityBuilder<NewsItem>
 {
-    /// <summary>
-    /// Represents a news item entity builder
-    /// </summary>
-    public partial class NewsItemBuilder : NopEntityBuilder<NewsItem>
-    {
-        #region Methods
+    #region Methods
 
         /// <summary>
         /// Apply entity configuration
@@ -39,6 +39,5 @@ namespace Nop.Data.Mapping.Builders.News
                 ;
         }
 
-        #endregion
-    }
+    #endregion
 }

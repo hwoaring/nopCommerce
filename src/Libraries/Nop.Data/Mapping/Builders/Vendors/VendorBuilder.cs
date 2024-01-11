@@ -1,14 +1,14 @@
 ﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Vendors;
 
-namespace Nop.Data.Mapping.Builders.Vendors
+namespace Nop.Data.Mapping.Builders.Vendors;
+
+/// <summary>
+/// Represents a vendor entity builder
+/// </summary>
+public partial class VendorBuilder : NopEntityBuilder<Vendor>
 {
-    /// <summary>
-    /// Represents a vendor entity builder
-    /// </summary>
-    public partial class VendorBuilder : NopEntityBuilder<Vendor>
-    {
-        #region Methods
+    #region Methods
 
         /// <summary>
         /// Apply entity configuration
@@ -29,6 +29,5 @@ namespace Nop.Data.Mapping.Builders.Vendors
                 ;
         }
 
-        #endregion
-    }
+    #endregion
 }

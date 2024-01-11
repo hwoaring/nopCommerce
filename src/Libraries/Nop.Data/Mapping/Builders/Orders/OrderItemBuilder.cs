@@ -3,14 +3,14 @@ using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Orders;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Orders
+namespace Nop.Data.Mapping.Builders.Orders;
+
+/// <summary>
+/// Represents a order item entity builder
+/// </summary>
+public partial class OrderItemBuilder : NopEntityBuilder<OrderItem>
 {
-    /// <summary>
-    /// Represents a order item entity builder
-    /// </summary>
-    public partial class OrderItemBuilder : NopEntityBuilder<OrderItem>
-    {
-        #region Methods
+    #region Methods
 
         /// <summary>
         /// Apply entity configuration
@@ -29,6 +29,5 @@ namespace Nop.Data.Mapping.Builders.Orders
                 ;
         }
 
-        #endregion
-    }
+    #endregion
 }

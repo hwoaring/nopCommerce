@@ -5,14 +5,14 @@ using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.FriendCircles;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Common
+namespace Nop.Data.Mapping.Builders.Common;
+
+/// <summary>
+/// Represents a address entity builder
+/// </summary>
+public partial class AddressBuilder : NopEntityBuilder<Address>
 {
-    /// <summary>
-    /// Represents a address entity builder
-    /// </summary>
-    public partial class AddressBuilder : NopEntityBuilder<Address>
-    {
-        #region Methods
+    #region Methods
 
         /// <summary>
         /// Apply entity configuration
@@ -32,6 +32,5 @@ namespace Nop.Data.Mapping.Builders.Common
                 ;
         }
 
-        #endregion
-    }
+    #endregion
 }

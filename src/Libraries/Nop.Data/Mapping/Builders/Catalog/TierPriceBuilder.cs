@@ -3,14 +3,14 @@ using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Catalog
+namespace Nop.Data.Mapping.Builders.Catalog;
+
+/// <summary>
+/// Represents a tier price entity builder
+/// </summary>
+public partial class TierPriceBuilder : NopEntityBuilder<TierPrice>
 {
-    /// <summary>
-    /// Represents a tier price entity builder
-    /// </summary>
-    public partial class TierPriceBuilder : NopEntityBuilder<TierPrice>
-    {
-        #region Methods
+    #region Methods
 
         /// <summary>
         /// Apply entity configuration
@@ -28,6 +28,5 @@ namespace Nop.Data.Mapping.Builders.Catalog
                 ;
         }
 
-        #endregion
-    }
+    #endregion
 }

@@ -6,14 +6,14 @@ using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Localization;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Customers
+namespace Nop.Data.Mapping.Builders.Customers;
+
+/// <summary>
+/// Represents a customer entity builder
+/// </summary>
+public partial class CustomerBuilder : NopEntityBuilder<Customer>
 {
-    /// <summary>
-    /// Represents a customer entity builder
-    /// </summary>
-    public partial class CustomerBuilder : NopEntityBuilder<Customer>
-    {
-        #region Methods
+    #region Methods
 
         /// <summary>
         /// Apply entity configuration
@@ -58,6 +58,5 @@ namespace Nop.Data.Mapping.Builders.Customers
                 ;
         }
 
-        #endregion
-    }
+    #endregion
 }

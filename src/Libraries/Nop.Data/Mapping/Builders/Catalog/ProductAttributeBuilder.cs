@@ -1,14 +1,14 @@
 ﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Catalog;
 
-namespace Nop.Data.Mapping.Builders.Catalog
+namespace Nop.Data.Mapping.Builders.Catalog;
+
+/// <summary>
+/// Represents a product attribute entity builder
+/// </summary>
+public partial class ProductAttributeBuilder : NopEntityBuilder<ProductAttribute>
 {
-    /// <summary>
-    /// Represents a product attribute entity builder
-    /// </summary>
-    public partial class ProductAttributeBuilder : NopEntityBuilder<ProductAttribute>
-    {
-        #region Methods
+    #region Methods
 
         /// <summary>
         /// Apply entity configuration
@@ -25,6 +25,5 @@ namespace Nop.Data.Mapping.Builders.Catalog
                 ;
         }
 
-        #endregion
-    }
+    #endregion
 }

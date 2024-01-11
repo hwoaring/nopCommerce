@@ -4,14 +4,14 @@ using Nop.Core.Domain.News;
 using Nop.Core.Domain.Stores;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.News
+namespace Nop.Data.Mapping.Builders.News;
+
+/// <summary>
+/// Represents a news comment entity builder
+/// </summary>
+public partial class NewsCommentBuilder : NopEntityBuilder<NewsComment>
 {
-    /// <summary>
-    /// Represents a news comment entity builder
-    /// </summary>
-    public partial class NewsCommentBuilder : NopEntityBuilder<NewsComment>
-    {
-        #region Methods
+    #region Methods
 
         /// <summary>
         /// Apply entity configuration
@@ -33,6 +33,5 @@ namespace Nop.Data.Mapping.Builders.News
                 ;
         }
 
-        #endregion
-    }
+    #endregion
 }

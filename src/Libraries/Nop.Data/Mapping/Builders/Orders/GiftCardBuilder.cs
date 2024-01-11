@@ -3,14 +3,14 @@ using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Orders;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Orders
+namespace Nop.Data.Mapping.Builders.Orders;
+
+/// <summary>
+/// Represents a gift card entity builder
+/// </summary>
+public partial class GiftCardBuilder : NopEntityBuilder<GiftCard>
 {
-    /// <summary>
-    /// Represents a gift card entity builder
-    /// </summary>
-    public partial class GiftCardBuilder : NopEntityBuilder<GiftCard>
-    {
-        #region Methods
+    #region Methods
 
         /// <summary>
         /// Apply entity configuration
@@ -29,6 +29,5 @@ namespace Nop.Data.Mapping.Builders.Orders
                 ;
         }
 
-        #endregion
-    }
+    #endregion
 }

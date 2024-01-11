@@ -2,14 +2,14 @@
 using Nop.Core.Domain.Catalog;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Catalog
+namespace Nop.Data.Mapping.Builders.Catalog;
+
+/// <summary>
+/// Represents a specification attribute option entity builder
+/// </summary>
+public partial class SpecificationAttributeOptionBuilder : NopEntityBuilder<SpecificationAttributeOption>
 {
-    /// <summary>
-    /// Represents a specification attribute option entity builder
-    /// </summary>
-    public partial class SpecificationAttributeOptionBuilder : NopEntityBuilder<SpecificationAttributeOption>
-    {
-        #region Methods
+    #region Methods
 
         /// <summary>
         /// Apply entity configuration
@@ -28,6 +28,5 @@ namespace Nop.Data.Mapping.Builders.Catalog
                 ;
         }
 
-        #endregion
-    }
+    #endregion
 }
