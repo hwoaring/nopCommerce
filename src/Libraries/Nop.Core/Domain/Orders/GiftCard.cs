@@ -67,43 +67,44 @@ public partial class GiftCard : BaseEntity
     /// </summary>
     public DateTime CreatedOnUtc { get; set; }
 
-        /// <summary>
-        /// Gets or sets the gift card type
-        /// </summary>
-        public GiftCardType GiftCardType
-        {
-            get => (GiftCardType)GiftCardTypeId;
-            set => GiftCardTypeId = (int)value;
-        }
-
-
-        #region
-
-        /// <summary>
-        /// 卡券密码（可以通过设置密码，保持couponcode不变情况下禁止他人消费）
-        /// </summary>
-        public string GiftCardPassword { get; set; }
-
-        /// <summary>
-        /// 接收人电话
-        /// </summary>
-        public string RecipientPhone { get; set; }
-
-        /// <summary>
-        /// 发送人电话
-        /// </summary>
-        public string SenderPhone { get; set; }
-
-        /// <summary>
-        /// 有效期开始日期
-        /// </summary>
-        public DateTime? GiftCardStartUseDateTimeUtc { get; set; }
-
-        /// <summary>
-        /// 最大有效期结束日期
-        /// </summary>
-        public DateTime? GiftCardEndUseDateTimeUtc { get; set; }
-
-        #endregion
+    /// <summary>
+    /// Gets or sets the gift card type
+    /// </summary>
+    public GiftCardType GiftCardType
+    {
+        get => (GiftCardType)GiftCardTypeId;
+        set => GiftCardTypeId = (int)value;
     }
+
+
+    #region
+
+    /// <summary>
+    /// 卡券密码（可以通过设置密码，保持couponcode不变情况下禁止他人消费）
+    /// </summary>
+    public string GiftCardPassword { get; set; }
+
+    /// <summary>
+    /// 接收人电话
+    /// </summary>
+    public string RecipientPhone { get; set; }
+
+    /// <summary>
+    /// 发送人电话
+    /// </summary>
+    public string SenderPhone { get; set; }
+
+    /// <summary>
+    /// 有效期开始日期
+    /// </summary>
+    public DateTime? GiftCardStartUseDateTimeUtc { get; set; }
+
+    /// <summary>
+    /// 最大有效期结束日期
+    /// </summary>
+    public DateTime? GiftCardEndUseDateTimeUtc { get; set; }
+
+    #endregion
+
+
 }

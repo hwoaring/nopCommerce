@@ -127,30 +127,30 @@ public partial class Category : BaseEntity, ILocalizedEntity, ISlugSupported, IA
     /// </summary>
     public decimal PriceTo { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the price range should be entered manually
-        /// </summary>
-        public bool ManuallyPriceRange { get; set; }
+    /// <summary>
+    /// Gets or sets a value indicating whether the price range should be entered manually
+    /// </summary>
+    public bool ManuallyPriceRange { get; set; }
 
 
 
-        #region === 扩展属性 ===
+    #region === 扩展属性 ===
 
-        /// <summary>
-        /// 对外展示统一加密id（URL参数）
-        /// </summary>
-        public long UnifiedId { get; set; }
+    /// <summary>
+    /// 对外展示统一加密id（URL参数）
+    /// </summary>
+    public long UnifiedId { get; set; }
 
-        /// <summary>
-        /// 平台交易费率（成交后扣除费率，商品指定费率优先，其次时候分类指定的费率）
-        /// </summary>
-        public decimal PlatformRate { get; set; }
+    /// <summary>
+    /// 平台交易费率（成交后扣除费率，商品指定费率优先，其次时候分类指定的费率）
+    /// </summary>
+    public decimal PlatformRate { get; set; }
 
-        /// <summary>
-        /// 摘要
-        /// </summary>
-        public string Summary { get; set; }
+    /// <summary>
+    /// 摘要
+    /// </summary>
+    public string Summary { get; set; }
 
-        #endregion
-    }
+    #endregion
+
 }

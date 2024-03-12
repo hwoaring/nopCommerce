@@ -237,4 +237,14 @@ public partial interface ISettingModelFactory
     /// The task result contains the store scope configuration model
     /// </returns>
     Task<StoreScopeConfigurationModel> PrepareStoreScopeConfigurationModelAsync();
+
+
+    //新增属性
+    
+    /// <summary>
+    /// 微信设置
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    Task<WeixinSettingsModel> PrepareWeixinSettingsModelAsync(WeixinSettingsModel model = null);
 }

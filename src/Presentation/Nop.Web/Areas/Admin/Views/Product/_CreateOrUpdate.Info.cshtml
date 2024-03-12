@@ -208,6 +208,34 @@
                 <span asp-validation-for="Name"></span>
             </div>
         </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="Slogan" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="Slogan" />
+                    <span asp-validation-for="Slogan"></span>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="SloganUrl" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="SloganUrl" />
+                    <span asp-validation-for="SloganUrl"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <nop-label asp-for="SloganUrlText" />
+                </div>
+                <div class="col-md-9">
+                    <nop-editor asp-for="SloganUrlText" />
+                    <span asp-validation-for="SloganUrlText"></span>
+                </div>
+            </div>
         <div class="form-group row">
             <div class="col-md-3">
                 <nop-label asp-for="ShortDescription" />
@@ -322,6 +350,17 @@
             <span asp-validation-for="ManufacturerPartNumber"></span>
         </div>
     </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ProductBarCode" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ProductBarCode" />
+            <span asp-validation-for="ProductBarCode"></span>
+        </div>
+    </div>
+
     <div class="form-group row @(Model.ProductEditorSettingsModel.ShowOnHomepage ? null : "advanced-setting")" @(Model.IsLoggedInAsVendor ? Html.Raw("style='display: none;'") : null)>
         <div class="col-md-3">
             <nop-label asp-for="ShowOnHomepage" />
@@ -661,4 +700,5 @@
             <span asp-validation-for="AdminComment"></span>
         </div>
     </div>
+
 </div>

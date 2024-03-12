@@ -23,14 +23,14 @@ using Nop.Web.Framework.Globalization;
 using Nop.Services.Weixins;
 using Nop.Core.Http.Extensions;
 
-namespace Nop.Web.Framework
+namespace Nop.Web.Framework;
+
+/// <summary>
+/// Represents work context for web application
+/// </summary>
+public partial class WebWorkContext : IWorkContext
 {
-    /// <summary>
-    /// Represents work context for web application
-    /// </summary>
-    public partial class WebWorkContext : IWorkContext
-    {
-        #region Fields
+    #region Fields
 
     protected readonly CookieSettings _cookieSettings;
     protected readonly CurrencySettings _currencySettings;
@@ -54,6 +54,7 @@ namespace Nop.Web.Framework
     protected Language _cachedLanguage;
     protected Currency _cachedCurrency;
     protected TaxDisplayType? _cachedTaxDisplayType;
+    protected Customer _cachedReferrerCustomer;  //推荐人信息
 
     #endregion
 
@@ -241,36 +242,36 @@ namespace Nop.Web.Framework
                 customer = await _authenticationService.GetAuthenticatedCustomerAsync();
             }
 
-                if (customer == null || customer.Deleted || !customer.Active || customer.RequireReLogin)
+            if (customer == null || customer.Deleted || !customer.Active || customer.RequireReLogin)
+            {
+                //微信认证登录获取用户
+                var customerSession = await _httpContextAccessor.HttpContext.Session.GetAsync<WeixinOAuthSession>(NopWeixinDefaults.WeixinOAuthSession);
+                if (customerSession != null && !string.IsNullOrEmpty(customerSession.OpenId))
                 {
-                    //微信认证登录获取用户
-                    var customerSession = await _httpContextAccessor.HttpContext.Session.GetAsync<WeixinOAuthSession>(NopWeixinDefaults.WeixinOAuthSession);
-                    if (customerSession != null && !string.IsNullOrEmpty(customerSession.OpenId))
-                    {
-                        var customerBySession = await _customerService.GetCustomerByOpenIdAsync(customerSession.OpenId);
-                        if (customerBySession != null)
-                            customer = customerBySession;
-                    }
+                    var customerBySession = await _customerService.GetCustomerByOpenIdAsync(customerSession.OpenId);
+                    if (customerBySession != null)
+                        customer = customerBySession;
                 }
+            }
 
-                if (customer != null && !customer.Deleted && customer.Active && !customer.RequireReLogin)
+            if (customer != null && !customer.Deleted && customer.Active && !customer.RequireReLogin)
+            {
+                //get impersonate user if required
+                var impersonatedCustomerId = await _genericAttributeService
+                    .GetAttributeAsync<int?>(customer, NopCustomerDefaults.ImpersonatedCustomerIdAttribute);
+                if (impersonatedCustomerId.HasValue && impersonatedCustomerId.Value > 0)
                 {
-                    //get impersonate user if required
-                    var impersonatedCustomerId = await _genericAttributeService
-                        .GetAttributeAsync<int?>(customer, NopCustomerDefaults.ImpersonatedCustomerIdAttribute);
-                    if (impersonatedCustomerId.HasValue && impersonatedCustomerId.Value > 0)
+                    var impersonatedCustomer = await _customerService.GetCustomerByIdAsync(impersonatedCustomerId.Value);
+                    if (impersonatedCustomer != null && !impersonatedCustomer.Deleted &&
+                        impersonatedCustomer.Active &&
+                        !impersonatedCustomer.RequireReLogin)
                     {
-                        var impersonatedCustomer = await _customerService.GetCustomerByIdAsync(impersonatedCustomerId.Value);
-                        if (impersonatedCustomer != null && !impersonatedCustomer.Deleted &&
-                            impersonatedCustomer.Active &&
-                            !impersonatedCustomer.RequireReLogin)
-                        {
-                            //set impersonated customer
-                            _originalCustomerIfImpersonated = customer;
-                            customer = impersonatedCustomer;
-                        }
+                        //set impersonated customer
+                        _originalCustomerIfImpersonated = customer;
+                        customer = impersonatedCustomer;
                     }
                 }
+            }
 
             if (customer == null || customer.Deleted || !customer.Active || customer.RequireReLogin)
             {
@@ -523,61 +524,221 @@ namespace Nop.Web.Framework
     /// </summary>
     public virtual bool IsAdmin { get; set; }
 
-        #endregion
+    #endregion
 
-        #region === 扩展方法 ===
+    #region === 扩展方法 ===
 
-        /// <summary>
-        /// 获取当前用户推荐人信息（已经判断临时推荐人和永久推荐人）
-        /// </summary>
-        /// <returns></returns>
-        public virtual async Task<Customer> GetCurrentReferrerCustomerAsync(Customer customer = null)
+    /// <summary>
+    /// 获取当前用户推荐人信息（已经判断临时推荐人和永久推荐人）
+    /// </summary>
+    /// <returns></returns>
+    public virtual async Task<Customer> GetCurrentReferrerCustomerAsync()
+    {
+        //whether there is a cached value
+        if (_cachedReferrerCustomer != null)
+            return _cachedReferrerCustomer;
+
+        await SetCurrentReferrerCustomerAsync();
+
+        return _cachedReferrerCustomer;
+    }
+
+    /// <summary>
+    /// 获取当前用户的推荐人信息
+    /// 如果传入有值，判断是否更推荐人信息
+    /// </summary>
+    /// <param name="referrerCustomer"></param>
+    /// <returns></returns>
+    public virtual async Task SetCurrentReferrerCustomerAsync(Customer referrerCustomer = null)
+    {
+        //需要解决问题：
+        //传入参数为空时，直接获取当前已经有的推荐人
+        //如果有参数，则判断是否更新推荐人信息，并重新获取推荐人
+
+        var store = await _storeContext.GetCurrentStoreAsync();
+        var currentCustomer = GetCurrentCustomerAsync();
+
+        #region === 更新或新建推荐人信息 ===
+
+        //更新（不为空，Id>0防止默认推荐人传入）
+        if (referrerCustomer != null && referrerCustomer.Id > 0)
         {
-            customer ??= await GetCurrentCustomerAsync();
+            //判断（推荐人）是否在推荐状态，忽略自己推荐自己
+            if (referrerCustomer.Deleted || !referrerCustomer.Active || referrerCustomer.Id == currentCustomer.Id)
+                referrerCustomer = null;
 
-            int referrerCustomerId;
-            if (customer.TempReferrerExpireDateUtc != null && customer.TempReferrerExpireDateUtc > DateTime.UtcNow)
-                referrerCustomerId = customer.TempReferrerCustomerId;
-            else
-                referrerCustomerId = customer.ReferrerCustomerId;
+            //判断店铺是否关闭推荐功能
+            if (!store.ReferrerEnable)
+                referrerCustomer = null;
 
-            return await _customerService.GetCustomerByIdAsync(referrerCustomerId);
+            if (referrerCustomer != null)
+            {
+                //获取（当前）用户的推荐设置
+                var currentCustomerReferrerSetting = await _customerService.GetCustomerReferrerSettingByStoreIdCustomerIdAsync(store.Id, currentCustomer.Id);
+                if (currentCustomerReferrerSetting == null)
+                {
+                    currentCustomerReferrerSetting = new CustomerReferrerSetting
+                    {
+                        StoreId = store.Id,
+                        CustomerId = currentCustomer.Id,
+                        AsReferrerEnable = store.DefaultCustomerReferrerEnable,
+                        AsRecommendedEnable = store.DefaultCustomerRecommendedEnable,
+                        AsTempReferrerEnable = store.DefaultCustomerTempReferrerEnable
+                    };
+                    await _customerService.InsertCustomerReferrerSettingAsync(currentCustomerReferrerSetting);
+                }
+
+                //判断（当前）用户是否在被推荐状态
+                if (!currentCustomerReferrerSetting.AsRecommendedEnable)
+                    referrerCustomer = null;
+            }
+
+            if (referrerCustomer != null)
+            {
+                //获取（推荐人）用户的推荐设置
+                var referrerCustomerReferrerSetting = await _customerService.GetCustomerReferrerSettingByStoreIdCustomerIdAsync(store.Id, referrerCustomer.Id);
+                if (referrerCustomerReferrerSetting == null)
+                {
+                    referrerCustomerReferrerSetting = new CustomerReferrerSetting
+                    {
+                        StoreId = store.Id,
+                        CustomerId = referrerCustomer.Id,
+                        AsReferrerEnable = store.DefaultCustomerReferrerEnable,
+                        AsRecommendedEnable = store.DefaultCustomerRecommendedEnable,
+                        AsTempReferrerEnable = store.DefaultCustomerTempReferrerEnable
+                    };
+                    await _customerService.InsertCustomerReferrerSettingAsync(referrerCustomerReferrerSetting);
+                }
+
+                //判断（推荐人）是否在推荐状态
+                if (!referrerCustomerReferrerSetting.AsReferrerEnable)
+                    referrerCustomer = null;
+            }
+
+            if (referrerCustomer != null)
+            {
+                //获取（当前）用户的推荐人参数信息
+                var currentCustomerReferrer = await _customerService.GetCustomerReferrerByStoreIdCustomerIdAsync(store.Id, currentCustomer.Id);
+                if (currentCustomerReferrer == null)
+                {
+                    currentCustomerReferrer = new CustomerReferrer
+                    {
+                        ReferreredInStoreId = store.Id,
+                        CustomerId = currentCustomer.Id,
+                        ReferrerCustomerId = referrerCustomer.Id,
+                        TempReferrerCustomerId = referrerCustomer.Id,
+                        TempReferrerExpireDateUtc = DateTime.UtcNow.AddMinutes(store.TempReferrerExpireMinutes),
+                        ReferrerSceneStr = string.Empty,  //推荐场景值
+                        ReferrerSceneId = 0,   //推荐场景数字ID
+                        FirstReferrerPageUrl = string.Empty,  //被推荐用户的首次访问页面
+                        FirstReferrerPageId = 0,  //被推荐用户的首次访问页面ID
+                        FirstReferrerPageType = 1,  //页面类型
+                    };
+                    await _customerService.InsertCustomerReferrerAsync(currentCustomerReferrer);
+                }
+
+                //获取（推荐人）用户的推荐设置
+                var referrerCustomerReferrerSetting = await _customerService.GetCustomerReferrerSettingByStoreIdCustomerIdAsync(store.Id, referrerCustomer.Id);
+                
+                //更新（当前）用户的临时推荐人ID
+                if (referrerCustomerReferrerSetting != null && referrerCustomerReferrerSetting.AsTempReferrerEnable && store.TempReferrerExpireMinutes > 0)
+                {
+                    //过期前保护
+                    if (store.TempReferrerExpireProtect)
+                    {
+                        if (currentCustomerReferrer.TempReferrerExpireDateUtc < DateTime.UtcNow)
+                        {
+                            currentCustomerReferrer.TempReferrerCustomerId = referrerCustomer.Id;
+                            currentCustomerReferrer.TempReferrerExpireDateUtc = DateTime.UtcNow.AddMinutes(store.TempReferrerExpireMinutes);
+                        }
+                    }
+                    else
+                    {
+                        currentCustomerReferrer.TempReferrerCustomerId = referrerCustomer.Id;
+                        currentCustomerReferrer.TempReferrerExpireDateUtc = DateTime.UtcNow.AddMinutes(store.TempReferrerExpireMinutes);
+                    }
+
+                    //更新临时推荐人信息
+                    await _customerService.UpdateCustomerReferrerAsync(currentCustomerReferrer);
+                }
+            }
         }
 
-        /// <summary>
-        /// 从WeixinSession绑定当前用户的OpenId
-        /// </summary>
-        /// <param name="customer">当前用户</param>
-        /// <param name="openId"></param>
-        /// <param name="isSnapshotuser"></param>
-        /// <returns></returns>
-        public virtual async Task<Customer> SetCurrentCustomerOpenIdAsync(Customer customer, string openId, int? isSnapshotuser)
+        #endregion
+
+        #region === 重新查找推荐人信息 ===
+
+        //重新查找推荐人信息
+        var customerReferrer = await _customerService.GetCustomerReferrerByStoreIdCustomerIdAsync(store.Id, currentCustomer.Id);
+        if (customerReferrer != null)
         {
-            //空值不绑定
-            if (string.IsNullOrEmpty(openId) || customer == null)
-                return customer;
+            int referrerId;
+            if (customerReferrer.TempReferrerExpireDateUtc != null && customerReferrer.TempReferrerExpireDateUtc > DateTime.UtcNow)
+                referrerId = customerReferrer.TempReferrerCustomerId;
+            else
+                referrerId = customerReferrer.ReferrerCustomerId;
 
-            //虚拟账号不进行绑定
-            if (isSnapshotuser.HasValue && isSnapshotuser.Value == 1)
-                return customer;
+            //重新查找（新推荐人），并判断推荐人状态
+            referrerCustomer = await _customerService.GetCustomerByIdAsync(referrerId);
+            if (referrerCustomer == null || referrerCustomer.Deleted || !referrerCustomer.Active)
+            {
+                _cachedReferrerCustomer = new Customer();
+                return;
+            }
 
-            //已经绑定OpenId
-            if (!string.IsNullOrWhiteSpace(customer.OpenId))
-                return customer;
+            //获取（新推荐人）的推荐设置，并判断推荐人推荐状态
+            var referrerCustomerReferrerSetting = await _customerService.GetCustomerReferrerSettingByStoreIdCustomerIdAsync(store.Id, referrerCustomer.Id);
+            if (referrerCustomerReferrerSetting == null || !referrerCustomerReferrerSetting.AsReferrerEnable)
+            {
+                _cachedReferrerCustomer = new Customer();
+                return;
+            }
 
-            //绑定
-            customer.OpenId = openId;
-            customer.AdminComment = "Weixin Authorized Guest."; //微信授权进入的普通访客
+            //缓存新推荐人
+            _cachedReferrerCustomer = referrerCustomer;
 
-            //更新数据库
-            await _customerService.UpdateCustomerAsync(customer);
-
-            //重置缓存
-            await SetCurrentCustomerAsync(customer);
-
-            return customer;
+        }
+        else
+        {
+            _cachedReferrerCustomer = new Customer();
         }
 
         #endregion
     }
+
+    /// <summary>
+    /// 从WeixinSession绑定当前用户的OpenId
+    /// </summary>
+    /// <param name="customer">当前用户</param>
+    /// <param name="openId"></param>
+    /// <param name="isSnapshotuser"></param>
+    /// <returns></returns>
+    public virtual async Task<Customer> SetCurrentCustomerOpenIdAsync(Customer customer, string openId, int? isSnapshotuser)
+    {
+        //空值不绑定
+        if (string.IsNullOrEmpty(openId) || customer == null)
+            return customer;
+
+        //虚拟账号不进行绑定
+        if (isSnapshotuser.HasValue && isSnapshotuser.Value == 1)
+            return customer;
+
+        //已经绑定OpenId
+        if (!string.IsNullOrWhiteSpace(customer.OpenId))
+            return customer;
+
+        //绑定
+        customer.OpenId = openId;
+        customer.AdminComment = "Weixin Authorized Guest."; //微信授权进入的普通访客
+
+        //更新数据库
+        await _customerService.UpdateCustomerAsync(customer);
+
+        //重置缓存
+        await SetCurrentCustomerAsync(customer);
+
+        return customer;
+    }
+
+    #endregion
 }

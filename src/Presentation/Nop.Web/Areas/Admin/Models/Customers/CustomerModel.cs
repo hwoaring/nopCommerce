@@ -252,6 +252,67 @@ public partial record CustomerModel : BaseNopEntityModel, IAclSupportedModel
 
     public CustomerAssociatedExternalAuthRecordsSearchModel CustomerAssociatedExternalAuthRecordsSearchModel { get; set; }
 
+
+    //新增属性
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.Level")]
+    public int Level { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.ReferrerCustomerId")]
+    public int ReferrerCustomerId { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.TempReferrerCustomerId")]
+    public int TempReferrerCustomerId { get; set; }
+
+    [UIHint("DateNullable")]
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.TempReferrerExpireDateUtc")]
+    public DateTime? TempReferrerExpireDateUtc { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.ReferrerSceneStr")]
+    public string ReferrerSceneStr { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.OpenId")]
+    public string OpenId { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.UnionId")]
+    public string UnionId { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.ReferrerCode")]
+    public long ReferrerCode { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.QrcodePictureId")]
+    public int QrcodePictureId { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.Remark")]
+    public string Remark { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.QrcodeValidated")]
+    public bool QrcodeValidated { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.EmailValidated")]
+    public bool EmailValidated { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.PhoneValidated")]
+    public bool PhoneValidated { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.PhoneToRevalidate")]
+    public string PhoneToRevalidate { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.AsReferrerEnable")]
+    public bool AsReferrerEnable { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.AsRecommendedEnable")]
+    public bool AsRecommendedEnable { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.AsTempReferrerEnable")]
+    public bool AsTempReferrerEnable { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.IgnoringWeChatPublicOauth")]
+    public bool IgnoringWeChatPublicOauth { get; set; }
+
+    [NopResourceDisplayName("Admin.Customers.Customers.Fields.IgnoringWeChatAdminOauth")]
+    public bool IgnoringWeChatAdminOauth { get; set; }
+
     #endregion
 
     #region Nested classes

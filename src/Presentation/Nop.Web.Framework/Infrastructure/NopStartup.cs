@@ -43,6 +43,7 @@ using Nop.Services.Polls;
 using Nop.Services.ScheduleTasks;
 using Nop.Services.Security;
 using Nop.Services.Seo;
+using Nop.Services.Shares;
 using Nop.Services.Shipping;
 using Nop.Services.Shipping.Date;
 using Nop.Services.Shipping.Pickup;
@@ -234,6 +235,10 @@ public partial class NopStartup : INopStartup
         services.AddScoped<IVideoService, VideoService>();
         services.AddScoped<INopUrlHelper, NopUrlHelper>();
         services.AddScoped<IWidgetModelFactory, WidgetModelFactory>();
+
+        //新增属性
+        services.AddScoped<ISharePageService, SharePageService>();
+
 
         //attribute services
         services.AddScoped(typeof(IAttributeService<,>), typeof(AttributeService<,>));

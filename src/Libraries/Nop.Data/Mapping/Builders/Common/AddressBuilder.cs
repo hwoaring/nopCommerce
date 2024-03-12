@@ -24,7 +24,6 @@ public partial class AddressBuilder : NopEntityBuilder<Address>
                 .WithColumn(nameof(Address.CountryId)).AsInt32().Nullable().ForeignKey<Country>(onDelete: Rule.None)
                 .WithColumn(nameof(Address.StateProvinceId)).AsInt32().Nullable().ForeignKey<StateProvince>(onDelete: Rule.None)
                 
-                .WithColumn(nameof(Address.Province)).AsString(32).Nullable()
                 .WithColumn(nameof(Address.AddressLable)).AsString(32).Nullable()
                 .WithColumn(nameof(Address.Latitude)).AsDecimal(9, 6).Nullable()
                 .WithColumn(nameof(Address.Longitude)).AsDecimal(9, 6).Nullable()

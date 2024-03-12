@@ -51,6 +51,15 @@
 
     const string hideStockQuantityHistoryBlockAttributeName = "ProductPage.HideStockQuantityHistoryBlock";
     var hideStockQuantityHistoryBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideStockQuantityHistoryBlockAttributeName, defaultValue: true);
+
+    //新增属性扩展属性
+    const string hideExtendAttributesBlockAttributeName = "ProductPage.HideExtendAttributesBlock";
+    var hideExtendAttributesBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideExtendAttributesBlockAttributeName, defaultValue: true);
+
+    //新增属性分享SharePage
+    const string hideSharePageBlockAttributeName = "ProductPage.HideSharePageBlock";
+    var hideSharePageBlock = await genericAttributeService.GetAttributeAsync<bool>(customer, hideSharePageBlockAttributeName, defaultValue: true);
+
 }
 
 <div asp-validation-summary="All"></div>
@@ -89,6 +98,13 @@
                 <nop-card asp-name="product-seo" asp-icon="fas fa-search-plus" asp-title="@T("Admin.Common.SEO")" asp-hide-block-attribute-name="@hideSeoBlockAttributeName" asp-hide="@hideSeoBlock" asp-advanced="@(!Model.ProductEditorSettingsModel.Seo)">@await Html.PartialAsync("_CreateOrUpdate.Seo", Model)</nop-card>
                 <nop-card asp-name="product-related-products" asp-icon="fas fa-object-group" asp-title="@T("Admin.Catalog.Products.RelatedProducts")" asp-hide-block-attribute-name="@hideRelatedProductsBlockAttributeName" asp-hide="@hideRelatedProductsBlock" asp-advanced="@(!Model.ProductEditorSettingsModel.RelatedProducts)">@await Html.PartialAsync("_CreateOrUpdate.RelatedProducts", Model)</nop-card>
                 <nop-card asp-name="product-crosssells-products" asp-icon="fas fa-random" asp-title="@T("Admin.Catalog.Products.CrossSells")" asp-hide-block-attribute-name="@hideCrossSellsProductsBlockAttributeName" asp-hide="@hideCrossSellsProductsBlock" asp-advanced="@(!Model.ProductEditorSettingsModel.CrossSellsProducts)">@await Html.PartialAsync("_CreateOrUpdate.CrossSellsProducts", Model)</nop-card>
+
+                @* 新增属性-扩展属性 *@
+                <nop-card asp-name="product-extend-attributes" asp-icon="fas fa-info" asp-title="@T("Admin.Catalog.Products.ExtendAttributes")" asp-hide-block-attribute-name="@hideExtendAttributesBlockAttributeName" asp-hide="@hideExtendAttributesBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.ExtendAttributes", Model)</nop-card>
+
+                @* 新增属性-分享 *@
+                <nop-card asp-name="product-share-page" asp-icon="fas fa-info" asp-title="@T("Admin.Product.SharePage")" asp-hide-block-attribute-name="@hideSharePageBlockAttributeName" asp-hide="@hideSharePageBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdate.SharePage", Model)</nop-card>
+
 
                 @if (Model.Id > 0)
                 {

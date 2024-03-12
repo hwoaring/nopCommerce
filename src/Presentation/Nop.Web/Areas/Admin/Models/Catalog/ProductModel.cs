@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Areas.Admin.Models.Settings;
+using Nop.Web.Areas.Admin.Models.Shares;
 using Nop.Web.Framework.Models;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
@@ -66,6 +67,9 @@ public partial record ProductModel : BaseNopEntityModel,
         StockQuantityHistorySearchModel = new StockQuantityHistorySearchModel();
         ProductAttributeMappingSearchModel = new ProductAttributeMappingSearchModel();
         ProductAttributeCombinationSearchModel = new ProductAttributeCombinationSearchModel();
+
+        //新增属性
+        SharePage = new SharePageModel();
     }
 
     #endregion
@@ -477,6 +481,197 @@ public partial record ProductModel : BaseNopEntityModel,
     public ProductAttributeMappingSearchModel ProductAttributeMappingSearchModel { get; set; }
 
     public ProductAttributeCombinationSearchModel ProductAttributeCombinationSearchModel { get; set; }
+
+
+    //新增属性
+    public SharePageModel SharePage { get; set; }
+
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.Slogan")]
+    public string Slogan { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.SloganUrl")]
+    public string SloganUrl { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.SloganUrlText")]
+    public string SloganUrlText { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.CoverImagePictureId")]
+    public int CoverImagePictureId { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.CoverThumbImagePictureId")]
+    public int CoverThumbImagePictureId { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.Url")]
+    public string Url { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.CODSupport")]
+    public bool CODSupport { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.Audited")]
+    public bool Audited { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.PublicDisplay")]
+    public bool PublicDisplay { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.LimitToVendor")]
+    public bool LimitToVendor { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.SelfSupport")]
+    public bool SelfSupport { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.EnablePoints")]
+    public bool EnablePoints { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.MarkAsHot")]
+    public bool MarkAsHot { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.MarkAsRecommend")]
+    public bool MarkAsRecommend { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.SpecialOfferProduct")]
+    public bool SpecialOfferProduct { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.AllowComments")]
+    public bool AllowComments { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.DiscountedProduct")]
+    public bool DiscountedProduct { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.OnlyForNewUser")]
+    public bool OnlyForNewUser { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.RequireVerify")]
+    public bool RequireVerify { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.UsageRules")]
+    public string UsageRules { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.DelayPaymentMinutes")]
+    public int DelayPaymentMinutes { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.BuyBasePrice")]
+    public decimal BuyBasePrice { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.ShareBasePrice")]
+    public decimal ShareBasePrice { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.ProductBarCode")]
+    public long ProductBarCode { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.UnifiedId")]
+    public long UnifiedId { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.EnableViewsCount")]
+    public bool EnableViewsCount { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.ViewsCount")]
+    public int ViewsCount { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.InitialSalesCount")]
+    public int InitialSalesCount { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.BrandId")]
+    public int BrandId { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.PaymentReduceInventory")]
+    public bool PaymentReduceInventory { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.PreOrderHasDatePrices")]
+    public bool PreOrderHasDatePrices { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.PreOrderAvailabilityEndDateTimeUtc")]
+    [UIHint("DateTimeNullable")]
+    public DateTime? PreOrderAvailabilityEndDateTimeUtc { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.EnableReturnFixDays")]
+    public bool EnableReturnFixDays { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.ReturnFixDays")]
+    public int ReturnFixDays { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.ReturnFeeByPercent")]
+    public bool ReturnFeeByPercent { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.ReturnFee")]
+    public decimal ReturnFee { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.EnableLatestReturn")]
+    public bool EnableLatestReturn { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.LatestReturnDays")]
+    public int LatestReturnDays { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.LatestReturnTimeUtc")]
+    [UIHint("DateTimeNullable")]
+    public DateTime? LatestReturnTimeUtc { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.EnableExpiredReturn")]
+    public bool EnableExpiredReturn { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.ExpiredReturnDates")]
+    public int ExpiredReturnDates { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.IsCouponCard")]
+    public bool IsCouponCard { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.EnabledVendorCommission")]
+    public bool EnabledVendorCommission { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.EnabledVendorCommissionRules")]
+    public bool EnabledVendorCommissionRules { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.PercentageCommissionRules")]
+    public bool PercentageCommissionRules { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.CommissionAmount")]
+    public decimal CommissionAmount { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.EnabledCustomerPriceRules")]
+    public bool EnabledCustomerPriceRules { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.EnabledCustomerShare")]
+    public bool EnabledCustomerShare { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.EnabledCustomerShareRules")]
+    public bool EnabledCustomerShareRules { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.CustomerShareAmount")]
+    public decimal CustomerShareAmount { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.PlatformRate")]
+    public decimal PlatformRate { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.FreeShippingAmount")]
+    public decimal FreeShippingAmount { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.MaxBackOrderStockQuantity")]
+    public int MaxBackOrderStockQuantity { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.BackOrderNotice")]
+    public string BackOrderNotice { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.RequireConsumePoints")]
+    public bool RequireConsumePoints { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.RequireConsumePointsCount")]
+    public int RequireConsumePointsCount { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.RequireConsumeShares")]
+    public bool RequireConsumeShares { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.RequireConsumeSharesAmount")]
+    public decimal RequireConsumeSharesAmount { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.VendorEntersPrice")]
+    public bool VendorEntersPrice { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.MinimumVendorEnteredPrice")]
+    public decimal MinimumVendorEnteredPrice { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Products.Fields.MaximumVendorEnteredPrice")]
+    public decimal MaximumVendorEnteredPrice { get; set; }
+
 
     #endregion
 }

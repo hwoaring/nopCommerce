@@ -102,6 +102,64 @@ public partial record VendorModel : BaseNopEntityModel, ILocalizedModel<VendorLo
 
     public string PrimaryStoreCurrencyCode { get; set; }
 
+    //新增属性
+
+    [UIHint("DateNullable")]
+    [NopResourceDisplayName("Admin.Vendors.Fields.CreatOnUtc")]
+    public DateTime? CreatOnUtc { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.EnableVendorForm")]
+    public bool EnableVendorForm { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.ManageOwnProductPrices")]
+    public bool ManageOwnProductPrices { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.UnifiedId")]
+    public long UnifiedId { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.ReferrerVendorId")]
+    public int ReferrerVendorId { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.VendorTypeId")]
+    public int VendorTypeId { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.NickName")]
+    public string NickName { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.PhoneNumber")]
+    public string PhoneNumber { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.VendorLevel")]
+    public int VendorLevel { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.VendorWarehouseId")]
+    public int VendorWarehouseId { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.ShoppingGuide")]
+    public bool ShoppingGuide { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.HasVendorStore")]
+    public bool HasVendorStore { get; set; }
+
+    [UIHint("Picture")]
+    [NopResourceDisplayName("Admin.Vendors.Fields.QrcodePictureId")]
+    public int QrcodePictureId { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.LimitQrcodeId")]
+    public int LimitQrcodeId { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.Approved")]
+    public bool Approved { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.Locked")]
+    public bool Locked { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.DisplayContactInfo")]
+    public bool DisplayContactInfo { get; set; }
+
+    [NopResourceDisplayName("Admin.Vendors.Fields.ContactInfoStyle")]
+    public int ContactInfoStyle { get; set; }
+
     #endregion
 
     #region Nested classes

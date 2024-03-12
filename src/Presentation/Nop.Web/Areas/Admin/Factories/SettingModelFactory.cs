@@ -18,6 +18,7 @@ using Nop.Core.Domain.Seo;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Vendors;
+using Nop.Core.Domain.Weixins;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Data.Configuration;
@@ -37,6 +38,8 @@ using Nop.Web.Areas.Admin.Models.Stores;
 using Nop.Web.Framework.Factories;
 using Nop.Web.Framework.Models.Extensions;
 using Nop.Web.Framework.WebOptimizer;
+
+
 
 namespace Nop.Web.Areas.Admin.Factories;
 
@@ -1867,6 +1870,34 @@ public partial class SettingModelFactory : ISettingModelFactory
 
         return model;
     }
+
+
+    //新增属性
+    
+    /// <summary>
+    /// 微信设置
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public virtual async Task<WeixinSettingsModel> PrepareWeixinSettingsModelAsync(WeixinSettingsModel model = null)
+    {
+        //load settings for a chosen store scope
+        var storeId = await _storeContext.GetActiveStoreScopeConfigurationAsync();
+        var weixinSettings = await _settingService.LoadSettingAsync<WeixinSettings>(storeId);
+
+        //fill in model values from the entity
+        model ??= weixinSettings.ToSettingsModel<WeixinSettingsModel>();
+
+        //fill in additional values (not existing in the entity)
+        model.ActiveStoreScopeConfiguration = storeId;
+
+        if (storeId <= 0)
+            return model;
+
+        return model;
+    }
+
+
 
     #endregion
 }

@@ -296,4 +296,10 @@ public static partial class AdminWidgetZones
     public static string WarningsButtons => "admin_warnings_buttons";
     public static string WarningsTop => "admin_warnings_top";
     public static string WidgetListButtons => "admin_widget_list_buttons";
+
+
+    //新增属性
+    //微信
+    public static string WeixinSettingsButtons => "admin_weixin_settings_buttons";
+    public static string WeixinDetailsBlock => "admin_weixin_details_block";
 }

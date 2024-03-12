@@ -1,4 +1,5 @@
 ﻿using Nop.Core.Domain.Common;
+using Nop.Core.Domain.Publics;
 
 namespace Nop.Core.Domain.Shares
 {
@@ -7,6 +8,7 @@ namespace Nop.Core.Domain.Shares
     /// </summary>
     public partial class SharePageRecords : BaseEntity, ISoftDeletedEntity
     {
+
         /// <summary>
         /// 实例ID
         /// </summary>
@@ -21,6 +23,16 @@ namespace Nop.Core.Domain.Shares
         /// 分享码（备用：用于减少URL参数）
         /// </summary>
         public int SharePageCode { get; set; }
+
+        /// <summary>
+        /// 分享链接（各种需要的参数组合成的url）
+        /// </summary>
+        public string Url { get; set; }
+
+        /// <summary>
+        /// 生成可以关注公众号的临时二维码ID（本系统的ID）
+        /// </summary>
+        public int QrCodeTemporaryId { get; set; }
 
         /// <summary>
         /// 分享用户ID
@@ -67,6 +79,15 @@ namespace Nop.Core.Domain.Shares
         /// </summary>
         public DateTime CreatedOnUtc { get; set; }
 
+
+        /// <summary>
+        /// 页面类型
+        /// </summary>
+        public PublicEntityType PublicEntityType
+        {
+            get => (PublicEntityType)PublicEntityTypeId;
+            set => PublicEntityTypeId = (int)value;
+        }
 
     }
 }

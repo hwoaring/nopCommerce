@@ -1,14 +1,13 @@
-﻿namespace Nop.Core.Domain.Vendors
+﻿namespace Nop.Core.Domain.Vendors;
+
+/// <summary>
+/// Vendor和Vendor中标签相关
+/// </summary>
+public partial class VendorTag : BaseEntity
 {
     /// <summary>
-    /// Vendor和Vendor中标签相关
+    /// Gets or sets the note
     /// </summary>
-    public partial class VendorTag : BaseEntity
-    {
-        /// <summary>
-        /// Gets or sets the note
-        /// </summary>
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-    }
 }

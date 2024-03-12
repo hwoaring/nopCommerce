@@ -295,69 +295,73 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
 
     #endregion
 
-        #region === 扩展属性 ===
+    #region === 扩展属性 ===
 
-        /// <summary>
-        /// 推荐用户ID（该单的推荐购买人）
-        /// </summary>
-        public int ReferrerCustomerId { get; set; }
+    /// <summary>
+    /// 推荐用户ID（该单的推荐购买人）
+    /// </summary>
+    public int ReferrerCustomerId { get; set; }
 
-        /// <summary>
-        /// 对外展示统一加密id（URL参数），作为订单号
-        /// </summary>
-        public long UnifiedId { get; set; }
+    /// <summary>
+    /// 对外展示统一加密id（URL参数），作为订单号
+    /// </summary>
+    public long UnifiedId { get; set; }
 
-        /// <summary>
-        /// 订单备注
-        /// </summary>
-        public string Notes { get; set; }
+    /// <summary>
+    /// 订单备注
+    /// </summary>
+    public string Notes { get; set; }
 
-        /// <summary>
-        /// 是否需要开开票/发票
-        /// </summary>
-        public bool NeedInvoice { get; set; }
+    /// <summary>
+    /// 是否需要开开票/发票
+    /// </summary>
+    public bool NeedInvoice { get; set; }
 
-        /// <summary>
-        /// 发票、开票信息ID
-        /// </summary>
-        public int OrderInvoiceId { get; set; }
+    /// <summary>
+    /// 发票、开票信息ID
+    /// </summary>
+    public int OrderInvoiceId { get; set; }
 
-        /// <summary>
-        /// 订单总邮费快递运费（向代理商结算运费）
-        /// </summary>
-        public decimal OrderShippingAmount { get; set; }
+    /// <summary>
+    /// 订单总邮费快递运费（向代理商结算运费）
+    /// </summary>
+    public decimal OrderShippingAmount { get; set; }
 
-        /// <summary>
-        /// 邮费快递公司名称Id
-        /// </summary>
-        public int ExpressCompanyId { get; set; }
+    /// <summary>
+    /// 邮费快递公司名称Id
+    /// </summary>
+    public int ExpressCompanyId { get; set; }
 
-        /// <summary>
-        /// 订单总邮费快递单号运单号
-        /// </summary>
-        public string OrderShippingNumber { get; set; }
+    /// <summary>
+    /// 订单总邮费快递单号运单号
+    /// </summary>
+    public string OrderShippingNumber { get; set; }
 
-        /// <summary>
-        /// 第三方交易调用接口提交的交易类型
-        /// </summary>
-        public string TradeType { get; set; }
+    /// <summary>
+    /// 第三方交易调用接口提交的交易类型
+    /// </summary>
+    public string TradeType { get; set; }
 
-        /// <summary>
-        /// 第三方交易单号
-        /// </summary>
-        public string TradeNumber { get; set; }
+    /// <summary>
+    /// 第三方交易单号
+    /// </summary>
+    public string TradeNumber { get; set; }
 
-        /// <summary>
-        /// 延时支付分钟数（默认=0未单独设置，默认为3天，如果产品单独设置后，采用产品设置）
-        /// 订单支付过期秒数（过期前支付，产品单独设置主要用于抢购商品）
-        /// 取默认设置和产品单独设置的最小时间
-        /// </summary>
-        public DateTime DelayPaymentExpireDateUtc { get; set; }
+    /// <summary>
+    /// 延时支付分钟数（默认=0未单独设置，默认为3天，如果产品单独设置后，采用产品设置）
+    /// 订单支付过期秒数（过期前支付，产品单独设置主要用于抢购商品）
+    /// 取默认设置和产品单独设置的最小时间
+    /// </summary>
+    public DateTime DelayPaymentExpireDateUtc { get; set; }
 
+    /// <summary>
+    /// 用户下单的场景值
+    /// </summary>
+    public int CurrentSceneId { get; set; }
 
-        #endregion
+    #endregion
 
-        #region Custom properties
+    #region Custom properties
 
     /// <summary>
     /// Gets or sets the order status

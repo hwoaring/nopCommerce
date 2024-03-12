@@ -21,7 +21,7 @@ namespace Nop.Data.Mapping.Builders.Shares
             table
                 .WithColumn(nameof(SharePageRecords.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(SharePageRecords.BalanceDateUtc)).AsDateTime2().Nullable()
-
+                .WithColumn(nameof(SharePageRecords.Url)).AsAnsiString(1024).Nullable()
                 ;
         }
 

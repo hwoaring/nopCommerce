@@ -129,6 +129,18 @@ public partial record CategoryModel : BaseNopEntityModel, IAclSupportedModel, ID
 
     public string PrimaryStoreCurrencyCode { get; set; }
 
+
+    //新增属性
+
+    [NopResourceDisplayName("Admin.Catalog.Categories.Fields.UnifiedId")]
+    public long UnifiedId { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Categories.Fields.PlatformRate")]
+    public decimal PlatformRate { get; set; }
+
+    [NopResourceDisplayName("Admin.Catalog.Categories.Fields.Summary")]
+    public string Summary { get; set; }
+
     #endregion
 }
 

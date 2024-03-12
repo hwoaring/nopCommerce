@@ -25,8 +25,8 @@ namespace Nop.Data.Mapping.Builders.Orders
                 .WithColumn(nameof(OrderInvoice.TaxNumber)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(OrderInvoice.BankAccount)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(OrderInvoice.Address)).AsString(128).Nullable()
+                .WithColumn(nameof(OrderInvoice.Email)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(OrderInvoice.Phone)).AsAnsiString(32).Nullable()
-
                 ;
         }
 

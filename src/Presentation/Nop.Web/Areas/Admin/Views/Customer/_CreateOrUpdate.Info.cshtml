@@ -519,6 +519,176 @@
             </div>
         </div>
     }
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Level" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Level" />
+            <span asp-validation-for="Level"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ReferrerCustomerId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ReferrerCustomerId" />
+            <span asp-validation-for="ReferrerCustomerId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="TempReferrerCustomerId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="TempReferrerCustomerId" />
+            <span asp-validation-for="TempReferrerCustomerId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="TempReferrerExpireDateUtc" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="TempReferrerExpireDateUtc" />
+            <span asp-validation-for="TempReferrerExpireDateUtc"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ReferrerSceneStr" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ReferrerSceneStr" />
+            <span asp-validation-for="ReferrerSceneStr"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="OpenId" />
+        </div>
+        <div class="col-md-9">
+            <div class="form-text-row">@Model.OpenId</div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="UnionId" />
+        </div>
+        <div class="col-md-9">
+            <div class="form-text-row">@Model.UnionId</div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ReferrerCode" />
+        </div>
+        <div class="col-md-9">
+            <div class="form-text-row">@Model.ReferrerCode</div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="QrcodePictureId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="QrcodePictureId" />
+            <span asp-validation-for="QrcodePictureId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Remark" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Remark" />
+            <span asp-validation-for="Remark"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="QrcodeValidated" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="QrcodeValidated" />
+            <span asp-validation-for="QrcodeValidated"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EmailValidated" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EmailValidated" />
+            <span asp-validation-for="EmailValidated"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="PhoneValidated" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PhoneValidated" />
+            <span asp-validation-for="PhoneValidated"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="PhoneToRevalidate" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PhoneToRevalidate" />
+            <span asp-validation-for="PhoneToRevalidate"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="AsReferrerEnable" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="AsReferrerEnable" />
+            <span asp-validation-for="AsReferrerEnable"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="AsRecommendedEnable" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="AsRecommendedEnable" />
+            <span asp-validation-for="AsRecommendedEnable"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="AsTempReferrerEnable" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="AsTempReferrerEnable" />
+            <span asp-validation-for="AsTempReferrerEnable"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="IgnoringWeChatPublicOauth" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="IgnoringWeChatPublicOauth" />
+            <span asp-validation-for="IgnoringWeChatPublicOauth"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="IgnoringWeChatAdminOauth" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="IgnoringWeChatAdminOauth" />
+            <span asp-validation-for="IgnoringWeChatAdminOauth"></span>
+        </div>
+    </div>
+
 </div>
 
 <nop-alert asp-alert-id="statesAlert" asp-alert-message="@T("Admin.Common.Alert.States.Failed")" />

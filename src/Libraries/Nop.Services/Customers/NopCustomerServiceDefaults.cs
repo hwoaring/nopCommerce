@@ -50,7 +50,7 @@ public static partial class NopCustomerServicesDefaults
     #endregion
 
     #region Customer roles
-    
+
     /// <summary>
     /// Gets a key for caching
     /// </summary>
@@ -76,7 +76,7 @@ public static partial class NopCustomerServicesDefaults
     /// Gets a key pattern to clear cache
     /// </summary>
     public static string CustomerCustomerRolesPrefix => "Nop.customer.customerrole.";
-    
+
     #endregion
 
     #region Addresses
@@ -125,33 +125,33 @@ public static partial class NopCustomerServicesDefaults
 
     #endregion
 
-        #endregion
+    #endregion
 
-        #region === 扩展属性 ===
+    #region === 扩展属性 ===
 
-        /// <summary>
-        /// Openid缓存键
-        /// </summary>
-        public static CacheKey CustomerByOpenidCacheKey => new("Nop.customer.byopenid.{0}");
+    /// <summary>
+    /// Openid缓存键
+    /// </summary>
+    public static CacheKey CustomerByOpenidCacheKey => new("Nop.customer.byopenid.{0}");
 
-        /// <summary>
-        /// 获取推荐人URL参数推荐编码
-        /// </summary>
-        public static string CustomerQueryReferrerCode => "refcode";
+    /// <summary>
+    /// 获取推荐人URL参数推荐编码
+    /// </summary>
+    public static string CustomerQueryReferrerCode => "refcode";
 
-        /// <summary>
-        /// 获取推荐人URL参数Id
-        /// </summary>
-        public static string CustomerQueryReferrerId => "refid";
-        /// <summary>
-        /// 获取推荐人URL参数OpenId
-        /// </summary>
-        public static string CustomerQueryReferrerOpenId => "refopenid";
-        /// <summary>
-        /// 获取推荐人URL参数Guid
-        /// </summary>
-        public static string CustomerQueryReferrerGuid => "refgid";
+    /// <summary>
+    /// 获取推荐人URL参数Id
+    /// </summary>
+    public static string CustomerQueryReferrerId => "refid";
+    /// <summary>
+    /// 获取推荐人URL参数OpenId
+    /// </summary>
+    public static string CustomerQueryReferrerOpenId => "refopenid";
+    /// <summary>
+    /// 获取推荐人URL参数Guid
+    /// </summary>
+    public static string CustomerQueryReferrerGuid => "refgid";
 
-        #endregion
-    }
+    #endregion
+
 }

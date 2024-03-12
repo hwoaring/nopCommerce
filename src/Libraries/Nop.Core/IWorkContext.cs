@@ -67,34 +67,39 @@ public partial interface IWorkContext
     /// <returns>A task that represents the asynchronous operation</returns>
     Task<TaxDisplayType> GetTaxDisplayTypeAsync();
 
-        /// <summary>
-        /// Sets current tax display type
-        /// </summary>
-        /// <returns>A task that represents the asynchronous operation</returns>
-        Task SetTaxDisplayTypeAsync(TaxDisplayType taxDisplayType);
+    /// <summary>
+    /// Sets current tax display type
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    Task SetTaxDisplayTypeAsync(TaxDisplayType taxDisplayType);
 
 
 
-        #region === 扩展方法 ===
+    #region === 扩展方法 ===
 
-        /// <summary>
-        /// 绑定Openid到Customer
-        /// </summary>
-        /// <param name="customer"></param>
-        /// <param name="openId"></param>
-        /// <param name="isSnapshotuser"></param>
-        /// <returns></returns>
-        Task<Customer> SetCurrentCustomerOpenIdAsync(Customer customer, string openId, int? isSnapshotuser);
+    /// <summary>
+    /// 绑定Openid到Customer
+    /// </summary>
+    /// <param name="customer"></param>
+    /// <param name="openId"></param>
+    /// <param name="isSnapshotuser"></param>
+    /// <returns></returns>
+    Task<Customer> SetCurrentCustomerOpenIdAsync(Customer customer, string openId, int? isSnapshotuser);
 
 
-        /// <summary>
-        /// 获取当前用户的推荐人信息（已经判断临时推荐人和永久推荐人）
-        /// </summary>
-        /// <param name="customer"></param>
-        /// <returns></returns>
-        Task<Customer> GetCurrentReferrerCustomerAsync(Customer customer = null);
+    /// <summary>
+    /// 获取当前用户的推荐人信息（已经判断临时推荐人和永久推荐人）
+    /// </summary>
+    /// <param name="forceRefresh">是否强制刷新</param>
+    /// <returns></returns>
+    Task<Customer> GetCurrentReferrerCustomerAsync();
 
-        #endregion
+    /// <summary>
+    /// 设置当前用户的推荐人信息（如果不存在，则新建默认值）
+    /// </summary>
+    /// <param name="referrerCustomer"></param>
+    /// <returns></returns>
+    Task SetCurrentReferrerCustomerAsync(Customer referrerCustomer = null);
+    #endregion
 
-    }
 }

@@ -10,9 +10,8 @@ public enum PictureType
     /// </summary>
     Entity = 1,
 
-        /// <summary>
-        /// Avatar
-        /// </summary>
-        Avatar = 10,
-    }
+    /// <summary>
+    /// Avatar
+    /// </summary>
+    Avatar = 10,
 }

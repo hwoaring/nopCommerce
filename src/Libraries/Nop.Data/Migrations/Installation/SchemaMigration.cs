@@ -178,6 +178,20 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<VendorAttributeValue>();
             Create.TableFor<VendorNote>();
 
+            //扩展用户相关 Customer
+            Create.TableFor<CustomerReferrer>();
+            Create.TableFor<CustomerReferrerSetting>();
+
+            //扩展品牌相关 Brand
+            Create.TableFor<Brand>();  //产品商标
+            Create.TableFor<BrandAuthorize>();
+            Create.TableFor<BrandPicture>();
+            Create.TableFor<BrandVideo>();
+            Create.TableFor<BrandTemplate>();
+            Create.TableFor<BrandTag>();
+            Create.TableFor<BrandBrandTagMapping>();
+            Create.TableFor<BrandFavoriteMapping>();
+
 
             //扩展订单相关 Orders
             Create.TableFor<OrderInvoice>(); //订单发票
@@ -190,8 +204,14 @@ namespace Nop.Data.Migrations.Installation
             //扩展微信相关 Weixins
             Create.TableFor<WeixinUser>();  //微信用户信息
             Create.TableFor<WeixinAccount>();  //公众号账号配置信息
+            Create.TableFor<QrCodeLimit>();
+            Create.TableFor<QrCodeLimitCustomerMapping>();
+            Create.TableFor<QrCodeTemporary>();
+            Create.TableFor<WeixinMessageResponse>();
+            Create.TableFor<WeixinMessageTemplate>();
+            Create.TableFor<WeixinOAuth>();
+            Create.TableFor<WeixinTag>();
 
-            
 
             //扩展产品及分类 Catalog
             Create.TableFor<Product3rdSalePlatform>();
@@ -239,12 +259,13 @@ namespace Nop.Data.Migrations.Installation
             //扩展供应商相关 Vendors
             Create.TableFor<VendorStore>();
             Create.TableFor<VendorStoreCategory>();
+            Create.TableFor<VendorSaleProduct>();
+            Create.TableFor<VendorCheckoutPrice>();
             Create.TableFor<VendorProductGroup>();
             Create.TableFor<VendorProductGroupSellProduct>();
             Create.TableFor<RelateVendorStoreMapping>();
             Create.TableFor<Vendor3rdSaleOrder>();
             Create.TableFor<VendorFavoriteMapping>();
-            Create.TableFor<VendorSaleProduct>();
             Create.TableFor<VendorSaleUrl>();
             Create.TableFor<VendorScene>();
             Create.TableFor<VendorSms>();
@@ -267,20 +288,11 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<VendorWarehouse>();
 
 
+            //扩展Stores相关
+
+
             //扩展投票相关 Polls
             Create.TableFor<PollVotingLimit>();
-
-
-            //扩展品牌相关 Brand
-            Create.TableFor<Brand>();  //产品商标
-            Create.TableFor<BrandAuthorize>();
-            Create.TableFor<BrandPicture>();
-            Create.TableFor<BrandVideo>();
-            Create.TableFor<BrandTemplate>();
-            Create.TableFor<BrandTag>();
-            Create.TableFor<BrandBrandTagMapping>();
-            Create.TableFor<BrandFavoriteMapping>();
-
 
             //扩展分享相关 Shares
             Create.TableFor<SharePage>();
@@ -288,6 +300,8 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<SharePageRecords>();
             Create.TableFor<SharePageViews>();
             Create.TableFor<SharePageSharePictureMapping>();
+            Create.TableFor<SharePermission>();
+
 
             //公共相关 Publics
             Create.TableFor<PublicTag>();
@@ -304,6 +318,7 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<AntiFakeProduct>();
             Create.TableFor<AntiFakeProductTemplate>();
             Create.TableFor<AntiFakeBoxCode>();
+            Create.TableFor<AntiFakeBoxVendorRecords>();
             Create.TableFor<AntiFakeCode>();
             Create.TableFor<AntiFakeBottleCode>();
             Create.TableFor<AntiFakeCoverCode>();
@@ -316,6 +331,7 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<AssetsBank>();
             Create.TableFor<AssetsBankAccount>();
             Create.TableFor<AssetsCashsHistory>();
+            Create.TableFor<AssetsCashsVirtualHistory>();
             Create.TableFor<AssetsCouponsHistory>();
             Create.TableFor<AssetsMemberCard>();
             Create.TableFor<AssetsPointsHistory>();
@@ -329,20 +345,20 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<FormRecord>();
 
             //个人关系扩展 RelationShips
-            Create.TableFor<PersonalRelationCooperater>();
-            Create.TableFor<PersonalRelationFollowup>();
             Create.TableFor<PersonalRelationShip>();
             Create.TableFor<PersonalRelationTag>();
+            Create.TableFor<PersonalRelationCooperater>();
+            Create.TableFor<PersonalRelationFollowup>();
             Create.TableFor<PersonalRelationTagMapping>();
 
             //短信扩展 SMS
             Create.TableFor<SmsAccount>();
-            Create.TableFor<SmsPlatform>();
-            Create.TableFor<SmsPublicCombination>();
-            Create.TableFor<SmsSendBlackList>();
-            Create.TableFor<SmsSendRecords>();
             Create.TableFor<SmsSign>();
+            Create.TableFor<SmsPlatform>();
             Create.TableFor<SmsTemplate>();
+            Create.TableFor<SmsPublicCombination>();
+            Create.TableFor<SmsSendRecords>();
+            Create.TableFor<SmsSendBlackList>();
 
         }
     }

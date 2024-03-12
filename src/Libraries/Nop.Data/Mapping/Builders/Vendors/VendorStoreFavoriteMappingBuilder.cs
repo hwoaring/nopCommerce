@@ -3,29 +3,28 @@ using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Vendors;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Vendors
+namespace Nop.Data.Mapping.Builders.Vendors;
+
+/// <summary>
+/// Represents a vendor entity builder
+/// </summary>
+public partial class VendorStoreFavoriteMappingBuilder : NopEntityBuilder<VendorStoreFavoriteMapping>
 {
+    #region Methods
+
     /// <summary>
-    /// Represents a vendor entity builder
+    /// Apply entity configuration
     /// </summary>
-    public partial class VendorStoreFavoriteMappingBuilder : NopEntityBuilder<VendorStoreFavoriteMapping>
+    /// <param name="table">Create table expression builder</param>
+    public override void MapEntity(CreateTableExpressionBuilder table)
     {
-        #region Methods
+        table
+            .WithColumn(nameof(VendorStoreFavoriteMapping.VendorStoreId)).AsInt32().ForeignKey<VendorStore>()
+            .WithColumn(nameof(VendorStoreFavoriteMapping.CustomerId)).AsInt32().ForeignKey<Customer>()
 
-        /// <summary>
-        /// Apply entity configuration
-        /// </summary>
-        /// <param name="table">Create table expression builder</param>
-        public override void MapEntity(CreateTableExpressionBuilder table)
-        {
-            table
-                .WithColumn(nameof(VendorStoreFavoriteMapping.VendorStoreId)).AsInt32().ForeignKey<VendorStore>()
-                .WithColumn(nameof(VendorStoreFavoriteMapping.CustomerId)).AsInt32().ForeignKey<Customer>()
-
-                ;
-        }
-
-        #endregion
-
+            ;
     }
+
+    #endregion
+
 }

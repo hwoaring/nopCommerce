@@ -136,6 +136,7 @@ public static partial class NopCommonDefaults
     /// {3} : store URL
     /// {4} : language code
     /// {5} : culture name
+    /// "installation-completed?version={0}&local={1}&email={2}&url={3}&language={4}&culture={5}";
     /// </remarks>
     public static string NopInstallationCompletedPath => "installation-completed?version={0}&local={1}&email={2}&url={3}&language={4}&culture={5}";
 

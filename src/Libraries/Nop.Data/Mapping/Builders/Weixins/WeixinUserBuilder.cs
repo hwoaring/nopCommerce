@@ -21,6 +21,7 @@ namespace Nop.Data.Mapping.Builders.Weixins
             table
                 .WithColumn(nameof(WeixinUser.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(WeixinUser.OpenId)).AsAnsiString(64).NotNullable()
+                .WithColumn(nameof(WeixinUser.WeixinId)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(WeixinUser.UnionId)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(WeixinUser.NickName)).AsString(64).Nullable()
                 .WithColumn(nameof(WeixinUser.Province)).AsString(32).Nullable()

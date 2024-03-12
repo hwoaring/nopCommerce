@@ -17,24 +17,23 @@ public partial class SpecificationAttribute : BaseEntity, ILocalizedEntity
     /// </summary>
     public int DisplayOrder { get; set; }
 
-        /// <summary>
-        /// Gets or sets the specification attribute group identifier
-        /// </summary>
-        public int? SpecificationAttributeGroupId { get; set; }
+    /// <summary>
+    /// Gets or sets the specification attribute group identifier
+    /// </summary>
+    public int? SpecificationAttributeGroupId { get; set; }
 
 
-        #region
+    #region
 
-        /// <summary>
-        /// 描述
-        /// </summary>
-        public string Description { get; set; }
+    /// <summary>
+    /// 描述
+    /// </summary>
+    public string Description { get; set; }
 
-        /// <summary>
-        /// 内容
-        /// </summary>
-        public string Content { get; set; }
+    /// <summary>
+    /// 内容
+    /// </summary>
+    public string Content { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

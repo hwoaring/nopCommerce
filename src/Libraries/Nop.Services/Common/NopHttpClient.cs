@@ -79,6 +79,8 @@ public partial class NopHttpClient
     /// </returns>
     public virtual async Task<string> GetLicenseCheckDetailsAsync()
     {
+        return string.Empty;
+
         var isLocal = _webHelper.IsLocalRequest(_httpContextAccessor.HttpContext.Request);
         var storeUrl = _webHelper.GetStoreLocation();
         if (!_adminAreaSettings.CheckLicense || isLocal || storeUrl.Contains("localhost"))
@@ -107,6 +109,12 @@ public partial class NopHttpClient
     /// </returns>
     public virtual async Task<RssFeed> GetNewsRssAsync()
     {
+        return new RssFeed(
+            string.Empty,
+            string.Empty,
+            new Uri("http://www.yourdomain.com"),
+            DateTimeOffset.Now);
+
         //prepare URL to request
         var language = _languageService.GetTwoLetterIsoLanguageName(await _workContext.GetWorkingLanguageAsync());
         var url = string.Format(NopCommonDefaults.NopNewsRssPath,

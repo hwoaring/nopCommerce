@@ -13,57 +13,57 @@ public static partial class NopLinksDefaults
         /// <summary>
         /// Gets the main site page
         /// </summary>
-        public static string Main => "https://www.nopcommerce.com/";
+        public static string Main => "https://www.yourdomain.com/";
 
         /// <summary>
         /// Gets the boards page
         /// </summary>
-        public static string Boards => "https://www.nopcommerce.com/boards/";
+        public static string Boards => "https://www.yourdomain.com/boards/";
 
         /// <summary>
         /// Gets the translations page
         /// </summary>
-        public static string Translations => "https://www.nopcommerce.com/translations/";
+        public static string Translations => "https://www.yourdomain.com/translations/";
 
         /// <summary>
         /// Gets the copyright removal key page
         /// </summary>
-        public static string CopyrightRemovalKey => "https://www.nopcommerce.com/nopcommerce-copyright-removal-key";
+        public static string CopyrightRemovalKey => "https://www.yourdomain.com/nopcommerce-copyright-removal-key";
 
         /// <summary>
         /// Gets the premium support services page
         /// </summary>
-        public static string PremiumSupportServices => "https://www.nopcommerce.com/nopcommerce-premium-support-services";
+        public static string PremiumSupportServices => "https://www.yourdomain.com/nopcommerce-premium-support-services";
 
         /// <summary>
         /// Gets the marketplace page
         /// </summary>
-        public static string Marketplace => "https://www.nopcommerce.com/marketplace/";
+        public static string Marketplace => "https://www.yourdomain.com/marketplace/";
 
         /// <summary>
         /// Gets the payment plugins page
         /// </summary>
-        public static string PaymentPlugins => "https://www.nopcommerce.com/en/marketplace/?category=payment-modules";
+        public static string PaymentPlugins => "https://www.yourdomain.com/en/marketplace/?category=payment-modules";
 
         /// <summary>
         /// Gets the shipping plugins page
         /// </summary>
-        public static string ShippingPlugins => "https://www.nopcommerce.com/en/marketplace/?category=shipping-delivery";
+        public static string ShippingPlugins => "https://www.yourdomain.com/en/marketplace/?category=shipping-delivery";
 
         /// <summary>
         /// Gets the tax plugins page
         /// </summary>
-        public static string TaxPlugins => "https://www.nopcommerce.com/en/marketplace/?category=taxes";
+        public static string TaxPlugins => "https://www.yourdomain.com/en/marketplace/?category=taxes";
 
         /// <summary>
         /// Gets the themes page
         /// </summary>
-        public static string Themes => "https://www.nopcommerce.com/themes/";
+        public static string Themes => "https://www.yourdomain.com/themes/";
 
         /// <summary>
         /// Gets the states and provinces package page
         /// </summary>
-        public static string StatesPackage => "https://www.nopcommerce.com/all-states-provinces-package-nopcommerce-team/";
+        public static string StatesPackage => "https://www.yourdomain.com/all-states-provinces-package-nopcommerce-team/";
     }
 
     /// <summary>

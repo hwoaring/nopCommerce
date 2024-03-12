@@ -35,7 +35,7 @@ namespace Nop.Core.Domain.Shares
         /// <summary>
         /// 高清图片下载地址
         /// </summary>
-        public int DownloadId { get; set; }
+        public int? DownloadId { get; set; }
 
         /// <summary>
         /// 使用第三方下载地址

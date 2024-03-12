@@ -21,11 +21,13 @@ using Nop.Core.Domain.Polls;
 using Nop.Core.Domain.ScheduleTasks;
 using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Seo;
+using Nop.Core.Domain.Shares;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Stores;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Topics;
 using Nop.Core.Domain.Vendors;
+using Nop.Core.Domain.Weixins;
 using Nop.Core.Infrastructure.Mapper;
 using Nop.Data.Configuration;
 using Nop.Services.Authentication.External;
@@ -56,6 +58,7 @@ using Nop.Web.Areas.Admin.Models.Payments;
 using Nop.Web.Areas.Admin.Models.Plugins;
 using Nop.Web.Areas.Admin.Models.Polls;
 using Nop.Web.Areas.Admin.Models.Settings;
+using Nop.Web.Areas.Admin.Models.Shares;
 using Nop.Web.Areas.Admin.Models.Shipping;
 using Nop.Web.Areas.Admin.Models.ShoppingCart;
 using Nop.Web.Areas.Admin.Models.Stores;
@@ -110,6 +113,10 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
         CreateTopicsMaps();
         CreateVendorsMaps();
         CreateWarehouseMaps();
+
+        //新增属性
+        CreateWeixinsMaps();
+        CreateSharesMaps();
 
         //add some generic mapping rules
         this.Internal().ForAllMaps((mapConfiguration, map) =>
@@ -490,6 +497,7 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
 
         //products
         CreateMap<Product, ProductModel>()
+            .ForMember(model => model.SharePage, options => options.Ignore())  //新增
             .ForMember(model => model.AddPictureModel, options => options.Ignore())
             .ForMember(model => model.AssociatedProductSearchModel, options => options.Ignore())
             .ForMember(model => model.AssociatedToProductId, options => options.Ignore())
@@ -892,6 +900,9 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(model => model.CustomerBackInStockSubscriptionSearchModel, options => options.Ignore());
 
         CreateMap<CustomerModel, Customer>()
+            .ForMember(entity => entity.OpenId, options => options.Ignore()) //新增
+            .ForMember(entity => entity.UnionId, options => options.Ignore()) //新增
+            .ForMember(entity => entity.ReferrerCode, options => options.Ignore()) //新增
             .ForMember(entity => entity.CustomerGuid, options => options.Ignore())
             .ForMember(entity => entity.CreatedOnUtc, options => options.Ignore())
             .ForMember(entity => entity.LastActivityDateUtc, options => options.Ignore())
@@ -1691,6 +1702,7 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(model => model.VendorNoteSearchModel, options => options.Ignore())
             .ForMember(model => model.PrimaryStoreCurrencyCode, options => options.Ignore());
         CreateMap<VendorModel, Vendor>()
+            .ForMember(entity => entity.UnifiedId, options => options.Ignore()) //新增
             .ForMember(entity => entity.Deleted, options => options.Ignore());
 
         CreateMap<VendorNote, VendorNoteModel>()
@@ -1733,6 +1745,29 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
         CreateMap<WarehouseModel, Warehouse>()
             .ForMember(entity => entity.AddressId, options => options.Ignore());
     }
+
+
+    //新增属性
+    /// <summary>
+    /// 微信Weixin
+    /// </summary>
+    protected virtual void CreateWeixinsMaps()
+    {
+        CreateMap<WeixinSettings, WeixinSettingsModel>();
+        CreateMap<WeixinSettingsModel, WeixinSettings>();
+    }
+
+    /// <summary>
+    /// 分享Share
+    /// </summary>
+    protected virtual void CreateSharesMaps()
+    {
+        CreateMap<SharePage, SharePageModel>();
+        CreateMap<SharePageModel, SharePage>();
+    }
+
+
+
 
     #endregion
 

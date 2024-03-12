@@ -19,6 +19,7 @@ using Nop.Core.Domain.Seo;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Vendors;
+using Nop.Core.Domain.Weixins;
 using Nop.Core.Events;
 using Nop.Core.Infrastructure;
 using Nop.Data;
@@ -2063,6 +2064,57 @@ public partial class SettingController : BaseAdminController
         }
 
         return Json(new { Result = string.Empty });
+    }
+
+
+    //新增属性
+
+    public virtual async Task<IActionResult> WeixinAsync()
+    {
+        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSettings))
+            return AccessDeniedView();
+
+        //prepare model
+        var model = await _settingModelFactory.PrepareWeixinSettingsModelAsync();
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public virtual async Task<IActionResult> WeixinAsync(WeixinSettingsModel model)
+    {
+        if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSettings))
+            return AccessDeniedView();
+
+        if (ModelState.IsValid)
+        {
+            //load settings for a chosen store scope
+            var storeScope = await _storeContext.GetActiveStoreScopeConfigurationAsync();
+            var weixinSettings = await _settingService.LoadSettingAsync<WeixinSettings>(storeScope);
+            weixinSettings = model.ToSettings(weixinSettings);
+
+            //we do not clear cache after each setting update.
+            //this behavior can increase performance because cached settings will not be cleared 
+            //and loaded from database after each update
+            await _settingService.SaveSettingAsync(weixinSettings);
+
+
+            //now clear settings cache
+            await _settingService.ClearCacheAsync();
+
+            //activity log
+            await _customerActivityService.InsertActivityAsync("EditSettings", await _localizationService.GetResourceAsync("ActivityLog.EditSettings"));
+
+            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Configuration.Updated"));
+
+            return RedirectToAction("Weixin");
+        }
+
+        //prepare model
+        model = await _settingModelFactory.PrepareWeixinSettingsModelAsync(model);
+
+        //if we got this far, something failed, redisplay form
+        return View(model);
     }
 
     #endregion

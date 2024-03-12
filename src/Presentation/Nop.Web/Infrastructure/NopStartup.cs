@@ -109,6 +109,10 @@ public partial class NopStartup : INopStartup
 
         //helpers classes
         services.AddScoped<ITinyMceHelper, TinyMceHelper>();
+
+        //新增属性
+        services.AddScoped<ISharePageModelFactory, SharePageModelFactory>();
+
     }
 
     /// <summary>

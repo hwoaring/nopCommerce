@@ -6,12 +6,12 @@
     public partial class NewsItemProductMapping : BaseEntity
     {
         /// <summary>
-        /// 第一个产品ID
+        /// 新闻ID
         /// </summary>
         public int NewsItemId { get; set; }
 
         /// <summary>
-        /// 产品ID
+        /// 绑定展示的产品ID
         /// </summary>
         public int ProductId { get; set; }
 

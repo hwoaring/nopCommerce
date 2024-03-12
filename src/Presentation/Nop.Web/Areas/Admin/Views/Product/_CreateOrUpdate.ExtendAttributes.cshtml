@@ -1,0 +1,500 @@
+﻿
+@* 新增扩展属性 *@
+
+@model ProductModel
+@using Nop.Core.Domain.Catalog;
+@using Nop.Services
+
+<div class="card-body">
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CoverImagePictureId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="CoverImagePictureId" />
+            <span asp-validation-for="CoverImagePictureId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Url" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Url" />
+            <span asp-validation-for="Url"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CODSupport" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="CODSupport" />
+            <span asp-validation-for="CODSupport"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Audited" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Audited" />
+            <span asp-validation-for="Audited"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="PublicDisplay" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PublicDisplay" />
+            <span asp-validation-for="PublicDisplay"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="LimitToVendor" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="LimitToVendor" />
+            <span asp-validation-for="LimitToVendor"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SelfSupport" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="SelfSupport" />
+            <span asp-validation-for="SelfSupport"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnablePoints" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnablePoints" />
+            <span asp-validation-for="EnablePoints"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="MarkAsHot" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="MarkAsHot" />
+            <span asp-validation-for="MarkAsHot"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="MarkAsRecommend" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="MarkAsRecommend" />
+            <span asp-validation-for="MarkAsRecommend"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SpecialOfferProduct" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="SpecialOfferProduct" />
+            <span asp-validation-for="SpecialOfferProduct"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="AllowComments" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="AllowComments" />
+            <span asp-validation-for="AllowComments"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DiscountedProduct" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DiscountedProduct" />
+            <span asp-validation-for="DiscountedProduct"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="OnlyForNewUser" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="OnlyForNewUser" />
+            <span asp-validation-for="OnlyForNewUser"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="RequireVerify" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="RequireVerify" />
+            <span asp-validation-for="RequireVerify"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="UsageRules" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="UsageRules" />
+            <span asp-validation-for="UsageRules"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DelayPaymentMinutes" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DelayPaymentMinutes" />
+            <span asp-validation-for="DelayPaymentMinutes"></span>
+        </div>
+    </div>
+
+    
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="UnifiedId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="UnifiedId" />
+            <span asp-validation-for="UnifiedId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableViewsCount" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableViewsCount" />
+            <span asp-validation-for="EnableViewsCount"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ViewsCount" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ViewsCount" />
+            <span asp-validation-for="ViewsCount"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="InitialSalesCount" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="InitialSalesCount" />
+            <span asp-validation-for="InitialSalesCount"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="BrandId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="BrandId" />
+            <span asp-validation-for="BrandId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="PaymentReduceInventory" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PaymentReduceInventory" />
+            <span asp-validation-for="PaymentReduceInventory"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="PreOrderHasDatePrices" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PreOrderHasDatePrices" />
+            <span asp-validation-for="PreOrderHasDatePrices"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="PreOrderAvailabilityEndDateTimeUtc" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PreOrderAvailabilityEndDateTimeUtc" />
+            <span asp-validation-for="PreOrderAvailabilityEndDateTimeUtc"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableReturnFixDays" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableReturnFixDays" />
+            <span asp-validation-for="EnableReturnFixDays"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ReturnFixDays" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ReturnFixDays" />
+            <span asp-validation-for="ReturnFixDays"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ReturnFeeByPercent" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ReturnFeeByPercent" />
+            <span asp-validation-for="ReturnFeeByPercent"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ReturnFee" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ReturnFee" />
+            <span asp-validation-for="ReturnFee"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableLatestReturn" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableLatestReturn" />
+            <span asp-validation-for="EnableLatestReturn"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="LatestReturnDays" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="LatestReturnDays" />
+            <span asp-validation-for="LatestReturnDays"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="LatestReturnTimeUtc" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="LatestReturnTimeUtc" />
+            <span asp-validation-for="LatestReturnTimeUtc"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableExpiredReturn" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableExpiredReturn" />
+            <span asp-validation-for="EnableExpiredReturn"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ExpiredReturnDates" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ExpiredReturnDates" />
+            <span asp-validation-for="ExpiredReturnDates"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="IsCouponCard" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="IsCouponCard" />
+            <span asp-validation-for="IsCouponCard"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnabledVendorCommission" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnabledVendorCommission" />
+            <span asp-validation-for="EnabledVendorCommission"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnabledVendorCommissionRules" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnabledVendorCommissionRules" />
+            <span asp-validation-for="EnabledVendorCommissionRules"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="PercentageCommissionRules" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PercentageCommissionRules" />
+            <span asp-validation-for="PercentageCommissionRules"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CommissionAmount" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="CommissionAmount" />
+            <span asp-validation-for="CommissionAmount"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnabledCustomerPriceRules" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnabledCustomerPriceRules" />
+            <span asp-validation-for="EnabledCustomerPriceRules"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnabledCustomerShare" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnabledCustomerShare" />
+            <span asp-validation-for="EnabledCustomerShare"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnabledCustomerShareRules" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnabledCustomerShareRules" />
+            <span asp-validation-for="EnabledCustomerShareRules"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CustomerShareAmount" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="CustomerShareAmount" />
+            <span asp-validation-for="CustomerShareAmount"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="PlatformRate" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PlatformRate" />
+            <span asp-validation-for="PlatformRate"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="FreeShippingAmount" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="FreeShippingAmount" />
+            <span asp-validation-for="FreeShippingAmount"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="MaxBackOrderStockQuantity" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="MaxBackOrderStockQuantity" />
+            <span asp-validation-for="MaxBackOrderStockQuantity"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="BackOrderNotice" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="BackOrderNotice" />
+            <span asp-validation-for="BackOrderNotice"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="RequireConsumePoints" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="RequireConsumePoints" />
+            <span asp-validation-for="RequireConsumePoints"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="RequireConsumePointsCount" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="RequireConsumePointsCount" />
+            <span asp-validation-for="RequireConsumePointsCount"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="RequireConsumeShares" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="RequireConsumeShares" />
+            <span asp-validation-for="RequireConsumeShares"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="RequireConsumeSharesAmount" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="RequireConsumeSharesAmount" />
+            <span asp-validation-for="RequireConsumeSharesAmount"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="VendorEntersPrice" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="VendorEntersPrice" />
+            <span asp-validation-for="VendorEntersPrice"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="MinimumVendorEnteredPrice" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="MinimumVendorEnteredPrice" />
+            <span asp-validation-for="MinimumVendorEnteredPrice"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="MaximumVendorEnteredPrice" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="MaximumVendorEnteredPrice" />
+            <span asp-validation-for="MaximumVendorEnteredPrice"></span>
+        </div>
+    </div>
+
+
+</div>

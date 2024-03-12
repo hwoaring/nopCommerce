@@ -21,7 +21,6 @@ namespace Nop.Data.Mapping.Builders.News
         {
             table
                 .WithColumn(nameof(NewsCommentFavoriteMapping.NewsCommentId)).AsInt32().ForeignKey<NewsComment>()
-                .WithColumn(nameof(NewsCommentFavoriteMapping.CustomerId)).AsInt32().ForeignKey<Customer>()
                 ;
         }
 

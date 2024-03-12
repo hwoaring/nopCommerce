@@ -96,60 +96,59 @@ public partial class OrderItem : BaseEntity
     /// </summary>
     public DateTime? RentalStartDateUtc { get; set; }
 
-        /// <summary>
-        /// Gets or sets the rental product end date (null if it's not a rental product)
-        /// </summary>
-        public DateTime? RentalEndDateUtc { get; set; }
+    /// <summary>
+    /// Gets or sets the rental product end date (null if it's not a rental product)
+    /// </summary>
+    public DateTime? RentalEndDateUtc { get; set; }
 
 
 
-        #region
+    #region
 
-        /// <summary>
-        /// 是否延期发货订单（进入顺位排序）
-        /// </summary>
-        public bool BackOrderItem { get; set; }
+    /// <summary>
+    /// 是否延期发货订单（进入顺位排序）
+    /// </summary>
+    public bool BackOrderItem { get; set; }
 
-        /// <summary>
-        /// 是否需要验证审核：本产品需要后台审核验证后才能付款
-        /// </summary>
-        public bool RequireVerify { get; set; }
+    /// <summary>
+    /// 是否需要验证审核：本产品需要后台审核验证后才能付款
+    /// </summary>
+    public bool RequireVerify { get; set; }
 
-        /// <summary>
-        /// 是否已经验证审核：本产品需要后台审核验证后才能付款
-        /// </summary>
-        public bool Verified { get; set; }
+    /// <summary>
+    /// 是否已经验证审核：本产品需要后台审核验证后才能付款
+    /// </summary>
+    public bool Verified { get; set; }
 
-        /// <summary>
-        /// 对外展示统一加密id（URL参数），作为单个产品的订单号
-        /// </summary>
-        public long UnifiedId { get; set; }
+    /// <summary>
+    /// 对外展示统一加密id（URL参数），作为单个产品的订单号
+    /// </summary>
+    public long UnifiedId { get; set; }
 
-        /// <summary>
-        /// 订单产品备注
-        /// </summary>
-        public string Notes { get; set; }
+    /// <summary>
+    /// 订单产品备注
+    /// </summary>
+    public string Notes { get; set; }
 
-        /// <summary>
-        /// 使用时间（订单产品使用时间）
-        /// </summary>
-        public DateTime? UsageDateOnUtc { get; set; }
+    /// <summary>
+    /// 使用时间（订单产品使用时间）
+    /// </summary>
+    public DateTime? UsageDateOnUtc { get; set; }
 
-        /// <summary>
-        /// 订单总邮费快递运费（向代理商结算运费）
-        /// </summary>
-        public decimal OrderShippingAmount { get; set; }
+    /// <summary>
+    /// 订单总邮费快递运费（向代理商结算运费）
+    /// </summary>
+    public decimal OrderShippingAmount { get; set; }
 
-        /// <summary>
-        /// 订单总邮费快递单号运单号
-        /// </summary>
-        public string OrderShippingNumber { get; set; }
+    /// <summary>
+    /// 订单总邮费快递单号运单号
+    /// </summary>
+    public string OrderShippingNumber { get; set; }
 
-        /// <summary>
-        /// 产品订单备注选项，多项以逗号分开
-        /// </summary>
-        public string ProductOrderNoticeIdList { get; set; }
+    /// <summary>
+    /// 产品订单备注选项，多项以逗号分开
+    /// </summary>
+    public string ProductOrderNoticeIdList { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

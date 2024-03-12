@@ -32,7 +32,7 @@ public partial class OrderBuilder : NopEntityBuilder<Order>
                 .WithColumn(nameof(Order.Notes)).AsString(128).Nullable()
                 .WithColumn(nameof(Order.OrderShippingNumber)).AsString(64).Nullable()
                 .WithColumn(nameof(Order.TradeType)).AsString(64).Nullable()
-                .WithColumn(nameof(Order.TradeNumber)).AsString(64).Nullable()
+                .WithColumn(nameof(Order.TradeNumber)).AsAnsiString(128).Nullable()
                 ;
         }
 

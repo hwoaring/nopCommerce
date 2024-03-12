@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics.Metrics;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -192,7 +193,7 @@ public partial class CommonHelper
         ArgumentNullException.ThrowIfNull(propertyName);
 
         var instanceType = instance.GetType();
-        var pi = instanceType.GetProperty(propertyName) 
+        var pi = instanceType.GetProperty(propertyName)
                  ?? throw new NopException("No property '{0}' found on the instance of type '{1}'.", propertyName, instanceType);
 
         if (!pi.CanWrite)
@@ -323,38 +324,127 @@ public partial class CommonHelper
     /// </summary>
     public static INopFileProvider DefaultFileProvider { get; set; }
 
-        #endregion
+    #endregion
 
-        #region === 扩展方法 ===
+    #region === 扩展方法 ===
 
-        /// <summary>
-        /// 随机数字和字母
-        /// </summary>
-        /// <param name="length">长度</param>
-        /// <param name="digit">包含数字</param>
-        /// <param name="letter">包含字母（大写）</param>
-        /// <returns></returns>
-        public static string GenerateRandomDigitLetterCode(int length, bool digit = true, bool letter = true)
+    /// <summary>
+    /// 获取固定长度的Int值（不为0开头）
+    /// </summary>
+    /// <param name="length"></param>
+    /// <returns></returns>
+    public static int GenerateFixLengthRandomInt32Code(int length, string firstIntegerStr = "")
+    {
+        //长度不能小于等于0
+        if (length < 1)
+            return 0;
+
+        //长度不能大于9，否则出界
+        if (length > 9)
+            length = 9;
+
+        using var random = new SecureRandomNumberGenerator();
+        var str = string.Empty;
+
+        if (firstIntegerStr.Length > 0)
         {
-            if (length < 1)
-                return string.Empty;
-
-            var pattern = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-            using var random = new SecureRandomNumberGenerator();
-            var str = string.Empty;
-
-            for (var i = 0; i < length; i++)
-            {
-                if (digit && !letter) //仅数字
-                    str = string.Concat(str, pattern[random.Next(0, 9)]);
-                else if (!digit && letter) //仅字母
-                    str = string.Concat(str, pattern[random.Next(10, 35)]);
-                else //数字和字母
-                    str = string.Concat(str, pattern[random.Next(0, 35)]);
-            }
-            return str;
+            str = firstIntegerStr.Trim();
+            length -= firstIntegerStr.Length;
         }
 
-        #endregion
+        if(length>0)
+        {
+            for (var i = 0; i < length; i++)
+            {
+                str = string.Concat(str, random.Next(10).ToString());
+                //首位不能为0，第一次循环，判断首位是否为0
+                if (i == 0 && "0" == str)
+                {
+                    str = random.Next(1, 10).ToString();
+                }
+            }
+        }
+
+        if (int.TryParse(str, out var tempInteger))
+            return tempInteger;
+        else
+            return 0;
     }
+
+    /// <summary>
+    /// 固定长度Int64数字
+    /// </summary>
+    /// <param name="length"></param>
+    /// <param name="firstIntegerStr">指定开头的数字</param>
+    /// <returns></returns>
+    public static long GenerateFixLengthRandomInt64Code(int length, string firstIntegerStr = "")
+    {
+        //长度不能小于等于0
+        if (length < 1)
+            return 0;
+
+        //长度不能大于18，否则出界
+        if (length > 18)
+            length = 18;
+
+        using var random = new SecureRandomNumberGenerator();
+        var str = string.Empty;
+
+        if (firstIntegerStr.Length > 0)
+        {
+            str = firstIntegerStr.Trim();
+            length -= firstIntegerStr.Length;
+        }
+
+        if (length > 0)
+        {
+            for (var i = 0; i < length; i++)
+            {
+                str = string.Concat(str, random.Next(10).ToString());
+                //首位不能为0，第一次循环，判断首位是否为0
+                if (i == 0 && "0" == str)
+                {
+                    str = random.Next(1, 10).ToString();
+                }
+            }
+        }
+
+        if (long.TryParse(str, out var tempInteger))
+            return tempInteger;
+        else
+            return 0L;
+    }
+
+    /// <summary>
+    /// 随机数字和字母
+    /// </summary>
+    /// <param name="length">长度</param>
+    /// <param name="digit">包含数字</param>
+    /// <param name="letter">包含字母（大写）</param>
+    /// <param name="firstZero">首位是否可为0</param>
+    /// <returns></returns>
+    public static string GenerateRandomDigitLetterCode(int length, bool digit = true, bool letter = true)
+    {
+        if (length < 1)
+            return string.Empty;
+
+        var pattern = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+        using var random = new SecureRandomNumberGenerator();
+        var str = string.Empty;
+
+        for (var i = 0; i < length; i++)
+        {
+            if (digit && !letter) //仅数字
+                str = string.Concat(str, pattern[random.Next(0, 9)]);
+            else if (!digit && letter) //仅字母
+                str = string.Concat(str, pattern[random.Next(10, 35)]);
+            else //数字和字母
+                str = string.Concat(str, pattern[random.Next(0, 35)]);
+        }
+
+        return str;
+    }
+
+    #endregion
+
 }

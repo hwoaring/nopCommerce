@@ -319,7 +319,11 @@ namespace Nop.Services.Installation
                     CompanyName = "Your company name",
                     CompanyAddress = "your company country, state, zip, street, etc",
                     CompanyPhoneNumber = "(123) 456-78901",
-                    CompanyVat = null
+                    CompanyVat = null,
+                    ReferrerEnable = true,
+                    DefaultCustomerReferrerEnable = true,
+                    DefaultCustomerRecommendedEnable = true,
+                    DefaultCustomerTempReferrerEnable = true
                 }
             };
 
@@ -2962,6 +2966,10 @@ namespace Nop.Services.Installation
                 DeleteGuestTaskOlderThanMinutes = 1440,
                 PhoneNumberValidationEnabled = false,
                 PhoneNumberValidationUseRegex = false,
+                RecordLastLongitude = false, //新增
+                AutoDetectCityName = false, //新增
+                UsePhoneNumberLogin = true, //新增
+                PhoneNumberValidationBySMS = false, //新增
                 PhoneNumberValidationRule = "^[0-9]{1,14}?$",
                 DefaultCountryId = _countryRepository.Table.FirstOrDefault(c => c.ThreeLetterIsoCode == regionInfo.ThreeLetterISORegionName)?.Id
             });
@@ -2988,6 +2996,7 @@ namespace Nop.Services.Installation
                 PhoneEnabled = true,
                 PhoneRequired = true,
                 FaxEnabled = true,
+                UseChinaRegionCode = false, //新增
                 LastNameEnabled = true, //新增
                 LastNameRequired = true, //新增
                 EmailEnabled = true, //新增
@@ -3153,7 +3162,9 @@ namespace Nop.Services.Installation
                 ShowProductThumbnailInOrderDetailsPage = true,
                 DisplayCustomerCurrencyOnOrders = false,
                 DisplayOrderSummary = true,
-                DelayPaymentMinutes = 1440  //新增
+                DelayPaymentMinutes = 1440,  //新增
+                ProductPageCheckoutEnabled = false,  //新增
+                OfflineCheckoutEnabled = false,  //新增
             });
 
             await settingService.SaveSettingAsync(new SecuritySettings
@@ -3419,7 +3430,8 @@ namespace Nop.Services.Installation
             {
                 AntiFakeDomain = string.Empty,
                 AntiFakeProductDomain = string.Empty,
-                AntiFakeVendorDomain = string.Empty
+                AntiFakeVendorDomain = string.Empty,
+                RecordLongitude = false
             });
 
             //资产设置
@@ -3469,12 +3481,15 @@ namespace Nop.Services.Installation
             //微信设置
             await settingService.SaveSettingAsync(new WeixinSettings
             {
-                WeChatOAuthEnable = true,
-                CheckWeChatBrowser = true,
+                SaveOAuthSession = false,
+                WeChatOAuthEnable = false,
+                CheckWeChatBrowser = false,
                 PublicPageUseSnsapiBase = true,
                 GetLocation = false,
                 UseExcludePage = true,
                 Debug = true,
+                EnableRequestLog = true,
+                EnbleResponseLog = true,
                 SaveRequestMessageLog = true,
                 SaveResponseMessageLog = true,
                 TraceLog = true,
@@ -8030,7 +8045,7 @@ namespace Nop.Services.Installation
                     LanguageId = defaultLanguage.Id,
                     Title = "About nopCommerce",
                     Short = "It's stable and highly usable. From downloads to documentation, www.nopCommerce.com offers a comprehensive base of information, resources, and support to the nopCommerce community.",
-                    Full = "<p>For full feature list go to <a href=\"https://www.nopCommerce.com\">nopCommerce.com</a></p><p>Providing outstanding custom search engine optimization, web development services and e-commerce development solutions to our clients at a fair price in a professional manner.</p>",
+                    Full = "<p>For full feature list go to <a href=\"https://www.yourdomain.com\">nopCommerce.com</a></p><p>Providing outstanding custom search engine optimization, web development services and e-commerce development solutions to our clients at a fair price in a professional manner.</p>",
                     Published = true,
                     CreatedOnUtc = DateTime.UtcNow
                 },

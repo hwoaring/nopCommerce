@@ -7,6 +7,8 @@ using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Discounts;
 using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Orders;
+using Nop.Core.Domain.Publics;
+using Nop.Core.Domain.Shares;
 using Nop.Core.Domain.Vendors;
 using Nop.Core.Http;
 using Nop.Core.Infrastructure;
@@ -23,6 +25,7 @@ using Nop.Services.Messages;
 using Nop.Services.Orders;
 using Nop.Services.Security;
 using Nop.Services.Seo;
+using Nop.Services.Shares;
 using Nop.Services.Shipping;
 using Nop.Web.Areas.Admin.Factories;
 using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
@@ -78,6 +81,10 @@ public partial class ProductController : BaseAdminController
     protected readonly VendorSettings _vendorSettings;
     private static readonly char[] _separator = [','];
 
+    //新增属性
+    protected readonly ISharePageService _sharePageService;
+    protected readonly ISharePageModelFactory _sharePageModelFactory;
+
     #endregion
 
     #region Ctor
@@ -118,7 +125,9 @@ public partial class ProductController : BaseAdminController
         IVideoService videoService,
         IWebHelper webHelper,
         IWorkContext workContext,
-        VendorSettings vendorSettings)
+        VendorSettings vendorSettings,
+        ISharePageService sharePageService,
+        ISharePageModelFactory sharePageModelFactory)
     {
         _aclService = aclService;
         _backInStockSubscriptionService = backInStockSubscriptionService;
@@ -157,6 +166,8 @@ public partial class ProductController : BaseAdminController
         _webHelper = webHelper;
         _workContext = workContext;
         _vendorSettings = vendorSettings;
+        _sharePageService = sharePageService;
+        _sharePageModelFactory = sharePageModelFactory;
     }
 
     #endregion
@@ -926,6 +937,9 @@ public partial class ProductController : BaseAdminController
             //warehouses
             await SaveProductWarehouseInventoryAsync(product, model);
 
+            //新增属性 SharePage
+            await _sharePageModelFactory.SaveSharePageAsync(product.Id, model.SharePage, PublicEntityType.Product);
+
             //quantity change history
             await _productService.AddStockQuantityHistoryEntryAsync(product, product.StockQuantity, product.StockQuantity, product.WarehouseId,
                 await _localizationService.GetResourceAsync("Admin.StockQuantityHistory.Messages.Edit"));
@@ -1066,6 +1080,10 @@ public partial class ProductController : BaseAdminController
             //picture seo names
             await UpdatePictureSeoNamesAsync(product);
 
+            //新增属性 SharePage
+            await _sharePageModelFactory.SaveSharePageAsync(product.Id, model.SharePage, PublicEntityType.Product);
+
+
             //back in stock notifications
             if (product.ManageInventoryMethod == ManageInventoryMethod.ManageStock &&
                 product.BackorderMode == BackorderMode.NoBackorders &&
@@ -1163,6 +1181,9 @@ public partial class ProductController : BaseAdminController
             return RedirectToAction("List");
 
         await _productService.DeleteProductAsync(product);
+
+        //新增属性 SharePage
+        await _sharePageService.DeleteSharePageAsync(product.Id, PublicEntityType.Product);
 
         //activity log
         await _customerActivityService.InsertActivityAsync("DeleteProduct",

@@ -88,54 +88,53 @@ public partial class ProductAttributeValue : BaseEntity, ILocalizedEntity
         set => AttributeValueTypeId = (int)value;
     }
 
-        /// <summary>
-        /// The field is not used since 4.70 and is left only for the update process
-        /// use the <see cref="ProductAttributeValuePicture"/> instead
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Browsable(false)]
-        [Obsolete("The field is not used since 4.70 and is left only for the update process use the ProductAttributeValuePicture instead")]
-        public int? PictureId { get; set; }
+    /// <summary>
+    /// The field is not used since 4.70 and is left only for the update process
+    /// use the <see cref="ProductAttributeValuePicture"/> instead
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    [Obsolete("The field is not used since 4.70 and is left only for the update process use the ProductAttributeValuePicture instead")]
+    public int? PictureId { get; set; }
 
 
-        #region
+    #region
 
-        /// <summary>
-        ///短名称
-        /// </summary>
-        public string ShortName { get; set; }
+    /// <summary>
+    ///短名称
+    /// </summary>
+    public string ShortName { get; set; }
 
-        /// <summary>
-        /// 描述
-        /// </summary>
-        public string Discription { get; set; }
+    /// <summary>
+    /// 描述
+    /// </summary>
+    public string Discription { get; set; }
 
-        /// <summary>
-        /// 内容
-        /// </summary>
-        public string Content { get; set; }
+    /// <summary>
+    /// 内容
+    /// </summary>
+    public string Content { get; set; }
 
-        /// <summary>
-        /// 使用规则（使用限制信息）
-        /// </summary>
-        public string UsageRules { get; set; }
+    /// <summary>
+    /// 使用规则（使用限制信息）
+    /// </summary>
+    public string UsageRules { get; set; }
 
-        /// <summary>
-        /// 原价/划线价
-        /// </summary>
-        public decimal OldPriceAdjustment { get; set; }
+    /// <summary>
+    /// 原价/划线价
+    /// </summary>
+    public decimal OldPriceAdjustment { get; set; }
 
-        /// <summary>
-        /// 最小购买数量
-        /// </summary>
-        public int OrderMinimumQuantity { get; set; }
+    /// <summary>
+    /// 最小购买数量
+    /// </summary>
+    public int OrderMinimumQuantity { get; set; }
 
-        /// <summary>
-        /// 最大购买数量
-        /// </summary>
-        public int OrderMaximumQuantity { get; set; }
+    /// <summary>
+    /// 最大购买数量
+    /// </summary>
+    public int OrderMaximumQuantity { get; set; }
 
-        #endregion
+    #endregion
 
-    }
 }

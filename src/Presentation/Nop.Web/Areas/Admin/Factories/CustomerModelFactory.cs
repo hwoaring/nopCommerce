@@ -666,6 +666,28 @@ public partial class CustomerModelFactory : ICustomerModelFactory
             //whether to fill in some of properties
             if (!excludeProperties)
             {
+                //新增属性
+                model.Level = customer.Level;
+                //model.ReferrerCustomerId = customer.ReferrerCustomerId;
+                //model.TempReferrerCustomerId = customer.TempReferrerCustomerId;
+                //model.TempReferrerExpireDateUtc = customer.TempReferrerExpireDateUtc;
+                //model.ReferrerSceneStr = customer.ReferrerSceneStr;
+                model.OpenId = customer.OpenId;
+                model.UnionId = customer.UnionId;
+                model.ReferrerCode = customer.ReferrerCode;
+                model.QrcodePictureId = customer.QrcodePictureId;
+                model.Remark = customer.Remark;
+                model.QrcodeValidated = customer.QrcodeValidated;
+                model.EmailValidated = customer.EmailValidated;
+                model.PhoneValidated = customer.PhoneValidated;
+                model.PhoneToRevalidate = customer.PhoneToRevalidate;
+                //model.AsReferrerEnable = customer.AsReferrerEnable;
+                //model.AsRecommendedEnable = customer.AsRecommendedEnable;
+                //model.AsTempReferrerEnable = customer.AsTempReferrerEnable;
+                model.IgnoringWeChatPublicOauth = customer.IgnoringWeChatPublicOauth;
+                model.IgnoringWeChatAdminOauth = customer.IgnoringWeChatAdminOauth;
+                //新增属性结束
+
                 model.Email = customer.Email;
                 model.Username = customer.Username;
                 model.VendorId = customer.VendorId;

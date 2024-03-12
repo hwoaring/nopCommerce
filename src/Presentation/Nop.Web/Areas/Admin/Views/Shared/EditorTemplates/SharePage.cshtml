@@ -1,0 +1,236 @@
+﻿
+@* 新增分享属性 *@
+
+@model SharePageModel
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $('#SharePage_EnableSharePage').click(toggleShowSharePage);
+        toggleShowSharePage();
+    });
+
+    function toggleShowSharePage() {
+        if ($('#SharePage_EnableSharePage').is(':checked')) {
+            $('#pnlDisplaySharePage').showElement();
+        }
+        else {
+            $('#pnlDisplaySharePage').hideElement();
+        }
+    }
+</script>
+
+<input asp-for="Id" type="hidden" />
+<input asp-for="EntityId" type="hidden" />
+<input asp-for="PublicEntityTypeId" type="hidden" />
+
+<div class="form-group row">
+    <div class="col-md-3">
+        <nop-label asp-for="EnableSharePage" />
+    </div>
+    <div class="col-md-9">
+        <nop-editor asp-for="EnableSharePage" />
+        <span asp-validation-for="EnableSharePage"></span>
+    </div>
+</div>
+<div id="pnlDisplaySharePage">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Title" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Title" asp-required="true" />
+            <span asp-validation-for="Title"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Slogan" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Slogan" />
+            <span asp-validation-for="Slogan"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Description" />
+        </div>
+        <div class="col-md-9">
+            <nop-textarea asp-for="Description" asp-required="true"></nop-textarea>
+            <span asp-validation-for="Description"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Url" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Url" />
+            <span asp-validation-for="Url"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SmallPictureId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="SmallPictureId" />
+            <span asp-validation-for="SmallPictureId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="BigPictureId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="BigPictureId" />
+            <span asp-validation-for="BigPictureId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableSharePicture" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableSharePicture" />
+            <span asp-validation-for="EnableSharePicture"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnablePromotion" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnablePromotion" />
+            <span asp-validation-for="EnablePromotion"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CashPromotion" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="CashPromotion" />
+            <span asp-validation-for="CashPromotion"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CommissionRatio" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="CommissionRatio" />
+            <span asp-validation-for="CommissionRatio"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ShareCycleDays" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ShareCycleDays" />
+            <span asp-validation-for="ShareCycleDays"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="LimitToStoreId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="LimitToStoreId" />
+            <span asp-validation-for="LimitToStoreId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="LimitToVendorStoreId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="LimitToVendorStoreId" />
+            <span asp-validation-for="LimitToVendorStoreId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="LimitToBrandId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="LimitToBrandId" />
+            <span asp-validation-for="LimitToBrandId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="LimitToProductId" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="LimitToProductId" />
+            <span asp-validation-for="LimitToProductId"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DisplaySharerCode" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DisplaySharerCode" />
+            <span asp-validation-for="DisplaySharerCode"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="DisplaySharerUser" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="DisplaySharerUser" />
+            <span asp-validation-for="DisplaySharerUser"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="BaseViewCount" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="BaseViewCount" />
+            <span asp-validation-for="BaseViewCount"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="BaseRecommendeCount" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="BaseRecommendeCount" />
+            <span asp-validation-for="BaseRecommendeCount"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="BaseFavoriteCount" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="BaseFavoriteCount" />
+            <span asp-validation-for="BaseFavoriteCount"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="BaseThumbCount" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="BaseThumbCount" />
+            <span asp-validation-for="BaseThumbCount"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="BaseShareCount" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="BaseShareCount" />
+            <span asp-validation-for="BaseShareCount"></span>
+        </div>
+    </div>
+</div>
+ 
+

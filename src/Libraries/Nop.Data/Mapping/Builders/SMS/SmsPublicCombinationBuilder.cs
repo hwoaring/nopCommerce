@@ -17,11 +17,7 @@ namespace Nop.Data.Mapping.Builders.SMS
         /// <param name="table">Create table expression builder</param>
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
-            table
-                .WithColumn(nameof(SmsPublicCombination.SmsSignId)).AsInt32().ForeignKey<SmsSign>()
-                .WithColumn(nameof(SmsPublicCombination.SmsTemplateId)).AsInt32().ForeignKey<SmsTemplate>()
-
-                ;
+            
         }
 
         #endregion

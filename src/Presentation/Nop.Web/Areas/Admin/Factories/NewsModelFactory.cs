@@ -2,18 +2,21 @@
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.News;
+using Nop.Core.Domain.Publics;
 using Nop.Services.Customers;
 using Nop.Services.Helpers;
 using Nop.Services.Html;
 using Nop.Services.Localization;
 using Nop.Services.News;
 using Nop.Services.Seo;
+using Nop.Services.Shares;
 using Nop.Services.Stores;
 using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
 using Nop.Web.Areas.Admin.Models.News;
 using Nop.Web.Framework.Extensions;
 using Nop.Web.Framework.Factories;
 using Nop.Web.Framework.Models.Extensions;
+using Senparc.Weixin.MP.AdvancedAPIs.MerChant;
 
 namespace Nop.Web.Areas.Admin.Factories;
 
@@ -36,6 +39,9 @@ public partial class NewsModelFactory : INewsModelFactory
     protected readonly IStoreService _storeService;
     protected readonly IUrlRecordService _urlRecordService;
 
+    //新增属性
+    protected readonly ISharePageService _sharePageService;
+
     #endregion
 
     #region Ctor
@@ -50,7 +56,8 @@ public partial class NewsModelFactory : INewsModelFactory
         INewsService newsService,
         IStoreMappingSupportedModelFactory storeMappingSupportedModelFactory,
         IStoreService storeService,
-        IUrlRecordService urlRecordService)
+        IUrlRecordService urlRecordService,
+        ISharePageService sharePageService)
     {
         _catalogSettings = catalogSettings;
         _customerService = customerService;
@@ -63,6 +70,7 @@ public partial class NewsModelFactory : INewsModelFactory
         _storeMappingSupportedModelFactory = storeMappingSupportedModelFactory;
         _storeService = storeService;
         _urlRecordService = urlRecordService;
+        _sharePageService = sharePageService;
     }
 
     #endregion
@@ -176,6 +184,12 @@ public partial class NewsModelFactory : INewsModelFactory
 
         //prepare available stores
         await _storeMappingSupportedModelFactory.PrepareModelStoresAsync(model, newsItem, excludeProperties);
+
+        //准备分享页Model share page model
+        var sharePage = await _sharePageService.GetSharePageByEntityIdAsync(newsItem?.Id ?? 0, PublicEntityType.NewsItem);
+        if (!excludeProperties && sharePage != null)
+            model.SharePage = sharePage.ToModel(model.SharePage);
+
 
         return model;
     }

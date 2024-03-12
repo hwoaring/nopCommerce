@@ -21,7 +21,7 @@ namespace Nop.Data.Mapping.Builders.Shares
         {
             table
                 .WithColumn(nameof(SharePageViews.SharePageRecordsId)).AsInt32().ForeignKey<SharePageRecords>()
-                .WithColumn(nameof(SharePageViews.CustomerId)).AsInt32().ForeignKey<Customer>()
+
                 ;
         }
 

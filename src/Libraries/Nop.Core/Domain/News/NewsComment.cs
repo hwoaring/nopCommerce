@@ -35,43 +35,43 @@ public partial class NewsComment : BaseEntity
     /// </summary>
     public int StoreId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the date and time of instance creation
-        /// </summary>
-        public DateTime CreatedOnUtc { get; set; }
+    /// <summary>
+    /// Gets or sets the date and time of instance creation
+    /// </summary>
+    public DateTime CreatedOnUtc { get; set; }
 
-        #region === 扩展属性 ===
+    #region === 扩展属性 ===
 
-        /// <summary>
-        /// 是否作者本人评论或回复
-        /// </summary>
-        public bool IsAuthor { get; set; }
+    /// <summary>
+    /// 是否作者本人评论或回复
+    /// </summary>
+    public bool IsAuthor { get; set; }
 
-        /// <summary>
-        /// 父级ID（针对评论下继续评论或留言）
-        /// </summary>
-        public int ParentId { get; set; }
+    /// <summary>
+    /// 父级ID（针对评论下继续评论或留言）
+    /// </summary>
+    public int ParentId { get; set; }
 
-        /// <summary>
-        /// 发布人IP
-        /// </summary>
-        public string PublisherIp { get; set; }
+    /// <summary>
+    /// 发布人IP
+    /// </summary>
+    public string PublisherIp { get; set; }
 
-        /// <summary>
-        /// 地址的区划代码
-        /// </summary>
-        public int ChinaRegionCode { get; set; }
+    /// <summary>
+    /// 地址的区划代码
+    /// </summary>
+    public int ChinaRegionCode { get; set; }
 
-        /// <summary>
-        /// 回复内容
-        /// </summary>
-        public string ReplyText { get; set; }
+    /// <summary>
+    /// 回复内容
+    /// </summary>
+    public string ReplyText { get; set; }
 
-        /// <summary>
-        /// 回复时间
-        /// </summary>
-        public DateTime? ReplyOnUtc { get; set; }
+    /// <summary>
+    /// 回复时间
+    /// </summary>
+    public DateTime? ReplyOnUtc { get; set; }
 
-        #endregion
-    }
+    #endregion
+
 }

@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Text;
+using ExCSS;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Nop.Core;
@@ -365,6 +366,12 @@ public partial class CustomerController : BaseAdminController
             customer.LastActivityDateUtc = DateTime.UtcNow;
             customer.RegisteredInStoreId = currentStore.Id;
 
+            //生成不重复的邀请码
+            if (customer.ReferrerCode == 0)
+            {
+                customer.ReferrerCode = await _customerService.GetCustomerReferrerCodeAsync(8);
+            }
+
             //form fields
             if (_dateTimeSettings.AllowCustomersToSetTimeZone)
                 customer.TimeZoneId = model.TimeZoneId;
@@ -642,6 +649,23 @@ public partial class CustomerController : BaseAdminController
 
                 //custom customer attributes
                 customer.CustomCustomerAttributesXML = customerAttributesXml;
+
+                //新增属性
+                customer.Level = model.Level;
+                customer.QrcodePictureId = model.QrcodePictureId;
+                customer.Remark = model.Remark;
+                customer.QrcodeValidated = model.QrcodeValidated;
+                customer.EmailValidated = model.EmailValidated;
+                customer.PhoneValidated = model.PhoneValidated;
+                customer.PhoneToRevalidate = model.PhoneToRevalidate;
+                customer.IgnoringWeChatPublicOauth = model.IgnoringWeChatPublicOauth;
+                customer.IgnoringWeChatAdminOauth = model.IgnoringWeChatAdminOauth;
+
+                //生成不重复的邀请码
+                if (customer.ReferrerCode == 0)
+                {
+                    customer.ReferrerCode = await _customerService.GetCustomerReferrerCodeAsync(8);
+                }
 
                 //newsletter subscriptions
                 if (!string.IsNullOrEmpty(customer.Email))

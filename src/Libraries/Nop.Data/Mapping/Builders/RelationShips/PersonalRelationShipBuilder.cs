@@ -19,7 +19,6 @@ namespace Nop.Data.Mapping.Builders.RelationShips
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(PersonalRelationShip.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(PersonalRelationShip.Name)).AsString(64).Nullable()
                 .WithColumn(nameof(PersonalRelationShip.Notes)).AsString(128).Nullable()
                 .WithColumn(nameof(PersonalRelationShip.CourtesyName)).AsString(32).Nullable()

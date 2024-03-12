@@ -23,7 +23,7 @@ namespace Nop.Data.Mapping.Builders.Shares
             table
                 .WithColumn(nameof(SharePicture.StoreId)).AsInt32().ForeignKey<Store>()
                 .WithColumn(nameof(SharePicture.PictureId)).AsInt32().ForeignKey<Picture>()
-                .WithColumn(nameof(SharePicture.DownloadId)).AsInt32().ForeignKey<Download>(onDelete: System.Data.Rule.SetDefault)
+                .WithColumn(nameof(SharePicture.DownloadId)).AsInt32().ForeignKey<Download>(onDelete: System.Data.Rule.SetNull).Nullable()
                 .WithColumn(nameof(SharePicture.DownloadUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(SharePicture.Name)).AsString(64).Nullable()
                 .WithColumn(nameof(SharePicture.Slogan)).AsString(64).Nullable()

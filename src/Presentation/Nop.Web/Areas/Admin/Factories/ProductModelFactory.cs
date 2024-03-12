@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Nop.Core;
@@ -10,6 +11,7 @@ using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Discounts;
 using Nop.Core.Domain.Orders;
+using Nop.Core.Domain.Publics;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Vendors;
 using Nop.Services.Catalog;
@@ -23,6 +25,7 @@ using Nop.Services.Localization;
 using Nop.Services.Media;
 using Nop.Services.Orders;
 using Nop.Services.Seo;
+using Nop.Services.Shares;
 using Nop.Services.Shipping;
 using Nop.Services.Stores;
 using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
@@ -82,6 +85,8 @@ public partial class ProductModelFactory : IProductModelFactory
     protected readonly TaxSettings _taxSettings;
     protected readonly VendorSettings _vendorSettings;
 
+    //新增属性
+    protected readonly ISharePageService _sharePageService;
     #endregion
 
     #region Ctor
@@ -124,7 +129,8 @@ public partial class ProductModelFactory : IProductModelFactory
         MeasureSettings measureSettings,
         NopHttpClient nopHttpClient,
         TaxSettings taxSettings,
-        VendorSettings vendorSettings)
+        VendorSettings vendorSettings,
+        ISharePageService sharePageService)
     {
         _catalogSettings = catalogSettings;
         _currencySettings = currencySettings;
@@ -165,6 +171,7 @@ public partial class ProductModelFactory : IProductModelFactory
         _nopHttpClient = nopHttpClient;
         _taxSettings = taxSettings;
         _vendorSettings = vendorSettings;
+        _sharePageService = sharePageService;
     }
 
     #endregion
@@ -955,6 +962,11 @@ public partial class ProductModelFactory : IProductModelFactory
 
         //prepare model stores
         await _storeMappingSupportedModelFactory.PrepareModelStoresAsync(model, product, excludeProperties);
+
+        //准备分享页Model share page model
+        var sharePage = await _sharePageService.GetSharePageByEntityIdAsync(product?.Id ?? 0, PublicEntityType.Product);
+        if (!excludeProperties && sharePage != null)
+            model.SharePage = sharePage.ToModel(model.SharePage);
 
         return model;
     }

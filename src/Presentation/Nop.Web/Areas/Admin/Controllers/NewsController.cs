@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.News;
+using Nop.Core.Domain.Publics;
 using Nop.Core.Events;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
@@ -7,6 +8,7 @@ using Nop.Services.Messages;
 using Nop.Services.News;
 using Nop.Services.Security;
 using Nop.Services.Seo;
+using Nop.Services.Shares;
 using Nop.Services.Stores;
 using Nop.Web.Areas.Admin.Factories;
 using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
@@ -31,6 +33,10 @@ public partial class NewsController : BaseAdminController
     protected readonly IStoreService _storeService;
     protected readonly IUrlRecordService _urlRecordService;
 
+    //新增属性
+    protected readonly ISharePageService _sharePageService;
+    protected readonly ISharePageModelFactory _sharePageModelFactory;
+
     #endregion
 
     #region Ctor
@@ -44,7 +50,9 @@ public partial class NewsController : BaseAdminController
         IPermissionService permissionService,
         IStoreMappingService storeMappingService,
         IStoreService storeService,
-        IUrlRecordService urlRecordService)
+        IUrlRecordService urlRecordService,
+        ISharePageService sharePageService,
+        ISharePageModelFactory sharePageModelFactory)
     {
         _customerActivityService = customerActivityService;
         _eventPublisher = eventPublisher;
@@ -56,6 +64,8 @@ public partial class NewsController : BaseAdminController
         _storeMappingService = storeMappingService;
         _storeService = storeService;
         _urlRecordService = urlRecordService;
+        _sharePageService = sharePageService;
+        _sharePageModelFactory = sharePageModelFactory;
     }
 
     #endregion
@@ -155,6 +165,9 @@ public partial class NewsController : BaseAdminController
             //Stores
             await SaveStoreMappingsAsync(newsItem, model);
 
+            //新增属性 SharePage
+            await _sharePageModelFactory.SaveSharePageAsync(newsItem.Id, model.SharePage, PublicEntityType.NewsItem);
+
             _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.ContentManagement.News.NewsItems.Added"));
 
             if (!continueEditing)
@@ -213,6 +226,9 @@ public partial class NewsController : BaseAdminController
             //stores
             await SaveStoreMappingsAsync(newsItem, model);
 
+            //新增属性 SharePage
+            await _sharePageModelFactory.SaveSharePageAsync(newsItem.Id, model.SharePage, PublicEntityType.NewsItem);
+
             _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.ContentManagement.News.NewsItems.Updated"));
 
             if (!continueEditing)
@@ -240,6 +256,9 @@ public partial class NewsController : BaseAdminController
             return RedirectToAction("NewsItems");
 
         await _newsService.DeleteNewsAsync(newsItem);
+
+        //新增属性SharePage
+        await _sharePageService.DeleteSharePageAsync(newsItem.Id, PublicEntityType.NewsItem);
 
         //activity log
         await _customerActivityService.InsertActivityAsync("DeleteNews",

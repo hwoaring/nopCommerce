@@ -48,12 +48,12 @@ public partial class CustomerBuilder : NopEntityBuilder<Customer>
                 .WithColumn(NameCompatibilityManager.GetColumnName(typeof(Customer), nameof(Customer.ShippingAddressId))).AsInt32().ForeignKey<Address>(onDelete: Rule.None).Nullable()
 
                 //扩展
-                .WithColumn(nameof(Customer.TempReferrerExpireDateUtc)).AsDateTime2().Nullable()
-                .WithColumn(nameof(Customer.ReferrerSceneStr)).AsString(64).Nullable()
                 .WithColumn(nameof(Customer.OpenId)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(Customer.UnionId)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(Customer.Remark)).AsString(64).Nullable()
                 .WithColumn(nameof(Customer.PhoneToRevalidate)).AsString(64).Nullable()
+                .WithColumn(nameof(Customer.LastLongitude)).AsDecimal(9,6).Nullable()
+                .WithColumn(nameof(Customer.LastLatitude)).AsDecimal(9, 6).Nullable()
 
                 ;
         }

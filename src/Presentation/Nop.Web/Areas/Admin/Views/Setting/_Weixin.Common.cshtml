@@ -1,0 +1,144 @@
+@model WeixinSettingsModel
+
+@{
+    const int maxTextAreaRows = 10;
+    const int minTextAreaRows = 5;
+
+    int GetAreaRows(string rows)
+    {
+        if (string.IsNullOrEmpty(rows))
+            return 1;
+
+        var rowsCount = rows.Split(Environment.NewLine).Length;
+
+        return rowsCount switch
+        {
+            0 => 1,
+            < 10 => minTextAreaRows,
+            _ => maxTextAreaRows
+            };
+    }
+}
+
+
+<div class="card-body">
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="WeChatOAuthEnable" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="WeChatOAuthEnable" />
+            <span asp-validation-for="WeChatOAuthEnable"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CheckWeChatBrowser" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="CheckWeChatBrowser" />
+            <span asp-validation-for="CheckWeChatBrowser"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="PublicPageUseSnsapiBase" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="PublicPageUseSnsapiBase" />
+            <span asp-validation-for="PublicPageUseSnsapiBase"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="GetLocation" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="GetLocation" />
+            <span asp-validation-for="GetLocation"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="UseExcludePage" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="UseExcludePage" />
+            <span asp-validation-for="UseExcludePage"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Debug" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Debug" />
+            <span asp-validation-for="Debug"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnableRequestLog" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnableRequestLog" />
+            <span asp-validation-for="EnableRequestLog"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="EnbleResponseLog" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="EnbleResponseLog" />
+            <span asp-validation-for="EnbleResponseLog"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SaveRequestMessageLog" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="SaveRequestMessageLog" />
+            <span asp-validation-for="SaveRequestMessageLog"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="SaveResponseMessageLog" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="SaveResponseMessageLog" />
+            <span asp-validation-for="SaveResponseMessageLog"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="TraceLog" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="TraceLog" />
+            <span asp-validation-for="TraceLog"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="JSSDKDebug" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="JSSDKDebug" />
+            <span asp-validation-for="JSSDKDebug"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="@Model.JsApiList" />
+        </div>
+        <div class="col-md-9">
+            <nop-textarea rows="@GetAreaRows(Model.JsApiList)" asp-for="@Model.JsApiList"></nop-textarea>
+            <span asp-validation-for="@Model.JsApiList"></span>
+        </div>
+    </div>
+
+
+</div>

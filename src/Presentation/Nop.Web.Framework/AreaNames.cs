@@ -1,22 +1,22 @@
-﻿namespace Nop.Web.Framework
+﻿namespace Nop.Web.Framework;
+
+/// <summary>
+/// Represents a list of area names
+/// </summary>
+public static class AreaNames
 {
     /// <summary>
-    /// Represents a list of area names
+    /// Admin area
     /// </summary>
-    public static class AreaNames
-    {
-        /// <summary>
-        /// Admin area
-        /// </summary>
-        public const string Admin = "Admin";
+    public const string ADMIN = "Admin";
 
-        #region === 扩展属性 ===
+    #region === 扩展属性 ===
 
-        /// <summary>
-        /// 普通用户 area
-        /// </summary>
-        public const string User = "User";
+    /// <summary>
+    /// 普通用户 area
+    /// </summary>
+    public const string USER = "User";
 
-        #endregion
-    }
+
+    #endregion
 }

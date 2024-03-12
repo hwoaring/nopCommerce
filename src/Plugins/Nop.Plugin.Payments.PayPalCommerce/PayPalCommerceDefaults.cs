@@ -93,7 +93,7 @@ public class PayPalCommerceDefaults
         /// <summary>
         /// Gets the base URL of onboarding services
         /// </summary>
-        public static string ServiceUrl => "https://www.nopcommerce.com/";
+        public static string ServiceUrl => "https://www.yourdomain.com/";
 
         /// <summary>
         /// Gets the onboarding js script URL

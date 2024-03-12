@@ -20,7 +20,6 @@ namespace Nop.Data.Mapping.Builders.FriendCircles
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(FriendCircleComment.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(FriendCircleComment.FriendCircleId)).AsInt32().ForeignKey<FriendCircle>()
                 .WithColumn(nameof(FriendCircleComment.CommentText)).AsString(1024).Nullable() //防止评论内容过长的攻击
                 .WithColumn(nameof(FriendCircleComment.ReplyText)).AsString(1024).Nullable()

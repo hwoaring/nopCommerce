@@ -16,7 +16,7 @@
         public bool CompanyInvoice { get; set; }
 
         /// <summary>
-        /// 是否专票
+        /// 是否开专票、否则为个人票
         /// </summary>
         public bool SpecialInvoice { get; set; }
 
@@ -44,6 +44,11 @@
         /// 联系电话
         /// </summary>
         public string Phone { get; set; }
+
+        /// <summary>
+        /// 接受发票邮箱
+        /// </summary>
+        public string Email { get; set; }
 
         /// <summary>
         /// 创建时间

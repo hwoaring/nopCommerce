@@ -21,7 +21,6 @@ namespace Nop.Data.Mapping.Builders.FriendCircles
         {
             table
                 .WithColumn(nameof(FriendCircleFavoriteMapping.FriendCircleId)).AsInt32().ForeignKey<FriendCircle>()
-                .WithColumn(nameof(FriendCircleFavoriteMapping.CustomerId)).AsInt32().ForeignKey<Customer>()
                 ;
         }
 

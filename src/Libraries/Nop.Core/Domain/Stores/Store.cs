@@ -87,4 +87,51 @@ public partial class Store : BaseEntity, ILocalizedEntity, ISoftDeletedEntity
     /// Gets or sets a value indicating whether the entity has been deleted
     /// </summary>
     public bool Deleted { get; set; }
+
+
+    #region === 扩展属性 ===
+
+    /// <summary>
+    /// 临时推荐人过期分钟数
+    /// 0：表示不使用临时推荐人功能
+    /// </summary>
+    public int TempReferrerExpireMinutes { get; set; }
+
+    /// <summary>
+    /// 过期保护（临时推荐人过期前，不允许更新临时推荐人）
+    /// </summary>
+    public bool TempReferrerExpireProtect { get; set; }
+
+    /// <summary>
+    /// 是否开启推荐功能
+    /// </summary>
+    public bool ReferrerEnable { get; set; }
+
+    /// <summary>
+    /// 创建新推荐信息时候，默认是否允许成为推荐人
+    /// </summary>
+    public bool DefaultCustomerReferrerEnable { get; set; }
+
+    /// <summary>
+    /// 创建新推荐信息时候，默认是否允许被推荐人，不允许时，该用户不会成为其他用户的推荐客户或临时推荐客户
+    /// </summary>
+    public bool DefaultCustomerRecommendedEnable { get; set; }
+
+    /// <summary>
+    /// 创建新推荐信息时候，默认是否允许成为临时推荐人（False=不允许覆盖临时推荐信ID）
+    /// </summary>
+    public bool DefaultCustomerTempReferrerEnable { get; set; }
+
+    /// <summary>
+    /// 店铺最大产品数量
+    /// </summary>
+    public int MaxProductCount { get; set; }
+
+    /// <summary>
+    /// 最大发布新闻数量
+    /// </summary>
+    public int MaxNewsCount { get; set; }
+
+    #endregion
+
 }

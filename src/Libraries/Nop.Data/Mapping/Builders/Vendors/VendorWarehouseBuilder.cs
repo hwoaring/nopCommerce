@@ -2,31 +2,30 @@
 using Nop.Core.Domain.Vendors;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Vendors
+namespace Nop.Data.Mapping.Builders.Vendors;
+
+/// <summary>
+/// Represents a vendor entity builder
+/// </summary>
+public partial class VendorWarehouseBuilder : NopEntityBuilder<VendorWarehouse>
 {
+    #region Methods
+
     /// <summary>
-    /// Represents a vendor entity builder
+    /// Apply entity configuration
     /// </summary>
-    public partial class VendorWarehouseBuilder : NopEntityBuilder<VendorWarehouse>
+    /// <param name="table">Create table expression builder</param>
+    public override void MapEntity(CreateTableExpressionBuilder table)
     {
-        #region Methods
+        table
+            .WithColumn(nameof(VendorWarehouse.VendorId)).AsInt32().ForeignKey<Vendor>()
+            .WithColumn(nameof(VendorWarehouse.SelfPickupPhone)).AsString(32).Nullable()
+            .WithColumn(nameof(VendorWarehouse.Longitude)).AsDecimal(9,6).Nullable()
+            .WithColumn(nameof(VendorWarehouse.Latitude)).AsDecimal(9, 6).Nullable()
 
-        /// <summary>
-        /// Apply entity configuration
-        /// </summary>
-        /// <param name="table">Create table expression builder</param>
-        public override void MapEntity(CreateTableExpressionBuilder table)
-        {
-            table
-                .WithColumn(nameof(VendorWarehouse.VendorId)).AsInt32().ForeignKey<Vendor>()
-                .WithColumn(nameof(VendorWarehouse.SelfPickupPhone)).AsString(32).Nullable()
-                .WithColumn(nameof(VendorWarehouse.Longitude)).AsDecimal(9,6).Nullable()
-                .WithColumn(nameof(VendorWarehouse.Latitude)).AsDecimal(9, 6).Nullable()
-
-                ;
-        }
-
-        #endregion
-
+            ;
     }
+
+    #endregion
+
 }

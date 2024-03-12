@@ -22,30 +22,29 @@ public partial class SpecificationAttributeOption : BaseEntity, ILocalizedEntity
     /// </summary>
     public string ColorSquaresRgb { get; set; }
 
-        /// <summary>
-        /// Gets or sets the display order
-        /// </summary>
-        public int DisplayOrder { get; set; }
+    /// <summary>
+    /// Gets or sets the display order
+    /// </summary>
+    public int DisplayOrder { get; set; }
 
 
-        #region === 扩展信息 ===
+    #region === 扩展信息 ===
 
-        /// <summary>
-        /// 短名称
-        /// </summary>
-        public string ShortName { get; set; }
+    /// <summary>
+    /// 短名称
+    /// </summary>
+    public string ShortName { get; set; }
 
-        /// <summary>
-        /// 说明
-        /// </summary>
-        public string Discription { get; set; }
+    /// <summary>
+    /// 说明
+    /// </summary>
+    public string Discription { get; set; }
 
-        /// <summary>
-        /// 内容
-        /// </summary>
-        public string Content { get; set; }
+    /// <summary>
+    /// 内容
+    /// </summary>
+    public string Content { get; set; }
 
 
-        #endregion
-    }
+    #endregion
 }

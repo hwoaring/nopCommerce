@@ -1,0 +1,521 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Language Name="English">
+    
+    <!--新增 Weixin-->
+    <LocaleResource Name="admin.catalog.products.extendattributes">
+        <Value>Extend Attributes</Value>
+    </LocaleResource>
+    
+
+    <!--新增 Weixin-->
+        
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin">
+        <Value>Weixin Settings</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.WeChatOAuthEnable">
+        <Value>WeChatOAuthEnable</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.CheckWeChatBrowser">
+        <Value>CheckWeChatBrowser</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.PublicPageUseSnsapiBase">
+        <Value>PublicPageUseSnsapiBase</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.GetLocation">
+        <Value>GetLocation</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.UseExcludePage">
+        <Value>UseExcludePage</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.Debug">
+        <Value>Debug</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.EnableRequestLog">
+        <Value>EnableRequestLog</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.EnbleResponseLog">
+        <Value>EnbleResponseLog</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.SaveRequestMessageLog">
+        <Value>SaveRequestMessageLog</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.SaveResponseMessageLog">
+        <Value>SaveResponseMessageLog</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.TraceLog">
+        <Value>TraceLog</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.JSSDKDebug">
+        <Value>JSSDKDebug</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.JsApiList">
+        <Value>JsApiList</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Configuration.Settings.Weixin.BlockTitle.Common">
+        <Value>Common</Value>
+    </LocaleResource>
+
+    <!--新增 Vendors-->
+
+    <LocaleResource Name="Admin.Vendors.Fields.CreatOnUtc">
+        <Value>Creat Date</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.EnableVendorForm">
+        <Value>Enable Vendor Form</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.ManageOwnProductPrices">
+        <Value>ManageOwnProductPrices</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.UnifiedId">
+        <Value>UnifiedId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.ReferrerVendorId">
+        <Value>ReferrerVendorId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.VendorTypeId">
+        <Value>VendorTypeId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.NickName">
+        <Value>Nick Name</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.PhoneNumber">
+        <Value>Phone Number</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.VendorLevel">
+        <Value>Vendor Level</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.VendorWarehouseId">
+        <Value>Vendor WarehouseId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.ShoppingGuide">
+        <Value>ShoppingGuide</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.HasVendorStore">
+        <Value>HasVendorStore</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.QrcodePictureId">
+        <Value>QrcodePictureId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.LimitQrcodeId">
+        <Value>LimitQrcodeId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.Approved">
+        <Value>Approved</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.Locked">
+        <Value>Locked</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.DisplayContactInfo">
+        <Value>DisplayContactInfo</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Vendors.Fields.ContactInfoStyle">
+        <Value>ContactInfoStyle</Value>
+    </LocaleResource>
+
+    <!--新增 Customers-->
+
+    <LocaleResource Name="Admin.Customers.Customers.Fields.Level">
+        <Value>Level</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.ReferrerCustomerId">
+        <Value>ReferrerCustomerId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.TempReferrerCustomerId">
+        <Value>TempReferrerCustomerId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.TempReferrerExpireDateUtc">
+        <Value>TempReferrerExpireDateUtc</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.ReferrerSceneStr">
+        <Value>ReferrerSceneStr</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.OpenId">
+        <Value>OpenId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.UnionId">
+        <Value>UnionId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.ReferrerCode">
+        <Value>ReferrerCode</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.QrcodePictureId">
+        <Value>QrcodePictureId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.Remark">
+        <Value>Remark</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.QrcodeValidated">
+        <Value>QrcodeValidated</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.EmailValidated">
+        <Value>EmailValidated</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.PhoneValidated">
+        <Value>PhoneValidated</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.PhoneToRevalidate">
+        <Value>PhoneToRevalidate</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.AsReferrerEnable">
+        <Value>AsReferrerEnable</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.AsRecommendedEnable">
+        <Value>AsRecommendedEnable</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.AsTempReferrerEnable">
+        <Value>AsTempReferrerEnable</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.IgnoringWeChatPublicOauth">
+        <Value>IgnoringWeChatPublicOauth</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Customers.Customers.Fields.IgnoringWeChatAdminOauth">
+        <Value>IgnoringWeChatAdminOauth</Value>
+    </LocaleResource>
+    
+    <!--新增 Category-->
+    <LocaleResource Name="Admin.Catalog.Categories.Fields.UnifiedId">
+        <Value>UnifiedId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Categories.Fields.PlatformRate">
+        <Value>PlatformRate</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Categories.Fields.Summary">
+        <Value>Summary</Value>
+    </LocaleResource>
+    
+    <!--新增 Product-->
+    <LocaleResource Name="Admin.Catalog.Products.Fields.Slogan">
+        <Value>Slogan</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.SloganUrl">
+        <Value>SloganUrl</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.SloganUrlText">
+        <Value>SloganUrlText</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.CoverImagePictureId">
+        <Value>CoverImagePictureId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.CoverThumbImagePictureId">
+        <Value>CoverThumbImagePictureId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.Url">
+        <Value>Url</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.CODSupport">
+        <Value>CODSupport</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.Audited">
+        <Value>Audited</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.PublicDisplay">
+        <Value>PublicDisplay</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.LimitToVendor">
+        <Value>LimitToVendor</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.SelfSupport">
+        <Value>SelfSupport</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.EnablePoints">
+        <Value>EnablePoints</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.MarkAsHot">
+        <Value>MarkAsHot</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.MarkAsRecommend">
+        <Value>MarkAsRecommend</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.SpecialOfferProduct">
+        <Value>SpecialOfferProduct</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.AllowComments">
+        <Value>AllowComments</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.DiscountedProduct">
+        <Value>DiscountedProduct</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.OnlyForNewUser">
+        <Value>OnlyForNewUser</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.RequireVerify">
+        <Value>RequireVerify</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.UsageRules">
+        <Value>UsageRules</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.DelayPaymentMinutes">
+        <Value>DelayPaymentMinutes</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.BuyBasePrice">
+        <Value>BuyBasePrice</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.ShareBasePrice">
+        <Value>ShareBasePrice</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.ProductBarCode">
+        <Value>ProductBarCode</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.UnifiedId">
+        <Value>UnifiedId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.EnableViewsCount">
+        <Value>EnableViewsCount</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.ViewsCount">
+        <Value>ViewsCount</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.InitialSalesCount">
+        <Value>InitialSalesCount</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.BrandId">
+        <Value>BrandId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.PaymentReduceInventory">
+        <Value>PaymentReduceInventory</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.PreOrderHasDatePrices">
+        <Value>PreOrderHasDatePrices</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.PreOrderAvailabilityEndDateTimeUtc">
+        <Value>PreOrderAvailabilityEndDateTimeUtc</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.EnableReturnFixDays">
+        <Value>EnableReturnFixDays</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.ReturnFixDays">
+        <Value>ReturnFixDays</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.ReturnFeeByPercent">
+        <Value>ReturnFeeByPercent</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.ReturnFee">
+        <Value>ReturnFee</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.EnableLatestReturn">
+        <Value>EnableLatestReturn</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.LatestReturnDays">
+        <Value>LatestReturnDays</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.LatestReturnTimeUtc">
+        <Value>LatestReturnTimeUtc</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.EnableExpiredReturn">
+        <Value>EnableExpiredReturn</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.ExpiredReturnDates">
+        <Value>ExpiredReturnDates</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.IsCouponCard">
+        <Value>IsCouponCard</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.EnabledVendorCommission">
+        <Value>EnabledVendorCommission</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.EnabledVendorCommissionRules">
+        <Value>EnabledVendorCommissionRules</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.PercentageCommissionRules">
+        <Value>PercentageCommissionRules</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.CommissionAmount">
+        <Value>CommissionAmount</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.EnabledCustomerPriceRules">
+        <Value>EnabledCustomerPriceRules</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.EnabledCustomerShare">
+        <Value>EnabledCustomerShare</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.EnabledCustomerShareRules">
+        <Value>EnabledCustomerShareRules</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.CustomerShareAmount">
+        <Value>CustomerShareAmount</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.PlatformRate">
+        <Value>PlatformRate</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.FreeShippingAmount">
+        <Value>FreeShippingAmount</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.MaxBackOrderStockQuantity">
+        <Value>MaxBackOrderStockQuantity</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.BackOrderNotice">
+        <Value>BackOrderNotice</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.RequireConsumePoints">
+        <Value>RequireConsumePoints</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.RequireConsumePointsCount">
+        <Value>RequireConsumePointsCount</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.RequireConsumeShares">
+        <Value>RequireConsumeShares</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.RequireConsumeSharesAmount">
+        <Value>RequireConsumeSharesAmount</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.VendorEntersPrice">
+        <Value>VendorEntersPrice</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.MinimumVendorEnteredPrice">
+        <Value>MinimumVendorEnteredPrice</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Catalog.Products.Fields.MaximumVendorEnteredPrice">
+        <Value>MaximumVendorEnteredPrice</Value>
+    </LocaleResource>
+
+    <!--新增 Product-->
+    <LocaleResource Name="Admin.Product.SharePage">
+        <Value>Share Page</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.EntityId">
+        <Value>Entity Id</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.PublicEntityTypeId">
+        <Value>PublicEntityType</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.BaseViewCount">
+        <Value>Base ViewCount</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.BaseRecommendeCount">
+        <Value>Base RecommendeCount</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.BaseFavoriteCount">
+        <Value>Base FavoriteCount</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.BaseThumbCount">
+        <Value>Base ThumbCount</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.BaseShareCount">
+        <Value>Base ShareCount</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.Title">
+        <Value>Title</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.Slogan">
+        <Value>Slogan</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.Description">
+        <Value>Description</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.Url">
+        <Value>Url</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.SmallPictureId">
+        <Value>Small Picture</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.BigPictureId">
+        <Value>Big Picture</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.EnablePromotion">
+        <Value>Enable Promotion</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.EnableSharePicture">
+        <Value>Enable SharePicture</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.CashPromotion">
+        <Value>Cash Promotion</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.CommissionRatio">
+        <Value>Commission Ratio</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.ShareCycleDays">
+        <Value>Share Cycle Days</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.LimitToStoreId">
+        <Value>LimitToStoreId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.LimitToVendorStoreId">
+        <Value>LimitToVendorStoreId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.LimitToBrandId">
+        <Value>LimitToBrandId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.LimitToProductId">
+        <Value>LimitToProductId</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.DisplaySharerCode">
+        <Value>Display SharerCode</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.DisplaySharerUser">
+        <Value>Display SharerUser</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.EnableSharePage">
+        <Value>Enable SharePage</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.Title.Required">
+        <Value>Enter a Title</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.Share.Fields.Description.Required">
+        <Value>Enter a Description</Value>
+    </LocaleResource>
+
+    <!--新增 NewsItems-->
+
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.NewsTemplateId">
+        <Value>News Template</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.PageStyleTypeId">
+        <Value>Page Style</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.CustomerId">
+        <Value>Customer Name</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.AuthorName">
+        <Value>Author Name</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.PublisherArea">
+        <Value>Publisher Area</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.PublisherIp">
+        <Value>Publisher Ip</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.SubTitle">
+        <Value>Sub Title</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.CoverImageId">
+        <Value>Cover Image</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.SourceName">
+        <Value>Source Name</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.SourceUrl">
+        <Value>Source Url</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.JumpToSourceUrl">
+        <Value>JumpTo Source Url</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.IsApproved">
+        <Value>Approved</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.EnableViewsCount">
+        <Value>Enable Views Count</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.ViewsCount">
+        <Value>Views Count</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.IsAdvert">
+        <Value>Is Advert</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.AsTopNews">
+        <Value>As TopNews</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.AsRedNews">
+        <Value>As RedNews</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.AsHotNews">
+        <Value>As HotNews</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.AsSlideNews">
+        <Value>As SlideNews</Value>
+    </LocaleResource>
+    <LocaleResource Name="Admin.ContentManagement.News.NewsItems.Fields.UpdatedOnUtc">
+        <Value>Update Time</Value>
+    </LocaleResource>
+
+</Language>
+

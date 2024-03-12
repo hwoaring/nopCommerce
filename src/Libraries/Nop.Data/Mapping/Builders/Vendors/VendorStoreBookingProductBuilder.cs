@@ -2,29 +2,28 @@
 using Nop.Core.Domain.Vendors;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Vendors
+namespace Nop.Data.Mapping.Builders.Vendors;
+
+/// <summary>
+/// Represents a vendor entity builder
+/// </summary>
+public partial class VendorStoreBookingProductBuilder : NopEntityBuilder<VendorStoreBookingProduct>
 {
+    #region Methods
+
     /// <summary>
-    /// Represents a vendor entity builder
+    /// Apply entity configuration
     /// </summary>
-    public partial class VendorStoreBookingProductBuilder : NopEntityBuilder<VendorStoreBookingProduct>
+    /// <param name="table">Create table expression builder</param>
+    public override void MapEntity(CreateTableExpressionBuilder table)
     {
-        #region Methods
+        table
+            .WithColumn(nameof(VendorStoreBookingProduct.VendorStoreId)).AsInt32().ForeignKey<VendorStore>()
+            .WithColumn(nameof(VendorStoreBookingProduct.ProductOrderNoticeIdList)).AsString(128).Nullable()
 
-        /// <summary>
-        /// Apply entity configuration
-        /// </summary>
-        /// <param name="table">Create table expression builder</param>
-        public override void MapEntity(CreateTableExpressionBuilder table)
-        {
-            table
-                .WithColumn(nameof(VendorStoreBookingProduct.VendorStoreId)).AsInt32().ForeignKey<VendorStore>()
-                .WithColumn(nameof(VendorStoreBookingProduct.ProductOrderNoticeIdList)).AsString(128).Nullable()
-
-                ;
-        }
-
-        #endregion
-
+            ;
     }
+
+    #endregion
+
 }

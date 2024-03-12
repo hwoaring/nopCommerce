@@ -24,7 +24,6 @@ namespace Nop.Data.Mapping.Builders.FriendCircles
         {
             table
                 .WithColumn(nameof(FriendCircle.CustomerId)).AsInt32().ForeignKey<Customer>()
-                .WithColumn(nameof(FriendCircle.BrandId)).AsInt32().ForeignKey<Brand>()
                 .WithColumn(nameof(FriendCircle.StoreId)).AsInt32().ForeignKey<Store>()
                 .WithColumn(nameof(FriendCircle.ProductId)).AsInt32().ForeignKey<Product>()
                 .WithColumn(nameof(FriendCircle.Content)).AsString(1024).Nullable()  //避免攻击

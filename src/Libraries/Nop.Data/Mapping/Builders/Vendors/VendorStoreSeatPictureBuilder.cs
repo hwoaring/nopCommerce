@@ -3,29 +3,28 @@ using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Vendors;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Vendors
+namespace Nop.Data.Mapping.Builders.Vendors;
+
+/// <summary>
+/// Represents a vendor entity builder
+/// </summary>
+public partial class VendorStoreSeatPictureBuilder : NopEntityBuilder<VendorStoreSeatPicture>
 {
+    #region Methods
+
     /// <summary>
-    /// Represents a vendor entity builder
+    /// Apply entity configuration
     /// </summary>
-    public partial class VendorStoreSeatPictureBuilder : NopEntityBuilder<VendorStoreSeatPicture>
+    /// <param name="table">Create table expression builder</param>
+    public override void MapEntity(CreateTableExpressionBuilder table)
     {
-        #region Methods
+        table
+            .WithColumn(nameof(VendorStoreSeatPicture.VendorStoreSeatId)).AsInt32().ForeignKey<VendorStoreSeat>()
+            .WithColumn(nameof(VendorStoreSeatPicture.PictureId)).AsInt32().ForeignKey<Picture>()
 
-        /// <summary>
-        /// Apply entity configuration
-        /// </summary>
-        /// <param name="table">Create table expression builder</param>
-        public override void MapEntity(CreateTableExpressionBuilder table)
-        {
-            table
-                .WithColumn(nameof(VendorStoreSeatPicture.VendorStoreSeatId)).AsInt32().ForeignKey<VendorStoreSeat>()
-                .WithColumn(nameof(VendorStoreSeatPicture.PictureId)).AsInt32().ForeignKey<Picture>()
-
-                ;
-        }
-
-        #endregion
-
+            ;
     }
+
+    #endregion
+
 }

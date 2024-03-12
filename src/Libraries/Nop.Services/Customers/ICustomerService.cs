@@ -3,6 +3,7 @@ using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Tax;
+using Nop.Core.Domain.Stores;
 
 namespace Nop.Services.Customers;
 
@@ -646,25 +647,56 @@ public partial interface ICustomerService
     /// <returns>A task that represents the asynchronous operation</returns>
     Task InsertCustomerAddressAsync(Customer customer, Address address);
 
-        #endregion
+    #endregion
 
 
-        #region === 扩展方法 ===
+    #region === 推荐人信息相关 ===
 
-        /// <summary>
-        /// ReferrerCode 获取用户信息
-        /// </summary>
-        /// <param name="ReferrerCode"></param>
-        /// <returns></returns>
-        Task<Customer> GetCustomerByReferrerCodeAsync(long referrerCode);
+    Task<CustomerReferrerSetting> GetCustomerReferrerSettingByIdAsync(int id);
 
-        /// <summary>
-        /// OpenId 获取用户信息
-        /// </summary>
-        /// <param name="customerOpenId"></param>
-        /// <returns></returns>
-        Task<Customer> GetCustomerByOpenIdAsync(string customerOpenId);
+    Task<CustomerReferrerSetting> GetCustomerReferrerSettingByStoreIdCustomerIdAsync(int storeId, int customerId);
 
-        #endregion
-    }
+    Task InsertCustomerReferrerSettingAsync(CustomerReferrerSetting customerReferrerSetting);
+
+    Task UpdateCustomerReferrerSettingAsync(CustomerReferrerSetting customerReferrerSetting);
+
+    Task DeleteCustomerReferrerSettingAsync(CustomerReferrerSetting customerReferrerSetting);
+
+    Task<CustomerReferrer> GetCustomerReferrerByIdAsync(int id);
+
+    Task<CustomerReferrer> GetCustomerReferrerByStoreIdCustomerIdAsync(int referreredInStoreId, int customerId);
+
+    Task InsertCustomerReferrerAsync(CustomerReferrer customerReferrer);
+
+    Task UpdateCustomerReferrerAsync(CustomerReferrer customerReferrer);
+
+    Task DeleteCustomerReferrerAsync(CustomerReferrer customerReferrer);
+
+    #endregion
+
+
+    #region === 扩展方法 ===
+
+    /// <summary>
+    /// 获取不重复的推荐码
+    /// </summary>
+    /// <returns></returns>
+    Task<long> GetCustomerReferrerCodeAsync(int length);
+
+    /// <summary>
+    /// ReferrerCode 获取用户信息
+    /// </summary>
+    /// <param name="ReferrerCode"></param>
+    /// <returns></returns>
+    Task<Customer> GetCustomerByReferrerCodeAsync(long referrerCode);
+
+    /// <summary>
+    /// OpenId 获取用户信息
+    /// </summary>
+    /// <param name="customerOpenId"></param>
+    /// <returns></returns>
+    Task<Customer> GetCustomerByOpenIdAsync(string customerOpenId);
+
+    #endregion
+
 }

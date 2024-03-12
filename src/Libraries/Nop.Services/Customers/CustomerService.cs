@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using Irony.Parsing;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Blogs;
@@ -10,6 +11,7 @@ using Nop.Core.Domain.News;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Polls;
 using Nop.Core.Domain.Shipping;
+using Nop.Core.Domain.Stores;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Infrastructure;
 using Nop.Data;
@@ -35,6 +37,8 @@ public partial class CustomerService : ICustomerService
     protected readonly IRepository<CustomerCustomerRoleMapping> _customerCustomerRoleMappingRepository;
     protected readonly IRepository<CustomerPassword> _customerPasswordRepository;
     protected readonly IRepository<CustomerRole> _customerRoleRepository;
+    protected readonly IRepository<CustomerReferrer> _customerReferrerRepository;    //新增
+    protected readonly IRepository<CustomerReferrerSetting> _customerReferrerSettingRepository;   //新增
     protected readonly IRepository<ForumPost> _forumPostRepository;
     protected readonly IRepository<ForumTopic> _forumTopicRepository;
     protected readonly IRepository<GenericAttribute> _gaRepository;
@@ -64,6 +68,8 @@ public partial class CustomerService : ICustomerService
         IRepository<CustomerCustomerRoleMapping> customerCustomerRoleMappingRepository,
         IRepository<CustomerPassword> customerPasswordRepository,
         IRepository<CustomerRole> customerRoleRepository,
+        IRepository<CustomerReferrer> customerReferrerRepository,
+        IRepository<CustomerReferrerSetting> customerReferrerSettingRepository,
         IRepository<ForumPost> forumPostRepository,
         IRepository<ForumTopic> forumTopicRepository,
         IRepository<GenericAttribute> gaRepository,
@@ -89,6 +95,8 @@ public partial class CustomerService : ICustomerService
         _customerCustomerRoleMappingRepository = customerCustomerRoleMappingRepository;
         _customerPasswordRepository = customerPasswordRepository;
         _customerRoleRepository = customerRoleRepository;
+        _customerReferrerRepository = customerReferrerRepository;    //新增
+        _customerReferrerSettingRepository = customerReferrerSettingRepository;    //新增
         _forumPostRepository = forumPostRepository;
         _forumTopicRepository = forumTopicRepository;
         _gaRepository = gaRepository;
@@ -300,15 +308,15 @@ public partial class CustomerService : ICustomerService
         //filter customers by billing country
         if (countryId > 0)
             customers = from c in customers
-                join a in _customerAddressRepository.Table on c.BillingAddressId equals a.Id
-                where a.CountryId == countryId
-                select c;
+                        join a in _customerAddressRepository.Table on c.BillingAddressId equals a.Id
+                        where a.CountryId == countryId
+                        select c;
 
         var customersWithCarts = from c in customers
-            join item in items on c.Id equals item.CustomerId
-            //we change ordering for the MySQL engine to avoid problems with the ONLY_FULL_GROUP_BY server property that is set by default since the 5.7.5 version
-            orderby _dataProvider.ConfigurationName == "MySql" ? c.CreatedOnUtc : item.CreatedOnUtc descending
-            select c;
+                                 join item in items on c.Id equals item.CustomerId
+                                 //we change ordering for the MySQL engine to avoid problems with the ONLY_FULL_GROUP_BY server property that is set by default since the 5.7.5 version
+                                 orderby _dataProvider.ConfigurationName == "MySql" ? c.CreatedOnUtc : item.CreatedOnUtc descending
+                                 select c;
 
         return await customersWithCarts.Distinct().ToPagedListAsync(pageIndex, pageSize);
     }
@@ -394,8 +402,8 @@ public partial class CustomerService : ICustomerService
             return null;
 
         var query = from c in _customerRepository.Table
-            where customerGuids.Contains(c.CustomerGuid)
-            select c;
+                    where customerGuids.Contains(c.CustomerGuid)
+                    select c;
         var customers = await query.ToListAsync();
 
         return customers;
@@ -415,9 +423,9 @@ public partial class CustomerService : ICustomerService
             return null;
 
         var query = from c in _customerRepository.Table
-            where c.CustomerGuid == customerGuid
-            orderby c.Id
-            select c;
+                    where c.CustomerGuid == customerGuid
+                    orderby c.Id
+                    select c;
 
         return await _shortTermCacheManager.GetAsync(async () => await query.FirstOrDefaultAsync(), NopCustomerServicesDefaults.CustomerByGuidCacheKey, customerGuid);
     }
@@ -436,9 +444,9 @@ public partial class CustomerService : ICustomerService
             return null;
 
         var query = from c in _customerRepository.Table
-            orderby c.Id
-            where c.Email == email
-            select c;
+                    orderby c.Id
+                    where c.Email == email
+                    select c;
         var customer = await query.FirstOrDefaultAsync();
 
         return customer;
@@ -458,9 +466,9 @@ public partial class CustomerService : ICustomerService
             return null;
 
         var query = from c in _customerRepository.Table
-            orderby c.Id
-            where c.SystemName == systemName
-            select c;
+                    orderby c.Id
+                    where c.SystemName == systemName
+                    select c;
 
         var customer = await _shortTermCacheManager.GetAsync(async () => await query.FirstOrDefaultAsync(), NopCustomerServicesDefaults.CustomerBySystemNameCacheKey, systemName);
 
@@ -557,9 +565,9 @@ public partial class CustomerService : ICustomerService
             return null;
 
         var query = from c in _customerRepository.Table
-            orderby c.Id
-            where c.Username == username
-            select c;
+                    orderby c.Id
+                    where c.Username == username
+                    select c;
         var customer = await query.FirstOrDefaultAsync();
 
         return customer;
@@ -581,6 +589,9 @@ public partial class CustomerService : ICustomerService
             CreatedOnUtc = DateTime.UtcNow,
             LastActivityDateUtc = DateTime.UtcNow
         };
+
+        //添加邀请码
+        customer.ReferrerCode = await GetCustomerReferrerCodeAsync(8);
 
         //add to 'Guests' role
         var guestRole = await GetCustomerRoleBySystemNameAsync(NopCustomerDefaults.GuestsRoleName) ?? throw new NopException("'Guests' role could not be loaded");
@@ -673,29 +684,29 @@ public partial class CustomerService : ICustomerService
         var guestRole = await GetCustomerRoleBySystemNameAsync(NopCustomerDefaults.GuestsRoleName);
 
         var allGuestCustomers = from guest in _customerRepository.Table
-            join ccm in _customerCustomerRoleMappingRepository.Table on guest.Id equals ccm.CustomerId
-            where ccm.CustomerRoleId == guestRole.Id
-            select guest;
+                                join ccm in _customerCustomerRoleMappingRepository.Table on guest.Id equals ccm.CustomerId
+                                where ccm.CustomerRoleId == guestRole.Id
+                                select guest;
 
-            var guestsToDelete = from guest in _customerRepository.Table
-                                 join g in allGuestCustomers on guest.Id equals g.Id
-                                 from sCart in _shoppingCartRepository.Table.Where(sci => sci.CustomerId == guest.Id).DefaultIfEmpty()
-                                 from order in _orderRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
-                                 from blogComment in _blogCommentRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
-                                 from newsComment in _newsCommentRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
-                                 from productReview in _productReviewRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
-                                 from productReviewHelpfulness in _productReviewHelpfulnessRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
-                                 from pollVotingRecord in _pollVotingRecordRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
-                                 from forumTopic in _forumTopicRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
-                                 from forumPost in _forumPostRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
-                                 where (!onlyWithoutShoppingCart || sCart == null) &&
-                                     order == null && blogComment == null && newsComment == null && productReview == null && productReviewHelpfulness == null &&
-                                     pollVotingRecord == null && forumTopic == null && forumPost == null &&
-                                     !guest.IsSystemAccount &&
-                                     string.IsNullOrWhiteSpace(guest.OpenId) && //对应的OpenId为空时删除
-                                     (createdFromUtc == null || guest.CreatedOnUtc > createdFromUtc) &&
-                                     (createdToUtc == null || guest.CreatedOnUtc < createdToUtc)
-                                 select new { CustomerId = guest.Id };
+        var guestsToDelete = from guest in _customerRepository.Table
+                             join g in allGuestCustomers on guest.Id equals g.Id
+                             from sCart in _shoppingCartRepository.Table.Where(sci => sci.CustomerId == guest.Id).DefaultIfEmpty()
+                             from order in _orderRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
+                             from blogComment in _blogCommentRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
+                             from newsComment in _newsCommentRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
+                             from productReview in _productReviewRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
+                             from productReviewHelpfulness in _productReviewHelpfulnessRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
+                             from pollVotingRecord in _pollVotingRecordRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
+                             from forumTopic in _forumTopicRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
+                             from forumPost in _forumPostRepository.Table.Where(o => o.CustomerId == guest.Id).DefaultIfEmpty()
+                             where (!onlyWithoutShoppingCart || sCart == null) &&
+                                 order == null && blogComment == null && newsComment == null && productReview == null && productReviewHelpfulness == null &&
+                                 pollVotingRecord == null && forumTopic == null && forumPost == null &&
+                                 !guest.IsSystemAccount &&
+                                 (guest.OpenId == null || guest.OpenId == "") && //对应的OpenId为空时删除
+                                 (createdFromUtc == null || guest.CreatedOnUtc > createdFromUtc) &&
+                                 (createdToUtc == null || guest.CreatedOnUtc < createdToUtc)
+                             select new { CustomerId = guest.Id };
 
         await using var tmpGuests = await _dataProvider.CreateTempDataStorageAsync("tmp_guestsToDelete", guestsToDelete);
         await using var tmpAddresses = await _dataProvider.CreateTempDataStorageAsync("tmp_guestsAddressesToDelete",
@@ -1207,9 +1218,9 @@ public partial class CustomerService : ICustomerService
         var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCustomerServicesDefaults.CustomerRolesBySystemNameCacheKey, systemName);
 
         var query = from cr in _customerRoleRepository.Table
-            orderby cr.Id
-            where cr.SystemName == systemName
-            select cr;
+                    orderby cr.Id
+                    where cr.SystemName == systemName
+                    select cr;
 
         var customerRole = await _staticCacheManager.GetAsync(key, async () => await query.FirstOrDefaultAsync());
 
@@ -1607,9 +1618,9 @@ public partial class CustomerService : ICustomerService
     public virtual async Task<IList<Address>> GetAddressesByCustomerIdAsync(int customerId)
     {
         var query = from address in _customerAddressRepository.Table
-            join cam in _customerAddressMappingRepository.Table on address.Id equals cam.AddressId
-            where cam.CustomerId == customerId
-            select address;
+                    join cam in _customerAddressMappingRepository.Table on address.Id equals cam.AddressId
+                    where cam.CustomerId == customerId
+                    select address;
 
         return await _shortTermCacheManager.GetAsync(async () => await query.ToListAsync(), NopCustomerServicesDefaults.CustomerAddressesCacheKey, customerId);
     }
@@ -1629,9 +1640,9 @@ public partial class CustomerService : ICustomerService
             return null;
 
         var query = from address in _customerAddressRepository.Table
-            join cam in _customerAddressMappingRepository.Table on address.Id equals cam.AddressId
-            where cam.CustomerId == customerId && address.Id == addressId
-            select address;
+                    join cam in _customerAddressMappingRepository.Table on address.Id equals cam.AddressId
+                    where cam.CustomerId == customerId && address.Id == addressId
+                    select address;
 
         return await _shortTermCacheManager.GetAsync(async () => await query.FirstOrDefaultAsync(), NopCustomerServicesDefaults.CustomerAddressCacheKey, customerId, addressId);
     }
@@ -1668,47 +1679,137 @@ public partial class CustomerService : ICustomerService
 
     #endregion
 
-        #endregion
+    #endregion
 
 
-        #region === 扩展方法 ===
 
-        /// <summary>
-        /// ReferrerCode 获取用户信息
-        /// </summary>
-        /// <param name="ReferrerCode"></param>
-        /// <returns></returns>
-        public virtual async Task<Customer> GetCustomerByReferrerCodeAsync(long referrerCode)
-        {
-            if (referrerCode <= 0)
-                return null;
+    #region === 推荐人信息相关 ===
 
-            var query = from c in _customerRepository.Table
-                        where c.ReferrerCode == referrerCode
-                        orderby c.Id
-                        select c;
-
-            return await query.FirstOrDefaultAsync();
-        }
-
-        /// <summary>
-        /// OpenId 获取用户信息
-        /// </summary>
-        /// <param name="customerOpenId"></param>
-        /// <returns></returns>
-        public virtual async Task<Customer> GetCustomerByOpenIdAsync(string customerOpenId)
-        {
-            if (string.IsNullOrWhiteSpace(customerOpenId))
-                return null;
-
-            var query = from c in _customerRepository.Table
-                        where c.OpenId == customerOpenId
-                        orderby c.Id
-                        select c;
-
-            return await _shortTermCacheManager.GetAsync(async () => await query.FirstOrDefaultAsync(), NopCustomerServicesDefaults.CustomerByOpenidCacheKey, customerOpenId);
-        }
-
-        #endregion
+    public virtual async Task<CustomerReferrerSetting> GetCustomerReferrerSettingByIdAsync(int id)
+    {
+        return await _customerReferrerSettingRepository.GetByIdAsync(id, cache => default);
     }
+
+    public virtual async Task<CustomerReferrerSetting> GetCustomerReferrerSettingByStoreIdCustomerIdAsync(int storeId, int customerId)
+    {
+        if (storeId <= 0)
+            return null;
+
+        if (customerId <= 0)
+            return null;
+
+        var query = from crs in _customerReferrerSettingRepository.Table
+                    where crs.StoreId == storeId &&
+                    crs.CustomerId == customerId
+                    select crs;
+
+        return await query.FirstOrDefaultAsync();
+    }
+
+    public virtual async Task InsertCustomerReferrerSettingAsync(CustomerReferrerSetting customerReferrerSetting)
+    {
+        await _customerReferrerSettingRepository.InsertAsync(customerReferrerSetting);
+    }
+
+    public virtual async Task UpdateCustomerReferrerSettingAsync(CustomerReferrerSetting customerReferrerSetting)
+    {
+        await _customerReferrerSettingRepository.UpdateAsync(customerReferrerSetting);
+    }
+
+    public virtual async Task DeleteCustomerReferrerSettingAsync(CustomerReferrerSetting customerReferrerSetting)
+    {
+        await _customerReferrerSettingRepository.DeleteAsync(customerReferrerSetting);
+    }
+
+    public virtual async Task<CustomerReferrer> GetCustomerReferrerByIdAsync(int id)
+    {
+        return await _customerReferrerRepository.GetByIdAsync(id, cache => default);
+    }
+
+    public virtual async Task<CustomerReferrer> GetCustomerReferrerByStoreIdCustomerIdAsync(int referreredInStoreId, int customerId)
+    {
+        if (referreredInStoreId <= 0 || customerId <= 0)
+            return null;
+
+        var query = from cr in _customerReferrerRepository.Table
+                    where cr.ReferreredInStoreId == referreredInStoreId &&
+                    cr.CustomerId == customerId
+                    select cr;
+
+        return await query.FirstOrDefaultAsync();
+    }
+
+    public virtual async Task InsertCustomerReferrerAsync(CustomerReferrer customerReferrer)
+    {
+        await _customerReferrerRepository.InsertAsync(customerReferrer);
+    }
+
+    public virtual async Task UpdateCustomerReferrerAsync(CustomerReferrer customerReferrer)
+    {
+        await _customerReferrerRepository.UpdateAsync(customerReferrer);
+    }
+
+    public virtual async Task DeleteCustomerReferrerAsync(CustomerReferrer customerReferrer)
+    {
+        await _customerReferrerRepository.DeleteAsync(customerReferrer);
+    }
+
+    #endregion
+
+
+    #region === 扩展方法 ===
+
+    /// <summary>
+    /// 生成邀请码
+    /// </summary>
+    /// <param name="ReferrerCode"></param>
+    /// <returns></returns>
+    public virtual async Task<long> GetCustomerReferrerCodeAsync(int length)
+    {
+        var referrerCode = CommonHelper.GenerateFixLengthRandomInt64Code(length);
+        while (await GetCustomerByReferrerCodeAsync(referrerCode) != null)
+        {
+            referrerCode = CommonHelper.GenerateFixLengthRandomInt64Code(length);
+        }
+        return referrerCode;
+    }
+
+    /// <summary>
+    /// ReferrerCode 获取用户信息
+    /// </summary>
+    /// <param name="ReferrerCode"></param>
+    /// <returns></returns>
+    public virtual async Task<Customer> GetCustomerByReferrerCodeAsync(long referrerCode)
+    {
+        if (referrerCode <= 0)
+            return null;
+
+        var query = from c in _customerRepository.Table
+                    where c.ReferrerCode == referrerCode
+                    orderby c.Id
+                    select c;
+
+        return await query.FirstOrDefaultAsync();
+    }
+
+    /// <summary>
+    /// OpenId 获取用户信息
+    /// </summary>
+    /// <param name="customerOpenId"></param>
+    /// <returns></returns>
+    public virtual async Task<Customer> GetCustomerByOpenIdAsync(string customerOpenId)
+    {
+        if (string.IsNullOrWhiteSpace(customerOpenId))
+            return null;
+
+        var query = from c in _customerRepository.Table
+                    where c.OpenId == customerOpenId
+                    orderby c.Id
+                    select c;
+
+        return await _shortTermCacheManager.GetAsync(async () => await query.FirstOrDefaultAsync(), NopCustomerServicesDefaults.CustomerByOpenidCacheKey, customerOpenId);
+    }
+
+    #endregion
+
 }

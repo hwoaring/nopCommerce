@@ -2,29 +2,28 @@
 using Nop.Core.Domain.Vendors;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Vendors
+namespace Nop.Data.Mapping.Builders.Vendors;
+
+/// <summary>
+/// Represents a vendor entity builder
+/// </summary>
+public partial class VendorProductGroupSellProductBuilder : NopEntityBuilder<VendorProductGroupSellProduct>
 {
+    #region Methods
+
     /// <summary>
-    /// Represents a vendor entity builder
+    /// Apply entity configuration
     /// </summary>
-    public partial class VendorProductGroupSellProductBuilder : NopEntityBuilder<VendorProductGroupSellProduct>
+    /// <param name="table">Create table expression builder</param>
+    public override void MapEntity(CreateTableExpressionBuilder table)
     {
-        #region Methods
+        table
+            .WithColumn(nameof(VendorProductGroupSellProduct.VendorProductGroupId)).AsInt32().ForeignKey<VendorProductGroup>()
+            .WithColumn(nameof(VendorProductGroupSellProduct.VendorSaleProductId)).AsInt32().ForeignKey<VendorSaleProduct>()
 
-        /// <summary>
-        /// Apply entity configuration
-        /// </summary>
-        /// <param name="table">Create table expression builder</param>
-        public override void MapEntity(CreateTableExpressionBuilder table)
-        {
-            table
-                .WithColumn(nameof(VendorProductGroupSellProduct.VendorProductGroupId)).AsInt32().ForeignKey<VendorProductGroup>()
-                .WithColumn(nameof(VendorProductGroupSellProduct.VendorSaleProductId)).AsInt32().ForeignKey<VendorSaleProduct>()
-
-                ;
-        }
-
-        #endregion
-
+            ;
     }
+
+    #endregion
+
 }

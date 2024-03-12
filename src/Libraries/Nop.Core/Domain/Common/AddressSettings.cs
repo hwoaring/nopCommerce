@@ -102,33 +102,37 @@ public partial class AddressSettings : ISettings
     /// </summary>
     public bool FaxRequired { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether we have to preselect a country if there's only one country available (public store)
-        /// </summary>
-        public bool PreselectCountryIfOnlyOne { get; set; }
+    /// <summary>
+    /// Gets or sets a value indicating whether we have to preselect a country if there's only one country available (public store)
+    /// </summary>
+    public bool PreselectCountryIfOnlyOne { get; set; }
 
-        #region === 扩展属性 ===
+    #region === 扩展属性 ===
 
-        /// <summary>
-        /// 是否启用LastName
-        /// </summary>
-        public bool LastNameEnabled { get; set; }
+    /// <summary>
+    /// 地址使用区划码
+    /// </summary>
+    public bool UseChinaRegionCode { get; set; }
 
-        /// <summary>
-        /// 是否必须LastName
-        /// </summary>
-        public bool LastNameRequired { get; set; }
+    /// <summary>
+    /// 是否启用LastName
+    /// </summary>
+    public bool LastNameEnabled { get; set; }
 
-        /// <summary>
-        /// 是否启用Email
-        /// </summary>
-        public bool EmailEnabled { get; set; }
+    /// <summary>
+    /// 是否必须LastName
+    /// </summary>
+    public bool LastNameRequired { get; set; }
 
-        /// <summary>
-        /// 是否必须Email
-        /// </summary>
-        public bool EmailRequired { get; set; }
+    /// <summary>
+    /// 是否启用Email
+    /// </summary>
+    public bool EmailEnabled { get; set; }
 
-        #endregion
-    }
+    /// <summary>
+    /// 是否必须Email
+    /// </summary>
+    public bool EmailRequired { get; set; }
+
+    #endregion
 }

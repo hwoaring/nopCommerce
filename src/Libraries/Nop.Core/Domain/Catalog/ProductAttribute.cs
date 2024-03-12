@@ -12,19 +12,18 @@ public partial class ProductAttribute : BaseEntity, ILocalizedEntity
     /// </summary>
     public string Name { get; set; }
 
-        /// <summary>
-        /// Gets or sets the description
-        /// </summary>
-        public string Description { get; set; }
+    /// <summary>
+    /// Gets or sets the description
+    /// </summary>
+    public string Description { get; set; }
 
 
-        #region
+    #region
 
-        /// <summary>
-        /// 短名称
-        /// </summary>
-        public string ShortName { get; set; }
+    /// <summary>
+    /// 短名称
+    /// </summary>
+    public string ShortName { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

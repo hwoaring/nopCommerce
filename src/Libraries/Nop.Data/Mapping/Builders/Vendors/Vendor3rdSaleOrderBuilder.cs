@@ -3,30 +3,29 @@ using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Vendors;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Vendors
+namespace Nop.Data.Mapping.Builders.Vendors;
+
+/// <summary>
+/// Represents a vendor entity builder
+/// </summary>
+public partial class Vendor3rdSaleOrderBuilder : NopEntityBuilder<Vendor3rdSaleOrder>
 {
+    #region Methods
+
     /// <summary>
-    /// Represents a vendor entity builder
+    /// Apply entity configuration
     /// </summary>
-    public partial class Vendor3rdSaleOrderBuilder : NopEntityBuilder<Vendor3rdSaleOrder>
+    /// <param name="table">Create table expression builder</param>
+    public override void MapEntity(CreateTableExpressionBuilder table)
     {
-        #region Methods
+        table
+            .WithColumn(nameof(Vendor3rdSaleOrder.VendorId)).AsInt32().ForeignKey<Vendor>()
+            .WithColumn(nameof(Vendor3rdSaleOrder.Product3rdSalePlatformId)).AsInt32().ForeignKey<Product3rdSalePlatform>()
+            .WithColumn(nameof(Vendor3rdSaleOrder.OrderSerialNumber)).AsAnsiString(128).NotNullable()
 
-        /// <summary>
-        /// Apply entity configuration
-        /// </summary>
-        /// <param name="table">Create table expression builder</param>
-        public override void MapEntity(CreateTableExpressionBuilder table)
-        {
-            table
-                .WithColumn(nameof(Vendor3rdSaleOrder.VendorId)).AsInt32().ForeignKey<Vendor>()
-                .WithColumn(nameof(Vendor3rdSaleOrder.Product3rdSalePlatformId)).AsInt32().ForeignKey<Product3rdSalePlatform>()
-                .WithColumn(nameof(Vendor3rdSaleOrder.OrderSerialNumber)).AsAnsiString(128).NotNullable()
-
-                ;
-        }
-
-        #endregion
-
+            ;
     }
+
+    #endregion
+
 }

@@ -18,6 +18,7 @@ namespace Nop.Data.Mapping.Builders.AntiFake
         {
             table
                 .WithColumn(nameof(AntiFakeVendorCompany.Name)).AsString(128).NotNullable()
+                .WithColumn(nameof(AntiFakeVendorCompany.Code)).AsAnsiString(32).Nullable()
                 .WithColumn(nameof(AntiFakeVendorCompany.Address)).AsString(128).Nullable()
                 .WithColumn(nameof(AntiFakeVendorCompany.Phone)).AsAnsiString(32).Nullable()
                 .WithColumn(nameof(AntiFakeVendorCompany.BusinessLicenseCode)).AsAnsiString(64).Nullable()

@@ -580,35 +580,34 @@ public partial class CatalogSettings : ISettings
     /// <remarks>We have ProductUrlStructureType enum, but we use int value here so that it can be overridden in third-party plugins</remarks>
     public int ProductUrlStructureTypeId { get; set; }
 
-        /// <summary>
-        /// Gets or sets an system name of active search provider
-        /// </summary>
-        public string ActiveSearchProviderSystemName { get; set; }
+    /// <summary>
+    /// Gets or sets an system name of active search provider
+    /// </summary>
+    public string ActiveSearchProviderSystemName { get; set; }
 
 
-        #region
+    #region
 
-        /// <summary>
-        /// 未标价时提示文字（如：电话咨询）
-        /// </summary>
-        public string UnpricedText { get; set; }
+    /// <summary>
+    /// 未标价时提示文字（如：电话咨询）
+    /// </summary>
+    public string UnpricedText { get; set; }
 
-        /// <summary>
-        /// 评论标题字数
-        /// </summary>
-        public int MaxCommentTitleText { get; set; }
+    /// <summary>
+    /// 评论标题字数
+    /// </summary>
+    public int MaxCommentTitleText { get; set; }
 
-        /// <summary>
-        /// 评论内容字数
-        /// </summary>
-        public int MaxCommentContentText { get; set; }
+    /// <summary>
+    /// 评论内容字数
+    /// </summary>
+    public int MaxCommentContentText { get; set; }
 
-        /// <summary>
-        /// 是否延迟加载详情内容中的图片
-        /// </summary>
-        public bool LazyLoadContentImage { get; set; }
+    /// <summary>
+    /// 是否延迟加载详情内容中的图片
+    /// </summary>
+    public bool LazyLoadContentImage { get; set; }
 
-        #endregion
+    #endregion
 
-    }
 }

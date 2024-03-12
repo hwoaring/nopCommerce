@@ -21,12 +21,12 @@ using Nop.Core.Domain.News;
 using Nop.Core.Domain.FriendCircles;
 using Nop.Core.Domain.Shares;
 
-namespace Nop.Data.Migrations.Installation
+namespace Nop.Data.Migrations.Installation;
+
+[NopSchemaMigration("2020/03/13 09:36:08:9037677", "Nop.Data base indexes", MigrationProcessType.Installation)]
+public class Indexes : ForwardOnlyMigration
 {
-    [NopSchemaMigration("2020/03/13 09:36:08:9037677", "Nop.Data base indexes", MigrationProcessType.Installation)]
-    public class Indexes : ForwardOnlyMigration
-    {
-        #region Methods
+    #region Methods
 
     public override void Up()
     {
@@ -97,7 +97,7 @@ namespace Nop.Data.Migrations.Installation
             .OnColumn(nameof(ProductTag.Name)).Ascending()
             .WithOptions().NonClustered();
 
-        Create.Index("IX_Product_Name").OnTable(nameof (Product))
+        Create.Index("IX_Product_Name").OnTable(nameof(Product))
             .OnColumn(nameof(Product.Name)).Ascending()
             .WithOptions().NonClustered();
 
@@ -304,51 +304,56 @@ namespace Nop.Data.Migrations.Installation
             .OnColumn(nameof(ActivityLog.CreatedOnUtc)).Descending()
             .WithOptions().NonClustered();
 
-            Create.Index("IX_AclRecord_EntityId_EntityName").OnTable(nameof(AclRecord))
-                .OnColumn(nameof(AclRecord.EntityId)).Ascending()
-                .OnColumn(nameof(AclRecord.EntityName)).Ascending()
-                .WithOptions().NonClustered();
+        Create.Index("IX_AclRecord_EntityId_EntityName").OnTable(nameof(AclRecord))
+            .OnColumn(nameof(AclRecord.EntityId)).Ascending()
+            .OnColumn(nameof(AclRecord.EntityName)).Ascending()
+            .WithOptions().NonClustered();
 
 
-            //扩展索引
-            Create.Index("IX_Customer_OpenId").OnTable(nameof(Customer))
-                .OnColumn(nameof(Customer.OpenId)).Ascending()
-                .WithOptions().NonClustered();
+        //扩展索引
+        Create.Index("IX_Customer_OpenId").OnTable(nameof(Customer))
+            .OnColumn(nameof(Customer.OpenId)).Ascending()
+            .WithOptions().NonClustered();
 
-            Create.Index("IX_ChinaRegionCode_Code").OnTable(nameof(ChinaRegionCode))
-                .OnColumn(nameof(ChinaRegionCode.Code)).Ascending()
-                .WithOptions().NonClustered();
+        Create.Index("IX_CustomerReferrer_CustomerId_ReferreredInStoreId").OnTable(nameof(CustomerReferrer))
+            .OnColumn(nameof(CustomerReferrer.CustomerId)).Ascending()
+            .OnColumn(nameof(CustomerReferrer.ReferreredInStoreId)).Ascending()
+            .WithOptions().NonClustered();
 
-            Create.Index("IX_BrandTag_Name").OnTable(nameof(BrandTag))
-                .OnColumn(nameof(BrandTag.Name)).Ascending()
-                .WithOptions().NonClustered();
+        Create.Index("IX_ChinaRegionCode_Code").OnTable(nameof(ChinaRegionCode))
+            .OnColumn(nameof(ChinaRegionCode.Code)).Ascending()
+            .WithOptions().NonClustered();
 
-            Create.Index("IX_NewsTag_Name").OnTable(nameof(NewsTag))
-                .OnColumn(nameof(NewsTag.Name)).Ascending()
-                .WithOptions().NonClustered();
+        Create.Index("IX_BrandTag_Name").OnTable(nameof(BrandTag))
+            .OnColumn(nameof(BrandTag.Name)).Ascending()
+            .WithOptions().NonClustered();
 
-            Create.Index("IX_FriendCircleTag_Name").OnTable(nameof(FriendCircleTag))
-                .OnColumn(nameof(FriendCircleTag.Name)).Ascending()
-                .WithOptions().NonClustered();
+        Create.Index("IX_NewsTag_Name").OnTable(nameof(NewsTag))
+            .OnColumn(nameof(NewsTag.Name)).Ascending()
+            .WithOptions().NonClustered();
 
-            Create.Index("IX_PublicTagMapping_PublicEntityId_PublicEntityTypeId").OnTable(nameof(PublicTagMapping))
-                .OnColumn(nameof(PublicTagMapping.PublicEntityId)).Ascending()
-                .OnColumn(nameof(PublicTagMapping.PublicEntityTypeId)).Ascending()
-                .WithOptions().NonClustered();
+        Create.Index("IX_FriendCircleTag_Name").OnTable(nameof(FriendCircleTag))
+            .OnColumn(nameof(FriendCircleTag.Name)).Ascending()
+            .WithOptions().NonClustered();
 
-            Create.Index("IX_SharePage_EntityId_PublicEntityTypeId").OnTable(nameof(SharePage))
-                .OnColumn(nameof(SharePage.EntityId)).Ascending()
-                .OnColumn(nameof(SharePage.PublicEntityTypeId)).Ascending()
-                .WithOptions().NonClustered();
+        Create.Index("IX_PublicTagMapping_PublicEntityId_PublicEntityTypeId").OnTable(nameof(PublicTagMapping))
+            .OnColumn(nameof(PublicTagMapping.PublicEntityId)).Ascending()
+            .OnColumn(nameof(PublicTagMapping.PublicEntityTypeId)).Ascending()
+            .WithOptions().NonClustered();
 
-            Create.Index("IX_SharePageRecords_EntityId_PublicEntityTypeId").OnTable(nameof(SharePageRecords))
-                .OnColumn(nameof(SharePageRecords.EntityId)).Ascending()
-                .OnColumn(nameof(SharePageRecords.PublicEntityTypeId)).Ascending()
-                .OnColumn(nameof(SharePageRecords.CustomerId)).Ascending()
-                .OnColumn(nameof(SharePageRecords.CreatedOnUtc)).Ascending()
-                .WithOptions().NonClustered();
+        Create.Index("IX_SharePage_EntityId_PublicEntityTypeId").OnTable(nameof(SharePage))
+            .OnColumn(nameof(SharePage.EntityId)).Ascending()
+            .OnColumn(nameof(SharePage.PublicEntityTypeId)).Ascending()
+            .WithOptions().NonClustered();
 
-        }
+        Create.Index("IX_SharePageRecords_EntityId_PublicEntityTypeId").OnTable(nameof(SharePageRecords))
+            .OnColumn(nameof(SharePageRecords.EntityId)).Ascending()
+            .OnColumn(nameof(SharePageRecords.PublicEntityTypeId)).Ascending()
+            .OnColumn(nameof(SharePageRecords.CustomerId)).Ascending()
+            .OnColumn(nameof(SharePageRecords.CreatedOnUtc)).Ascending()
+            .WithOptions().NonClustered();
+
+    }
 
     #endregion
 }

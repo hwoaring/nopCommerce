@@ -4,35 +4,34 @@ using Microsoft.Extensions.DependencyInjection;
 using Nop.Core.Infrastructure;
 using Senparc.Weixin.CommonService.Infrastructure.Extensions;
 
-namespace Senparc.Weixin.CommonService.Infrastructure
+namespace Senparc.Weixin.CommonService.Infrastructure;
+
+/// <summary>
+/// Represents object for the configuring weixin on application startup
+/// </summary>
+public partial class NopWeixinStartup : INopStartup
 {
     /// <summary>
-    /// Represents object for the configuring weixin on application startup
+    /// Add and configure any of the middleware
     /// </summary>
-    public partial class NopWeixinStartup : INopStartup
+    /// <param name="services">Collection of service descriptors</param>
+    /// <param name="configuration">Configuration of the application</param>
+    public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        /// <summary>
-        /// Add and configure any of the middleware
-        /// </summary>
-        /// <param name="services">Collection of service descriptors</param>
-        /// <param name="configuration">Configuration of the application</param>
-        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddNopSenparcWeixinServices(configuration);
-        }
-
-        /// <summary>
-        /// Configure the using of added middleware
-        /// </summary>
-        /// <param name="application">Builder for configuring an application's request pipeline</param>
-        public void Configure(IApplicationBuilder application)
-        {
-            application.UseNopSenparcWeixin();
-        }
-
-        /// <summary>
-        /// Gets order of this startup configuration implementation
-        /// </summary>
-        public int Order => 200;
+        services.AddNopSenparcWeixinServices(configuration);
     }
+
+    /// <summary>
+    /// Configure the using of added middleware
+    /// </summary>
+    /// <param name="application">Builder for configuring an application's request pipeline</param>
+    public void Configure(IApplicationBuilder application)
+    {
+        application.UseNopSenparcWeixin();
+    }
+
+    /// <summary>
+    /// Gets order of this startup configuration implementation
+    /// </summary>
+    public int Order => 200;
 }

@@ -22,6 +22,9 @@ namespace Nop.Data.Mapping.Builders.Weixins
                 .WithColumn(nameof(WeixinAccount.StoreId)).AsInt32().ForeignKey<Store>()
                 .WithColumn(nameof(WeixinAccount.Name)).AsString(64).NotNullable()
                 .WithColumn(nameof(WeixinAccount.ApiCode)).AsAnsiString(32).NotNullable()
+                .WithColumn(nameof(WeixinAccount.OriginalId)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(WeixinAccount.SystemName)).AsString(64).Nullable()
+                .WithColumn(nameof(WeixinAccount.Remark)).AsString(512).Nullable()
 
                 .WithColumn(nameof(WeixinAccount.Token)).AsAnsiString(128).Nullable()
                 .WithColumn(nameof(WeixinAccount.EncodingAESKey)).AsAnsiString(128).Nullable()

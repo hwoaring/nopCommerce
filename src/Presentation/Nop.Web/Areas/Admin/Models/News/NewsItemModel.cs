@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Nop.Core.Domain.Shares;
+using Nop.Web.Areas.Admin.Models.Shares;
 using Nop.Web.Framework.Models;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
@@ -18,6 +20,9 @@ public partial record NewsItemModel : BaseNopEntityModel, IStoreMappingSupported
 
         SelectedStoreIds = new List<int>();
         AvailableStores = new List<SelectListItem>();
+
+        //新增属性
+        SharePage = new SharePageModel();
     }
 
     #endregion
@@ -79,6 +84,72 @@ public partial record NewsItemModel : BaseNopEntityModel, IStoreMappingSupported
 
     [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.CreatedOn")]
     public DateTime CreatedOn { get; set; }
+
+
+    //新增属性
+    public SharePageModel SharePage { get; set; }
+
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.NewsTemplateId")]
+    public int NewsTemplateId { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.PageStyleTypeId")]
+    public int PageStyleTypeId { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.CustomerId")]
+    public int CustomerId { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.AuthorName")]
+    public string AuthorName { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.PublisherArea")]
+    public string PublisherArea { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.PublisherIp")]
+    public string PublisherIp { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.SubTitle")]
+    public string SubTitle { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.CoverImageId")]
+    public int CoverImageId { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.SourceName")]
+    public string SourceName { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.SourceUrl")]
+    public string SourceUrl { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.JumpToSourceUrl")]
+    public bool JumpToSourceUrl { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.IsApproved")]
+    public bool IsApproved { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.EnableViewsCount")]
+    public bool EnableViewsCount { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.ViewsCount")]
+    public int ViewsCount { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.IsAdvert")]
+    public bool IsAdvert { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.AsTopNews")]
+    public bool AsTopNews { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.AsRedNews")]
+    public bool AsRedNews { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.AsHotNews")]
+    public bool AsHotNews { get; set; }
+
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.AsSlideNews")]
+    public bool AsSlideNews { get; set; }
+
+    [UIHint("DateTimeNullable")]
+    [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.UpdatedOnUtc")]
+    public DateTime? UpdatedOnUtc { get; set; }
 
     #endregion
 }

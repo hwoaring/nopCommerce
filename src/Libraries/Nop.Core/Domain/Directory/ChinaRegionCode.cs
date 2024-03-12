@@ -8,14 +8,14 @@ namespace Nop.Core.Domain.Directory
     public partial class ChinaRegionCode : BaseEntity, ILocalizedEntity
     {
         /// <summary>
-        /// 6位区划代码
-        /// </summary>
-        public int Code { get; set; }
-
-        /// <summary>
         /// 父级ID
         /// </summary>
         public int ParentId { get; set; }
+
+        /// <summary>
+        /// 6位区划代码
+        /// </summary>
+        public int Code { get; set; }
 
         /// <summary>
         /// 层级（0=省/直辖市，1=市，2=县/区）
@@ -28,12 +28,12 @@ namespace Nop.Core.Domain.Directory
         public string CapitalNameIndex { get; set; }
 
         /// <summary>
-        /// 名称
+        /// 名称(完整名称如：四川省,成都市,锦江区，显示全部路径名称)
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// 短名称
+        /// 短名称(短名称如：四川省或成都市或锦江区，仅显示最末的名称)
         /// </summary>
         public string ShortName { get; set; }
 

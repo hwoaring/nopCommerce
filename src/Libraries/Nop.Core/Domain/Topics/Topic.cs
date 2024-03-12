@@ -100,24 +100,33 @@ public partial class Topic : BaseEntity, ILocalizedEntity, ISlugSupported, IStor
     /// </summary>
     public bool SubjectToAcl { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the entity is limited/restricted to certain stores
-        /// </summary>
-        public bool LimitedToStores { get; set; }
+    /// <summary>
+    /// Gets or sets a value indicating whether the entity is limited/restricted to certain stores
+    /// </summary>
+    public bool LimitedToStores { get; set; }
 
-        #region
+    #region
 
-        /// <summary>
-        /// 开启浏览统计
-        /// </summary>
-        public bool EnableViewsCount { get; set; }
+    /// <summary>
+    /// 开启浏览统计
+    /// </summary>
+    public bool EnableViewsCount { get; set; }
 
-        /// <summary>
-        /// 浏览量
-        /// </summary>
-        public int ViewsCount { get; set; }
+    /// <summary>
+    /// 浏览量
+    /// </summary>
+    public int ViewsCount { get; set; }
 
-        #endregion
+    /// <summary>
+    /// 跳转链接，当直接关闭主题不适合的时候，可以设置跳转链接，避免出现404页面或禁止提示页面。
+    /// </summary>
+    public string Url { get; set; }
 
-    }
+    /// <summary>
+    /// 扩展链接，可以是产品购买链接等
+    /// </summary>
+    public string ExtendUrl { get; set; }
+
+    #endregion
+
 }
