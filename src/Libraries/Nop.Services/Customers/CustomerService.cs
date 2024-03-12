@@ -13,6 +13,7 @@ using Nop.Core.Domain.Polls;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Stores;
 using Nop.Core.Domain.Tax;
+using Nop.Core.Events;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Services.Common;
@@ -28,6 +29,7 @@ public partial class CustomerService : ICustomerService
     #region Fields
 
     protected readonly CustomerSettings _customerSettings;
+    protected readonly IEventPublisher _eventPublisher;
     protected readonly IGenericAttributeService _genericAttributeService;
     protected readonly INopDataProvider _dataProvider;
     protected readonly IRepository<Address> _customerAddressRepository;
@@ -59,6 +61,7 @@ public partial class CustomerService : ICustomerService
     #region Ctor
 
     public CustomerService(CustomerSettings customerSettings,
+        IEventPublisher eventPublisher,
         IGenericAttributeService genericAttributeService,
         INopDataProvider dataProvider,
         IRepository<Address> customerAddressRepository,
@@ -86,6 +89,7 @@ public partial class CustomerService : ICustomerService
         TaxSettings taxSettings)
     {
         _customerSettings = customerSettings;
+        _eventPublisher = eventPublisher;
         _genericAttributeService = genericAttributeService;
         _dataProvider = dataProvider;
         _customerAddressRepository = customerAddressRepository;
@@ -667,6 +671,8 @@ public partial class CustomerService : ICustomerService
         //clear selected payment method
         if (clearPaymentMethod)
             await _genericAttributeService.SaveAttributeAsync<string>(customer, NopCustomerDefaults.SelectedPaymentMethodAttribute, null, storeId);
+
+        await _eventPublisher.PublishAsync(new ResetCheckoutDataEvent(customer, storeId));
     }
 
     /// <summary>

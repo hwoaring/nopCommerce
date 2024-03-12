@@ -1941,13 +1941,7 @@ public partial class SettingController : BaseAdminController
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSettings))
             return AccessDeniedView();
-
-        if (model.Name != null)
-            model.Name = model.Name;
-
-        if (model.Value != null)
-            model.Value = model.Value;
-
+        
         if (!ModelState.IsValid)
             return ErrorJson(ModelState.SerializeErrors());
 
@@ -1974,13 +1968,7 @@ public partial class SettingController : BaseAdminController
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageSettings))
             return AccessDeniedView();
-
-        if (model.Name != null)
-            model.Name = model.Name;
-
-        if (model.Value != null)
-            model.Value = model.Value;
-
+        
         if (!ModelState.IsValid)
             return ErrorJson(ModelState.SerializeErrors());
 
