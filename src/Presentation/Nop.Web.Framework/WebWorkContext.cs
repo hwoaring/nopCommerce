@@ -558,6 +558,43 @@ public partial class WebWorkContext : IWorkContext
         var store = await _storeContext.GetCurrentStoreAsync();
         var currentCustomer = GetCurrentCustomerAsync();
 
+        var rootReferrerCustomerId = 0;          //保存源推荐人ID
+        var setRootReferrerCustomerId = false;   //判断是否需要设置源推荐人ID（源推荐人设置了新的推荐人code情况）
+
+
+        #region === 判断referrerCustomer是否设置了他人的推荐码 ===
+
+        //判断源推荐人referrerCustomer是否设置了他人的推荐码(不为空，Id>0防止默认推荐人传入)
+        if (referrerCustomer != null && referrerCustomer.Id > 0)
+        {
+            //判断（推荐人）是否在推荐状态，忽略自己推荐自己
+            if (referrerCustomer.Deleted || !referrerCustomer.Active)
+                referrerCustomer = null;
+
+            //判断店铺是否关闭推荐功能
+            if (!store.ReferrerEnable)
+                referrerCustomer = null;
+
+            if(referrerCustomer != null)
+            {
+                //获取当前（推荐人）的推荐设置
+                var referrerCustomerReferrerSetting = await _customerService.GetCustomerReferrerSettingByStoreIdCustomerIdAsync(store.Id, referrerCustomer.Id);
+                if (referrerCustomerReferrerSetting != null &&
+                    referrerCustomerReferrerSetting.AsReferrerEnable &&
+                    referrerCustomerReferrerSetting.AsTempReferrerEnable &&
+                    referrerCustomerReferrerSetting.OthersReferrerCode > 0 &&
+                    referrerCustomerReferrerSetting.OthersReferrerCodeEnable)
+                {
+                    rootReferrerCustomerId = referrerCustomer.Id;  //保存源推荐人ID
+                    setRootReferrerCustomerId = true;              //允许设置源推荐人ID
+                    //获取用户通过推荐码设置的新（推荐人）
+                    referrerCustomer = await _customerService.GetCustomerByReferrerCodeAsync(referrerCustomerReferrerSetting.OthersReferrerCode);
+                }
+            }
+        }
+
+        #endregion
+
         #region === 更新或新建推荐人信息 ===
 
         //更新（不为空，Id>0防止默认推荐人传入）
@@ -581,9 +618,13 @@ public partial class WebWorkContext : IWorkContext
                     {
                         StoreId = store.Id,
                         CustomerId = currentCustomer.Id,
+                        OthersReferrerCode = 0L,
+                        OthersReferrerCodeEnable = true,
                         AsReferrerEnable = store.DefaultCustomerReferrerEnable,
                         AsRecommendedEnable = store.DefaultCustomerRecommendedEnable,
-                        AsTempReferrerEnable = store.DefaultCustomerTempReferrerEnable
+                        AsTempReferrerEnable = store.DefaultCustomerTempReferrerEnable,
+                        EnableTempReferrerId = true,
+                        CloseReferrer = false
                     };
                     await _customerService.InsertCustomerReferrerSettingAsync(currentCustomerReferrerSetting);
                 }
@@ -603,9 +644,13 @@ public partial class WebWorkContext : IWorkContext
                     {
                         StoreId = store.Id,
                         CustomerId = referrerCustomer.Id,
+                        OthersReferrerCode = 0L,
+                        OthersReferrerCodeEnable = true,
                         AsReferrerEnable = store.DefaultCustomerReferrerEnable,
                         AsRecommendedEnable = store.DefaultCustomerRecommendedEnable,
-                        AsTempReferrerEnable = store.DefaultCustomerTempReferrerEnable
+                        AsTempReferrerEnable = store.DefaultCustomerTempReferrerEnable,
+                        EnableTempReferrerId = true,
+                        CloseReferrer = false
                     };
                     await _customerService.InsertCustomerReferrerSettingAsync(referrerCustomerReferrerSetting);
                 }
@@ -634,6 +679,10 @@ public partial class WebWorkContext : IWorkContext
                         FirstReferrerPageId = 0,  //被推荐用户的首次访问页面ID
                         FirstReferrerPageType = 1,  //页面类型
                     };
+                    //新建当前用户的推荐人信息，如果推荐用户设置了推荐码，永久推荐人保存为当前推荐人，临时推荐人为设置的推荐人
+                    currentCustomerReferrer.ReferrerCustomerId = setRootReferrerCustomerId ? rootReferrerCustomerId : referrerCustomer.Id;
+                    currentCustomerReferrer.TempReferrerBySourceCustomerId = setRootReferrerCustomerId ? rootReferrerCustomerId : referrerCustomer.Id;
+
                     await _customerService.InsertCustomerReferrerAsync(currentCustomerReferrer);
                 }
 
@@ -649,12 +698,14 @@ public partial class WebWorkContext : IWorkContext
                         if (currentCustomerReferrer.TempReferrerExpireDateUtc < DateTime.UtcNow)
                         {
                             currentCustomerReferrer.TempReferrerCustomerId = referrerCustomer.Id;
+                            currentCustomerReferrer.TempReferrerBySourceCustomerId = setRootReferrerCustomerId ? rootReferrerCustomerId : referrerCustomer.Id;
                             currentCustomerReferrer.TempReferrerExpireDateUtc = DateTime.UtcNow.AddMinutes(store.TempReferrerExpireMinutes);
                         }
                     }
                     else
                     {
                         currentCustomerReferrer.TempReferrerCustomerId = referrerCustomer.Id;
+                        currentCustomerReferrer.TempReferrerBySourceCustomerId = setRootReferrerCustomerId ? rootReferrerCustomerId : referrerCustomer.Id;
                         currentCustomerReferrer.TempReferrerExpireDateUtc = DateTime.UtcNow.AddMinutes(store.TempReferrerExpireMinutes);
                     }
 

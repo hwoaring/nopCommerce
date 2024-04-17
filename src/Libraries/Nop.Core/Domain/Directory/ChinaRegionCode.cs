@@ -38,6 +38,11 @@ namespace Nop.Core.Domain.Directory
         public string ShortName { get; set; }
 
         /// <summary>
+        /// 人口数量
+        /// </summary>
+        public int NumberOfPeople { get; set; }
+
+        /// <summary>
         /// 区划代码是否撤销
         /// </summary>
         public bool Revoked { get; set; }

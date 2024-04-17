@@ -21,7 +21,6 @@ public partial class VendorStoreCategoryBuilder : NopEntityBuilder<VendorStoreCa
     {
         table
             .WithColumn(nameof(VendorStoreCategory.VendorStoreId)).AsInt32().ForeignKey<VendorStore>()
-            .WithColumn(nameof(VendorStoreCategory.CategoryTemplateId)).AsInt32().ForeignKey<CategoryTemplate>(onDelete: Rule.SetNull).Nullable()
             .WithColumn(nameof(VendorStoreCategory.Name)).AsString(32).NotNullable()
             .WithColumn(nameof(VendorStoreCategory.Description)).AsString(512).Nullable()
             .WithColumn(nameof(VendorStoreCategory.MetaKeywords)).AsString(128).Nullable()

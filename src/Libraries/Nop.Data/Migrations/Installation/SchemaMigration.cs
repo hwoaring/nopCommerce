@@ -195,6 +195,8 @@ namespace Nop.Data.Migrations.Installation
 
             //扩展订单相关 Orders
             Create.TableFor<OrderInvoice>(); //订单发票
+            Create.TableFor<OrderScene>(); //订单下单场景信息
+            Create.TableFor<OrderPromotion>(); //订单下单优惠功能
 
 
             //扩展媒体相关 Media

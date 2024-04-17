@@ -23,9 +23,11 @@ public partial class OrderItemBuilder : NopEntityBuilder<OrderItem>
                 .WithColumn(nameof(OrderItem.ProductId)).AsInt32().ForeignKey<Product>()
 
                 //新增属性
-                .WithColumn(nameof(OrderItem.Notes)).AsString(64).Nullable()
+                .WithColumn(nameof(OrderItem.GoodsTag)).AsString(32).Nullable()
+                .WithColumn(nameof(OrderItem.Notes)).AsString(128).Nullable()
                 .WithColumn(nameof(OrderItem.OrderShippingNumber)).AsString(64).Nullable()
                 .WithColumn(nameof(OrderItem.ProductOrderNoticeIdList)).AsAnsiString(128).Nullable()
+                .WithColumn(nameof(OrderItem.DelayPaymentExpireDateUtc)).AsDateTime2().Nullable()
                 ;
         }
 

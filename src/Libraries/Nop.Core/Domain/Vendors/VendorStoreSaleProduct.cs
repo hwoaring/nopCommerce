@@ -13,7 +13,7 @@ public partial class VendorStoreSaleProduct : BaseEntity
     /// <summary>
     /// 产品id
     /// </summary>
-    public int ProductId { get; set; }
+    public int VendorSaleProductId { get; set; }
 
     /// <summary>
     /// 使用自定义价格

@@ -106,6 +106,16 @@ public partial class OrderItem : BaseEntity
     #region
 
     /// <summary>
+    /// (备用)商品退款金额，在order中已有，在这里针对单个产品备用
+    /// </summary>
+    public decimal RefundAmount { get; set; }
+
+    /// <summary>
+    /// 单品的退款数量(备用)
+    /// </summary>
+    public int RefundQuantity { get; set; }
+
+    /// <summary>
     /// 是否延期发货订单（进入顺位排序）
     /// </summary>
     public bool BackOrderItem { get; set; }
@@ -114,6 +124,11 @@ public partial class OrderItem : BaseEntity
     /// 是否需要验证审核：本产品需要后台审核验证后才能付款
     /// </summary>
     public bool RequireVerify { get; set; }
+
+    /// <summary>
+    /// 电子发票入口开放标识
+    /// </summary>
+    public bool SupportFapiao { get; set; }
 
     /// <summary>
     /// 是否已经验证审核：本产品需要后台审核验证后才能付款
@@ -126,7 +141,12 @@ public partial class OrderItem : BaseEntity
     public long UnifiedId { get; set; }
 
     /// <summary>
-    /// 订单产品备注
+    /// 订单优惠标记
+    /// </summary>
+    public string GoodsTag { get; set; }
+
+    /// <summary>
+    /// 订单产品备注信息
     /// </summary>
     public string Notes { get; set; }
 
@@ -149,6 +169,17 @@ public partial class OrderItem : BaseEntity
     /// 产品订单备注选项，多项以逗号分开
     /// </summary>
     public string ProductOrderNoticeIdList { get; set; }
+
+    /// <summary>
+    /// 不在Order中记录，因为一个订单包括多个产品，每个产品的支付过期时间可能不同，
+    /// 订单过期时间取所有产品的过期时间的最小值。
+    /// 
+    /// 交易结束时间,订单失效时间,延时支付分钟数
+    /// （默认可以设置为为3天，如果产品单独设置后，采用产品设置）
+    /// （过期前支付，产品单独设置主要用于抢购商品）
+    /// 取默认设置和产品单独设置的最小时间
+    /// </summary>
+    public DateTime? DelayPaymentExpireDateUtc { get; set; }
 
     #endregion
 }

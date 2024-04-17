@@ -20,7 +20,7 @@ public partial class VendorStoreSaleProductBuilder : NopEntityBuilder<VendorStor
     {
         table
             .WithColumn(nameof(VendorStoreSaleProduct.VendorStoreId)).AsInt32().ForeignKey<VendorStore>()
-            .WithColumn(nameof(VendorStoreSaleProduct.ProductId)).AsInt32().ForeignKey<Product>()
+            .WithColumn(nameof(VendorStoreSaleProduct.VendorSaleProductId)).AsInt32().ForeignKey<VendorSaleProduct>()
 
             ;
     }

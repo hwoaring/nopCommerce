@@ -15,7 +15,8 @@ public partial class VendorStore : BaseEntity, ISoftDeletedEntity
     public long UnifiedId { get; set; }
 
     /// <summary>
-    /// 创建人零售商id（拥有人ID）
+    /// 创建人零售商id（拥有人ID，系统可以创建品牌首页，让对方公司认领，认领时给一定费用）
+    /// 认领为企业店铺时，个人无法删除企业认领店铺
     /// </summary>
     public int VendorId { get; set; }
 
@@ -71,9 +72,54 @@ public partial class VendorStore : BaseEntity, ISoftDeletedEntity
     public int AuthorizePictureId { get; set; }
 
     /// <summary>
-    /// 模板
+    /// 首页模板Id
     /// </summary>
-    public int StoreTemplateId { get; set; }
+    public int IndexTemplateId { get; set; }
+
+    /// <summary>
+    /// 栏目页模板Id
+    /// </summary>
+    public int CategoryTemplateId { get; set; }
+
+    /// <summary>
+    /// 产品页模板Id
+    /// </summary>
+    public int ProductTemplateId { get; set; }
+
+    /// <summary>
+    /// 关于页模板Id
+    /// </summary>
+    public int AboutTemplateId { get; set; }
+
+    /// <summary>
+    /// 招商/投资页模板Id
+    /// </summary>
+    public int InvestmentTemplateId { get; set; }
+
+    /// <summary>
+    /// 表单页模板Id
+    /// </summary>
+    public int FormTemplateId { get; set; }
+
+    /// <summary>
+    /// 联系页模板Id
+    /// </summary>
+    public int ContactTemplateId { get; set; }
+
+    /// <summary>
+    /// 经度值（用于定位店铺位置，可用于设置定位周边x公里范围的搜索）
+    /// </summary>
+    public decimal? Longitude { get; set; }
+
+    /// <summary>
+    /// 纬度值（用于定位店铺位置，可用于设置定位周边x公里范围的搜索）
+    /// </summary>
+    public decimal? Latitude { get; set; }
+
+    /// <summary>
+    /// 覆盖公里数（或者通过VendorStoreRegionalAgent表，查找代理人覆盖区域）
+    /// </summary>
+    public int CoverageKilometers { get; set; }
 
     /// <summary>
     /// 商店联系人姓名
@@ -129,6 +175,11 @@ public partial class VendorStore : BaseEntity, ISoftDeletedEntity
     /// 店铺二维码（公众号图片）
     /// </summary>
     public int QrCodePictureId { get; set; }
+
+    /// <summary>
+    /// 等级（备用）
+    /// </summary>
+    public int Level { get; set; }
 
     /// <summary>
     /// 营业执照公司名称
@@ -312,9 +363,14 @@ public partial class VendorStore : BaseEntity, ISoftDeletedEntity
     
 
     /// <summary>
-    /// 企业已认证
+    /// 是否已认证
     /// </summary>
     public bool Certified { get; set; }
+
+    /// <summary>
+    /// 是否企业店铺：区分店铺是个人认领店铺还是公司/企业认领店铺
+    /// </summary>
+    public bool EnterpriseStore { get; set; }
 
     /// <summary>
     /// 审核通过

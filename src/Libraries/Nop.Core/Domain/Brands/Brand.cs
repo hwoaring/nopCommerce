@@ -28,6 +28,11 @@ namespace Nop.Core.Domain.Brands
         public string Content { get; set; }
 
         /// <summary>
+        /// 注册地ID，0=默认中国大陆
+        /// </summary>
+        public int RegistrationLocation { get; set; }
+
+        /// <summary>
         /// 商标长编号
         /// </summary>
         public string LongCode { get; set; }
@@ -76,6 +81,16 @@ namespace Nop.Core.Domain.Brands
         /// 商标图片地址
         /// </summary>
         public int PictureId { get; set; }
+
+        /// <summary>
+        /// 授权文件图片
+        /// </summary>
+        public int AuthorizationPictureId { get; set; }
+
+        /// <summary>
+        /// 授权到期日期
+        /// </summary>
+        public DateTime? AuthorizationExpireDateUtc { get; set; }
 
         /// <summary>
         /// 排序

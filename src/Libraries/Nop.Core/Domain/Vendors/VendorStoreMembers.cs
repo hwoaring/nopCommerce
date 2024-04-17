@@ -43,6 +43,11 @@ public partial class VendorStoreMembers : BaseEntity, ISoftDeletedEntity
     public int Gender { get; set; }
 
     /// <summary>
+    /// 在VendorStore中的等级
+    /// </summary>
+    public int Level { get; set; }
+
+    /// <summary>
     /// 尊称（礼貌名称，发祝福时候使用尊称）
     /// </summary>
     public string CourtesyName { get; set; }

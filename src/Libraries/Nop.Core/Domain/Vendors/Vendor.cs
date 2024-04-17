@@ -118,7 +118,6 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     /// </summary>
     public bool EnableVendorForm { get; set; }
 
-
     /// <summary>
     /// 是否允许调整自己的产品价格
     /// </summary>
@@ -181,6 +180,11 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     public int LimitQrcodeId { get; set; }
 
     /// <summary>
+    /// 等级（备用）
+    /// </summary>
+    public int Level { get; set; }
+
+    /// <summary>
     /// 是否允许防伪码跟踪信息换入（防伪码设置成为自己的联系方式）
     /// </summary>
     public bool EnableAntiFakeIn { get; set; }
@@ -191,9 +195,14 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     public bool EnableAntiFakeOut { get; set; }
 
     /// <summary>
-    /// 是否自动允许申请人申请更改联系方式，不需要源所有人审核
+    /// 是否自动允许申请人申请更改联系方式，不需要源所有人审核（下级分销人申请）
     /// </summary>
-    public bool AutoAntiFakeOut { get; set; }
+    public bool AutoAntiFakeOutToChildVendor { get; set; }
+
+    /// <summary>
+    /// 是否自动允许源拥有人申请更改联系方式，不需要现用有人审核（防止源拥有人悄悄设置为本人联系信息）
+    /// </summary>
+    public bool AutoAntiFakeOutToParentVendor { get; set; }
 
     /// <summary>
     /// 审核通过
@@ -206,6 +215,11 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     public bool Locked { get; set; }
 
     /// <summary>
+    /// 个人控制：可以自己打开和关闭Vendor功能
+    /// </summary>
+    public bool CloseVendor { get; set; }
+
+    /// <summary>
     /// 个人控制：公开展示，或直接显示推荐的联系方式,客户可以直接联系，表明自己是供应商
     /// </summary>
     public bool DisplayContactInfo { get; set; }
@@ -214,6 +228,11 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     /// 个人信息展示样式
     /// </summary>
     public int ContactInfoStyle { get; set; }
+
+    /// <summary>
+    /// 个人最大可注册个人商店数量
+    /// </summary>
+    public int MaxVendorStore { get; set;}
 
     #endregion
 

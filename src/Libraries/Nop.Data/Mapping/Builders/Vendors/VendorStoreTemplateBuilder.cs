@@ -18,6 +18,7 @@ public partial class VendorStoreTemplateBuilder : NopEntityBuilder<VendorStoreTe
     {
         table
             .WithColumn(nameof(VendorStoreTemplate.Name)).AsString(64).NotNullable()
+            .WithColumn(nameof(VendorStoreTemplate.Discription)).AsString(512).Nullable()
             .WithColumn(nameof(VendorStoreTemplate.ViewPath)).AsAnsiString(1024).NotNullable()
 
             ;

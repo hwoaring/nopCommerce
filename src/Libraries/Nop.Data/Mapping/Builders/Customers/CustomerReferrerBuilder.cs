@@ -28,6 +28,7 @@ public partial class CustomerReferrerBuilder : NopEntityBuilder<CustomerReferrer
                 .WithColumn(nameof(CustomerReferrer.TempReferrerExpireDateUtc)).AsDateTime2().Nullable()
                 .WithColumn(nameof(CustomerReferrer.ReferrerSceneStr)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(CustomerReferrer.FirstReferrerPageUrl)).AsAnsiString(512).Nullable()
+                .WithColumn(nameof(CustomerReferrer.ReferrerHistory)).AsAnsiString(512).Nullable()
                 .WithColumn(nameof(CustomerReferrer.Remark)).AsString(64).Nullable()
                 ;
         }

@@ -262,7 +262,7 @@ public partial class Customer : BaseEntity, ISoftDeletedEntity
     public string UnionId { get; set; }
 
     /// <summary>
-    /// 8位个人推荐码
+    /// 8位个人推荐码（由系统生成，不可更改）
     /// </summary>
     public long ReferrerCode { get; set; }
 

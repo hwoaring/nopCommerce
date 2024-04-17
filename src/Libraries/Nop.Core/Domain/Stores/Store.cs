@@ -108,6 +108,12 @@ public partial class Store : BaseEntity, ILocalizedEntity, ISoftDeletedEntity
     public bool ReferrerEnable { get; set; }
 
     /// <summary>
+    /// 是否开启按品牌区分推荐人
+    /// 即：不同店铺，不同品牌，不同推荐人
+    /// </summary>
+    public bool ReferrerByBrand { get; set; }
+
+    /// <summary>
     /// 创建新推荐信息时候，默认是否允许成为推荐人
     /// </summary>
     public bool DefaultCustomerReferrerEnable { get; set; }

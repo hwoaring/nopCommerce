@@ -32,7 +32,7 @@ public partial class VendorStoreCategory : BaseEntity, ISlugSupported, ISoftDele
     /// <summary>
     /// 模板ID
     /// </summary>
-    public int? CategoryTemplateId { get; set; }
+    public int CategoryTemplateId { get; set; }
 
     /// <summary>
     /// 排序

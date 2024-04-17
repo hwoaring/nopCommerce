@@ -79,7 +79,12 @@ public partial class AntiFakeVendorCompany : BaseEntity, ISoftDeletedEntity
     public string Remark { get; set; }
 
     /// <summary>
-    /// 服务有效期开始
+    /// 创建日期
+    /// </summary>
+    public DateTime CreatDateUtc { get; set; }
+
+    /// <summary>
+    /// 首次开始服务有效期开始时间
     /// </summary>
     public DateTime? StartDateUtc { get; set; }
     
@@ -87,4 +92,9 @@ public partial class AntiFakeVendorCompany : BaseEntity, ISoftDeletedEntity
     /// 服务有效期结束
     /// </summary>
     public DateTime? EndDateUtc { get; set; }
+
+    /// <summary>
+    /// 最近认证日期（最新审核日期）
+    /// </summary>
+    public DateTime? VerifiedDateUtc { get; set; }
 }

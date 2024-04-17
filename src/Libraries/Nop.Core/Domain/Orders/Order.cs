@@ -298,6 +298,11 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
     #region === 扩展属性 ===
 
     /// <summary>
+    /// 支付人的OpenId
+    /// </summary>
+    public string OpenId { get; set; }
+
+    /// <summary>
     /// 推荐用户ID（该单的推荐购买人）
     /// </summary>
     public int ReferrerCustomerId { get; set; }
@@ -306,6 +311,21 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
     /// 对外展示统一加密id（URL参数），作为订单号
     /// </summary>
     public long UnifiedId { get; set; }
+
+    /// <summary>
+    /// 商户系统内部订单号，只能是数字、大小写字母_-*且在同一个商户号下唯一
+    /// </summary>
+    public string OutTradeNo { get; set; }
+
+    /// <summary>
+    /// 附加数据，在查询API和支付通知中原样返回，可作为自定义参数使用，实际情况下只有支付完成状态才会返回该字段
+    /// </summary>
+    public string Attach { get; set; }
+
+    /// <summary>
+    /// 订单优惠标记
+    /// </summary>
+    public string GoodsTag { get; set; }
 
     /// <summary>
     /// 订单备注
@@ -323,6 +343,11 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
     public int OrderInvoiceId { get; set; }
 
     /// <summary>
+    /// 商家小票ID（不是发票信息，是商家机打小票ID号，如：微信1234）
+    /// </summary>
+    public string InvoiceId { get; set; }
+
+    /// <summary>
     /// 订单总邮费快递运费（向代理商结算运费）
     /// </summary>
     public decimal OrderShippingAmount { get; set; }
@@ -338,26 +363,70 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
     public string OrderShippingNumber { get; set; }
 
     /// <summary>
+    /// 商户系统内部的退款单号，商户系统内部唯一，
+    /// 只能是数字、大小写字母_-|*@ ，同一退款单号多次请求只退一笔
+    /// </summary>
+    public string OutRefundNo { get; set; }
+
+    /// <summary>
+    /// 退款原因
+    /// </summary>
+    public string RefundReason { get; set; }
+
+    /// <summary>
+    /// JSAPI支付，APP支付中的PrepayId
+    /// 预支付交易会话标识。用于后续接口调用中使用，该值有效期为2小时
+    /// </summary>
+    public string PrepayId { get; set; }
+
+    /// <summary>
+    /// H5支付中的后h5_url，Native支付中的code_url值
+    /// h5_url为拉起微信支付收银台的中间页面，可通过访问该url来拉起微信客户端，完成支付，h5_url的有效期为5分钟。
+    /// </summary>
+    public string PrepayUrl { get; set; }
+
+    /// <summary>
+    /// PrepayId或PrepayUrl过期时间（如果有）
+    /// </summary>
+    public DateTime? PrepayExpireDateUtc { get; set; }
+
+    /// <summary>
     /// 第三方交易调用接口提交的交易类型
+    /// 交易类型，枚举值：
+    ///JSAPI：公众号支付
+    ///NATIVE：扫码支付
+    ///APP：APP支付
+    ///MICROPAY：付款码支付
+    ///MWEB：H5支付
+    ///FACEPAY：刷脸支付
     /// </summary>
-    public string TradeType { get; set; }
+    public string TradeTypeId { get; set; }
 
     /// <summary>
-    /// 第三方交易单号
+    /// 付款银行
     /// </summary>
-    public string TradeNumber { get; set; }
+    public string BankTypeId { get; set; }
 
     /// <summary>
-    /// 延时支付分钟数（默认=0未单独设置，默认为3天，如果产品单独设置后，采用产品设置）
-    /// 订单支付过期秒数（过期前支付，产品单独设置主要用于抢购商品）
-    /// 取默认设置和产品单独设置的最小时间
+    /// 第三方交易号(由第三方交易平台返回)
     /// </summary>
-    public DateTime DelayPaymentExpireDateUtc { get; set; }
+    public string TransactionId { get; set; }
 
     /// <summary>
     /// 用户下单的场景值
     /// </summary>
     public int CurrentSceneId { get; set; }
+
+    /// <summary>
+    /// 绑定OrderScene表
+    /// </summary>
+    public int OrderSceneId { get; set; }
+
+    /// <summary>
+    /// 是否指定分账
+    /// </summary>
+    public bool ProfitSharing { get; set; }
+
 
     #endregion
 

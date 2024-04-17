@@ -29,10 +29,21 @@ public partial class OrderBuilder : NopEntityBuilder<Order>
                 .WithColumn(nameof(Order.CustomerIp)).AsString(100).Nullable()
 
                 //新增属性
+                .WithColumn(nameof(Order.OpenId)).AsAnsiString(128).Nullable()
+                .WithColumn(nameof(Order.OutTradeNo)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(Order.Attach)).AsString(128).Nullable()
                 .WithColumn(nameof(Order.Notes)).AsString(128).Nullable()
+                .WithColumn(nameof(Order.GoodsTag)).AsString(32).Nullable()
+                .WithColumn(nameof(Order.InvoiceId)).AsString(32).Nullable()
                 .WithColumn(nameof(Order.OrderShippingNumber)).AsString(64).Nullable()
-                .WithColumn(nameof(Order.TradeType)).AsString(64).Nullable()
-                .WithColumn(nameof(Order.TradeNumber)).AsAnsiString(128).Nullable()
+                .WithColumn(nameof(Order.OutRefundNo)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(Order.RefundReason)).AsString(64).Nullable()
+                .WithColumn(nameof(Order.TradeTypeId)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(Order.BankTypeId)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(Order.TransactionId)).AsAnsiString(128).Nullable()
+                .WithColumn(nameof(Order.PrepayId)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(Order.PrepayUrl)).AsAnsiString(512).Nullable()
+                .WithColumn(nameof(Order.PrepayExpireDateUtc)).AsDateTime2().Nullable()
                 ;
         }
 

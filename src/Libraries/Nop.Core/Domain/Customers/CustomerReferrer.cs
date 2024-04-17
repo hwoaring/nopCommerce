@@ -19,9 +19,20 @@ public partial class CustomerReferrer : BaseEntity
     public int CustomerId { get; set; }
 
     /// <summary>
+    /// 品牌ID（备用）
+    /// 按品牌再次区分分享人
+    /// </summary>
+    public int BrandId { get; set; }
+
+    /// <summary>
     /// 永久推荐人ID（推荐人ID）
     /// </summary>
     public int ReferrerCustomerId { get; set; }
+
+    /// <summary>
+    /// 源推荐人设置了他人的推荐码（OthersReferrerCode）时，更新临时推荐人时，暂时保存源推荐人的ID
+    /// </summary>
+    public int TempReferrerBySourceCustomerId { get; set; }
 
     /// <summary>
     /// 临时推荐人ID（推荐人ID）
@@ -42,6 +53,13 @@ public partial class CustomerReferrer : BaseEntity
     /// 推荐场景数字ID
     /// </summary>
     public int ReferrerSceneId { get; set; }
+
+    /// <summary>
+    /// 推荐历史路径（备用）
+    /// 记录推荐人路径，当新人被推荐时候，该值等于：推荐人的历史路径+推荐人ID
+    /// 路径以逗号风格，如：3,43,5
+    /// </summary>
+    public string ReferrerHistory { get; set; }
 
     /// <summary>
     /// 被推荐用户的首次访问页面，即推荐页面（只有用户是被推荐的才记录首次访问页面）

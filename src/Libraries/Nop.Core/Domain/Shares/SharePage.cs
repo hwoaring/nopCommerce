@@ -84,6 +84,12 @@ public partial class SharePage : BaseEntity
     public int BigPictureId { get; set; }
 
     /// <summary>
+    /// 是否及时分享
+    /// 及时分享链接，将优先选择及时分享人，再选择临时分享人，最后选择永久分享人。
+    /// </summary>
+    public bool TimelySharing { get; set; }
+
+    /// <summary>
     /// 开启海报图片设置（海报/广告图）
     /// </summary>
     public bool EnableSharePicture { get; set; }

@@ -23,11 +23,12 @@ namespace Nop.Data.Mapping.Builders.Brands
                 .WithColumn(nameof(Brand.Name)).AsString(64).NotNullable()
                 .WithColumn(nameof(Brand.LongCode)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(Brand.Code)).AsAnsiString(64).Nullable()
-                .WithColumn(nameof(Brand.Company)).AsString(64).Nullable()
+                .WithColumn(nameof(Brand.Company)).AsString(128).Nullable()
                 .WithColumn(nameof(Brand.InternationalText)).AsString(1024).Nullable()
                 .WithColumn(nameof(Brand.MetaTitle)).AsString(512).Nullable()
                 .WithColumn(nameof(Brand.MetaKeywords)).AsString(512).Nullable()
                 .WithColumn(nameof(Brand.MetaDescription)).AsString(1024).Nullable()
+                .WithColumn(nameof(Brand.AuthorizationExpireDateUtc)).AsDateTime2().Nullable()
                 .WithColumn(nameof(Brand.ExpireDateUtc)).AsDateTime2().Nullable()
                 ;
         }

@@ -89,6 +89,11 @@ public partial class VendorSettings : ISettings
     /// </summary>
     public int MaxVendorSaleOrderCount { get; set; }
 
+    /// <summary>
+    /// 个人最大可注册个人商店数量
+    /// </summary>
+    public int MaxVendorStoreCount { get; set; }
+
     #endregion
 
 

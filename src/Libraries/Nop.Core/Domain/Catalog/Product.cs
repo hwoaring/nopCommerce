@@ -544,6 +544,13 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     #region === 扩展属性 ===
 
     /// <summary>
+    /// 公开等级（备用）
+    /// 不同等级的用户是否可以查看
+    /// 或者公开，只能通过链接访问，或者只能通过权限访问
+    /// </summary>
+    public int PublicLevel { get; set; }
+
+    /// <summary>
     /// 产品标语
     /// </summary>
     public string Slogan { get; set; }
@@ -557,6 +564,11 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// 产品标语链接文字
     /// </summary>
     public string SloganUrlText { get; set; }
+
+    /// <summary>
+    /// 显示在支付页面的产品描述信息
+    /// </summary>
+    public string PaymentDescription { get; set; }
 
     /// <summary>
     /// 封面图(长图或大图)
@@ -640,6 +652,11 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public bool RequireVerify { get; set; }
 
     /// <summary>
+    /// 是否支持电子发票
+    /// </summary>
+    public bool SupportFapiao { get; set; }
+
+    /// <summary>
     /// 使用规则（使用限制信息）
     /// </summary>
     public string UsageRules { get; set; }
@@ -661,7 +678,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public decimal ShareBasePrice { get; set; }
 
     /// <summary>
-    /// 产品条码号
+    /// 产品条码号，即UPC编码
     /// </summary>
     public long ProductBarCode { get; set; }
 
@@ -689,6 +706,11 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// 商标ID
     /// </summary>
     public int BrandId { get; set; }
+
+    /// <summary>
+    /// 支持无理由退货类型
+    /// </summary>
+    public int NoReasonReturnTypeId { get; set; }
 
     /// <summary>
     /// 库存减少方式：是否支付减少库存（否则为下单减库存）

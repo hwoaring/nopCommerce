@@ -23,4 +23,14 @@ public partial class VendorStoreRegionalAgent : BaseEntity
     /// 地址的区划代码
     /// </summary>
     public int ChinaRegionCode { get; set; }
+
+    /// <summary>
+    /// 锁定原因
+    /// </summary>
+    public string LockReason { get; set; }
+
+    /// <summary>
+    /// 是否锁定
+    /// </summary>
+    public bool Locked { get; set; }
 }

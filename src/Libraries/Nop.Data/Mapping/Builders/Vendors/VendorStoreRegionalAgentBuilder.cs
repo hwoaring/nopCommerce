@@ -19,6 +19,8 @@ public partial class VendorStoreRegionalAgentBuilder : NopEntityBuilder<VendorSt
     {
         table
             .WithColumn(nameof(VendorStoreRegionalAgent.VendorStoreId)).AsInt32().ForeignKey<VendorStore>()
+            .WithColumn(nameof(VendorStoreRegionalAgent.LockReason)).AsString(64).Nullable()
+
 
             ;
     }

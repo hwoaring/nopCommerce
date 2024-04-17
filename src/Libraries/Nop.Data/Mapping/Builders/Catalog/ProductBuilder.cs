@@ -30,6 +30,7 @@ public partial class ProductBuilder : NopEntityBuilder<Product>
                 .WithColumn(nameof(Product.Slogan)).AsString(128).Nullable()
                 .WithColumn(nameof(Product.SloganUrl)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Product.SloganUrlText)).AsString(128).Nullable()
+                .WithColumn(nameof(Product.PaymentDescription)).AsString(128).Nullable()
                 .WithColumn(nameof(Product.Url)).AsAnsiString(1024).Nullable()
                 .WithColumn(nameof(Product.BackOrderNotice)).AsString(512).Nullable()
                 .WithColumn(nameof(Product.PreOrderAvailabilityEndDateTimeUtc)).AsDateTime2().Nullable()
