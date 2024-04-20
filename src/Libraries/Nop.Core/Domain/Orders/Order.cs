@@ -374,6 +374,15 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
     public string RefundReason { get; set; }
 
     /// <summary>
+    /// 退款渠道
+    /// ORIGINAL：原路退款
+    ///BALANCE：退回到余额
+    ///OTHER_BALANCE：原账户异常退到其他余额账户
+    ///OTHER_BANKCARD：原银行卡异常退到其他银行卡
+    /// </summary>
+    public int RefundChannelId { get; set; }
+
+    /// <summary>
     /// JSAPI支付，APP支付中的PrepayId
     /// 预支付交易会话标识。用于后续接口调用中使用，该值有效期为2小时
     /// </summary>
