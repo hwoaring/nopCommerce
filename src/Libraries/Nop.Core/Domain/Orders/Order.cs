@@ -409,15 +409,22 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
     ///MWEB：H5支付
     ///FACEPAY：刷脸支付
     /// </summary>
-    public string TradeTypeId { get; set; }
+    public int TradeTypeId { get; set; }
+
+    /// <summary>
+    /// 交易状态
+    /// </summary>
+    public int TradeStateId { get; set; }
 
     /// <summary>
     /// 付款银行
+    /// （银行代码ICBC，ABC，WECHAT，ALIPAY等）
     /// </summary>
     public string BankTypeId { get; set; }
 
     /// <summary>
-    /// 第三方交易号(由第三方交易平台返回)
+    /// 备用：第三方交易号(由第三方交易平台返回)
+    /// 先考虑使用原相关字段
     /// </summary>
     public string TransactionId { get; set; }
 

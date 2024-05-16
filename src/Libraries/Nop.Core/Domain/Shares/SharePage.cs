@@ -84,6 +84,13 @@ public partial class SharePage : BaseEntity
     public int BigPictureId { get; set; }
 
     /// <summary>
+    /// 绑定推荐人，任何人分享的时候，阅读人的临时推荐人都是该绑定的推荐人
+    /// （分享页面绑定用户ID，针对给了现金广告费的用户，所有用户分享时，没有永久推荐人的，设置为永久推荐人
+    /// 有永久推荐人的，设置为临时推荐人，赚取分享广告费的用户，在本次分享中不参与分享人记录）
+    /// </summary>
+    public int BindCustomerId { get; set; }
+
+    /// <summary>
     /// 是否及时分享
     /// 及时分享链接，将优先选择及时分享人，再选择临时分享人，最后选择永久分享人。
     /// </summary>
@@ -100,14 +107,14 @@ public partial class SharePage : BaseEntity
     public bool EnablePromotion { get; set; }
 
     /// <summary>
-    /// 推广佣金是否现金（现金直接提现或消费，不是现金，则是广告点只能通过兑换或客户产品购买后返佣）
+    /// 浏览计数比：访客浏览一次计算多少广告点数比例
     /// </summary>
-    public bool CashPromotion { get; set; }
+    public decimal AdvertCommissionRatio { get; set; }
 
     /// <summary>
-    /// 浏览计数比：访客浏览一次计算多少广告点数
+    /// 广告点数结算兑换的券是否允许拆分分开使用
     /// </summary>
-    public decimal CommissionRatio { get; set; }
+    public bool AdvertCommissionSplit { get; set; }
 
     /// <summary>
     /// 自购分销权限金额（供应商没有购买全部服务时）
@@ -126,9 +133,14 @@ public partial class SharePage : BaseEntity
     public decimal OfflineServiceFee { get; set; }
 
     /// <summary>
-    /// 分享循环周期天数（每个周期内只统计一次分享链接）
+    /// 分享循环周期天数
     /// </summary>
     public int ShareCycleDays { get; set; }
+
+    /// <summary>
+    /// 广告代金券结算后，有效使用时间（如365天内有效）
+    /// </summary>
+    public int BalanceExpireDays { get; set; }
 
     /// <summary>
     /// 指定到Store

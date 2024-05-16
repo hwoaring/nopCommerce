@@ -5,7 +5,7 @@ namespace Nop.Core.Domain.AntiFake;
 /// <summary>
 /// 生产公司可访问人绑定信息
 /// </summary>
-public partial class AntiFakeCompanyMapping : BaseEntity
+public partial class AntiFakeCompanyAuthority : BaseEntity
 {
     /// <summary>
     /// 能够访问人id

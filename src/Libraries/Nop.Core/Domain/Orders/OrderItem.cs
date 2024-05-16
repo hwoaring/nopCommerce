@@ -106,6 +106,16 @@ public partial class OrderItem : BaseEntity
     #region
 
     /// <summary>
+    /// 单个产品需要支付的积分
+    /// </summary>
+    public decimal UnitPoints { get; set; }
+
+    /// <summary>
+    /// 需要字符的总积分
+    /// </summary>
+    public decimal Points { get; set; }
+
+    /// <summary>
     /// (备用)商品退款金额，在order中已有，在这里针对单个产品备用
     /// </summary>
     public decimal RefundAmount { get; set; }

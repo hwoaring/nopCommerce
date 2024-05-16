@@ -3,18 +3,18 @@
 namespace Nop.Core.Domain.AntiFake;
 
 /// <summary>
-/// 防伪码
+/// 防伪码（小码）
 /// </summary>
-public partial class AntiFakeCode : BaseEntity, ISoftDeletedEntity
+public partial class AntiFakeCodeItem : BaseEntity, ISoftDeletedEntity
 {
     /// <summary>
-    /// 1：大码/箱码/物流码（外包装）（以1开头+6位生产公司条码编号+8位随机码+1位校验码）
+    /// 1、大码/箱码/物流码（1开头）（以1开头+6位生产公司条码编号+11位随机码+1位校验码）
     /// 二维码链接加上特殊标识参数，系统识别后马上跳转或更改url去掉特殊标识，防止别人通过链接生成二维码
     /// </summary>
     public long BoxCode { get; set; }
 
     /// <summary>
-    /// 6：小码编码（内包装）（以6开头+6位生产公司条码编号+8位随机码+1位校验码）
+    /// 6：小码编码（内包装）（6位生产公司条码编号+11位随机码+1位校验码）
     /// 二维码链接加上特殊标识参数，系统识别后马上跳转或更改url去掉特殊标识，防止别人通过链接生成二维码
     /// </summary>
     public long ItemCode { get; set; }
@@ -24,6 +24,16 @@ public partial class AntiFakeCode : BaseEntity, ISoftDeletedEntity
     /// 二维码链接加上特殊标识参数，系统识别后马上跳转或更改url去掉特殊标识，防止别人通过链接生成二维码
     /// </summary>
     public long Password { get; set; }
+
+    /// <summary>
+    /// 绑定大码的时候同时更新该值（或者作为备用，调用大码的该值）
+    /// </summary>
+    public int AntiFakeProductId { get; set; }
+
+    /// <summary>
+    /// 防伪码图片Url或者图片ID
+    /// </summary>
+    public string ItemCodePictureUrl { get; set; }
 
     /// <summary>
     /// 绑定到销售ID扫码的时候可以显示购买电话

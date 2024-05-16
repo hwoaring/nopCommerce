@@ -1,14 +1,15 @@
 ﻿using FluentMigrator.Builders.Create.Table;
-using Nop.Core.Domain.AntiFake;
+using Nop.Core.Domain.Assets;
 using Nop.Core.Domain.Customers;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.AntiFake
+
+namespace Nop.Data.Mapping.Builders.Assets
 {
     /// <summary>
     /// Represents a affiliate entity builder
     /// </summary>
-    public partial class AntiFakeVendorCompanyMappingBuilder : NopEntityBuilder<AntiFakeVendorCompanyMapping>
+    public partial class AssetsCashsBuilder : NopEntityBuilder<AssetsCashs>
     {
         #region Methods
 
@@ -19,8 +20,10 @@ namespace Nop.Data.Mapping.Builders.AntiFake
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(AntiFakeVendorCompanyMapping.CustomerId)).AsInt32().PrimaryKey().ForeignKey<Customer>()
-                .WithColumn(nameof(AntiFakeVendorCompanyMapping.AntiFakeVendorCompanyId)).AsInt32().PrimaryKey().ForeignKey<AntiFakeVendorCompany>()
+                .WithColumn(nameof(AssetsCashs.CustomerId)).AsInt32().ForeignKey<Customer>()
+                .WithColumn(nameof(AssetsCashs.CardNumber)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(AssetsCashs.Remarks)).AsString(128).Nullable()
+                .WithColumn(nameof(AssetsCashs.HashCode)).AsString(128).Nullable()
 
                 ;
         }

@@ -1,28 +1,27 @@
 ﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.AntiFake;
 
-namespace Nop.Data.Mapping.Builders.AntiFake
+namespace Nop.Data.Mapping.Builders.AntiFake;
+
+/// <summary>
+/// Represents a affiliate entity builder
+/// </summary>
+public partial class AntiFakeProductTemplateBuilder : NopEntityBuilder<AntiFakeProductTemplate>
 {
+    #region Methods
+
     /// <summary>
-    /// Represents a affiliate entity builder
+    /// Apply entity configuration
     /// </summary>
-    public partial class AntiFakeProductTemplateBuilder : NopEntityBuilder<AntiFakeProductTemplate>
+    /// <param name="table">Create table expression builder</param>
+    public override void MapEntity(CreateTableExpressionBuilder table)
     {
-        #region Methods
+        table
+            .WithColumn(nameof(AntiFakeProductTemplate.Name)).AsString(128).NotNullable()
+            .WithColumn(nameof(AntiFakeProductTemplate.ViewPath)).AsAnsiString(128).NotNullable()
 
-        /// <summary>
-        /// Apply entity configuration
-        /// </summary>
-        /// <param name="table">Create table expression builder</param>
-        public override void MapEntity(CreateTableExpressionBuilder table)
-        {
-            table
-                .WithColumn(nameof(AntiFakeProductTemplate.Name)).AsString(128).NotNullable()
-                .WithColumn(nameof(AntiFakeProductTemplate.ViewPath)).AsAnsiString(128).NotNullable()
-
-                ;
-        }
-
-        #endregion
+            ;
     }
+
+    #endregion
 }

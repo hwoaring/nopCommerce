@@ -9,7 +9,7 @@ namespace Nop.Core.Domain.Assets;
 public partial class AssetsMemberCard : BaseEntity, ISoftDeletedEntity
 {
     /// <summary>
-    /// 对应店铺ID
+    /// 对应StoreID
     /// </summary>
     public int StoreId { get; set; }
 
@@ -97,8 +97,6 @@ public partial class AssetsMemberCard : BaseEntity, ISoftDeletedEntity
     /// 激活/是否已开卡
     /// </summary>
     public bool Actived { get; set; }
-
-
 
     /// <summary>
     /// 删除

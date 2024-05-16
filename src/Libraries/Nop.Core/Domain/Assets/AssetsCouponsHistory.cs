@@ -14,24 +14,19 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     public int StoreId { get; set; }
 
     /// <summary>
-    /// 属于零售商店铺ID/否则属于平台公用
-    /// </summary>
-    public int VendorStoreId { get; set; }
-
-    /// <summary>
     /// 对应人员ID
     /// </summary>
     public int CustomerId { get; set; }
 
     /// <summary>
-    /// 操作员ID
-    /// </summary>
-    public int OperatorCustomerId { get; set; }
-
-    /// <summary>
     /// 本单系统内部交易流水号（供应商结算流水号）
     /// </summary>
     public long SerialNumber { get; set; }
+
+    /// <summary>
+    /// 操作员ID
+    /// </summary>
+    public int OperatorCustomerId { get; set; }
 
     /// <summary>
     /// 创建方式
@@ -91,7 +86,7 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// 是否绑定证件使用
     /// </summary>
-    public bool LimitToID { get; set; }
+    public bool LimitToBindID { get; set; }
 
     /// <summary>
     /// 绑定的证件类型（Common中的IDType）
@@ -139,7 +134,7 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     public int AssetsUsedTypeId { get; set; }
 
     /// <summary>
-    /// 已经使用金额/单次使用或可拆分使用记录
+    /// 已经使用金额/单次使用或可拆分分开使用记录
     /// </summary>
     public decimal UsedAmount { get; set; }
 
@@ -169,7 +164,7 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     public int AssetsCashsHistoryId { get; set; }
 
     /// <summary>
-    /// 是否可以拆分使用
+    /// 是否可以拆分分开使用
     /// </summary>
     public bool EnableSplit { get; set; }
 
@@ -282,6 +277,12 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     public int Points { get; set; }
 
     /// <summary>
+    /// 通过哪个外部实体ID创建（主要用于分享赚取的广告费时，记录SharePageRecords的ID值）
+    /// 筛选ID时需要配合获取来源字段进行筛选
+    /// </summary>
+    public int CreatedWithEntityId { get; set; }
+
+    /// <summary>
     /// 通过哪个订单创建/获得
     /// </summary>
     public Guid? CreatedWithOrder { get; set; }
@@ -297,6 +298,11 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     public Guid? UsedWithOrder { get; set; }
 
     /// <summary>
+    /// 通过哪个订单使用/消费（可以拆分使用时，记录多个消费单的单号）
+    /// </summary>
+    public string UsedWithOrderString { get; set; }
+
+    /// <summary>
     /// 指定到Store
     /// </summary>
     public int LimitToStoreId { get; set; }
@@ -310,11 +316,6 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     /// 指定到指定产品品牌Brand
     /// </summary>
     public int LimitToBrandId { get; set; }
-
-    /// <summary>
-    /// 指定到属于某品牌的店铺都可使用（如红旗连锁，舞东风）
-    /// </summary>
-    public int LimitToVendorStoreBrandId { get; set; }
 
     /// <summary>
     /// 指定到Product

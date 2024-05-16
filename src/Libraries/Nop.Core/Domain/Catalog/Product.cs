@@ -581,6 +581,11 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public int CoverThumbImagePictureId { get; set; }
 
     /// <summary>
+    /// 产品透明图片ID
+    /// </summary>
+    public int TransparentPictureId { get; set; }
+
+    /// <summary>
     /// 跳转链接，在列表页点击详情链接跳转（可用于三方购买链接使用）
     /// </summary>
     public string Url { get; set; }
@@ -644,7 +649,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// <summary>
     /// 仅新用户可购买
     /// </summary>
-    public bool OnlyForNewUser { get; set; }
+    public bool NewUserOnly { get; set; }
 
     /// <summary>
     /// 产品需要后台验证后才能付款
@@ -703,7 +708,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public int InitialSalesCount { get; set; }
 
     /// <summary>
-    /// 商标ID
+    /// 商标/品牌ID
     /// </summary>
     public int BrandId { get; set; }
 
@@ -775,57 +780,53 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
 
     /// <summary>
     /// 卡券类型产品（需要填写卡券相关信息）
-    /// </remarks>
     /// </summary>
     public bool IsCouponCard { get; set; }
 
     /// <summary>
     /// 分销：开启销售佣金
-    /// </remarks>
     /// </summary>
     public bool EnabledVendorCommission { get; set; }
 
     /// <summary>
     /// 分销：是否按分销商等级分配佣金（使用等级分配规则）
-    /// </remarks>
     /// </summary>
     public bool EnabledVendorCommissionRules { get; set; }
 
     /// <summary>
-    /// 分销：佣金是否按百分比（否则按估计金额）
-    /// </remarks>
+    /// 分销：佣金是否按销售价格百分比（否则按固定金额）
     /// </summary>
     public bool PercentageCommissionRules { get; set; }
 
     /// <summary>
     /// 分销：佣金金额/或佣金比例
-    /// </remarks>
     /// </summary>
     public decimal CommissionAmount { get; set; }
 
     /// <summary>
     /// 会员价格：开启使用会员价格
-    /// </remarks>
     /// </summary>
     public bool EnabledCustomerPriceRules { get; set; }
 
     /// <summary>
-    /// 广告分享金抵用：开启使用广告金抵用
-    /// </remarks>
+    /// 广告分享金抵用：开启使用广告费抵用
     /// </summary>
-    public bool EnabledCustomerShare { get; set; }
+    public bool AdvertAmountEnabled { get; set; }
 
     /// <summary>
-    /// 广告分享金抵用：开启使用不同等级用户的广告金抵用
-    /// </remarks>
+    /// 广告分享金抵用：开启使用不同等级用户的广告金抵用规则
     /// </summary>
-    public bool EnabledCustomerShareRules { get; set; }
+    public bool UseAdvertAmountRules { get; set; }
 
     /// <summary>
-    /// 广告分享金抵用数量
-    /// </remarks>
+    /// 广告分享金抵用：最高使用金额
     /// </summary>
-    public decimal CustomerShareAmount { get; set; }
+    public decimal MaxAdvertAmounts { get; set; }
+
+    /// <summary>
+    /// 必须使用积分抵扣数量
+    /// </summary>
+    public decimal RequirePoints { get; set; }
 
     /// <summary>
     /// 平台交易费率（成交后扣除费率，商品指定费率优先，其次时候分类指定的费率）
@@ -847,26 +848,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// 延期发货订单提醒客户的信息
     /// </summary>
     public string BackOrderNotice { get; set; }
-
-    /// <summary>
-    /// 购买是否需要扣除积分（可以用于积分兑换）
-    /// </summary>
-    public bool RequireConsumePoints { get; set; }
-
-    /// <summary>
-    /// 购买需要扣除积分数量（可以用于积分兑换）
-    /// </summary>
-    public int RequireConsumePointsCount { get; set; }
-
-    /// <summary>
-    /// 购买是否需要扣除广告费（可以用于广告费兑换）
-    /// </summary>
-    public bool RequireConsumeShares { get; set; }
-
-    /// <summary>
-    /// 购买需要扣除广告费数量（可以用于广告费兑换）
-    /// </summary>
-    public decimal RequireConsumeSharesAmount { get; set; }
 
     /// <summary>
     /// 是否允许代理商自定义价格

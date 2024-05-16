@@ -50,12 +50,12 @@ public static class QrCodeHelper
         MemoryStream fileStream = new MemoryStream();
         var fontSize = 14;
         var wordLength = 0;
-        for (int i = 0; i < text.Length; i++)
+        for (var i = 0; i < text.Length; i++)
         {
-            byte[] bytes = Encoding.Default.GetBytes(text.Substring(i, 1));
+            var bytes = Encoding.Default.GetBytes(text.Substring(i, 1));
             wordLength += bytes.Length > 1 ? 2 : 1;
         }
-        using (var bitmap = new System.Drawing.Bitmap(wordLength * fontSize + 20, 14 + 40, System.Drawing.Imaging.PixelFormat.Format32bppRgb))
+        using (var bitmap = new Bitmap(wordLength * fontSize + 20, 14 + 40, System.Drawing.Imaging.PixelFormat.Format32bppRgb))
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {

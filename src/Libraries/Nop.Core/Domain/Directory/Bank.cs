@@ -1,11 +1,11 @@
-﻿using Nop.Core.Domain.Common;
+﻿using Nop.Core.Domain.Localization;
 
-namespace Nop.Core.Domain.Assets;
+namespace Nop.Core.Domain.Directory;
 
 /// <summary>
-/// 银行
+/// 银行资源信息表
 /// </summary>
-public partial class AssetsBank : BaseEntity, ISoftDeletedEntity
+public partial class Bank : BaseEntity, ILocalizedEntity
 {
     /// <summary>
     /// 银行名称
@@ -28,12 +28,12 @@ public partial class AssetsBank : BaseEntity, ISoftDeletedEntity
     public int DisplayOrder { get; set; }
 
     /// <summary>
+    /// 是否线上支付平台（如：支付宝，微信，易宝等）
+    /// </summary>
+    public bool OnlinePlatform { get; set; }
+
+    /// <summary>
     /// 可用
     /// </summary>
     public bool Available { get; set; }
-
-    /// <summary>
-    /// 删除
-    /// </summary>
-    public bool Deleted { get; set; }
 }

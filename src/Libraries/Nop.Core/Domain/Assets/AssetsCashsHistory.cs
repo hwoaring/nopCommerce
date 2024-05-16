@@ -3,30 +3,19 @@
 namespace Nop.Core.Domain.Assets;
 
 /// <summary>
-/// 现金资产
+/// 个人（现金资产）
 /// </summary>
 public partial class AssetsCashsHistory : BaseEntity, ISoftDeletedEntity
 {
     /// <summary>
-    /// 备用
+    /// 主卡ID号
     /// </summary>
-    public int StoreId { get; set; }
+    public int AssetsCashsId { get; set; }
 
     /// <summary>
     /// 系统现金结算流水号（本系统内）
     /// </summary>
     public long SerialNumber { get; set; }
-
-    /// <summary>
-    /// 资金属于零售商店铺ID/否则属于个人（提现时候提现到对应的商家店铺）
-    /// 属于零售商的固定资金，不能够在其他店铺消费。
-    /// </summary>
-    public int VendorStoreId { get; set; }
-
-    /// <summary>
-    /// 对应人员ID
-    /// </summary>
-    public int CustomerId { get; set; }
 
     /// <summary>
     /// 操作员ID
@@ -44,7 +33,8 @@ public partial class AssetsCashsHistory : BaseEntity, ISoftDeletedEntity
     public int AssetsPaymentPlatformTypeId { get; set; }
 
     /// <summary>
-    /// 是否可提现（特殊用图现金不可提现，只能平台使用，比如充值等，防止非法刷单）
+    /// 是否可退款（提现）如果提现，只能原路返回
+    ///（特殊用图现金不可提现，只能平台使用，比如充值等，防止非法刷单套现）
     /// </summary>
     public bool WithdrawalEnable { get; set; }
 
@@ -64,7 +54,7 @@ public partial class AssetsCashsHistory : BaseEntity, ISoftDeletedEntity
     public decimal ExpendAmounts { get; set; }
 
     /// <summary>
-    /// 余额
+    /// 当前余额
     /// </summary>
     public decimal Amounts { get; set; }
 
@@ -84,7 +74,7 @@ public partial class AssetsCashsHistory : BaseEntity, ISoftDeletedEntity
     public string BankNumber { get; set; }
 
     /// <summary>
-    /// 对方账号（银行账号或支付宝、微信账号）
+    /// 对方账号（银行账号或支付宝、微信账号，数字账号或邮箱）
     /// </summary>
     public string BankAccount { get; set; }
 
@@ -123,31 +113,6 @@ public partial class AssetsCashsHistory : BaseEntity, ISoftDeletedEntity
     /// 创建时间/交易时间
     /// </summary>
     public DateTime CreatedOnUtc { get; set; }
-
-    /// <summary>
-    /// 指定到Store
-    /// </summary>
-    public int LimitToStoreId { get; set; }
-
-    /// <summary>
-    /// 指定到VendorStore
-    /// </summary>
-    public int LimitToVendorStoreId { get; set; }
-
-    /// <summary>
-    /// 指定到指定产品品牌Brand
-    /// </summary>
-    public int LimitToBrandId { get; set; }
-
-    /// <summary>
-    /// 指定到属于某品牌的店铺都可使用（如红旗连锁，舞东风）
-    /// </summary>
-    public int LimitToVendorStoreBrandId { get; set; }
-
-    /// <summary>
-    /// 指定到Product
-    /// </summary>
-    public int LimitToProductId { get; set; }
 
     /// <summary>
     /// 锁定原因备注

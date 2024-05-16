@@ -3,32 +3,32 @@
 namespace Nop.Core.Domain.AntiFake;
 
 /// <summary>
-/// 防伪外箱码、物流码，大码
+/// 防伪码（外箱、物流码，大码）
 /// </summary>
-public partial class AntiFakeBoxCode : BaseEntity, ISoftDeletedEntity
+public partial class AntiFakeCodeBox : BaseEntity, ISoftDeletedEntity
 {
     /// <summary>
-    /// 快速筛选：印刷版面批号（用以快速设置二维码绑定的产品信息，交给印刷公司前要确定）
+    /// 快速筛选(备用)：印刷版面批号（用以快速设置二维码绑定的产品信息，交给印刷公司前要确定）
     /// 以日期 + 当日印刷批号1位 +5位序列号版面号：231208 + 1 +00001，一共12位，以印刷版面递增序号
     /// </summary>
     public long PrintPageCode { get; set; }
 
     /// <summary>
-    /// 快速筛选：大码序列号（用以快速设置二维码绑定的产品信息，序列号在每个大标，交给印刷公司前要确定）
+    /// 快速筛选(备用)：大码序列号（用以快速设置二维码绑定的产品信息，序列号在每个大标，交给印刷公司前要确定）
     /// 以日期+0+随机5位：231208+0+xxxxx，一共12位，然后以这个数作为起点，向后序列增加（避免别人猜出数量）
     /// </summary>
     public long BoxCodeSerialNumber { get; set; }
 
     /// <summary>
-    /// 1、大码/箱码/物流码（外包装）（以1开头+6位生产公司条码编号+8位随机码+1位校验码）
+    /// 1、大码/箱码/物流码（1开头）（6位生产公司条码编号+11位随机码+1位校验码）
     /// 二维码链接加上特殊标识参数，系统识别后马上跳转或更改url去掉特殊标识，防止别人通过链接生成二维码
     /// </summary>
     public long BoxCode { get; set; }
 
     /// <summary>
-    /// 创建日期（系统控制）
+    /// 小码数量（即一拖几）
     /// </summary>
-    public DateTime CreatOnUtc { get; set; }
+    public int ItemCounts { get; set; }
 
     /// <summary>
     /// 【由生产公司控制】：绑定产品（后期使用的时候绑定，避免乱设置产品信息）
@@ -48,12 +48,7 @@ public partial class AntiFakeBoxCode : BaseEntity, ISoftDeletedEntity
     public int VendorId { get; set; }
 
     /// <summary>
-    /// 当前拥有人自己控制是否展示个人销售信息
-    /// </summary>
-    public bool DisplayVendorInfo { get; set; }
-
-    /// <summary>
-    /// 【由生产公司控制】:产品信息绑定日期，不可更改，绑定后作为过期时间计算的参考值
+    /// 【由生产公司控制】:产品信息绑定日期，不可更改，绑定后作为防伪服务过期时间计算的参考值
     /// 生产公司也可作为生产日期使用
     /// </summary>
     public DateTime? BindDateUtc { get; set; }
@@ -72,4 +67,9 @@ public partial class AntiFakeBoxCode : BaseEntity, ISoftDeletedEntity
     /// 删除
     /// </summary>
     public bool Deleted { get; set; }
+
+    /// <summary>
+    /// 创建日期（系统控制）
+    /// </summary>
+    public DateTime CreatOnUtc { get; set; }
 }

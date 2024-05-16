@@ -3,7 +3,7 @@
 namespace Nop.Core.Domain.AntiFake;
 
 /// <summary>
-/// 产品销售员绑定信息更新记录（产品跟踪）
+/// 外箱码扫码，绑定销售员记录（物流跟踪等）
 /// </summary>
 public partial class AntiFakeBoxVendorRecords : BaseEntity
 {

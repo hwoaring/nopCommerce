@@ -1,5 +1,6 @@
 ﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Assets;
+using Nop.Core.Domain.Customers;
 using Nop.Data.Extensions;
 
 
@@ -19,6 +20,7 @@ namespace Nop.Data.Mapping.Builders.Assets
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
+                .WithColumn(nameof(AssetsCouponsHistory.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(AssetsCouponsHistory.Name)).AsString(128).NotNullable()
                 .WithColumn(nameof(AssetsCouponsHistory.CardNumber)).AsAnsiString(128).NotNullable()
                 .WithColumn(nameof(AssetsCouponsHistory.PassWord)).AsAnsiString(64).Nullable()
@@ -33,6 +35,7 @@ namespace Nop.Data.Mapping.Builders.Assets
                 .WithColumn(nameof(AssetsCouponsHistory.HashCode)).AsAnsiString(128).Nullable()
                 .WithColumn(nameof(AssetsCouponsHistory.LockRemark)).AsString(512).Nullable()
 
+                .WithColumn(nameof(AssetsCouponsHistory.UsedWithOrderString)).AsAnsiString(8000).Nullable()
                 .WithColumn(nameof(AssetsCouponsHistory.PassWordExpireDateUtc)).AsDateTime2().Nullable()
                 .WithColumn(nameof(AssetsCouponsHistory.StartDateUtc)).AsDateTime2().Nullable()
                 .WithColumn(nameof(AssetsCouponsHistory.EndDateUtc)).AsDateTime2().Nullable()

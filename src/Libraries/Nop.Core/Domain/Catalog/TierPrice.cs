@@ -71,12 +71,22 @@ public partial class TierPrice : BaseEntity
     /// <summary>
     /// 购买需大于等于会员等级（0-不限会员等级）
     /// </summary>
-    public int CustomerLevel { get; set; }
+    public int LimitCustomerLevel { get; set; }
 
     /// <summary>
     /// 划线价
     /// </summary>
     public decimal OldPrice { get; set; }
+
+    /// <summary>
+    /// 广告分享金抵用：最高使用金额
+    /// </summary>
+    public decimal MaxAdvertAmounts { get; set; }
+
+    /// <summary>
+    /// 必须使用积分抵扣数量
+    /// </summary>
+    public decimal RequirePoints { get; set; }
 
     #endregion
 

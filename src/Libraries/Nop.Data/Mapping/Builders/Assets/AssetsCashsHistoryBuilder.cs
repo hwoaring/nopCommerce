@@ -19,6 +19,7 @@ namespace Nop.Data.Mapping.Builders.Assets
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
+                .WithColumn(nameof(AssetsCashsHistory.AssetsCashsId)).AsInt32().ForeignKey<AssetsCashs>()
                 .WithColumn(nameof(AssetsCashsHistory.BankCode)).AsAnsiString(32).Nullable()
                 .WithColumn(nameof(AssetsCashsHistory.BankNumber)).AsAnsiString(32).Nullable()
                 .WithColumn(nameof(AssetsCashsHistory.BankAccount)).AsAnsiString(64).Nullable()

@@ -178,6 +178,10 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<VendorAttributeValue>();
             Create.TableFor<VendorNote>();
 
+            //扩展区划表相关 Directory
+            Create.TableFor<Bank>();
+            Create.TableFor<ChinaRegionCode>(); //中国区划表
+
             //扩展用户相关 Customer
             Create.TableFor<CustomerReferrer>();
             Create.TableFor<CustomerReferrerSetting>();
@@ -242,11 +246,6 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<NewsTemplate>(); //新闻页面模板（如：微信模板，视频模板，新闻模板……）
 
 
-
-            //扩展区划表相关 Directory
-            Create.TableFor<ChinaRegionCode>(); //中国区划表
-
-
             //扩展朋友圈 FriendCircles
             Create.TableFor<FriendCircle>();
             Create.TableFor<FriendCircleComment>();
@@ -298,6 +297,7 @@ namespace Nop.Data.Migrations.Installation
 
             //扩展分享相关 Shares
             Create.TableFor<SharePage>();
+            Create.TableFor<SharePageAdvert>();
             Create.TableFor<SharePicture>();
             Create.TableFor<SharePageRecords>();
             Create.TableFor<SharePageViews>();
@@ -315,29 +315,30 @@ namespace Nop.Data.Migrations.Installation
             //防伪扩展 AntiFake
             Create.TableFor<AntiFakeCompany>();
             Create.TableFor<AntiFakeVendorCompany>();
-            Create.TableFor<AntiFakeVendorCompanyMapping>();
-            Create.TableFor<AntiFakeCompanyMapping>();
+            Create.TableFor<AntiFakeVendorCompanyAuthority>();
+            Create.TableFor<AntiFakeCompanyAuthority>();
             Create.TableFor<AntiFakeProduct>();
             Create.TableFor<AntiFakeProductTemplate>();
-            Create.TableFor<AntiFakeBoxCode>();
+            Create.TableFor<AntiFakeCodeBox>();
             Create.TableFor<AntiFakeBoxVendorRecords>();
-            Create.TableFor<AntiFakeCode>();
-            Create.TableFor<AntiFakeBottleCode>();
-            Create.TableFor<AntiFakeCoverCode>();
-            Create.TableFor<AntiFakeCashRewardsConfig>();
-            Create.TableFor<AntiFakeCashRewards>();
+            Create.TableFor<AntiFakeCodeItem>();
+            Create.TableFor<AntiFakeCodeBottle>();
+            Create.TableFor<AntiFakeCodeCover>();
+            Create.TableFor<AntiFakeCodeRelateMapping>();
+            Create.TableFor<AntiFakeRewardsConfig>();
+            Create.TableFor<AntiFakeRewardsCode>();
+            Create.TableFor<AntiFakeRewardsPaid>();
+            Create.TableFor<AntiFakeRewardsBlackList>();
             Create.TableFor<AntiFakeCodeScanRecords>();
             Create.TableFor<AntiFakeProductRelatedNews>();
 
             //资产扩展 Assets
-            Create.TableFor<AssetsBank>();
             Create.TableFor<AssetsBankAccount>();
+            Create.TableFor<AssetsCashs>();
             Create.TableFor<AssetsCashsHistory>();
-            Create.TableFor<AssetsCashsVirtualHistory>();
             Create.TableFor<AssetsCouponsHistory>();
             Create.TableFor<AssetsMemberCard>();
             Create.TableFor<AssetsPointsHistory>();
-            Create.TableFor<AssetsSharesHistory>();
 
             //表单扩展 Forms
             Create.TableFor<Form>();

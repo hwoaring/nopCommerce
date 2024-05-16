@@ -8,24 +8,19 @@ namespace Nop.Core.Domain.Assets;
 public partial class AssetsPointsHistory : BaseEntity, ISoftDeletedEntity
 {
     /// <summary>
-    /// 系统积分结算流水号（本系统内）
-    /// </summary>
-    public long SerialNumber { get; set; }
-
-    /// <summary>
     /// 备用
     /// </summary>
     public int StoreId { get; set; }
 
     /// <summary>
-    /// 资金属于零售商店铺ID/否则属于平台公用
-    /// </summary>
-    public int VendorStoreId { get; set; }
-
-    /// <summary>
     /// 对应人员ID
     /// </summary>
     public int CustomerId { get; set; }
+
+    /// <summary>
+    /// 系统积分结算流水号（本系统内）
+    /// </summary>
+    public long SerialNumber { get; set; }
 
     /// <summary>
     /// 操作员ID
@@ -83,6 +78,16 @@ public partial class AssetsPointsHistory : BaseEntity, ISoftDeletedEntity
     public Guid? UsedWithOrder { get; set; }
 
     /// <summary>
+    /// 创建订单号
+    /// </summary>
+    public Guid? CreatedWithOrder { get; set; }
+
+    /// <summary>
+    /// 通过哪个订单产品创建/获得
+    /// </summary>
+    public Guid? CreatedWithOrderItem { get; set; }
+
+    /// <summary>
     /// 指定到Store
     /// </summary>
     public int LimitToStoreId { get; set; }
@@ -96,11 +101,6 @@ public partial class AssetsPointsHistory : BaseEntity, ISoftDeletedEntity
     /// 指定到指定产品品牌Brand
     /// </summary>
     public int LimitToBrandId { get; set; }
-
-    /// <summary>
-    /// 指定到属于某品牌的店铺都可使用（如红旗连锁，舞东风）
-    /// </summary>
-    public int LimitToVendorStoreBrandId { get; set; }
 
     /// <summary>
     /// 指定到Product

@@ -3,7 +3,7 @@
 namespace Nop.Core.Domain.Assets;
 
 /// <summary>
-/// 个人结算提现账号管理
+/// 个人结算提现账号管理(需要实名绑定，防止刷单)
 /// </summary>
 public partial class AssetsBankAccount : BaseEntity
 {
@@ -23,7 +23,7 @@ public partial class AssetsBankAccount : BaseEntity
     public string BankNumber { get; set; }
 
     /// <summary>
-    /// 个人账号（银行账号或支付宝、微信账号）
+    /// 个人账号（银行账号，支付宝、微信账号，可以是数字账号或者邮箱）
     /// </summary>
     public string BankAccount { get; set; }
 
@@ -52,6 +52,11 @@ public partial class AssetsBankAccount : BaseEntity
     /// 银行是否验证
     /// </summary>
     public bool BankVerified { get; set; }
+
+    /// <summary>
+    /// 验证时间
+    /// </summary>
+    public DateTime? VerifiedOnUtc { get; set; }
 
     /// <summary>
     /// 创建时间/交易时间

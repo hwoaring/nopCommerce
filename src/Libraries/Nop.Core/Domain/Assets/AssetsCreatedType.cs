@@ -52,7 +52,7 @@ public enum AssetsCreatedType
     /// </summary>
     SignIn = 31,
     /// <summary>
-    /// 分享
+    /// 分享收入、广告收入
     /// </summary>
     Share = 32,
     /// <summary>

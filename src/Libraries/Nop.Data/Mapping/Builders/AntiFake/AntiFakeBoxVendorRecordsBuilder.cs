@@ -3,28 +3,27 @@ using Nop.Core.Domain.AntiFake;
 using Nop.Data.Extensions;
 
 
-namespace Nop.Data.Mapping.Builders.AntiFake
+namespace Nop.Data.Mapping.Builders.AntiFake;
+
+/// <summary>
+/// Represents a affiliate entity builder
+/// </summary>
+public partial class AntiFakeBoxVendorRecordsBuilder : NopEntityBuilder<AntiFakeBoxVendorRecords>
 {
+    #region Methods
+
     /// <summary>
-    /// Represents a affiliate entity builder
+    /// Apply entity configuration
     /// </summary>
-    public partial class AntiFakeBoxVendorRecordsBuilder : NopEntityBuilder<AntiFakeBoxVendorRecords>
+    /// <param name="table">Create table expression builder</param>
+    public override void MapEntity(CreateTableExpressionBuilder table)
     {
-        #region Methods
+        table
+            .WithColumn(nameof(AntiFakeBoxVendorRecords.Content)).AsAnsiString(3000).Nullable()
 
-        /// <summary>
-        /// Apply entity configuration
-        /// </summary>
-        /// <param name="table">Create table expression builder</param>
-        public override void MapEntity(CreateTableExpressionBuilder table)
-        {
-            table
-                .WithColumn(nameof(AntiFakeBoxVendorRecords.Content)).AsAnsiString(1024).Nullable()
-
-                ;
-        }
-
-        #endregion
-
+            ;
     }
+
+    #endregion
+
 }

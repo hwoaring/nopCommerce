@@ -38,7 +38,6 @@ public partial class OrderBuilder : NopEntityBuilder<Order>
                 .WithColumn(nameof(Order.OrderShippingNumber)).AsString(64).Nullable()
                 .WithColumn(nameof(Order.OutRefundNo)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(Order.RefundReason)).AsString(64).Nullable()
-                .WithColumn(nameof(Order.TradeTypeId)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(Order.BankTypeId)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(Order.TransactionId)).AsAnsiString(128).Nullable()
                 .WithColumn(nameof(Order.PrepayId)).AsAnsiString(64).Nullable()

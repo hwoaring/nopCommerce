@@ -135,6 +135,16 @@ public partial class ProductAttributeValue : BaseEntity, ILocalizedEntity
     /// </summary>
     public int OrderMaximumQuantity { get; set; }
 
+    /// <summary>
+    /// 广告分享金抵用：最高使用金额
+    /// </summary>
+    public decimal MaxAdvertAmounts { get; set; }
+
+    /// <summary>
+    /// 必须使用积分抵扣数量
+    /// </summary>
+    public decimal RequirePoints { get; set; }
+
     #endregion
 
 }

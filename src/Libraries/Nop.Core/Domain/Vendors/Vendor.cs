@@ -134,7 +134,7 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     public int ReferrerVendorId { get; set; }
 
     /// <summary>
-    /// Vendor类型：代理，烟酒门市，终端，个人渠道
+    /// Vendor类型：代理，烟酒门市，终端，个人团购渠道
     /// </summary>
     public int VendorTypeId { get; set; }
 
@@ -228,11 +228,6 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     /// 个人信息展示样式
     /// </summary>
     public int ContactInfoStyle { get; set; }
-
-    /// <summary>
-    /// 个人最大可注册个人商店数量
-    /// </summary>
-    public int MaxVendorStore { get; set;}
 
     #endregion
 

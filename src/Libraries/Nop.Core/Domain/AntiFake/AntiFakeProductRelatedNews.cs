@@ -12,7 +12,6 @@ public partial class AntiFakeProductRelatedNews : BaseEntity
     /// </summary>
     public int AntiFakeProductId { get; set; }
 
-
     /// <summary>
     /// 新闻ID
     /// </summary>
@@ -22,4 +21,9 @@ public partial class AntiFakeProductRelatedNews : BaseEntity
     /// 排序
     /// </summary>
     public int DisplayOrder { get; set; }
+
+    /// <summary>
+    /// 展示
+    /// </summary>
+    public bool Displayed { get; set; }
 }

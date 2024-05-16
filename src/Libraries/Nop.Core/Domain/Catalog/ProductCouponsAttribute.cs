@@ -69,7 +69,7 @@ public partial class ProductCouponsAttribute : BaseEntity
     public bool NeedPassWord { get; set; }
 
     /// <summary>
-    /// 是否可以拆分使用
+    /// 是否可以拆分分开使用
     /// </summary>
     public bool EnableSplit { get; set; }
 

@@ -23,9 +23,34 @@ public partial class AntiFakeProduct : BaseEntity, ISoftDeletedEntity
     public long ProductBarCode { get; set; }
 
     /// <summary>
+    /// 产品图片ID
+    /// </summary>
+    public int PictureId { get; set; }
+
+    /// <summary>
+    /// 产品透明图片ID
+    /// </summary>
+    public int TransparentPictureId { get; set; }
+
+    /// <summary>
+    /// 销售的产品ID（可不设置）
+    /// </summary>
+    public int ProductId { get; set; }
+
+    /// <summary>
+    /// 每箱数量
+    /// </summary>
+    public int QuantityPerBox { get; set; }
+
+    /// <summary>
     /// 产品名称
     /// </summary>
     public string Name { get; set; }
+
+    /// <summary>
+    /// 广告语
+    /// </summary>
+    public string Slogan { get; set; }
 
     /// <summary>
     /// 产品类型（如浓香型）
@@ -100,7 +125,22 @@ public partial class AntiFakeProduct : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// 扫码价格
     /// </summary>
+    public decimal ScanPrice { get; set; }
+
+    /// <summary>
+    /// 零售价格
+    /// </summary>
     public decimal Price { get; set; }
+
+    /// <summary>
+    /// 显示扫码价格
+    /// </summary>
+    public bool DisplayScanPrice { get; set; }
+
+    /// <summary>
+    /// 显示零售价格
+    /// </summary>
+    public bool DisplayPrice { get; set; }
 
     /// <summary>
     /// 产品页模板

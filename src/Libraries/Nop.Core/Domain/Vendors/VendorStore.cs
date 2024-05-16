@@ -17,6 +17,7 @@ public partial class VendorStore : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// 创建人零售商id（拥有人ID，系统可以创建品牌首页，让对方公司认领，认领时给一定费用）
     /// 认领为企业店铺时，个人无法删除企业认领店铺
+    /// 提供公司资质后，可以更换认领人
     /// </summary>
     public int VendorId { get; set; }
 

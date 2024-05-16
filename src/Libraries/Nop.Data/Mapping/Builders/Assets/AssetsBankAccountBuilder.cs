@@ -28,7 +28,7 @@ namespace Nop.Data.Mapping.Builders.Assets
                 .WithColumn(nameof(AssetsBankAccount.BankAccountName)).AsString(32).NotNullable()
                 .WithColumn(nameof(AssetsBankAccount.HashCode)).AsAnsiString(128).Nullable()
                 .WithColumn(nameof(AssetsBankAccount.Remark)).AsString(128).Nullable()
-
+                .WithColumn(nameof(AssetsBankAccount.VerifiedOnUtc)).AsDateTime2().Nullable()
                 ;
         }
 

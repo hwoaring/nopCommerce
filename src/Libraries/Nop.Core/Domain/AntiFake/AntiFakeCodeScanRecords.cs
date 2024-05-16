@@ -3,7 +3,7 @@
 namespace Nop.Core.Domain.AntiFake;
 
 /// <summary>
-/// 防伪内码扫描记录
+/// 防伪内码（小码）扫描记录
 /// </summary>
 public partial class AntiFakeCodeScanRecords : BaseEntity
 {
@@ -14,7 +14,7 @@ public partial class AntiFakeCodeScanRecords : BaseEntity
     public long Password { get; set; }
 
     /// <summary>
-    /// 扫描次数
+    /// 累计扫描次数
     /// </summary>
     public int Count { get; set; }
 
@@ -37,6 +37,16 @@ public partial class AntiFakeCodeScanRecords : BaseEntity
     /// 纬度值（首次扫码）
     /// </summary>
     public decimal? Latitude { get; set; }
+
+    /// <summary>
+    /// 本次扫码时间
+    /// </summary>
+    public DateTime UpdateDateOnUtc { get; set; }
+
+    /// <summary>
+    /// 上一次时间（最新扫码时间）
+    /// </summary>
+    public DateTime LastDateOnUtc { get; set; }
 
     /// <summary>
     /// 创建时间（首次扫码）

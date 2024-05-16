@@ -3,9 +3,9 @@
 namespace Nop.Core.Domain.AntiFake;
 
 /// <summary>
-/// 销售公司可访问人ID
+/// 销售公司可访问人ID权限
 /// </summary>
-public partial class AntiFakeVendorCompanyMapping : BaseEntity
+public partial class AntiFakeVendorCompanyAuthority : BaseEntity
 {
     /// <summary>
     /// 能够访问人id
