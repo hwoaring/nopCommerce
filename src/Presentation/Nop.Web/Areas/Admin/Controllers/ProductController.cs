@@ -836,7 +836,7 @@ public partial class ProductController : BaseAdminController
     {
         //try to load a product entity, if not found, then try to load a product attribute combination
         var productId = (await _productService.GetProductBySkuAsync(searchModel.GoDirectlyToSku))?.Id
-                        ?? (await _productAttributeService.GetProductAttributeCombinationBySkuAsync(searchModel.GoDirectlyToSku))?.ProductId;
+            ?? (await _productAttributeService.GetProductAttributeCombinationBySkuAsync(searchModel.GoDirectlyToSku))?.ProductId;
 
         if (productId != null)
             return RedirectToAction("Edit", "Product", new { id = productId });
@@ -852,8 +852,9 @@ public partial class ProductController : BaseAdminController
 
         //validate maximum number of products per vendor
         var currentVendor = await _workContext.GetCurrentVendorAsync();
-        if (_vendorSettings.MaximumProductNumber > 0 && currentVendor != null
-                                                     && await _productService.GetNumberOfProductsByVendorIdAsync(currentVendor.Id) >= _vendorSettings.MaximumProductNumber)
+        if (_vendorSettings.MaximumProductNumber > 0 &&
+            currentVendor != null &&
+            await _productService.GetNumberOfProductsByVendorIdAsync(currentVendor.Id) >= _vendorSettings.MaximumProductNumber)
         {
             _notificationService.ErrorNotification(string.Format(await _localizationService.GetResourceAsync("Admin.Catalog.Products.ExceededMaximumNumber"),
                 _vendorSettings.MaximumProductNumber));
@@ -885,8 +886,9 @@ public partial class ProductController : BaseAdminController
 
         //validate maximum number of products per vendor
         var currentVendor = await _workContext.GetCurrentVendorAsync();
-        if (_vendorSettings.MaximumProductNumber > 0 && currentVendor != null
-                                                     && await _productService.GetNumberOfProductsByVendorIdAsync(currentVendor.Id) >= _vendorSettings.MaximumProductNumber)
+        if (_vendorSettings.MaximumProductNumber > 0 &&
+            currentVendor != null &&
+            await _productService.GetNumberOfProductsByVendorIdAsync(currentVendor.Id) >= _vendorSettings.MaximumProductNumber)
         {
             _notificationService.ErrorNotification(string.Format(await _localizationService.GetResourceAsync("Admin.Catalog.Products.ExceededMaximumNumber"),
                 _vendorSettings.MaximumProductNumber));
@@ -1198,7 +1200,7 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -1339,7 +1341,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(searchModel.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -1356,11 +1358,11 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> RelatedProductUpdate(RelatedProductModel model)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         //try to get a related product with the specified id
         var relatedProduct = await _productService.GetRelatedProductByIdAsync(model.Id)
-                             ?? throw new ArgumentException("No related product found with the specified id");
+            ?? throw new ArgumentException("No related product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -1381,11 +1383,11 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> RelatedProductDelete(int id)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         //try to get a related product with the specified id
         var relatedProduct = await _productService.GetRelatedProductByIdAsync(id)
-                             ?? throw new ArgumentException("No related product found with the specified id");
+            ?? throw new ArgumentException("No related product found with the specified id");
 
         var productId = relatedProduct.ProductId1;
 
@@ -1473,7 +1475,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(searchModel.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -1490,11 +1492,11 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> CrossSellProductDelete(int id)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         //try to get a cross-sell product with the specified id
         var crossSellProduct = await _productService.GetCrossSellProductByIdAsync(id)
-                               ?? throw new ArgumentException("No cross-sell product found with the specified id");
+            ?? throw new ArgumentException("No cross-sell product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -1579,7 +1581,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(searchModel.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -1596,11 +1598,11 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> AssociatedProductUpdate(AssociatedProductModel model)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         //try to get an associated product with the specified id
         var associatedProduct = await _productService.GetProductByIdAsync(model.Id)
-                                ?? throw new ArgumentException("No associated product found with the specified id");
+            ?? throw new ArgumentException("No associated product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -1617,11 +1619,11 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> AssociatedProductDelete(int id)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         //try to get an associated product with the specified id
         var product = await _productService.GetProductByIdAsync(id)
-                      ?? throw new ArgumentException("No associated product found with the specified id");
+            ?? throw new ArgumentException("No associated product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -1723,7 +1725,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         var files = form.Files.ToList();
         if (!files.Any())
@@ -1770,7 +1772,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(searchModel.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -1787,11 +1789,11 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> ProductPictureUpdate(ProductPictureModel model)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         //try to get a product picture with the specified id
         var productPicture = await _productService.GetProductPictureByIdAsync(model.Id)
-                             ?? throw new ArgumentException("No product picture found with the specified id");
+            ?? throw new ArgumentException("No product picture found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -1804,7 +1806,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a picture with the specified id
         var picture = await _pictureService.GetPictureByIdAsync(productPicture.PictureId)
-                      ?? throw new ArgumentException("No picture found with the specified id");
+            ?? throw new ArgumentException("No picture found with the specified id");
 
         await _pictureService.UpdatePictureAsync(picture.Id,
             await _pictureService.LoadPictureBinaryAsync(picture),
@@ -1823,11 +1825,11 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> ProductPictureDelete(int id)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         //try to get a product picture with the specified id
         var productPicture = await _productService.GetProductPictureByIdAsync(id)
-                             ?? throw new ArgumentException("No product picture found with the specified id");
+            ?? throw new ArgumentException("No product picture found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -1843,7 +1845,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a picture with the specified id
         var picture = await _pictureService.GetPictureByIdAsync(pictureId)
-                      ?? throw new ArgumentException("No picture found with the specified id");
+            ?? throw new ArgumentException("No picture found with the specified id");
 
         await _pictureService.DeletePictureAsync(picture);
 
@@ -1858,14 +1860,14 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> ProductVideoAdd(int productId, [Validate] ProductVideoModel model)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         if (productId == 0)
             throw new ArgumentException();
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         if (string.IsNullOrEmpty(model.VideoUrl))
             ModelState.AddModelError(string.Empty,
@@ -1930,7 +1932,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(searchModel.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -1947,11 +1949,11 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> ProductVideoUpdate([Validate] ProductVideoModel model)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         //try to get a product picture with the specified id
         var productVideo = await _productService.GetProductVideoByIdAsync(model.Id)
-                           ?? throw new ArgumentException("No product video found with the specified id");
+            ?? throw new ArgumentException("No product video found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -1964,7 +1966,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a video with the specified id
         var video = await _videoService.GetVideoByIdAsync(productVideo.VideoId)
-                    ?? throw new ArgumentException("No video found with the specified id");
+            ?? throw new ArgumentException("No video found with the specified id");
 
         var videoUrl = model.VideoUrl.TrimStart('~');
 
@@ -1995,11 +1997,11 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> ProductVideoDelete(int id)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         //try to get a product video with the specified id
         var productVideo = await _productService.GetProductVideoByIdAsync(id)
-                           ?? throw new ArgumentException("No product video found with the specified id");
+            ?? throw new ArgumentException("No product video found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -2015,7 +2017,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a video with the specified id
         var video = await _videoService.GetVideoByIdAsync(videoId)
-                    ?? throw new ArgumentException("No video found with the specified id");
+            ?? throw new ArgumentException("No video found with the specified id");
 
         await _videoService.DeleteVideoAsync(video);
 
@@ -2055,8 +2057,7 @@ public partial class ProductController : BaseAdminController
             model.ValueRaw = null;
 
         //store raw html if field allow this
-        if (model.AttributeTypeId == (int)SpecificationAttributeType.CustomText
-            || model.AttributeTypeId == (int)SpecificationAttributeType.Hyperlink)
+        if (model.AttributeTypeId == (int)SpecificationAttributeType.CustomText || model.AttributeTypeId == (int)SpecificationAttributeType.Hyperlink)
             model.ValueRaw = model.Value;
 
         var psa = model.ToEntity<ProductSpecificationAttribute>();
@@ -2110,7 +2111,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(searchModel.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -2297,7 +2298,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product tag with the specified id
         var tag = await _productTagService.GetProductTagByIdAsync(id)
-                  ?? throw new ArgumentException("No product tag found with the specified id");
+            ?? throw new ArgumentException("No product tag found with the specified id");
 
         await _productTagService.DeleteProductTagAsync(tag);
 
@@ -2310,7 +2311,7 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> ProductTagsDelete(ICollection<int> selectedIds)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProductTags))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -2380,7 +2381,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(searchModel.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -2675,7 +2676,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(searchModel.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -2695,7 +2696,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //prepare model
         var model = await _productModelFactory.PrepareTierPriceModelAsync(new TierPriceModel(), product, null);
@@ -2712,7 +2713,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(model.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -2755,7 +2756,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(tierPrice.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -2781,7 +2782,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(tierPrice.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -2811,15 +2812,15 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> TierPriceDelete(int id)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         //try to get a tier price with the specified id
         var tierPrice = await _productService.GetTierPriceByIdAsync(id)
-                        ?? throw new ArgumentException("No tier price found with the specified id");
+            ?? throw new ArgumentException("No tier price found with the specified id");
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(tierPrice.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -2846,7 +2847,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(searchModel.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -2866,7 +2867,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -2890,7 +2891,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(model.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -2967,11 +2968,11 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product attribute mapping with the specified id
         var productAttributeMapping = await _productAttributeService.GetProductAttributeMappingByIdAsync(id)
-                                      ?? throw new ArgumentException("No product attribute mapping found with the specified id");
+            ?? throw new ArgumentException("No product attribute mapping found with the specified id");
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productAttributeMapping.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -2995,11 +2996,11 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product attribute mapping with the specified id
         var productAttributeMapping = await _productAttributeService.GetProductAttributeMappingByIdAsync(model.Id)
-                                      ?? throw new ArgumentException("No product attribute mapping found with the specified id");
+            ?? throw new ArgumentException("No product attribute mapping found with the specified id");
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productAttributeMapping.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -3049,11 +3050,11 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product attribute mapping with the specified id
         var productAttributeMapping = await _productAttributeService.GetProductAttributeMappingByIdAsync(id)
-                                      ?? throw new ArgumentException("No product attribute mapping found with the specified id");
+            ?? throw new ArgumentException("No product attribute mapping found with the specified id");
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productAttributeMapping.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -3097,11 +3098,11 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product attribute mapping with the specified id
         var productAttributeMapping = await _productAttributeService.GetProductAttributeMappingByIdAsync(searchModel.ProductAttributeMappingId)
-                                      ?? throw new ArgumentException("No product attribute mapping found with the specified id");
+            ?? throw new ArgumentException("No product attribute mapping found with the specified id");
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productAttributeMapping.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -3121,11 +3122,11 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product attribute mapping with the specified id
         var productAttributeMapping = await _productAttributeService.GetProductAttributeMappingByIdAsync(productAttributeMappingId)
-                                      ?? throw new ArgumentException("No product attribute mapping found with the specified id");
+            ?? throw new ArgumentException("No product attribute mapping found with the specified id");
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productAttributeMapping.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -3151,7 +3152,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productAttributeMapping.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -3220,7 +3221,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productAttributeMapping.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -3251,7 +3252,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productAttributeMapping.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -3306,19 +3307,19 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> ProductAttributeValueDelete(int id)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         //try to get a product attribute value with the specified id
         var productAttributeValue = await _productAttributeService.GetProductAttributeValueByIdAsync(id)
-                                    ?? throw new ArgumentException("No product attribute value found with the specified id");
+            ?? throw new ArgumentException("No product attribute value found with the specified id");
 
         //try to get a product attribute mapping with the specified id
         var productAttributeMapping = await _productAttributeService.GetProductAttributeMappingByIdAsync(productAttributeValue.ProductAttributeMappingId)
-                                      ?? throw new ArgumentException("No product attribute mapping found with the specified id");
+            ?? throw new ArgumentException("No product attribute mapping found with the specified id");
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productAttributeMapping.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -3436,7 +3437,7 @@ public partial class ProductController : BaseAdminController
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(searchModel.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -3453,15 +3454,15 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> ProductAttributeCombinationDelete(int id)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         //try to get a combination with the specified id
         var combination = await _productAttributeService.GetProductAttributeCombinationByIdAsync(id)
-                          ?? throw new ArgumentException("No product attribute combination found with the specified id");
+            ?? throw new ArgumentException("No product attribute combination found with the specified id");
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(combination.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -3716,11 +3717,11 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> GenerateAllAttributeCombinations(int productId)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageProducts))
-            return AccessDeniedView();
+            return await AccessDeniedDataTablesJson();
 
         //try to get a product with the specified id
         var product = await _productService.GetProductByIdAsync(productId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -3772,7 +3773,7 @@ public partial class ProductController : BaseAdminController
             return await AccessDeniedDataTablesJson();
 
         var product = await _productService.GetProductByIdAsync(searchModel.ProductId)
-                      ?? throw new ArgumentException("No product found with the specified id");
+            ?? throw new ArgumentException("No product found with the specified id");
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
