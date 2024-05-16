@@ -427,6 +427,7 @@ public partial class CustomerController : BaseAdminController
                                 Email = customer.Email,
                                 Active = true,
                                 StoreId = store.Id,
+                                LanguageId = customer.LanguageId ?? store.DefaultLanguageId,
                                 CreatedOnUtc = DateTime.UtcNow
                             });
                         }
@@ -687,6 +688,7 @@ public partial class CustomerController : BaseAdminController
                                     Email = customer.Email,
                                     Active = true,
                                     StoreId = store.Id,
+                                    LanguageId = customer.LanguageId ?? store.DefaultLanguageId,
                                     CreatedOnUtc = DateTime.UtcNow
                                 });
                             }
@@ -798,10 +800,7 @@ public partial class CustomerController : BaseAdminController
             return RedirectToAction("Edit", new { id = customer.Id });
         }
 
-        if (!ModelState.IsValid)
-            return RedirectToAction("Edit", new { id = customer.Id });
-
-        var changePassRequest = new ChangePasswordRequest(model.Email,
+        var changePassRequest = new ChangePasswordRequest(customer.Email,
             false, _customerSettings.DefaultPasswordFormat, model.Password);
         var changePassResult = await _customerRegistrationService.ChangePasswordAsync(changePassRequest);
         if (changePassResult.Success)

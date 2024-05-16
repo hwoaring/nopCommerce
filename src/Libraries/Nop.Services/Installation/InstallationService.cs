@@ -2876,6 +2876,8 @@ namespace Nop.Services.Installation
                 DisplayAllPicturesOnCatalogPages = false,
                 ProductUrlStructureTypeId = (int)ProductUrlStructureType.Product,
                 ActiveSearchProviderSystemName = string.Empty,
+                UseStandardSearchWhenSearchProviderThrowsException = true
+                ActiveSearchProviderSystemName = string.Empty,
                 UnpricedText = string.Empty,  //新增加
                 MaxCommentTitleText = 50,  //新增加
                 MaxCommentContentText = 100,  //新增加

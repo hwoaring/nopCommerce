@@ -1213,6 +1213,7 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
         CreateMap<NewsletterSubscriptionModel, NewsLetterSubscription>()
             .ForMember(entity => entity.CreatedOnUtc, options => options.Ignore())
             .ForMember(entity => entity.NewsLetterSubscriptionGuid, options => options.Ignore())
+            .ForMember(entity => entity.LanguageId, option => option.Ignore())
             .ForMember(entity => entity.StoreId, options => options.Ignore());
 
         CreateMap<QueuedEmail, QueuedEmailModel>()

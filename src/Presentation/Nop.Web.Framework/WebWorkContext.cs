@@ -113,7 +113,7 @@ public partial class WebWorkContext : IWorkContext
     /// <param name="customerGuid">Guid of the customer</param>
     protected virtual void SetCustomerCookie(Guid customerGuid)
     {
-        if (_httpContextAccessor.HttpContext?.Response?.HasStarted ?? true)
+        if (_httpContextAccessor.HttpContext?.Response.HasStarted ?? true)
             return;
 
         //delete current cookie value
@@ -144,7 +144,7 @@ public partial class WebWorkContext : IWorkContext
     /// <param name="language">Language</param>
     protected virtual void SetLanguageCookie(Language language)
     {
-        if (_httpContextAccessor.HttpContext?.Response?.HasStarted ?? true)
+        if (_httpContextAccessor.HttpContext?.Response.HasStarted ?? true)
             return;
 
         //delete current cookie value
