@@ -183,6 +183,12 @@ public partial class VendorStore : BaseEntity, ISoftDeletedEntity
     public int Level { get; set; }
 
     /// <summary>
+    /// 平台合作承诺书，合作协议图片ID
+    /// （内容包括会员个人信息保密与合理使用，自行发布的优惠卡卡券由发布公司承担所有责任，品牌只提供数据存储服务和会员功能服务）
+    /// </summary>
+    public int AgreementPictureId { get; set; }
+
+    /// <summary>
     /// 营业执照公司名称
     /// </summary>
     public string BusinessName { get; set; }

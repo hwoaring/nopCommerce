@@ -8,6 +8,10 @@ namespace Nop.Core.Domain.Shares;
 /// </summary>
 public partial class SharePageRecords : BaseEntity
 {
+    /// <summary>
+    /// 分享用户ID
+    /// </summary>
+    public int CustomerId { get; set; }
 
     /// <summary>
     /// 实例ID
@@ -33,11 +37,6 @@ public partial class SharePageRecords : BaseEntity
     /// 生成可以关注公众号的临时二维码ID（本系统的ID）
     /// </summary>
     public int QrCodeTemporaryId { get; set; }
-
-    /// <summary>
-    /// 分享用户ID
-    /// </summary>
-    public int CustomerId { get; set; }
 
     /// <summary>
     /// 使用的分享海报ID（可为空：统计海报共享人，分析海报引用数量和阅读效果）

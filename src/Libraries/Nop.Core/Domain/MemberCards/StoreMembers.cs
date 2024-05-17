@@ -1,26 +1,21 @@
 ﻿using Nop.Core.Domain.Common;
 
-namespace Nop.Core.Domain.Vendors;
+namespace Nop.Core.Domain.MemberCards;
 
 /// <summary>
 /// 不同店铺的会员信息（会员信息管理系统）
 /// </summary>
-public partial class VendorStoreMembers : BaseEntity, ISoftDeletedEntity
+public partial class StoreMembers : BaseEntity, ISoftDeletedEntity
 {
     /// <summary>
-    /// Store ID
-    /// </summary>
-    public int StoreId { get; set; }
-
-    /// <summary>
-    /// VendorStore ID
-    /// </summary>
-    public int VendorStoreId { get; set; }
-
-    /// <summary>
-    /// 会员ID
+    /// 用户ID
     /// </summary>
     public int CustomerId { get; set; }
+
+    /// <summary>
+    /// 店铺ID
+    /// </summary>
+    public int VendorStoreId { get; set; }
 
     /// <summary>
     /// 姓名
@@ -43,9 +38,9 @@ public partial class VendorStoreMembers : BaseEntity, ISoftDeletedEntity
     public int Gender { get; set; }
 
     /// <summary>
-    /// 在VendorStore中的等级
+    /// 会员卡开卡推荐人
     /// </summary>
-    public int Level { get; set; }
+    public int ReferrerCustomerId { get; set; }
 
     /// <summary>
     /// 尊称（礼貌名称，发祝福时候使用尊称）
@@ -131,4 +126,9 @@ public partial class VendorStoreMembers : BaseEntity, ISoftDeletedEntity
     /// 删除
     /// </summary>
     public bool Deleted { get; set; }
+
+    /// <summary>
+    /// 添加时间(开卡时间)
+    /// </summary>
+    public DateTime CreatOnUtc { get; set; }
 }

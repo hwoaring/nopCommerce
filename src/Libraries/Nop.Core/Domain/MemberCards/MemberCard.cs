@@ -1,32 +1,17 @@
 ﻿
 using Nop.Core.Domain.Common;
 
-namespace Nop.Core.Domain.Assets;
+namespace Nop.Core.Domain.MemberCards;
 
 /// <summary>
 /// 会员卡，会员等级（不同店铺的用户）
 /// </summary>
-public partial class AssetsMemberCard : BaseEntity, ISoftDeletedEntity
+public partial class MemberCard : BaseEntity, ISoftDeletedEntity
 {
     /// <summary>
-    /// 对应StoreID
+    /// 会员信息ID（外键）
     /// </summary>
-    public int StoreId { get; set; }
-
-    /// <summary>
-    /// VendorStore ID
-    /// </summary>
-    public int VendorStoreId { get; set; }
-
-    /// <summary>
-    /// 用户ID
-    /// </summary>
-    public int CustomerId { get; set; }
-
-    /// <summary>
-    /// 会员卡开卡推荐人
-    /// </summary>
-    public int ReferrerCustomerId { get; set; }
+    public int StoreMembersId { get; set; }
 
     /// <summary>
     /// 会员卡号（16位=店铺8位+个人随机8位）

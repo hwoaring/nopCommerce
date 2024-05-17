@@ -1,15 +1,14 @@
 ﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Customers;
-using Nop.Core.Domain.Shares;
-using Nop.Core.Domain.Stores;
+using Nop.Core.Domain.MemberCards;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Shares;
+namespace Nop.Data.Mapping.Builders.MemberCards;
 
 /// <summary>
-/// 广告阅读详情统计
+/// Represents a vendor entity builder
 /// </summary>
-public partial class SharePageViewsBuilder : NopEntityBuilder<SharePageViews>
+public partial class MemberFollowupBuilder : NopEntityBuilder<MemberFollowup>
 {
     #region Methods
 
@@ -20,10 +19,12 @@ public partial class SharePageViewsBuilder : NopEntityBuilder<SharePageViews>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(SharePageViews.SharePageRecordsId)).AsInt32().ForeignKey<SharePageRecords>()
+            .WithColumn(nameof(MemberFollowup.StoreMembersId)).AsInt32().ForeignKey<StoreMembers>()
+            .WithColumn(nameof(MemberFollowup.Content)).AsString(512).Nullable()
 
             ;
     }
 
     #endregion
+
 }

@@ -1,17 +1,12 @@
 ﻿using Nop.Core.Domain.Common;
 
-namespace Nop.Core.Domain.Vendors;
+namespace Nop.Core.Domain.MemberCards;
 
 /// <summary>
 /// 不同店铺的会员等级升级设置，会员卡设置
 /// </summary>
-public partial class VendorStoreMemberCardLevel : BaseEntity, ISoftDeletedEntity
+public partial class MemberCardLevel : BaseEntity, ISoftDeletedEntity
 {
-    /// <summary>
-    /// Store ID
-    /// </summary>
-    public int StoreId { get; set; }
-
     /// <summary>
     /// VendorStore ID
     /// </summary>

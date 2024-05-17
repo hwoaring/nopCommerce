@@ -12,6 +12,7 @@ using Nop.Core.Domain.Gdpr;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Logging;
 using Nop.Core.Domain.Media;
+using Nop.Core.Domain.MemberCards;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.News;
 using Nop.Core.Domain.Orders;
@@ -275,9 +276,6 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<VendorStoreBookingSeat>();
             Create.TableFor<VendorStoreCustomerAuthority>();
             Create.TableFor<VendorStoreFavoriteMapping>();
-            Create.TableFor<VendorStoreMemberCardLevel>();
-            Create.TableFor<VendorStoreMemberFollowup>();
-            Create.TableFor<VendorStoreMembers>();
             Create.TableFor<VendorStorePicture>();
             Create.TableFor<VendorStoreRegionalAgent>();
             Create.TableFor<VendorStoreSaleProduct>();
@@ -288,6 +286,9 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<VendorTag>();
             Create.TableFor<VendorWarehouse>();
 
+
+            //通用扩展Common相关
+            Create.TableFor<SearchTermHistory>();
 
             //扩展Stores相关
 
@@ -303,6 +304,7 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<SharePageViews>();
             Create.TableFor<SharePageSharePictureMapping>();
             Create.TableFor<SharePermission>();
+            Create.TableFor<ShareProductApply>();
 
 
             //公共相关 Publics
@@ -337,8 +339,13 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<AssetsCashs>();
             Create.TableFor<AssetsCashsHistory>();
             Create.TableFor<AssetsCouponsHistory>();
-            Create.TableFor<AssetsMemberCard>();
             Create.TableFor<AssetsPointsHistory>();
+
+            //店铺会员卡扩展 MemberCards
+            Create.TableFor<StoreMembers>();
+            Create.TableFor<MemberCard>();
+            Create.TableFor<MemberCardLevel>();
+            Create.TableFor<MemberFollowup>();
 
             //表单扩展 Forms
             Create.TableFor<Form>();

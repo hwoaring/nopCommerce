@@ -1,14 +1,14 @@
 ﻿using FluentMigrator.Builders.Create.Table;
+using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
-using Nop.Core.Domain.Vendors;
 using Nop.Data.Extensions;
 
-namespace Nop.Data.Mapping.Builders.Vendors;
+namespace Nop.Data.Mapping.Builders.Common;
 
 /// <summary>
-/// Represents a vendor entity builder
+/// Represents a address attribute entity builder
 /// </summary>
-public partial class VendorStoreMemberFollowupBuilder : NopEntityBuilder<VendorStoreMemberFollowup>
+public partial class SearchTermHistoryBuilder : NopEntityBuilder<SearchTermHistory>
 {
     #region Methods
 
@@ -19,12 +19,11 @@ public partial class VendorStoreMemberFollowupBuilder : NopEntityBuilder<VendorS
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(VendorStoreMemberFollowup.CustomerId)).AsInt32().ForeignKey<Customer>()
-            .WithColumn(nameof(VendorStoreMemberFollowup.Content)).AsString(512).Nullable()
+            .WithColumn(nameof(SearchTermHistory.CustomerId)).AsInt32().ForeignKey<Customer>()
+            .WithColumn(nameof(SearchTermHistory.Keyword)).AsString(32).NotNullable()
 
             ;
     }
 
     #endregion
-
 }

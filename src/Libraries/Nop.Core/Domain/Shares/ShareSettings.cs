@@ -51,4 +51,9 @@ public partial class ShareSettings : ISettings
     /// 广告代金券结算后，有效使用时间间隔（如365天）
     /// </summary>
     public int BalanceExpireDays { get; set; }
+
+    /// <summary>
+    /// 品牌产品上架上线申请，最大未处理条数，超过条数不能提交新申请，等待处理完成后才能提交
+    /// </summary>
+    public int ShareProductApplyCount { get; set; }
 }
