@@ -29,4 +29,8 @@
     <ProjectReference Include="..\Nop.Core\Nop.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mapping\Builders\MemberCards\" />
+  </ItemGroup>
+
 </Project>

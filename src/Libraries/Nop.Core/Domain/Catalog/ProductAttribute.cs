@@ -25,5 +25,10 @@ public partial class ProductAttribute : BaseEntity, ILocalizedEntity
     /// </summary>
     public string ShortName { get; set; }
 
+    /// <summary>
+    /// 内容
+    /// </summary>
+    public string Content { get; set; }
+
     #endregion
 }

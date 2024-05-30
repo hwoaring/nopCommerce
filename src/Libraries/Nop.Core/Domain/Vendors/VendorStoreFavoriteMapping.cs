@@ -5,19 +5,19 @@ using Nop.Core.Domain.Stores;
 namespace Nop.Core.Domain.Vendors;
 
 /// <summary>
-/// 销售员收藏/推荐/点赞（放在一起避免标记与取消多次统计）
+/// 收藏/推荐/点赞（放在一起避免标记与取消多次统计）
 /// </summary>
 public partial class VendorStoreFavoriteMapping : BaseEntity
 {
     /// <summary>
-    /// VendorStore ID
-    /// </summary>
-    public int VendorStoreId { get; set; }
-
-    /// <summary>
     /// 客户ID
     /// </summary>
     public int CustomerId { get; set; }
+
+    /// <summary>
+    /// VendorStore ID
+    /// </summary>
+    public int VendorStoreId { get; set; }
 
     /// <summary>
     /// 不喜欢

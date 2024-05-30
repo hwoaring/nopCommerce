@@ -23,6 +23,7 @@ public partial class ProductAttributeValueBuilder : NopEntityBuilder<ProductAttr
                 .WithColumn(nameof(ProductAttributeValue.ProductAttributeMappingId)).AsInt32().ForeignKey<ProductAttributeMapping>()
 
                 //新增加
+                .WithColumn(nameof(ProductAttributeValue.Sku)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(ProductAttributeValue.ShortName)).AsString(32).Nullable()
                 ;
         }

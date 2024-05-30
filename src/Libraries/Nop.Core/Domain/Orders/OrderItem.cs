@@ -151,6 +151,24 @@ public partial class OrderItem : BaseEntity
     public long UnifiedId { get; set; }
 
     /// <summary>
+    /// DeliverCustomerId ，发货人ID，或者线下兑换人ID，用于记录谁发货货款结算给谁
+    /// （卡券资产中也有兑换人，防伪码奖励中也有兑换人，怎么把3处兑换人合并到一张表）
+    /// 同一订单，可能有不同的发货人
+    /// </summary>
+    public int DeliverCustomerId { get; set; }
+
+    /// <summary>
+    /// 线下取货，代发货：取货日期
+    /// 同一订单，可能有不同的发货人
+    /// </summary>
+    public DateTime PickupDateOnUtc { get; set; }
+
+    /// <summary>
+    /// 订单优惠券，优惠卡属性（备用）
+    /// </summary>
+    public string CouponAttributesXML { get; set; }
+
+    /// <summary>
     /// 订单优惠标记
     /// </summary>
     public string GoodsTag { get; set; }

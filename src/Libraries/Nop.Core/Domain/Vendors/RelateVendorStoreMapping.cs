@@ -10,7 +10,7 @@ namespace Nop.Core.Domain.Vendors;
 public partial class RelateVendorStoreMapping : BaseEntity
 {
     /// <summary>
-    /// 店铺ID
+    /// 申请店铺ID
     /// </summary>
     public int VendorStoreId { get; set; }
 
@@ -20,7 +20,12 @@ public partial class RelateVendorStoreMapping : BaseEntity
     public int RelateVendorStoreId { get; set; }
 
     /// <summary>
-    /// 需要被关联店铺同意（否则添加的关联的店铺无效）
+    /// 申请店铺是否同意（可用于单方面临时关闭关联状态）
+    /// </summary>
+    public bool VendorStoreApproved { get; set; }
+
+    /// <summary>
+    /// 需要被关联店铺同意（可用于单方面临时关闭关联状态）
     /// </summary>
     public bool RelateVendorStoreApproved { get; set; }
 

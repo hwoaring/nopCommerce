@@ -72,6 +72,21 @@ public partial class ProductAttributeMapping : BaseEntity, ILocalizedEntity
     /// </summary>
     public string ConditionAttributeXml { get; set; }
 
+
+    #region
+
+    /// <summary>
+    ///短名称
+    /// </summary>
+    public string ShortName { get; set; }
+
+    /// <summary>
+    /// 描述
+    /// </summary>
+    public string Discription { get; set; }
+
+    #endregion
+
     /// <summary>
     /// Gets the attribute control type
     /// </summary>

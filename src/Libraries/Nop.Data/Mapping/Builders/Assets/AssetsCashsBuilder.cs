@@ -23,8 +23,8 @@ namespace Nop.Data.Mapping.Builders.Assets
                 .WithColumn(nameof(AssetsCashs.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(AssetsCashs.CardNumber)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(AssetsCashs.Remarks)).AsString(128).Nullable()
+                .WithColumn(nameof(AssetsCashs.Password)).AsAnsiString(16).Nullable()
                 .WithColumn(nameof(AssetsCashs.HashCode)).AsString(128).Nullable()
-
                 ;
         }
 

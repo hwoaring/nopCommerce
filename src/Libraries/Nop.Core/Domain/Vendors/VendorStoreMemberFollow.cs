@@ -1,24 +1,14 @@
-﻿namespace Nop.Core.Domain.MemberCards;
+﻿namespace Nop.Core.Domain.Vendors;
 
 /// <summary>
 /// 店铺对会员的回访记录
 /// </summary>
-public partial class MemberFollowup : BaseEntity
+public partial class VendorStoreMemberFollow : BaseEntity
 {
     /// <summary>
     /// 会员信息ID（外键）
     /// </summary>
-    public int StoreMembersId { get; set; }
-
-    /// <summary>
-    /// 用户ID（不作为外键，仅用于筛选）
-    /// </summary>
-    public int CustomerId { get; set; }
-
-    /// <summary>
-    /// 店铺ID（不作为外键，仅用于筛选）
-    /// </summary>
-    public int VendorStoreId { get; set; }
+    public int VendorStoreMemberId { get; set; }
 
     /// <summary>
     /// 回访人ID（当前客服ID）

@@ -1,21 +1,21 @@
 ﻿using Nop.Core.Domain.Common;
 
-namespace Nop.Core.Domain.MemberCards;
+namespace Nop.Core.Domain.Vendors;
 
 /// <summary>
-/// 不同店铺的会员信息（会员信息管理系统）
+/// 不同店铺的会员信息
 /// </summary>
-public partial class StoreMembers : BaseEntity, ISoftDeletedEntity
+public partial class VendorStoreMember : BaseEntity, ISoftDeletedEntity
 {
-    /// <summary>
-    /// 用户ID
-    /// </summary>
-    public int CustomerId { get; set; }
-
     /// <summary>
     /// 店铺ID
     /// </summary>
     public int VendorStoreId { get; set; }
+
+    /// <summary>
+    /// 用户ID
+    /// </summary>
+    public int CustomerId { get; set; }
 
     /// <summary>
     /// 姓名
@@ -41,6 +41,31 @@ public partial class StoreMembers : BaseEntity, ISoftDeletedEntity
     /// 会员卡开卡推荐人
     /// </summary>
     public int ReferrerCustomerId { get; set; }
+
+    /// <summary>
+    /// 会员当前等级
+    /// </summary>
+    public int Level { get; set; }
+
+    /// <summary>
+    /// 会员最高等级（记录会员曾经最高达到的等级）
+    /// </summary>
+    public int MaxLevel { get; set; }
+
+    /// <summary>
+    /// 基础VIP过期时间（过期后需重新购买会员卡或充值）
+    /// </summary>
+    public DateTime? ExpireTimeOnUtc { get; set; }
+
+    /// <summary>
+    /// 会员等级最后升级时间
+    /// </summary>
+    public DateTime? UpgradeTimeOnUtc { get; set; }
+
+    /// <summary>
+    /// 是否用户有新的升级申请
+    /// </summary>
+    public bool UpgradeApplication { get; set; }
 
     /// <summary>
     /// 尊称（礼貌名称，发祝福时候使用尊称）
@@ -128,7 +153,7 @@ public partial class StoreMembers : BaseEntity, ISoftDeletedEntity
     public bool Deleted { get; set; }
 
     /// <summary>
-    /// 添加时间(开卡时间)
+    /// 添加时间(成为会员时间)
     /// </summary>
     public DateTime CreatOnUtc { get; set; }
 }

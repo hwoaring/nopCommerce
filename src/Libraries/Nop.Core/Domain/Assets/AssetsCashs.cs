@@ -1,4 +1,5 @@
-﻿using Nop.Core.Domain.Common;
+﻿using System;
+using Nop.Core.Domain.Common;
 
 namespace Nop.Core.Domain.Assets;
 
@@ -53,7 +54,17 @@ public partial class AssetsCashs : BaseEntity, ISoftDeletedEntity
     public string HashCode { get; set; }
 
     /// <summary>
-    /// 账户等级或星级（备用）
+    /// 是否使用短信随机密码（可以不设置支付密码，由绑定的手机号获取短信随机密码，密码只能使用一次）
+    /// </summary>
+    public bool SMSRandomPassword { get; set; }
+
+    /// <summary>
+    /// 支付密码（并非银行等支付密码，设置密码时候明确告知用户）
+    /// </summary>
+    public string Password { get; set; }
+
+    /// <summary>
+    /// 账户等级或星级，针对整个系统的等级（备用）
     /// </summary>
     public int Level { get; set; }
 

@@ -29,6 +29,10 @@ public partial class SpecificationAttributeOption : BaseEntity, ILocalizedEntity
 
 
     #region === 扩展信息 ===
+    /// <summary>
+    /// 小图标ID
+    /// </summary>
+    public int PictureId { get; set; }
 
     /// <summary>
     /// 短名称

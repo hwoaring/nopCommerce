@@ -318,6 +318,22 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
     public string OutTradeNo { get; set; }
 
     /// <summary>
+    /// 线下取货，代发货：取货密码，提货密码，线下提货码
+    /// </summary>
+    public long PickupPassword { get; set; }
+
+    /// <summary>
+    /// DeliverCustomerId ，发货人ID，或者线下兑换人ID，用于记录谁发货货款结算给谁
+    /// （卡券资产中也有兑换人，防伪码奖励中也有兑换人，怎么把3处兑换人合并到一张表）
+    /// </summary>
+    public int DeliverCustomerId { get; set; }
+
+    /// <summary>
+    /// 线下取货，代发货：取货日期
+    /// </summary>
+    public DateTime PickupDateOnUtc { get; set; }
+
+    /// <summary>
     /// 附加数据，在查询API和支付通知中原样返回，可作为自定义参数使用，实际情况下只有支付完成状态才会返回该字段
     /// </summary>
     public string Attach { get; set; }

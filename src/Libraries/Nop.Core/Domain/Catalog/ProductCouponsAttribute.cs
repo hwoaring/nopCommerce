@@ -59,9 +59,30 @@ public partial class ProductCouponsAttribute : BaseEntity
     public bool RequireBindPhoneEachRealName { get; set; }
 
     /// <summary>
+    /// 是否次数卡片，次卡
+    /// </summary>
+    public bool IsTimesCard { get; set; }
+
+    /// <summary>
+    /// 次数值，次卡总次数
+    /// </summary>
+    public int TimesValue { get; set; }
+
+    /// <summary>
     /// 卡券显示的金额/数量（票面显示数值）
+    /// 卡片除了可以按次数使用，还可以一次性抵用某一活动金额
     /// </summary>
     public decimal CouponsAmount { get; set; }
+
+    /// <summary>
+    /// 卡券logo（或者小图标）
+    /// </summary>
+    public int LogoPictureId { get; set; }
+
+    /// <summary>
+    /// 卡券背景图
+    /// </summary>
+    public int BackgroundPictureId { get; set; }
 
     /// <summary>
     /// 核销码需要密码（密码通过关注的公众号或短信发放）
@@ -72,12 +93,6 @@ public partial class ProductCouponsAttribute : BaseEntity
     /// 是否可以拆分分开使用
     /// </summary>
     public bool EnableSplit { get; set; }
-
-    /// <summary>
-    /// 是否需要客户确定使用时间/使用日期
-    /// 弹出使用日期选项
-    /// </summary>
-    public bool UseFixedUsageDate { get; set; }
 
     /// <summary>
     /// 购买后立刻可用
@@ -120,11 +135,6 @@ public partial class ProductCouponsAttribute : BaseEntity
     public int DefaultAssetsStatusId { get; set; }
 
     /// <summary>
-    /// 使用限制信息（比如：周几可使用，节假日是否可用）
-    /// </summary>
-    public string LimitText { get; set; }
-
-    /// <summary>
     /// 本券使用最低消费金额限制
     /// </summary>
     public decimal MinConsumeAmount { get; set; }
@@ -132,28 +142,28 @@ public partial class ProductCouponsAttribute : BaseEntity
     /// <summary>
     /// 是否允许转卖
     /// </summary>
-    public bool EnableResold { get; set; }
+    public bool EnableReSell { get; set; }
 
     /// <summary>
     /// 最大允许转卖次数
     /// </summary>
-    public int MaxResoldCount { get; set; }
+    public int MaxReSellCount { get; set; }
 
     /// <summary>
-    /// 入股卡券有有效期，则转卖后不更新有效期
+    /// 如果卡券有有效期，则转卖后不更新有效期
     /// 如果卡券没有有效期，转卖后设置为购买当天后多少天内必须使用。
     /// </summary>
-    public int ResoldUsageEndDays { get; set; }
+    public int ReSellUsageEndDays { get; set; }
 
     /// <summary>
     /// 转卖允许最低折扣（降价最低折扣，如：20，表示降价80%以内）
     /// </summary>
-    public decimal MinPercentResold { get; set; }
+    public decimal MinPercentReSell { get; set; }
 
     /// <summary>
     /// 转卖允许最高幅度（涨价最高比例：如：20，表示涨价20%以内）
     /// </summary>
-    public decimal MaxPercentResold { get; set; }
+    public decimal MaxPercentReSell { get; set; }
 
     /// <summary>
     /// 出票：是否需要出票（针对门票机票等需要打印实际票的订单）

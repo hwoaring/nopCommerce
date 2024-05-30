@@ -29,9 +29,9 @@ public partial class SharePage : BaseEntity
     public string ThumbMediaId { get; set; }
 
     /// <summary>
-    /// 阅读基数
+    /// 基础浏览量（增加浏览量基数）
     /// </summary>
-    public int BaseViewCount { get; set; }
+    public int BaseViewsCount { get; set; }
 
     /// <summary>
     /// 推荐基数
@@ -67,6 +67,12 @@ public partial class SharePage : BaseEntity
     /// 分享描述
     /// </summary>
     public string Description { get; set; }
+
+    /// <summary>
+    /// 宣传文字，推广文字
+    /// 发了链接后，朋友圈单独发推广的文字（有利于增加链接点击量）
+    /// </summary>
+    public string PromotionText { get; set; }
 
     /// <summary>
     /// 分享链接（可用于生成二维码链接）

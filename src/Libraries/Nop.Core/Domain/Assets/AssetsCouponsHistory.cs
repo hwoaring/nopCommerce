@@ -44,9 +44,9 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     public string Name { get; set; }
 
     /// <summary>
-    /// 使用限制信息（比如：周几可使用，节假日是否可用）
+    /// 使用规则（使用限制信息，比如：周几可使用，节假日是否可用）
     /// </summary>
-    public string LimitText { get; set; }
+    public string UsageRulesContent { get; set; }
 
     /// <summary>
     /// 内容
@@ -64,12 +64,12 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     public bool NeedPassWord { get; set; }
 
     /// <summary>
-    /// 核销密码
+    /// 核销密码/兑换密码
     /// </summary>
     public string PassWord { get; set; }
 
     /// <summary>
-    /// 核销密码过期时间
+    /// 核销密码/兑换密码过期时间
     /// </summary>
     public DateTime? PassWordExpireDateUtc { get; set; }
 
@@ -82,6 +82,39 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     /// 兑换单位：瓶、箱，张，个等
     /// </summary>
     public string ExchangeUnit { get; set; }
+
+    /// <summary>
+    /// DeliverCustomerId ，发货人ID，或者线下兑换人ID，用于记录谁发货货款结算给谁
+    /// （卡券资产中也有兑换人，防伪码奖励中也有兑换人，怎么把3处兑换人合并到一张表）
+    /// 同一订单，可能有不同的发货人
+    /// </summary>
+    public int DeliverCustomerId { get; set; }
+
+    /// <summary>
+    /// 线下取货，代发货：取货日期
+    /// 同一订单，可能有不同的发货人
+    /// </summary>
+    public DateTime PickupDateOnUtc { get; set; }
+
+    /// <summary>
+    /// 卡券logo（或者小图标）
+    /// </summary>
+    public int LogoPictureId { get; set; }
+
+    /// <summary>
+    /// 卡券背景图
+    /// </summary>
+    public int BackgroundPictureId { get; set; }
+
+    /// <summary>
+    /// 卡券购买价格（现价）
+    /// </summary>
+    public decimal Price { get; set; }
+
+    /// <summary>
+    /// 卡券原价
+    /// </summary>
+    public decimal OldPrice { get; set; }
 
     /// <summary>
     /// 是否绑定证件使用
@@ -99,19 +132,34 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     public string BindIDNationality { get; set; }
 
     /// <summary>
-    /// 绑定的身份证号码
+    /// 绑定的身份证号码（要求实名的）
     /// </summary>
     public string BindIDNumber { get; set; }
 
     /// <summary>
-    /// 绑定的身份证姓名
+    /// 绑定的身份证姓名（要求实名的）
     /// </summary>
     public string BindIDName { get; set; }
 
     /// <summary>
-    /// 绑定电话
+    /// 绑定的电话、绑定的联系方式
     /// </summary>
     public string BindPhone { get; set; }
+
+    /// <summary>
+    /// 是否次数卡片，次卡
+    /// </summary>
+    public bool IsTimesCard { get; set; }
+
+    /// <summary>
+    /// 次卡总次数
+    /// </summary>
+    public int TimesValue { get; set; }
+
+    /// <summary>
+    /// 次卡剩余次数
+    /// </summary>
+    public int RemainTimesValue { get; set; }
 
     /// <summary>
     /// 卡券显示的金额/数量（票面显示数值）
@@ -129,7 +177,7 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     public decimal SettlementAmount { get; set; }
 
     /// <summary>
-    /// 资产使用方式（线下消费，变卖/转卖，兑换，抽奖）
+    /// 资产使用方式（线下消费，变卖/转让/转卖，兑换，抽奖）
     /// </summary>
     public int AssetsUsedTypeId { get; set; }
 
@@ -334,29 +382,29 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     public string HashCode { get; set; }
 
     /// <summary>
-    /// 转卖金额
+    /// 转让，转卖金额
     /// </summary>
-    public decimal ResoldAmount { get; set; }
+    public decimal ReSellAmount { get; set; }
 
     /// <summary>
-    /// 是否允许转卖
+    /// 是否允许转让，转卖
     /// </summary>
-    public bool EnableResold { get; set; }
+    public bool EnableReSell { get; set; }
 
     /// <summary>
-    /// 转卖了多少次
+    /// 转让，转卖了多少次
     /// </summary>
-    public int ResoldCount { get; set; }
+    public int ReSellCount { get; set; }
 
     /// <summary>
-    /// 转卖前，原持有人ID
+    /// 转让，转卖前，原持有人ID
     /// </summary>
-    public int ResoldCustomerId { get; set; }
+    public int ReSellCustomerId { get; set; }
 
     /// <summary>
-    /// 转卖时间
+    /// 转让，转卖时间
     /// </summary>
-    public DateTime? ResoldDateOnUtc { get; set; }
+    public DateTime? ReSellDateOnUtc { get; set; }
 
     /// <summary>
     /// 是否延期发货订单，超量销售的订单（进入顺位排序等待线下资源分配）

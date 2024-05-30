@@ -667,7 +667,6 @@ public partial class CustomerModelFactory : ICustomerModelFactory
             if (!excludeProperties)
             {
                 //新增属性
-                model.Level = customer.Level;
                 //model.ReferrerCustomerId = customer.ReferrerCustomerId;
                 //model.TempReferrerCustomerId = customer.TempReferrerCustomerId;
                 //model.TempReferrerExpireDateUtc = customer.TempReferrerExpireDateUtc;

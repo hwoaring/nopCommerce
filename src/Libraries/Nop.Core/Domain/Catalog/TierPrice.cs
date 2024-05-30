@@ -71,7 +71,7 @@ public partial class TierPrice : BaseEntity
     /// <summary>
     /// 购买需大于等于会员等级（0-不限会员等级）
     /// </summary>
-    public int LimitCustomerLevel { get; set; }
+    public int OrderLimitCustomerLevel { get; set; }
 
     /// <summary>
     /// 划线价

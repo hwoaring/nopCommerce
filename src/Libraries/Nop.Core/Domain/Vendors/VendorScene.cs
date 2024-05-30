@@ -18,4 +18,14 @@ public partial class VendorScene : BaseEntity
     /// 场景名称
     /// </summary>
     public string Name { get; set; }
+
+    /// <summary>
+    /// 场景值（主要用于指定场景用户的邀请码等）
+    /// </summary>
+    public long Value { get; set; }
+
+    /// <summary>
+    /// 场景值（备用）
+    /// </summary>
+    public string StrValue { get; set; }
 }

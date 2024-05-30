@@ -17,10 +17,7 @@ namespace Nop.Data.Mapping.Builders.Catalog
         /// <param name="table">Create table expression builder</param>
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
-            table
-                .WithColumn(nameof(ProductCustomerPriceRules.ProductId)).AsInt32().ForeignKey<Product>()
 
-                ;
         }
 
         #endregion

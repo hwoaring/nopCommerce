@@ -10,16 +10,16 @@ namespace Nop.Core.Domain.Vendors;
 public partial class VendorStore : BaseEntity, ISoftDeletedEntity
 {
     /// <summary>
-    /// 对外展示统一加密id（URL参数）
-    /// </summary>
-    public long UnifiedId { get; set; }
-
-    /// <summary>
     /// 创建人零售商id（拥有人ID，系统可以创建品牌首页，让对方公司认领，认领时给一定费用）
     /// 认领为企业店铺时，个人无法删除企业认领店铺
     /// 提供公司资质后，可以更换认领人
     /// </summary>
     public int VendorId { get; set; }
+
+    /// <summary>
+    /// 对外展示统一加密id（URL参数）
+    /// </summary>
+    public long UnifiedId { get; set; }
 
     /// <summary>
     /// 店铺编号(8位数字码：可用于系统内店铺查询，或印刷到门头上，同时用到会员卡前8位）
@@ -51,6 +51,11 @@ public partial class VendorStore : BaseEntity, ISoftDeletedEntity
     /// 店铺内容
     /// </summary>
     public string Content { get; set; }
+
+    /// <summary>
+    /// 商店Logo，店铺会员卡Logo图片
+    /// </summary>
+    public int LogoPictureId { get; set; }
 
     /// <summary>
     /// 供应商店铺域名
@@ -158,6 +163,11 @@ public partial class VendorStore : BaseEntity, ISoftDeletedEntity
     public string BookingPhone { get; set; }
 
     /// <summary>
+    /// 显示电话
+    /// </summary>
+    public bool DisplayPhone { get; set; }
+
+    /// <summary>
     /// 开店时间
     /// </summary>
     public string OpeningTime { get; set; }
@@ -166,6 +176,11 @@ public partial class VendorStore : BaseEntity, ISoftDeletedEntity
     /// 店铺地址ID
     /// </summary>
     public int AddressId { get; set; }
+
+    /// <summary>
+    /// 显示地址
+    /// </summary>
+    public bool DisplayAddress { get; set; }
 
     /// <summary>
     /// 代理商有货时候仓库配送地址或取货地址

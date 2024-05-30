@@ -19,7 +19,11 @@ public partial class ProductAttributeMappingBuilder : NopEntityBuilder<ProductAt
     {
         table
             .WithColumn(nameof(ProductAttributeMapping.ProductAttributeId)).AsInt32().ForeignKey<ProductAttribute>()
-            .WithColumn(nameof(ProductAttributeMapping.ProductId)).AsInt32().ForeignKey<Product>();
+            .WithColumn(nameof(ProductAttributeMapping.ProductId)).AsInt32().ForeignKey<Product>()
+
+            .WithColumn(nameof(ProductAttributeMapping.ShortName)).AsString(32).Nullable()
+            .WithColumn(nameof(ProductAttributeMapping.Discription)).AsString(1024).Nullable()
+            ;
     }
 
     #endregion

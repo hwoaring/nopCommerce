@@ -272,11 +272,6 @@ public partial class Customer : BaseEntity, ISoftDeletedEntity
     public int QrcodePictureId { get; set; }
 
     /// <summary>
-    /// 备用
-    /// </summary>
-    public int Level { get; set; }
-
-    /// <summary>
     /// 系统备注名称
     /// </summary>
     public string Remark { get; set; }

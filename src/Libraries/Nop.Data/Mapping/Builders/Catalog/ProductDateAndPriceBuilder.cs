@@ -7,7 +7,7 @@ namespace Nop.Data.Mapping.Builders.Catalog
     /// <summary>
     /// Represents a product entity builder
     /// </summary>
-    public partial class ProductVendorCommissionRulesBuilder : NopEntityBuilder<ProductVendorCommissionRules>
+    public partial class ProductDateAndPriceBuilder : NopEntityBuilder<ProductDateAndPrice>
     {
         #region Methods
 
@@ -18,17 +18,12 @@ namespace Nop.Data.Mapping.Builders.Catalog
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(ProductVendorCommissionRules.ProductId)).AsInt32().ForeignKey<Product>()
+                .WithColumn(nameof(ProductDateAndPrice.ProductId)).AsInt32().ForeignKey<Product>()
 
                 ;
         }
 
         #endregion
-        /// <summary>
-        /// 产品ID
-        /// </summary>
-        public int ProductId { get; set; }
 
-  
     }
 }

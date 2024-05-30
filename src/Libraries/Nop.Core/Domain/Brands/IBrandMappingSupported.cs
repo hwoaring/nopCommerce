@@ -1,13 +1,12 @@
-﻿namespace Nop.Core.Domain.Brands
+﻿namespace Nop.Core.Domain.Brands;
+
+/// <summary>
+/// 品牌映射
+/// </summary>
+public partial interface IBrandMappingSupported
 {
     /// <summary>
-    /// 品牌映射
+    /// 限制到品牌
     /// </summary>
-    public partial interface IBrandMappingSupported
-    {
-        /// <summary>
-        /// 限制到品牌
-        /// </summary>
-        bool LimitedToBrands { get; set; }
-    }
+    bool LimitedToBrands { get; set; }
 }

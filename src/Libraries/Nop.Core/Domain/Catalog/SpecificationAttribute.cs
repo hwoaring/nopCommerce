@@ -24,6 +24,15 @@ public partial class SpecificationAttribute : BaseEntity, ILocalizedEntity
 
 
     #region
+    /// <summary>
+    /// 小图标ID
+    /// </summary>
+    public int PictureId { get; set; }
+
+    /// <summary>
+    /// 短名称
+    /// </summary>
+    public string ShortName { get; set; }
 
     /// <summary>
     /// 描述

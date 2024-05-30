@@ -16,6 +16,11 @@ public partial class VendorStorePicture : BaseEntity
     public int PictureId { get; set; }
 
     /// <summary>
+    /// 图片描述
+    /// </summary>
+    public string Discription { get; set; }
+
+    /// <summary>
     /// 排序
     /// </summary>
     public int DisplayOrder { get; set; }

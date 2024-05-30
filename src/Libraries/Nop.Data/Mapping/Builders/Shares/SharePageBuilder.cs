@@ -24,6 +24,7 @@ public partial class SharePageBuilder : NopEntityBuilder<SharePage>
             .WithColumn(nameof(SharePage.Title)).AsString(128).Nullable()
             .WithColumn(nameof(SharePage.Slogan)).AsString(128).Nullable()
             .WithColumn(nameof(SharePage.Description)).AsString(1024).Nullable()
+            .WithColumn(nameof(SharePage.PromotionText)).AsString(512).Nullable()
             .WithColumn(nameof(SharePage.Url)).AsAnsiString(1024).Nullable()
 
             ;

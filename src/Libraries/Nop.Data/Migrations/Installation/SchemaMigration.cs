@@ -12,7 +12,6 @@ using Nop.Core.Domain.Gdpr;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Logging;
 using Nop.Core.Domain.Media;
-using Nop.Core.Domain.MemberCards;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.News;
 using Nop.Core.Domain.Orders;
@@ -186,6 +185,8 @@ namespace Nop.Data.Migrations.Installation
             //扩展用户相关 Customer
             Create.TableFor<CustomerReferrer>();
             Create.TableFor<CustomerReferrerSetting>();
+            Create.TableFor<CustomerLevel>();
+            Create.TableFor<CustomerLevelSetting>();
 
             //扩展品牌相关 Brand
             Create.TableFor<Brand>();  //产品商标
@@ -225,15 +226,18 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<Product3rdSalePlatformMapping>();
             Create.TableFor<ProductComment>();
             Create.TableFor<ProductCouponsAttribute>();
+            Create.TableFor<ProductCustomerAdvertRules>();
+            Create.TableFor<ProductCustomerPointRules>();
+            Create.TableFor<ProductCustomerCommissionRules>();
             Create.TableFor<ProductCustomerPriceRules>();
-            Create.TableFor<ProductCustomerShareRules>();
-            Create.TableFor<ProductDatePrice>();
+            Create.TableFor<ProductDateAndPrice>();
             Create.TableFor<ProductFavoriteMapping>();  //产品收藏、点赞
             Create.TableFor<ProductOrderNotice>();
             Create.TableFor<ProductProductOrderNoticeMapping>();
-            Create.TableFor<ProductVendorCommissionRules>();
             Create.TableFor<ProductCustomerViews>();
-            
+            Create.TableFor<ProductServiceTag>();
+            Create.TableFor<ProductProductServiceTagMapping>();
+
 
             //扩展新闻相关 News
             Create.TableFor<NewsPicture>();  //新闻图片
@@ -285,6 +289,10 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<VendorStoreTemplate>();
             Create.TableFor<VendorTag>();
             Create.TableFor<VendorWarehouse>();
+            Create.TableFor<VendorStoreMember>();
+            Create.TableFor<VendorStoreMemberLevelSetting>();
+            Create.TableFor<VendorStoreMemberCard>();
+            Create.TableFor<VendorStoreMemberFollow>();
 
 
             //通用扩展Common相关
@@ -340,12 +348,6 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<AssetsCashsHistory>();
             Create.TableFor<AssetsCouponsHistory>();
             Create.TableFor<AssetsPointsHistory>();
-
-            //店铺会员卡扩展 MemberCards
-            Create.TableFor<StoreMembers>();
-            Create.TableFor<MemberCard>();
-            Create.TableFor<MemberCardLevel>();
-            Create.TableFor<MemberFollowup>();
 
             //表单扩展 Forms
             Create.TableFor<Form>();

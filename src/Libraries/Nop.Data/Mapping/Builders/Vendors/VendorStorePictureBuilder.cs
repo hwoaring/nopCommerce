@@ -21,6 +21,7 @@ public partial class VendorStorePictureBuilder : NopEntityBuilder<VendorStorePic
         table
             .WithColumn(nameof(VendorStorePicture.VendorStoreId)).AsInt32().ForeignKey<VendorStore>()
             .WithColumn(nameof(VendorStorePicture.PictureId)).AsInt32().ForeignKey<Picture>()
+            .WithColumn(nameof(VendorStorePicture.Discription)).AsString(64).Nullable()
 
             ;
     }

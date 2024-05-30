@@ -10,14 +10,14 @@ namespace Nop.Core.Domain.Vendors;
 public partial class VendorFavoriteMapping : BaseEntity
 {
     /// <summary>
-    /// Vendor ID
-    /// </summary>
-    public int VendorId { get; set; }
-
-    /// <summary>
     /// 客户ID
     /// </summary>
     public int CustomerId { get; set; }
+
+    /// <summary>
+    /// Vendor ID
+    /// </summary>
+    public int VendorId { get; set; }
 
     /// <summary>
     /// 不喜欢

@@ -20,6 +20,7 @@ public partial class VendorSceneBuilder : NopEntityBuilder<VendorScene>
         table
             .WithColumn(nameof(VendorScene.VendorId)).AsInt32().ForeignKey<Vendor>()
             .WithColumn(nameof(VendorScene.Name)).AsString(32).NotNullable()
+            .WithColumn(nameof(VendorScene.StrValue)).AsAnsiString(64).Nullable()
             ;
     }
 

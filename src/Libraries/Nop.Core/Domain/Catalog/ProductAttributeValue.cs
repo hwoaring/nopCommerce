@@ -101,6 +101,11 @@ public partial class ProductAttributeValue : BaseEntity, ILocalizedEntity
     #region
 
     /// <summary>
+    /// 每个属性产品的系统SKU
+    /// </summary>
+    public string Sku { get; set; }
+
+    /// <summary>
     ///短名称
     /// </summary>
     public string ShortName { get; set; }
@@ -116,14 +121,19 @@ public partial class ProductAttributeValue : BaseEntity, ILocalizedEntity
     public string Content { get; set; }
 
     /// <summary>
-    /// 使用规则（使用限制信息）
+    /// 使用规则（使用限制文本信息）
     /// </summary>
-    public string UsageRules { get; set; }
+    public string UsageRulesContent { get; set; }
 
     /// <summary>
-    /// 原价/划线价
+    /// 原价/划线价（备用）
     /// </summary>
     public decimal OldPriceAdjustment { get; set; }
+
+    /// <summary>
+    /// 库存数量（备用），可能原有的Quantity是表示库存
+    /// </summary>
+    public int StockQuantity { get; set; }
 
     /// <summary>
     /// 最小购买数量
@@ -144,6 +154,46 @@ public partial class ProductAttributeValue : BaseEntity, ILocalizedEntity
     /// 必须使用积分抵扣数量
     /// </summary>
     public decimal RequirePoints { get; set; }
+
+    /// <summary>
+    /// 使用等级价格规则
+    /// </summary>
+    public bool UseCustomerPriceRules { get; set; }
+
+    /// <summary>
+    /// 使用等级价格规则ID
+    /// </summary>
+    public int CustomerPriceRulesId { get; set; }
+
+    /// <summary>
+    /// 使用等级积分购买规则
+    /// </summary>
+    public bool UseCustomerPointRules { get; set; }
+
+    /// <summary>
+    /// 使用等级积分购买规则ID
+    /// </summary>
+    public int CustomerPointRulesId { get; set; }
+
+    /// <summary>
+    /// 使用等级分享广告规则
+    /// </summary>
+    public bool UseCustomerAdvertRules { get; set; }
+
+    /// <summary>
+    /// 使用等级分享广告规则ID
+    /// </summary>
+    public int CustomerAdvertRulesId { get; set; }
+
+    /// <summary>
+    /// 仅新用户可购买
+    /// </summary>
+    public bool NewUserOnly { get; set; }
+
+    /// <summary>
+    /// 启用状态
+    /// </summary>
+    public bool Enabled { get; set; }
 
     #endregion
 

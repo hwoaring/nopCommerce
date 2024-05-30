@@ -109,6 +109,11 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     #region === 扩展属性 ===
 
     /// <summary>
+    /// 从哪个Store创建（备用）
+    /// </summary>
+    public int CreatedInStoreId { get; set; }
+
+    /// <summary>
     /// 创建时间
     /// </summary>
     public DateTime? CreatOnUtc { get; set; }
@@ -129,7 +134,7 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     public long UnifiedId { get; set; }
 
     /// <summary>
-    /// Vendor推荐人 （vendorid号）
+    /// Vendor推荐人的vendorid号（备用）
     /// </summary>
     public int ReferrerVendorId { get; set; }
 
@@ -151,7 +156,7 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     /// <summary>
     /// 供应商等级（分销商等级）
     /// </summary>
-    public int VendorLevel { get; set; }
+    public int Level { get; set; }
 
     /// <summary>
     /// 代理商有货时候仓库地址
@@ -178,11 +183,6 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     /// 个人销售在微信官方平台的永久二维码数字ID（一共10万个，一个人最多分配一次）
     /// </summary>
     public int LimitQrcodeId { get; set; }
-
-    /// <summary>
-    /// 等级（备用）
-    /// </summary>
-    public int Level { get; set; }
 
     /// <summary>
     /// 是否允许防伪码跟踪信息换入（防伪码设置成为自己的联系方式）

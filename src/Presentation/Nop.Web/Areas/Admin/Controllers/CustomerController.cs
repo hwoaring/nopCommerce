@@ -652,7 +652,6 @@ public partial class CustomerController : BaseAdminController
                 customer.CustomCustomerAttributesXML = customerAttributesXml;
 
                 //新增属性
-                customer.Level = model.Level;
                 customer.QrcodePictureId = model.QrcodePictureId;
                 customer.Remark = model.Remark;
                 customer.QrcodeValidated = model.QrcodeValidated;

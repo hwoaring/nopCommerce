@@ -1,16 +1,21 @@
 ﻿using Nop.Core.Domain.Common;
 
-namespace Nop.Core.Domain.MemberCards;
+namespace Nop.Core.Domain.Customers;
 
 /// <summary>
-/// 不同店铺的会员等级升级设置，会员卡设置
+/// 用户等级设置
 /// </summary>
-public partial class MemberCardLevel : BaseEntity, ISoftDeletedEntity
+public partial class CustomerLevelSetting : BaseEntity
 {
     /// <summary>
-    /// VendorStore ID
+    /// （备用）
     /// </summary>
-    public int VendorStoreId { get; set; }
+    public int StoreId { get; set; }
+
+    /// <summary>
+    /// 等级值
+    /// </summary>
+    public int Level { get; set; }
 
     /// <summary>
     /// 会员等级（卡片）名称，对外显示
@@ -38,14 +43,14 @@ public partial class MemberCardLevel : BaseEntity, ISoftDeletedEntity
     public int PictureId { get; set; }
 
     /// <summary>
-    /// 等级值
+    /// Logo图标ID
     /// </summary>
-    public int Level { get; set; }
+    public int LogoPictureId { get; set; }
 
     /// <summary>
     /// 升级要求：本店消费金额满
     /// </summary>
-    public decimal? ConsumeAmounts { get; set; }
+    public decimal ConsumeAmounts { get; set; }
 
     /// <summary>
     /// 升级要求：本店邀请/分享人数满
@@ -106,11 +111,6 @@ public partial class MemberCardLevel : BaseEntity, ISoftDeletedEntity
     /// 启用
     /// </summary>
     public bool Actived { get; set; }
-
-    /// <summary>
-    /// 删除
-    /// </summary>
-    public bool Deleted { get; set; }
 
     /// <summary>
     /// 创建时间
