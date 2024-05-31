@@ -123,7 +123,7 @@ public partial class NewsController : BaseAdminController
     public virtual async Task<IActionResult> List(NewsItemSearchModel searchModel)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNews))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         //prepare model
         var model = await _newsModelFactory.PrepareNewsItemListModelAsync(searchModel);
@@ -293,7 +293,7 @@ public partial class NewsController : BaseAdminController
     public virtual async Task<IActionResult> Comments(NewsCommentSearchModel searchModel)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNews))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         //prepare model
         var model = await _newsModelFactory.PrepareNewsCommentListModelAsync(searchModel, searchModel.NewsItemId);
@@ -305,7 +305,7 @@ public partial class NewsController : BaseAdminController
     public virtual async Task<IActionResult> CommentUpdate(NewsCommentModel model)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNews))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         //try to get a news comment with the specified id
         var comment = await _newsService.GetNewsCommentByIdAsync(model.Id)
@@ -333,7 +333,7 @@ public partial class NewsController : BaseAdminController
     public virtual async Task<IActionResult> CommentDelete(int id)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNews))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         //try to get a news comment with the specified id
         var comment = await _newsService.GetNewsCommentByIdAsync(id)
@@ -352,7 +352,7 @@ public partial class NewsController : BaseAdminController
     public virtual async Task<IActionResult> DeleteSelectedComments(ICollection<int> selectedIds)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNews))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -375,7 +375,7 @@ public partial class NewsController : BaseAdminController
     public virtual async Task<IActionResult> ApproveSelected(ICollection<int> selectedIds)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNews))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();
@@ -404,7 +404,7 @@ public partial class NewsController : BaseAdminController
     public virtual async Task<IActionResult> DisapproveSelected(ICollection<int> selectedIds)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNews))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         if (selectedIds == null || !selectedIds.Any())
             return NoContent();

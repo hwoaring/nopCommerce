@@ -287,7 +287,7 @@ public partial class CustomerController : BaseAdminController
     public virtual async Task<IActionResult> CustomerList(CustomerSearchModel searchModel)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         //prepare model
         var model = await _customerModelFactory.PrepareCustomerListModelAsync(searchModel);
@@ -1127,7 +1127,7 @@ public partial class CustomerController : BaseAdminController
     public virtual async Task<IActionResult> RewardPointsHistorySelect(CustomerRewardPointsSearchModel searchModel)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(searchModel.CustomerId)
@@ -1142,7 +1142,7 @@ public partial class CustomerController : BaseAdminController
     public virtual async Task<IActionResult> RewardPointsHistoryAdd(AddRewardPointsToCustomerModel model)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         //prevent adding a new row with zero value
         if (model.Points == 0)
@@ -1186,7 +1186,7 @@ public partial class CustomerController : BaseAdminController
     public virtual async Task<IActionResult> AddressesSelect(CustomerAddressSearchModel searchModel)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(searchModel.CustomerId)
@@ -1202,7 +1202,7 @@ public partial class CustomerController : BaseAdminController
     public virtual async Task<IActionResult> AddressDelete(int id, int customerId)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(customerId)
@@ -1357,7 +1357,7 @@ public partial class CustomerController : BaseAdminController
     public virtual async Task<IActionResult> OrderList(CustomerOrderSearchModel searchModel)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(searchModel.CustomerId)
@@ -1465,7 +1465,7 @@ public partial class CustomerController : BaseAdminController
     public virtual async Task<IActionResult> GetCartList(CustomerShoppingCartSearchModel searchModel)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(searchModel.CustomerId)
@@ -1485,7 +1485,7 @@ public partial class CustomerController : BaseAdminController
     public virtual async Task<IActionResult> ListActivityLog(CustomerActivityLogSearchModel searchModel)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(searchModel.CustomerId)
@@ -1505,7 +1505,7 @@ public partial class CustomerController : BaseAdminController
     public virtual async Task<IActionResult> BackInStockSubscriptionList(CustomerBackInStockSubscriptionSearchModel searchModel)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         //try to get a customer with the specified id
         var customer = await _customerService.GetCustomerByIdAsync(searchModel.CustomerId)
@@ -1536,7 +1536,7 @@ public partial class CustomerController : BaseAdminController
     public virtual async Task<IActionResult> GdprLogList(GdprLogSearchModel searchModel)
     {
         if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
-            return await AccessDeniedDataTablesJson();
+            return await AccessDeniedJsonAsync();
 
         //prepare model
         var model = await _customerModelFactory.PrepareGdprLogListModelAsync(searchModel);
