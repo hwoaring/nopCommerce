@@ -1,10 +1,9 @@
-﻿using System;
-using Nop.Core.Domain.Common;
+﻿using Nop.Core.Domain.Common;
 
 namespace Nop.Core.Domain.Assets;
 
 /// <summary>
-/// 现金主卡账号信息
+/// 现金卡账号信息
 /// </summary>
 public partial class AssetsCashs : BaseEntity, ISoftDeletedEntity
 {
@@ -14,14 +13,23 @@ public partial class AssetsCashs : BaseEntity, ISoftDeletedEntity
     public int StoreId { get; set; }
 
     /// <summary>
-    /// 对应人员ID（私人个人账户号）
+    /// 创建人，拥有人（私人个人账户号）
+    /// 私人账户只能有一个
     /// </summary>
     public int CustomerId { get; set; }
 
     /// <summary>
-    /// 绑定的提现账号
+    /// 是否Vendor现金账户（如果是）
+    /// Vendor账户只能有一个。
+    /// 一个Customer只能有一个私人账户和一个Vendor账户。
+    /// Customer表中映射了同一个Vendor时，映射的人都能看到这个Vendor的账户信息。
     /// </summary>
-    public int AssetsBankAccountId { get; set; }
+    public bool IsVendorAccount { get; set; }
+
+    /// <summary>
+    /// 如果是Vendor账户，绑定VendorId
+    /// </summary>
+    public int VendorId { get; set; }
 
     /// <summary>
     /// 本系统内的卡号信息

@@ -1,6 +1,6 @@
 ﻿using FluentMigrator.Builders.Create.Table;
-using Nop.Core.Domain.Catalog;
-using Nop.Core.Domain.Vendors;
+using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Shares;
 using Nop.Data.Extensions;
 
 namespace Nop.Data.Mapping.Builders.Vendors;
@@ -8,7 +8,7 @@ namespace Nop.Data.Mapping.Builders.Vendors;
 /// <summary>
 /// Represents a vendor entity builder
 /// </summary>
-public partial class VendorSaleUrlBuilder : NopEntityBuilder<VendorSaleUrl>
+public partial class ShareSceneBuilder : NopEntityBuilder<ShareScene>
 {
     #region Methods
 
@@ -19,16 +19,12 @@ public partial class VendorSaleUrlBuilder : NopEntityBuilder<VendorSaleUrl>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(VendorSaleUrl.VendorId)).AsInt32().ForeignKey<Vendor>()
-            .WithColumn(nameof(VendorSaleUrl.ProductId)).AsInt32().ForeignKey<Product>()
-            .WithColumn(nameof(VendorSaleUrl.Url)).AsAnsiString(512).Nullable()
-
+            .WithColumn(nameof(ShareScene.CustomerId)).AsInt32().ForeignKey<Customer>()
+            .WithColumn(nameof(ShareScene.Name)).AsString(32).NotNullable()
+            .WithColumn(nameof(ShareScene.StrValue)).AsAnsiString(64).Nullable()
             ;
     }
 
     #endregion
-
-
-
 
 }

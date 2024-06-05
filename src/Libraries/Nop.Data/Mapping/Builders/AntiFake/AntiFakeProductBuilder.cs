@@ -31,6 +31,7 @@ public partial class AntiFakeProductBuilder : NopEntityBuilder<AntiFakeProduct>
             .WithColumn(nameof(AntiFakeProduct.BrandName)).AsString(128).Nullable()
             .WithColumn(nameof(AntiFakeProduct.Tips)).AsString(512).Nullable()
             .WithColumn(nameof(AntiFakeProduct.Remark)).AsString(512).Nullable()
+            .WithColumn(nameof(AntiFakeProduct.UnitName)).AsString(32).Nullable()
 
             ;
     }

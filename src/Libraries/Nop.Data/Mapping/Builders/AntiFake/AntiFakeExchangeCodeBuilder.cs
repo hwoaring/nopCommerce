@@ -1,6 +1,5 @@
 ﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.AntiFake;
-using Nop.Core.Domain.Customers;
 using Nop.Data.Extensions;
 
 namespace Nop.Data.Mapping.Builders.AntiFake;
@@ -8,7 +7,7 @@ namespace Nop.Data.Mapping.Builders.AntiFake;
 /// <summary>
 /// Represents a affiliate entity builder
 /// </summary>
-public partial class AntiFakeRewardsBlackListBuilder : NopEntityBuilder<AntiFakeRewardsBlackList>
+public partial class AntiFakeExchangeCodeBuilder : NopEntityBuilder<AntiFakeExchangeCode>
 {
     #region Methods
 
@@ -19,8 +18,9 @@ public partial class AntiFakeRewardsBlackListBuilder : NopEntityBuilder<AntiFake
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(AntiFakeRewardsBlackList.AntiFakeProductId)).AsInt32().ForeignKey<AntiFakeProduct>()
-            .WithColumn(nameof(AntiFakeRewardsBlackList.CustomerId)).AsInt32().ForeignKey<Customer>()
+            .WithColumn(nameof(AntiFakeExchangeCode.AntiFakeExchangeConfigId)).AsInt32().ForeignKey<AntiFakeExchangeConfig>()
+            .WithColumn(nameof(AntiFakeExchangeCode.ExchangedDateOnUtc)).AsDateTime2().Nullable()
+
             ;
     }
 

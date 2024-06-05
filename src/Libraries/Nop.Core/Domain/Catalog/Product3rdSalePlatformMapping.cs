@@ -1,7 +1,7 @@
 ﻿namespace Nop.Core.Domain.Catalog
 {
     /// <summary>
-    /// 产品有第三方平台的链接，如：京东，天猫，淘宝等
+    /// 产品有哪些第三方平台可销售，如：京东，天猫，淘宝等
     /// </summary>
     public partial class Product3rdSalePlatformMapping : BaseEntity
     {

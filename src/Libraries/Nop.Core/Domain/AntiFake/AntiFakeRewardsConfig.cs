@@ -55,6 +55,11 @@ public partial class AntiFakeRewardsConfig : BaseEntity, ISoftDeletedEntity
     public string Content { get; set; }
 
     /// <summary>
+    /// 限定区域，限定使用区域（填写区划码，以逗号分开）
+    /// </summary>
+    public string LimitToRegionCode { get; set; }
+
+    /// <summary>
     /// 头部图片ID
     /// </summary>
     public int PictureId { get; set; }
@@ -101,6 +106,21 @@ public partial class AntiFakeRewardsConfig : BaseEntity, ISoftDeletedEntity
     public int SplitCounts { get; set; }
 
     /// <summary>
+    /// 阶梯阅读数，达到阶梯阅读数后，拆分的红包一个人可以领取达到分享的阶梯次数
+    /// 默认情况下，拆分的红包没人只能领取一次，
+    /// 设置分享领取数字后，分享阅读数达到设定阶梯值后，可以领取第二次，第三次等
+    /// 格式为：0,200,500 ，表示允许领取3次，第二次领取需要分享阅读200次，第三次领取需要阅读数500次。
+    /// 这里没有设置第四次阅读数要求，表示不能够领取第四次。
+    /// </summary>
+    public string TierShareCount { get; set; }
+
+    /// <summary>
+    /// 阶梯阅读数统计的文章ID
+    /// 阅读数统计时间为该用户首次领取奖金时间的24小时内。
+    /// </summary>
+    public int ShareNewsItemId { get; set; }
+
+    /// <summary>
     /// 是否以随机方式拆分，否则为均分
     /// </summary>
     public bool SplitByRandom { get; set; }
@@ -140,7 +160,7 @@ public partial class AntiFakeRewardsConfig : BaseEntity, ISoftDeletedEntity
     /// <summary>
     /// 现金奖励可提现
     /// 可提现：立即提现到微信
-    /// 不可提现：奖金设置为消费卡券（现金卡券、产品兑换券）
+    /// 不可提现：奖金设置为消费卡券（现金卡券、产品兑换券，发放到个人的卡券资产中）
     /// </summary>
     public bool EnableWithdrawal { get; set; }
 

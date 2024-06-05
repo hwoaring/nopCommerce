@@ -44,6 +44,11 @@ public partial class SharePageRecords : BaseEntity
     public int SharePictureId { get; set; }
 
     /// <summary>
+    /// 分享页用户单独设置的场景ID
+    /// </summary>
+    public int ShareSceneId { get; set; }
+
+    /// <summary>
     /// 开启线下广告分享（开启后，本条记录没有统计结束时间，宣传单印刷后可长时间使用）
     /// </summary>
     public bool OfflineShare { get; set; }

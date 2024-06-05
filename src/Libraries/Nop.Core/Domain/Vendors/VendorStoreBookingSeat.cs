@@ -1,6 +1,4 @@
 ﻿using Nop.Core.Domain.Common;
-using Nop.Core.Domain.Localization;
-using Nop.Core.Domain.Seo;
 
 namespace Nop.Core.Domain.Vendors;
 
@@ -75,7 +73,7 @@ public partial class VendorStoreBookingSeat : BaseEntity, ISoftDeletedEntity
     public bool Confirmed { get; set; }
 
     /// <summary>
-    /// 确认到店/确认用餐（多次没有到店的列入黑名单）
+    /// 确认到店/确认用餐（多次没有到店的列入VendorStore黑名单）
     /// </summary>
     public bool HasArrived { get; set; }
 

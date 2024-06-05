@@ -1,4 +1,4 @@
-﻿using Autofac.Core;
+﻿
 using Nop.Core.Domain.Common;
 
 namespace Nop.Core.Domain.Vendors;
@@ -29,15 +29,23 @@ public partial class VendorSaleProduct : BaseEntity, ISoftDeletedEntity
     public decimal CustomerPrice { get; set; }
 
     /// <summary>
-    /// 库存数量，自有库存（只有自己有库存的才能发货，才能在防伪二维码销售联系中显示电话）
-    /// 有无货，由上级代理商设置，设置有货后，表示为代理商。
-    /// </summary>
-    public int StockNumber { get; set; }
-
-    /// <summary>
     /// 排序
     /// </summary>
     public int DisplayOrder { get; set; }
+
+    /// <summary>
+    /// 默认不允许
+    /// 该产品允许代理商自己出库发货（在代理商满足出库发货条件下）
+    /// 允许从代理商仓库出库/发货
+    /// Product中已有总控制，这里单独控制是否允许代理的产品自己出库
+    /// </summary>
+    public bool AllowVendorShipping { get; set; }
+
+    /// <summary>
+    /// 是否允许0库存出库、发货
+    /// 代理商的库存在
+    /// </summary>
+    public bool AllowOutStockShipment { get; set; }
 
     /// <summary>
     /// 是否有该产品的分销权限（自己分销的页面展示自己的联系方式）

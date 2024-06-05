@@ -597,6 +597,14 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public int PaymentDelayMinutes { get; set; }
 
     /// <summary>
+    /// 货款结算延迟天数或佣金结算延迟天数
+    /// （根据产品类型确定在不同产品结算延迟不同天数）
+    /// 总延迟结算天数为：该产品设置的延迟天数+OrderSetting中设置的天数
+    /// 必须大于或等于0
+    /// </summary>
+    public int SettleDelayDays { get; set; }
+
+    /// <summary>
     /// 商标/品牌ID
     /// </summary>
     public int BrandId { get; set; }
@@ -750,6 +758,7 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
 
     /// <summary>
     /// 只展示给对应供应商（不对外公开）
+    /// 限制到Vendor（产品绑定了Vendor后，只能对应Vendor可以访问查看。）
     /// </summary>
     public bool OnlyDisplayToVendor { get; set; }
 
@@ -794,9 +803,15 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     public decimal MaxVendorEnteredPrice { get; set; }
 
     /// <summary>
-    /// 发货地（可以存储AddressId或者区域代码，要固定一种格式）
+    /// 该产品允许代理商自己出库发货（在代理商满足出库发货条件下）
+    /// 允许从代理商仓库出库/发货
     /// </summary>
-    public int ShippingPlaceId { get; set; }
+    public bool AllowVendorShipping { get; set; }
+
+    /// <summary>
+    /// 发货地-备用（可以存储AddressId或者区域代码，要固定一种格式）
+    /// </summary>
+    public int ShippingAddressId { get; set; }
 
     /// <summary>
     /// 满额免邮金额
@@ -876,11 +891,6 @@ public partial class Product : BaseEntity, ILocalizedEntity, ISlugSupported, IAc
     /// 是否折扣商品
     /// </summary>
     public bool DiscountedProduct { get; set; }
-
-    /// <summary>
-    /// 限制到Vendor（产品绑定了Vendor后，只能对应Vendor可以访问查看。）
-    /// </summary>
-    public bool LimitedToVendors { get; set; }
 
     /// <summary>
     /// 公开等级（备用）

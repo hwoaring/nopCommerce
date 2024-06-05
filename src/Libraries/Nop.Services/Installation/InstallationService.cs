@@ -3342,7 +3342,7 @@ namespace Nop.Services.Installation
                 MaximumProductNumber = 3000,
                 AllowVendorsToImportProducts = true,
                 MaxVendorStoreCategoryCount = 10, //新增
-                MaxVendorSceneCount = 50, //新增
+                MaxShareSceneCount = 50, //新增
                 MaxVendorProductGroupCount = 50, //新增
                 MaxVendorSaleOrderCount = 50, //新增
             });

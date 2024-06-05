@@ -4,6 +4,7 @@ namespace Nop.Core.Domain.AntiFake;
 
 /// <summary>
 /// 奖励领取黑名单
+/// 领取时候显示领取失败，请稍后重试
 /// </summary>
 public partial class AntiFakeRewardsBlackList : BaseEntity
 {

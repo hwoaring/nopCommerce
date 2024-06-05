@@ -33,7 +33,7 @@ public partial class AntiFakeProduct : BaseEntity, ISoftDeletedEntity
     public int TransparentPictureId { get; set; }
 
     /// <summary>
-    /// 销售的产品ID（可不设置）
+    /// 在系统中销售的产品ID（可不设置）
     /// </summary>
     public int ProductId { get; set; }
 
@@ -41,6 +41,16 @@ public partial class AntiFakeProduct : BaseEntity, ISoftDeletedEntity
     /// 每箱数量
     /// </summary>
     public int QuantityPerBox { get; set; }
+
+    /// <summary>
+    /// 每个单瓶的数值（如500ml，填写500）
+    /// </summary>
+    public decimal UnitValue { get; set; }
+
+    /// <summary>
+    /// 单瓶单位，如：500ml，填写ml
+    /// </summary>
+    public string UnitName { get; set; }
 
     /// <summary>
     /// 产品名称

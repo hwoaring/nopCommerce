@@ -48,11 +48,6 @@ public partial class OrderRealNames : BaseEntity, ISoftDeletedEntity
     public bool Certified { get; set; }
 
     /// <summary>
-    /// 是否黑名单
-    /// </summary>
-    public bool BlackList { get; set; }
-
-    /// <summary>
     /// 删除
     /// </summary>
     public bool Deleted { get; set; }

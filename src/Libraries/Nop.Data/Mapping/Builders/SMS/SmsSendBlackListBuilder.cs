@@ -20,6 +20,8 @@ namespace Nop.Data.Mapping.Builders.SMS
         {
             table
                 .WithColumn(nameof(SmsSendBlackList.VendorId)).AsInt32().ForeignKey<Vendor>()
+                .WithColumn(nameof(SmsSendBlackList.PhoneNumber)).AsAnsiString(32).NotNullable()
+
                 ;
         }
 

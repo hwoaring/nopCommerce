@@ -7,7 +7,7 @@ namespace Nop.Data.Mapping.Builders.Vendors;
 /// <summary>
 /// Represents a vendor entity builder
 /// </summary>
-public partial class VendorSceneBuilder : NopEntityBuilder<VendorScene>
+public partial class VendorStockOutboundBuilder : NopEntityBuilder<VendorStockOutbound>
 {
     #region Methods
 
@@ -18,9 +18,11 @@ public partial class VendorSceneBuilder : NopEntityBuilder<VendorScene>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(VendorScene.VendorId)).AsInt32().ForeignKey<Vendor>()
-            .WithColumn(nameof(VendorScene.Name)).AsString(32).NotNullable()
-            .WithColumn(nameof(VendorScene.StrValue)).AsAnsiString(64).Nullable()
+            .WithColumn(nameof(VendorStockOutbound.VendorId)).AsInt32().ForeignKey<Vendor>()
+            .WithColumn(nameof(VendorStockOutbound.OutboundAntiCodeBox)).AsAnsiString(int.MaxValue).Nullable()
+            .WithColumn(nameof(VendorStockOutbound.OutboundAntiCodeItem)).AsAnsiString(int.MaxValue).Nullable()
+            .WithColumn(nameof(VendorStockOutbound.Notes)).AsString(64).Nullable()
+
             ;
     }
 

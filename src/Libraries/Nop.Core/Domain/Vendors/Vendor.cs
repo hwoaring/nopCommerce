@@ -109,6 +109,11 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     #region === 扩展属性 ===
 
     /// <summary>
+    /// 超级管理员，创建人ID、总权限管理人ID（备用）
+    /// </summary>
+    public int CreatedCustomerId { get; set; }
+
+    /// <summary>
     /// 从哪个Store创建（备用）
     /// </summary>
     public int CreatedInStoreId { get; set; }
@@ -134,7 +139,7 @@ public partial class Vendor : BaseEntity, ILocalizedEntity, ISlugSupported, ISof
     public long UnifiedId { get; set; }
 
     /// <summary>
-    /// Vendor推荐人的vendorid号（备用）
+    /// Vendor推荐人的vendorid号，上级代理Id号（备用）
     /// </summary>
     public int ReferrerVendorId { get; set; }
 

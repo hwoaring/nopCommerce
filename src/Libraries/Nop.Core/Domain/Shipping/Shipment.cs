@@ -45,4 +45,28 @@ public partial class Shipment : BaseEntity
     /// Gets or sets the entity creation date
     /// </summary>
     public DateTime CreatedOnUtc { get; set; }
+
+    #region ===== 扩展信息 =====
+
+    /// <summary>
+    /// 发货公司ID或发货类型ID（顺丰、韵达，自提，厂家发货等）
+    /// </summary>
+    public int ShippingCompanyId { get; set; }
+
+    /// <summary>
+    /// 代理商出库序列号
+    /// </summary>
+    public long VendorOutboundSerialNumber { get; set; }
+
+    /// <summary>
+    /// 单独指定某个运输订单的运费（以便向代理商结算）
+    /// </summary>
+    public decimal ShippingCost { get; set; }
+
+    /// <summary>
+    /// 发货信息创建人ID
+    /// </summary>
+    public int CreatCustomerId { get; set; }
+
+    #endregion
 }

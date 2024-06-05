@@ -60,12 +60,12 @@ public partial class AntiFakeRewardsCode : BaseEntity, ISoftDeletedEntity
 
     /// <summary>
     /// 是否现金奖励（直接发送到微信钱包）
-    /// 否则都是发送到个人卡券中
+    /// 否则都是发送到个人卡券中（现金抵用券，产品兑换券等）
     /// </summary>
     public bool CashRewards { get; set; }
 
     /// <summary>
-    /// 是否可用
+    /// 是否可用(可以指定批次或某个代理激活使用)
     /// </summary>
     public bool Actived { get; set; }
 

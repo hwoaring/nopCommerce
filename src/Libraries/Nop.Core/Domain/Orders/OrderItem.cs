@@ -103,7 +103,19 @@ public partial class OrderItem : BaseEntity
 
 
 
-    #region
+    #region ====== 扩展属性 ======
+
+    /// <summary>
+    /// 佣金总金额（如果是购买的卡券，部分卡券没有消费，不结算佣金）
+    /// 佣金总金额=单个产品佣金*购买数量
+    /// 如果为消费完，则按比例结算佣金
+    /// </summary>
+    public decimal CommissionAmount { get; set; }
+
+    /// <summary>
+    /// 已结算佣金（单产品部分消费后，消费数量按比例结算佣金）
+    /// </summary>
+    public decimal SettledCommissionAmount { get; set; }
 
     /// <summary>
     /// 单个产品需要支付的积分
@@ -151,11 +163,14 @@ public partial class OrderItem : BaseEntity
     public long UnifiedId { get; set; }
 
     /// <summary>
-    /// DeliverCustomerId ，发货人ID，或者线下兑换人ID，用于记录谁发货货款结算给谁
+    /// 实际发货人，实际出库人（发货代理商ID），用于向代理商结算货款
+    /// 并非核销人，核销人可能是公司员工，产品只能向Vendor结算
+    /// 只有Vendor才能自己出库（条件：1，是代理商，2，产品品类允许代理商发货，3，代理商有库存）
+    /// OutboundVendorId ，发货人ID，或者线下兑换人ID，用于记录谁发货货款结算给谁
     /// （卡券资产中也有兑换人，防伪码奖励中也有兑换人，怎么把3处兑换人合并到一张表）
     /// 同一订单，可能有不同的发货人
     /// </summary>
-    public int DeliverCustomerId { get; set; }
+    public int OutboundVendorId { get; set; }
 
     /// <summary>
     /// 线下取货，代发货：取货日期
@@ -182,6 +197,16 @@ public partial class OrderItem : BaseEntity
     /// 使用时间（订单产品使用时间）
     /// </summary>
     public DateTime? UsageDateOnUtc { get; set; }
+
+    /// <summary>
+    /// 生成提货码需要加密：最后一位作为验证位
+    /// 在发货前，只有客人选择线下提货才生成提货码，防止线上发货和线下提货同时进行的漏洞。
+    /// 线下取货，代发货：取货密码，提货密码，线下提货码
+    /// （线下输入提货码时，错误3次将锁定查询10分钟，防止恶意提货）
+    /// 整个Order订单提货，提货码以1开头，OrderItem提货码以8开头
+    /// 取货密码/提货密码
+    /// </summary>
+    public long PickupPassword { get; set; }
 
     /// <summary>
     /// 订单总邮费快递运费（向代理商结算运费）

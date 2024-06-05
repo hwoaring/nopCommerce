@@ -198,6 +198,20 @@ public partial class OrderSettings : ISettings
     public int DelayPaymentMinutes { get; set; }
 
     /// <summary>
+    /// 查询AssetsCashs，个人或Vendor无保证金情况下，货款结算延迟天数或佣金结算延迟天数
+    /// 无保证金情况，延迟7天（根据产品类型确定在不同产品结算延迟基础上加7天）
+    /// 必须大于0
+    /// </summary>
+    public int SettleDelayDays { get; set; }
+
+    /// <summary>
+    /// 查询AssetsCashs，个人或Vendor有保证金情况下，货款结算延迟天数或佣金结算延迟天数
+    /// 京东设置的是2天（根据产品类型确定，在不同产品结算延迟基础上加2天）
+    /// 必须大于0
+    /// </summary>
+    public int DepositSettleDelayDays { get; set; }
+
+    /// <summary>
     /// 产品详情页发起支付
     /// </summary>
     public bool ProductPageCheckoutEnabled { get; set; }

@@ -1,16 +1,17 @@
-﻿using Nop.Core.Domain.Common;
-using Nop.Core.Domain.Localization;
-using Nop.Core.Domain.Seo;
-
-namespace Nop.Core.Domain.Vendors;
+﻿namespace Nop.Core.Domain.Shares;
 
 /// <summary>
-/// 销售员自定义场景（用于统计二维码宣传场景，区分渠道）
+/// 自定义分享场景（用于统计个人或者Vendor的二维码宣传场景，区分渠道）
 /// </summary>
-public partial class VendorScene : BaseEntity
+public partial class ShareScene : BaseEntity
 {
     /// <summary>
-    /// 销售员ID
+    /// Customer Id
+    /// </summary>
+    public int CustomerId { get; set; }
+
+    /// <summary>
+    /// 是否绑定到Vendor
     /// </summary>
     public int VendorId { get; set; }
 

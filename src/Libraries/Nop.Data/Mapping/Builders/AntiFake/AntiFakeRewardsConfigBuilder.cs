@@ -24,10 +24,13 @@ public partial class AntiFakeRewardsConfigBuilder : NopEntityBuilder<AntiFakeRew
             .WithColumn(nameof(AntiFakeRewardsConfig.Message)).AsString(512).Nullable()
             .WithColumn(nameof(AntiFakeRewardsConfig.PaymenTitle)).AsString(512).Nullable()
             .WithColumn(nameof(AntiFakeRewardsConfig.PaymenDescription)).AsString(512).Nullable()
+            .WithColumn(nameof(AntiFakeRewardsConfig.LimitToRegionCode)).AsAnsiString(4000).Nullable()
             .WithColumn(nameof(AntiFakeRewardsConfig.HashCode)).AsAnsiString(128).Nullable()
             .WithColumn(nameof(AntiFakeRewardsConfig.ConfirmDateUtc)).AsDateTime2().Nullable()
             .WithColumn(nameof(AntiFakeRewardsConfig.StartDateUtc)).AsDateTime2().Nullable()
             .WithColumn(nameof(AntiFakeRewardsConfig.EndDateUtc)).AsDateTime2().Nullable()
+
+            .WithColumn(nameof(AntiFakeRewardsConfig.TierShareCount)).AsAnsiString(512).Nullable()
             ;
     }
 

@@ -75,9 +75,9 @@ public partial class VendorSettings : ISettings
     public int MaxVendorStoreCategoryCount { get; set; }
 
     /// <summary>
-    /// 销售可以自定义场景数量
+    /// 销售可以自定义的分享场景数量
     /// </summary>
-    public int MaxVendorSceneCount { get; set; }
+    public int MaxShareSceneCount { get; set; }
 
     /// <summary>
     /// 销售可以自定义推广产品分组数量（便于和朋友圈分组隐私对应）

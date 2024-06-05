@@ -203,6 +203,8 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<OrderInvoice>(); //订单发票
             Create.TableFor<OrderScene>(); //订单下单场景信息
             Create.TableFor<OrderPromotion>(); //订单下单优惠功能
+            Create.TableFor<OrderIDBlackList>();  //实名黑名单
+            Create.TableFor<OrderPhoneBlackList>();  //电话黑名单
 
 
             //扩展媒体相关 Media
@@ -237,6 +239,7 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<ProductCustomerViews>();
             Create.TableFor<ProductServiceTag>();
             Create.TableFor<ProductProductServiceTagMapping>();
+            Create.TableFor<ProductBlackList>();   //产品展示黑名单
 
 
             //扩展新闻相关 News
@@ -249,6 +252,7 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<NewsItemProductMapping>();  //新闻产品映射
             Create.TableFor<NewsCreator>(); //新闻创作者
             Create.TableFor<NewsTemplate>(); //新闻页面模板（如：微信模板，视频模板，新闻模板……）
+            Create.TableFor<NewsBlackList>();  //新闻展示黑名单
 
 
             //扩展朋友圈 FriendCircles
@@ -271,9 +275,8 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<VendorProductGroupSellProduct>();
             Create.TableFor<RelateVendorStoreMapping>();
             Create.TableFor<Vendor3rdSaleOrder>();
+            Create.TableFor<Vendor3rdSaleUrl>();
             Create.TableFor<VendorFavoriteMapping>();
-            Create.TableFor<VendorSaleUrl>();
-            Create.TableFor<VendorScene>();
             Create.TableFor<VendorSms>();
             Create.TableFor<VendorStoreBlackList>();
             Create.TableFor<VendorStoreBookingProduct>();
@@ -288,11 +291,13 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<VendorStoreSeatPicture>();
             Create.TableFor<VendorStoreTemplate>();
             Create.TableFor<VendorTag>();
-            Create.TableFor<VendorWarehouse>();
             Create.TableFor<VendorStoreMember>();
             Create.TableFor<VendorStoreMemberLevelSetting>();
             Create.TableFor<VendorStoreMemberCard>();
             Create.TableFor<VendorStoreMemberFollow>();
+            Create.TableFor<VendorStockProduct>();   //库房库存产品品类
+            Create.TableFor<VendorStockInbound>();   //库房入库
+            Create.TableFor<VendorStockOutbound>();  //库房出库
 
 
             //通用扩展Common相关
@@ -313,6 +318,7 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<SharePageSharePictureMapping>();
             Create.TableFor<SharePermission>();
             Create.TableFor<ShareProductApply>();
+            Create.TableFor<ShareScene>();
 
 
             //公共相关 Publics
@@ -341,6 +347,8 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<AntiFakeRewardsBlackList>();
             Create.TableFor<AntiFakeCodeScanRecords>();
             Create.TableFor<AntiFakeProductRelatedNews>();
+            Create.TableFor<AntiFakeExchangeConfig>();
+            Create.TableFor<AntiFakeExchangeCode>();
 
             //资产扩展 Assets
             Create.TableFor<AssetsBankAccount>();
@@ -372,6 +380,8 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<SmsSendRecords>();
             Create.TableFor<SmsSendBlackList>();
 
+            //扩展物流运输发货 Shipping
+            Create.TableFor<ShippingCompany>();
         }
     }
 }

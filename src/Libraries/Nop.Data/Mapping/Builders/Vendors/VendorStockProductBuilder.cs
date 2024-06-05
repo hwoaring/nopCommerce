@@ -7,7 +7,7 @@ namespace Nop.Data.Mapping.Builders.Vendors;
 /// <summary>
 /// Represents a vendor entity builder
 /// </summary>
-public partial class VendorWarehouseBuilder : NopEntityBuilder<VendorWarehouse>
+public partial class VendorStockProductBuilder : NopEntityBuilder<VendorStockProduct>
 {
     #region Methods
 
@@ -18,10 +18,9 @@ public partial class VendorWarehouseBuilder : NopEntityBuilder<VendorWarehouse>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
-            .WithColumn(nameof(VendorWarehouse.VendorId)).AsInt32().ForeignKey<Vendor>()
-            .WithColumn(nameof(VendorWarehouse.SelfPickupPhone)).AsString(32).Nullable()
-            .WithColumn(nameof(VendorWarehouse.Longitude)).AsDecimal(9,6).Nullable()
-            .WithColumn(nameof(VendorWarehouse.Latitude)).AsDecimal(9, 6).Nullable()
+            .WithColumn(nameof(VendorStockProduct.VendorId)).AsInt32().ForeignKey<Vendor>()
+            .WithColumn(nameof(VendorStockProduct.Name)).AsString(64).NotNullable()
+            .WithColumn(nameof(VendorStockProduct.UnitName)).AsAnsiString(32).NotNullable()
 
             ;
     }

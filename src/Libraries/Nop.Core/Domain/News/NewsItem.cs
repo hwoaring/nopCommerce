@@ -172,6 +172,11 @@ public partial class NewsItem : BaseEntity, ISlugSupported, IStoreMappingSupport
     public bool AsSlideNews { get; set; }
 
     /// <summary>
+    /// 向黑名单用户隐藏新闻或禁止阅读
+    /// </summary>
+    public bool DisplayToBlackList { get; set; }
+
+    /// <summary>
     /// 更新时间
     /// </summary>
     public DateTime? UpdatedOnUtc { get; set; }

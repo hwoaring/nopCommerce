@@ -23,7 +23,6 @@ namespace Nop.Data.Mapping.Builders.Assets
                 .WithColumn(nameof(AssetsCouponsHistory.CustomerId)).AsInt32().ForeignKey<Customer>()
                 .WithColumn(nameof(AssetsCouponsHistory.Name)).AsString(128).NotNullable()
                 .WithColumn(nameof(AssetsCouponsHistory.CardNumber)).AsAnsiString(128).NotNullable()
-                .WithColumn(nameof(AssetsCouponsHistory.PassWord)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(AssetsCouponsHistory.ExchangeUnit)).AsString(32).Nullable()
                 .WithColumn(nameof(AssetsCouponsHistory.BindIDNationality)).AsString(32).Nullable()
                 .WithColumn(nameof(AssetsCouponsHistory.BindIDNumber)).AsAnsiString(64).Nullable()
@@ -43,7 +42,7 @@ namespace Nop.Data.Mapping.Builders.Assets
                 .WithColumn(nameof(AssetsCouponsHistory.LatestRefundDateUtc)).AsDateTime2().Nullable()
                 .WithColumn(nameof(AssetsCouponsHistory.ExpiredRefundDateUtc)).AsDateTime2().Nullable()
                 .WithColumn(nameof(AssetsCouponsHistory.RefundDateUtc)).AsDateTime2().Nullable()
-                .WithColumn(nameof(AssetsCouponsHistory.ResoldDateOnUtc)).AsDateTime2().Nullable()
+                .WithColumn(nameof(AssetsCouponsHistory.ReSellDateOnUtc)).AsDateTime2().Nullable()
                 ;
         }
 

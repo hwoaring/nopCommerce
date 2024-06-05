@@ -64,9 +64,9 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     public bool NeedPassWord { get; set; }
 
     /// <summary>
-    /// 核销密码/兑换密码
+    /// 核销密码/兑换密码（最后一位作为校验位，验证密码是否有效密码）
     /// </summary>
-    public string PassWord { get; set; }
+    public long PassWord { get; set; }
 
     /// <summary>
     /// 核销密码/兑换密码过期时间
@@ -84,11 +84,14 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     public string ExchangeUnit { get; set; }
 
     /// <summary>
-    /// DeliverCustomerId ，发货人ID，或者线下兑换人ID，用于记录谁发货货款结算给谁
+    /// 实际发货人，实际出库人（发货代理商ID），用于向代理商结算货款
+    /// 并非核销人，核销人可能是公司员工，产品只能向Vendor结算
+    /// 只有Vendor才能自己出库（条件：1，是代理商，2，产品品类允许代理商发货，3，代理商有库存）
+    /// OutboundVendorId ，发货人ID，或者线下兑换人ID，用于记录谁发货货款结算给谁
     /// （卡券资产中也有兑换人，防伪码奖励中也有兑换人，怎么把3处兑换人合并到一张表）
     /// 同一订单，可能有不同的发货人
     /// </summary>
-    public int DeliverCustomerId { get; set; }
+    public int OutboundVendorId { get; set; }
 
     /// <summary>
     /// 线下取货，代发货：取货日期
@@ -244,8 +247,8 @@ public partial class AssetsCouponsHistory : BaseEntity, ISoftDeletedEntity
     public bool Used { get; set; }
 
     /// <summary>
-    /// 核销/验证人员ID（没有绑定到店铺使用的券，结算时结算到验证人ID账户名下）
-    /// 绑定店铺的：验证后结算到VendorStore店铺下。
+    /// 核销/验证人员ID，非结算人员，核销人员可能是公司员工。
+    /// 所有款项结算到Vendor名下
     /// </summary>
     public int CheckCustomerId { get; set; }
 

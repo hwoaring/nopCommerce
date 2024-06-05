@@ -68,11 +68,6 @@ namespace Nop.Core.Domain.SMS
         public bool UnSubscribed { get; set; }
 
         /// <summary>
-        /// 是否黑名单
-        /// </summary>
-        public bool BlackList { get; set; }
-
-        /// <summary>
         /// 删除
         /// </summary>
         public bool Deleted { get; set; }

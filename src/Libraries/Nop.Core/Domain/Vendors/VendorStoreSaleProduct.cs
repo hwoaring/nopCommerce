@@ -16,21 +16,6 @@ public partial class VendorStoreSaleProduct : BaseEntity
     public int VendorSaleProductId { get; set; }
 
     /// <summary>
-    /// 使用自定义价格
-    /// </summary>
-    public bool UseCustomerPrice { get; set; }
-
-    /// <summary>
-    /// 自定义销售价格
-    /// </summary>
-    public decimal CustomerPrice { get; set; }
-
-    /// <summary>
-    /// 自有库存（只有自己有库存的才能发货）
-    /// </summary>
-    public int StockNumber { get; set; }
-
-    /// <summary>
     /// 排序
     /// </summary>
     public int DisplayOrder { get; set; }

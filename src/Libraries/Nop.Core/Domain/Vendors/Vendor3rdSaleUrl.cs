@@ -3,7 +3,7 @@
 /// <summary>
 /// 代理第三方平台的销售链接
 /// </summary>
-public partial class VendorSaleUrl : BaseEntity
+public partial class Vendor3rdSaleUrl : BaseEntity
 {
     /// <summary>
     /// 代理商ID

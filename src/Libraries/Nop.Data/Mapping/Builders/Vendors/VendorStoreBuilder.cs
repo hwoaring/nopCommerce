@@ -19,6 +19,7 @@ public partial class VendorStoreBuilder : NopEntityBuilder<VendorStore>
     public override void MapEntity(CreateTableExpressionBuilder table)
     {
         table
+            .WithColumn(nameof(VendorStore.VendorId)).AsInt32().ForeignKey<Vendor>()
             .WithColumn(nameof(VendorStore.Name)).AsString(128).NotNullable()
             .WithColumn(nameof(VendorStore.Slogan)).AsString(128).Nullable()
             .WithColumn(nameof(VendorStore.Description)).AsString(512).Nullable()

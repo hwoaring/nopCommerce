@@ -1,7 +1,5 @@
-﻿using System.Data;
-using FluentMigrator.Builders.Create.Table;
+﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Assets;
-using Nop.Core.Domain.Customers;
 using Nop.Data.Extensions;
 
 
@@ -21,7 +19,7 @@ namespace Nop.Data.Mapping.Builders.Assets
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(AssetsBankAccount.CustomerId)).AsInt32().ForeignKey<Customer>()
+                .WithColumn(nameof(AssetsBankAccount.AssetsCashsId)).AsInt32().ForeignKey<AssetsCashs>()
                 .WithColumn(nameof(AssetsBankAccount.BankNumber)).AsAnsiString(32).Nullable()
                 .WithColumn(nameof(AssetsBankAccount.BankCode)).AsAnsiString(32).NotNullable()
                 .WithColumn(nameof(AssetsBankAccount.BankAccount)).AsAnsiString(64).NotNullable()

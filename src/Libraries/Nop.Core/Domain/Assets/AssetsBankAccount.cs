@@ -3,14 +3,14 @@
 namespace Nop.Core.Domain.Assets;
 
 /// <summary>
-/// 个人结算提现账号管理(需要实名绑定，防止刷单)
+/// 公司或个人结算提现账号管理(需要实名绑定，防止刷单)
 /// </summary>
 public partial class AssetsBankAccount : BaseEntity
 {
     /// <summary>
-    /// 对应人员ID
+    /// 对应的系统现金账户ID
     /// </summary>
-    public int CustomerId { get; set; }
+    public int AssetsCashsId { get; set; }
 
     /// <summary>
     /// 个人银行代码（银行代码ICBC，ABC，WECHAT，ALIPAY等）
