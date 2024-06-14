@@ -5859,8 +5859,7 @@ namespace Nop.Services.Installation
                 Published = true,
                 MarkAsNew = true,
                 CreatedOnUtc = DateTime.UtcNow,
-                UpdatedOnUtc = DateTime.UtcNow,
-                HasTierPrices = true
+                UpdatedOnUtc = DateTime.UtcNow
             };
             allProducts.Add(productBeatsPill);
 
@@ -6632,8 +6631,7 @@ namespace Nop.Services.Installation
                 OrderMaximumQuantity = 10000,
                 Published = true,
                 CreatedOnUtc = DateTime.UtcNow,
-                UpdatedOnUtc = DateTime.UtcNow,
-                HasTierPrices = true
+                UpdatedOnUtc = DateTime.UtcNow
             };
 
             allProducts.Add(productOversizedWomenTShirt);
@@ -6760,8 +6758,7 @@ namespace Nop.Services.Installation
                 OrderMaximumQuantity = 10000,
                 Published = true,
                 CreatedOnUtc = DateTime.UtcNow,
-                UpdatedOnUtc = DateTime.UtcNow,
-                HasTierPrices = true
+                UpdatedOnUtc = DateTime.UtcNow
             };
             allProducts.Add(productLeviJeans);
 
