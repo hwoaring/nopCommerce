@@ -79,10 +79,8 @@ public partial class NopHttpClient
     /// </returns>
     public virtual async Task<string> GetLicenseCheckDetailsAsync()
     {
-        return string.Empty;
-
         var isLocal = _webHelper.IsLocalRequest(_httpContextAccessor.HttpContext.Request);
-        var storeUrl = _webHelper.GetStoreLocation();
+        var storeUrl = "https://localhost:58379/";   //_webHelper.GetStoreLocation();
         if (!_adminAreaSettings.CheckLicense || isLocal || storeUrl.Contains("localhost"))
             return string.Empty;
 
@@ -109,19 +107,13 @@ public partial class NopHttpClient
     /// </returns>
     public virtual async Task<RssFeed> GetNewsRssAsync()
     {
-        return new RssFeed(
-            string.Empty,
-            string.Empty,
-            new Uri("http://www.yourdomain.com"),
-            DateTimeOffset.Now);
-
         //prepare URL to request
         var language = _languageService.GetTwoLetterIsoLanguageName(await _workContext.GetWorkingLanguageAsync());
         var url = string.Format(NopCommonDefaults.NopNewsRssPath,
             NopVersion.FULL_VERSION,
-            _webHelper.IsLocalRequest(_httpContextAccessor.HttpContext.Request),
-            _adminAreaSettings.HideAdvertisementsOnAdminArea,
-            _webHelper.GetStoreLocation(),
+            true,                                                 //_webHelper.IsLocalRequest(_httpContextAccessor.HttpContext.Request),
+            true,                                                 //_adminAreaSettings.HideAdvertisementsOnAdminArea,
+            "https://localhost:58379/",                           //_webHelper.GetStoreLocation(),
             language).ToLowerInvariant();
 
         //get news feed
@@ -144,9 +136,9 @@ public partial class NopHttpClient
         //prepare URL to request
         var url = string.Format(NopCommonDefaults.NopInstallationCompletedPath,
                 NopVersion.FULL_VERSION,
-                _webHelper.IsLocalRequest(_httpContextAccessor.HttpContext.Request),
+                true,                                            //_webHelper.IsLocalRequest(_httpContextAccessor.HttpContext.Request),
                 WebUtility.UrlEncode(email),
-                _webHelper.GetStoreLocation(),
+                "https://localhost:58379/",                      //_webHelper.GetStoreLocation(),
                 languageCode,
                 culture)
             .ToLowerInvariant();
@@ -169,7 +161,7 @@ public partial class NopHttpClient
     {
         //prepare URL to request
         var url = string.Format(NopCommonDefaults.NopSubscribeNewslettersPath,
-                WebUtility.UrlEncode(email))
+            WebUtility.UrlEncode(email))
             .ToLowerInvariant();
 
         return await _httpClient.GetAsync(url);

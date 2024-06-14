@@ -65,7 +65,12 @@ public partial class XmlHelper
     {
         var sb = new StringBuilder(str);
 
-        var rez = sb.Replace("&quot;", "\"").Replace("&apos;", "'").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&amp;", "&").ToString();
+        var rez = sb.Replace("&quot;", "\"")
+            .Replace("&apos;", "'")
+            .Replace("&lt;", "<")
+            .Replace("&gt;", ">")
+            .Replace("&amp;", "&")
+            .ToString();
 
         return rez;
     }

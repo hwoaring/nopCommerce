@@ -320,8 +320,8 @@ public class Indexes : ForwardOnlyMigration
             .OnColumn(nameof(CustomerReferrer.ReferreredInStoreId)).Ascending()
             .WithOptions().NonClustered();
 
-        Create.Index("IX_ChinaRegionCode_Code").OnTable(nameof(ChinaRegionCode))
-            .OnColumn(nameof(ChinaRegionCode.Code)).Ascending()
+        Create.Index("IX_ChinaRegionCode_Name").OnTable(nameof(ChinaRegionCode))
+            .OnColumn(nameof(ChinaRegionCode.Name)).Ascending()
             .WithOptions().NonClustered();
 
         Create.Index("IX_BrandTag_Name").OnTable(nameof(BrandTag))

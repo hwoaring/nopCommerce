@@ -318,6 +318,11 @@ public partial class Order : BaseEntity, ISoftDeletedEntity
     public string OutTradeNo { get; set; }
 
     /// <summary>
+    /// 交易的商户单号（备用）
+    /// </summary>
+    public string MerchantNo { get; set; }
+
+    /// <summary>
     /// 线下取货，代发货：取货日期
     /// </summary>
     public DateTime PickupDateOnUtc { get; set; }

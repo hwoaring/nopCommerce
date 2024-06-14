@@ -31,6 +31,7 @@ public partial class OrderBuilder : NopEntityBuilder<Order>
                 //新增属性
                 .WithColumn(nameof(Order.OpenId)).AsAnsiString(128).Nullable()
                 .WithColumn(nameof(Order.OutTradeNo)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(Order.MerchantNo)).AsAnsiString(64).Nullable()
                 .WithColumn(nameof(Order.Attach)).AsString(128).Nullable()
                 .WithColumn(nameof(Order.Notes)).AsString(128).Nullable()
                 .WithColumn(nameof(Order.GoodsTag)).AsString(32).Nullable()

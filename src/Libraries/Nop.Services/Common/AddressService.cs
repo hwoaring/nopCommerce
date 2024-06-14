@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text.RegularExpressions;
 using Nop.Core.Domain.Common;
+using Nop.Core.Domain.Directory;
 using Nop.Data;
 using Nop.Services.Attributes;
 using Nop.Services.Directory;
@@ -164,10 +165,14 @@ public partial class AddressService : IAddressService
         if (string.IsNullOrWhiteSpace(address.FirstName))
             return false;
 
-        if (string.IsNullOrWhiteSpace(address.LastName))
+        if (_addressSettings.LastNameEnabled &&
+            _addressSettings.LastNameRequired && 
+            string.IsNullOrWhiteSpace(address.LastName))
             return false;
 
-        if (string.IsNullOrWhiteSpace(address.Email))
+        if (_addressSettings.EmailEnabled &&
+            _addressSettings.EmailRequired &&
+            string.IsNullOrWhiteSpace(address.Email))
             return false;
 
         if (_addressSettings.CompanyEnabled &&
@@ -307,7 +312,12 @@ public partial class AddressService : IAddressService
             PhoneNumber = address.PhoneNumber,
             FaxNumber = address.FaxNumber,
             CustomAttributes = address.CustomAttributes,
-            CreatedOnUtc = address.CreatedOnUtc
+            CreatedOnUtc = address.CreatedOnUtc,
+            ChinaRegionCode = address.ChinaRegionCode,   //新增
+            Longitude = address.Longitude,              //新增
+            Latitude = address.Latitude,               //新增
+            AddressTypeId = address.AddressTypeId      //新增
+
         };
 
         return addr;

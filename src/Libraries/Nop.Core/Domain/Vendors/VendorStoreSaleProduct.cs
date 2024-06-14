@@ -1,7 +1,8 @@
 ﻿namespace Nop.Core.Domain.Vendors;
 
 /// <summary>
-/// 分销人员个人销售的产品（个人产品或者分销产品）
+/// 店铺销售的产品ID（相当于是按店铺分类销售）
+/// 店铺销售的产品从VendorSaleProduct中选择已经存在的产品
 /// </summary>
 public partial class VendorStoreSaleProduct : BaseEntity
 {
@@ -11,7 +12,7 @@ public partial class VendorStoreSaleProduct : BaseEntity
     public int VendorStoreId { get; set; }
 
     /// <summary>
-    /// 产品id
+    /// 代理销售的产品id（不能作为外键，会引起循环错误）
     /// </summary>
     public int VendorSaleProductId { get; set; }
 

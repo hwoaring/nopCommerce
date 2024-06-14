@@ -19,8 +19,9 @@ namespace Nop.Data.Mapping.Builders.Directory
         {
             table
                 .WithColumn(nameof(ChinaRegionCode.Name)).AsString(64).NotNullable()
-                .WithColumn(nameof(ChinaRegionCode.ShortName)).AsString(64).Nullable()
-                .WithColumn(nameof(ChinaRegionCode.CapitalNameIndex)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(ChinaRegionCode.NameIndex)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(ChinaRegionCode.FullName)).AsString(128).Nullable()
+                
 
                 ;
         }

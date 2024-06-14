@@ -351,11 +351,11 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<AntiFakeExchangeCode>();
 
             //资产扩展 Assets
-            Create.TableFor<AssetsBankAccount>();
             Create.TableFor<AssetsCashs>();
             Create.TableFor<AssetsCashsHistory>();
             Create.TableFor<AssetsCouponsHistory>();
             Create.TableFor<AssetsPointsHistory>();
+            Create.TableFor<AssetsBankAccount>();
 
             //表单扩展 Forms
             Create.TableFor<Form>();

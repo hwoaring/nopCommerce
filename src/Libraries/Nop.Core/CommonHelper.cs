@@ -441,6 +441,17 @@ public partial class CommonHelper
         return str;
     }
 
+    /// <summary>
+    /// 只允许中文、英文、数字和下划线（防止XSS攻击）
+    /// </summary>
+    /// <param name="inputString"></param>
+    /// <returns></returns>
+    public static bool IsSafeString(string inputString)
+    {
+        var pattern = @"^[\u4E00-\u9FA5A-Za-z0-9_]+$";
+        return !Regex.IsMatch(inputString, pattern);
+    }
+
     #endregion
 
 }

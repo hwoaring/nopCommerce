@@ -110,7 +110,8 @@ public partial class AddressSettings : ISettings
     #region === 扩展属性 ===
 
     /// <summary>
-    /// 地址使用区划码
+    /// 地址使用区划码（使用区划码后，选择其他国家无效，只能是选择中国时才适用）
+    /// 选择States时，判断是否选的CN国家
     /// </summary>
     public bool UseChinaRegionCode { get; set; }
 
