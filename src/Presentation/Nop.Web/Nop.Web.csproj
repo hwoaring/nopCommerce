@@ -66,6 +66,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="App_Data\Localization\Regioncode\" />
+    <Folder Include="App_Data\SenparcTraceLog\" />
+    <Folder Include="App_Data\WeixinTraceLog\" />
     <Folder Include="Areas\Admin\Models\Weixins\" />
   </ItemGroup>
 

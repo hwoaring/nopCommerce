@@ -112,8 +112,8 @@ public partial class NopHttpClient
         var url = string.Format(NopCommonDefaults.NopNewsRssPath,
             NopVersion.FULL_VERSION,
             true,                                                 //_webHelper.IsLocalRequest(_httpContextAccessor.HttpContext.Request),
-            true,                                                 //_adminAreaSettings.HideAdvertisementsOnAdminArea,
-            "https://localhost:58379/",                           //_webHelper.GetStoreLocation(),
+            _adminAreaSettings.HideAdvertisementsOnAdminArea,
+            "https://localhost:58379/",                           //_webHelper.GetStoreLocation(),                       
             language).ToLowerInvariant();
 
         //get news feed

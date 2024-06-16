@@ -60,4 +60,16 @@ public partial interface IImportManager
     /// <param name="stream">Stream</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     Task ImportCustomersFromXlsxAsync(Stream stream);
+
+    #region ====== 新增 ======
+
+    /// <summary>
+    /// 区划表导入
+    /// </summary>
+    /// <param name="stream"></param>
+    /// <param name="writeLog"></param>
+    /// <returns></returns>
+    Task<int> ImportRegionCodeFromTxtAsync(Stream stream, string countryTwoLetterIsoCode, bool writeLog = true);
+
+    #endregion
 }

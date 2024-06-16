@@ -84,4 +84,24 @@ public static partial class NopDirectoryDefaults
     #endregion
 
     #endregion
+
+    #region ======= 新增 =======
+
+    /// <summary>
+    /// Gets a key for caching
+    /// </summary>
+    /// <remarks>
+    /// {0} : country ID
+    /// {1} : show hidden records?
+    /// </remarks>
+    public static CacheKey RegionCodesByCountryCacheKey => new("Nop.regioncode.bycountry.{0}-{1}", NopEntityCacheDefaults<RegionCode>.Prefix);
+
+    /// <summary>
+    /// Gets a key for caching
+    /// </summary>
+    /// <remarks>
+    /// {0} : show hidden records?
+    /// </remarks>
+    public static CacheKey RegionCodesAllCacheKey => new("Nop.regioncode.all.{0}", NopEntityCacheDefaults<RegionCode>.Prefix);
+    #endregion
 }

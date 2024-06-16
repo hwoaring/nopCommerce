@@ -313,7 +313,7 @@ public partial class AddressService : IAddressService
             FaxNumber = address.FaxNumber,
             CustomAttributes = address.CustomAttributes,
             CreatedOnUtc = address.CreatedOnUtc,
-            ChinaRegionCode = address.ChinaRegionCode,   //新增
+            RegionCodeId = address.RegionCodeId,   //新增
             Longitude = address.Longitude,              //新增
             Latitude = address.Latitude,               //新增
             AddressTypeId = address.AddressTypeId      //新增

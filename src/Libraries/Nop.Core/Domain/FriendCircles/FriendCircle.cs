@@ -48,9 +48,9 @@ namespace Nop.Core.Domain.FriendCircles
         public string PublisherIp { get; set; }
 
         /// <summary>
-        /// 地址的区划代码
+        /// 地址的区划代码ID
         /// </summary>
-        public int ChinaRegionCode { get; set; }
+        public int RegionCodeId { get; set; }
 
         /// <summary>
         /// 经度值

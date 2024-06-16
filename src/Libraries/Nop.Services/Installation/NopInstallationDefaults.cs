@@ -24,4 +24,14 @@ public static partial class NopInstallationDefaults
     /// Gets a path to the installation sample images
     /// </summary>
     public static string SampleImagesPath => "images\\samples\\";
+
+
+    #region ===== 新增 =====
+
+    /// <summary>
+    /// 区划码表路径/App_Data/Localization/Regioncode/
+    /// </summary>
+    public static string RegionCodeResourcesPath => "~/App_Data/Localization/Regioncode/";
+
+    #endregion
 }

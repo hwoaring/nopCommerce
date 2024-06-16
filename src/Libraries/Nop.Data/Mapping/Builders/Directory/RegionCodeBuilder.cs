@@ -7,7 +7,7 @@ namespace Nop.Data.Mapping.Builders.Directory
     /// <summary>
     /// 中国区划表
     /// </summary>
-    public partial class ChinaRegionCodeBuilder : NopEntityBuilder<ChinaRegionCode>
+    public partial class RegionCodeBuilder : NopEntityBuilder<RegionCode>
     {
         #region Methods
 
@@ -18,9 +18,11 @@ namespace Nop.Data.Mapping.Builders.Directory
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(ChinaRegionCode.Name)).AsString(64).NotNullable()
-                .WithColumn(nameof(ChinaRegionCode.NameIndex)).AsAnsiString(64).Nullable()
-                .WithColumn(nameof(ChinaRegionCode.FullName)).AsString(128).Nullable()
+                .WithColumn(nameof(RegionCode.CountryId)).AsInt32().ForeignKey<Country>()
+                .WithColumn(nameof(RegionCode.Code)).AsAnsiString(16).NotNullable()
+                .WithColumn(nameof(RegionCode.Name)).AsString(64).NotNullable()
+                .WithColumn(nameof(RegionCode.NameIndex)).AsAnsiString(64).Nullable()
+                .WithColumn(nameof(RegionCode.FullName)).AsString(128).Nullable()
                 
 
                 ;

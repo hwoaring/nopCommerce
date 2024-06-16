@@ -75,6 +75,7 @@ public partial class ImportManager : IImportManager
     protected readonly IShippingService _shippingService;
     protected readonly ISpecificationAttributeService _specificationAttributeService;
     protected readonly IStateProvinceService _stateProvinceService;
+    protected readonly IRegionCodeService _regionCodeService;
     protected readonly IStoreContext _storeContext;
     protected readonly IStoreMappingService _storeMappingService;
     protected readonly IStoreService _storeService;
@@ -122,6 +123,7 @@ public partial class ImportManager : IImportManager
         IShippingService shippingService,
         ISpecificationAttributeService specificationAttributeService,
         IStateProvinceService stateProvinceService,
+        IRegionCodeService regionCodeService,
         IStoreContext storeContext,
         IStoreMappingService storeMappingService,
         IStoreService storeService,
@@ -164,6 +166,7 @@ public partial class ImportManager : IImportManager
         _shippingService = shippingService;
         _specificationAttributeService = specificationAttributeService;
         _stateProvinceService = stateProvinceService;
+        _regionCodeService = regionCodeService;
         _storeContext = storeContext;
         _storeMappingService = storeMappingService;
         _storeService = storeService;
@@ -3322,6 +3325,100 @@ public partial class ImportManager : IImportManager
 
         //activity log
         await _customerActivityService.InsertActivityAsync("ImportOrders", string.Format(await _localizationService.GetResourceAsync("ActivityLog.ImportOrders"), metadata.CountOrdersInFile));
+    }
+
+    #endregion
+
+    #region ======= 新增 =======
+
+    /// <summary>
+    /// 导入区划表数据
+    /// </summary>
+    /// <param name="stream"></param>
+    /// <param name="writeLog"></param>
+    /// <returns></returns>
+    /// <exception cref="NopException"></exception>
+    public virtual async Task<int> ImportRegionCodeFromTxtAsync(Stream stream, string countryTwoLetterIsoCode, bool writeLog = true)
+    {
+        var count = 0;
+
+        if (!string.IsNullOrWhiteSpace(countryTwoLetterIsoCode))
+        {
+            var country = await _countryService.GetCountryByTwoLetterIsoCodeAsync(countryTwoLetterIsoCode);
+            if (country != null)
+            {
+                using var reader = new StreamReader(stream);
+                while (!reader.EndOfStream)
+                {
+                    var line = await reader.ReadLineAsync();
+                    if (string.IsNullOrWhiteSpace(line))
+                        continue;
+                    var tmp = line.Split(',');
+
+                    if (tmp.Length != 9)
+                        throw new NopException("Wrong file format");
+
+                    //获取值
+                    var code = tmp[0].Trim();
+                    var name = tmp[1].Trim();
+                    var nameIndex = tmp[2].Trim();
+                    var fullName = tmp[3].Trim();
+                    var areaLevel = int.Parse(tmp[4].Trim());
+                    var numberOfPeople = int.Parse(tmp[5].Trim());
+                    var displayOrder = int.TryParse(tmp[6].Trim(), out var temp_displayOrder) ? temp_displayOrder : 0;
+                    var revoked = bool.TryParse(tmp[7].Trim(), out var temp_revoked) && temp_revoked;
+                    var published = bool.TryParse(tmp[8].Trim(), out var temp_published) && temp_published;
+
+                    //import
+                    var regionCodes = await _regionCodeService.GetRegionCodesByCountryIdAsync(country.Id, showHidden: true);
+                    var regionCode = regionCodes.FirstOrDefault(x => x.Code.Equals(code, StringComparison.InvariantCultureIgnoreCase));
+
+                    if (regionCode != null)
+                    {
+                        regionCode.CountryId = country.Id;
+                        regionCode.Name = name;
+                        regionCode.NameIndex = nameIndex;
+                        regionCode.FullName = fullName;
+                        regionCode.AreaLevel = areaLevel;
+                        regionCode.NumberOfPeople = numberOfPeople;
+                        regionCode.DisplayOrder = displayOrder;
+                        regionCode.Revoked = revoked;
+                        regionCode.Published = published;
+
+                        await _regionCodeService.UpdateRegionCodeAsync(regionCode);
+                    }
+                    else
+                    {
+                        regionCode = new RegionCode
+                        {
+                            CountryId = country.Id,
+                            Code = code,
+                            Name = name,
+                            NameIndex = nameIndex,
+                            FullName = fullName,
+                            AreaLevel = areaLevel,
+                            NumberOfPeople = numberOfPeople,
+                            DisplayOrder = displayOrder,
+                            Revoked = revoked,
+                            Published = published
+                        };
+                        await _regionCodeService.InsertRegionCodeAsync(regionCode);
+                    }
+
+                    count++;
+                }
+
+            }
+        }
+
+        //activity log
+        if (writeLog)
+        {
+            await _customerActivityService.InsertActivityAsync("ImportRegionCodes",
+                string.Format(await _localizationService.GetResourceAsync("ActivityLog.ImportRegionCodes"), count));
+        }
+
+        return count;
     }
 
     #endregion

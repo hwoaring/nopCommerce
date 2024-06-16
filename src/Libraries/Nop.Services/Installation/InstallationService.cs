@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.DependencyInjection;
 using Nop.Core;
 using Nop.Core.Domain;
@@ -685,6 +686,35 @@ namespace Nop.Services.Installation
             {
                 await using var stream = new FileStream(filePath, FileMode.Open);
                 await importManager.ImportStatesFromTxtAsync(stream, false);
+            }
+        }
+
+        /// <summary>
+        /// 安装区划码数据
+        /// </summary>
+        /// <returns></returns>
+        protected virtual async Task InstallRegionCodeAsync()
+        {
+            //Import 区划表 for all countries
+            var directoryPath = _fileProvider.MapPath(NopInstallationDefaults.RegionCodeResourcesPath);
+            var pattern = "*.txt";
+
+            //we use different scope to prevent creating wrong settings in DI, because the settings data not exists yet
+            var serviceScopeFactory = EngineContext.Current.Resolve<IServiceScopeFactory>();
+            using var scope = serviceScopeFactory.CreateScope();
+            var importManager = EngineContext.Current.Resolve<IImportManager>(scope);
+            foreach (var filePath in _fileProvider.EnumerateFiles(directoryPath, pattern))
+            {
+                var countryTwoLetterIsoCode = "";
+                var r = new Regex(Regex.Escape("regioncode.") + "(.*?)" + Regex.Escape(".txt"));
+                var match = r.Match(_fileProvider.GetFileName(filePath));
+                if(match.Success)
+                {
+                    countryTwoLetterIsoCode = match.Groups[1].Value;
+                }
+
+                await using var stream = new FileStream(filePath, FileMode.Open);
+                await importManager.ImportRegionCodeFromTxtAsync(stream, countryTwoLetterIsoCode, false);
             }
         }
 
@@ -3003,7 +3033,7 @@ namespace Nop.Services.Installation
                 PhoneEnabled = true,
                 PhoneRequired = true,
                 FaxEnabled = true,
-                UseChinaRegionCode = false, //新增
+                UseRegionCode = false, //新增
                 LastNameEnabled = true, //新增
                 LastNameRequired = true, //新增
                 EmailEnabled = true, //新增
@@ -8808,6 +8838,11 @@ namespace Nop.Services.Installation
                     Name = "States were imported"
                 },
                 new() {
+                    SystemKeyword = "ImportRegionCodes",
+                    Enabled = true,
+                    Name = "Region codes were imported"
+                },
+                new() {
                     SystemKeyword = "ExportCustomers",
                     Enabled = true,
                     Name = "Customers were exported"
@@ -9334,6 +9369,7 @@ namespace Nop.Services.Installation
             await InstallLanguagesAsync(languagePackInfo, cultureInfo, regionInfo);
             await InstallCurrenciesAsync(cultureInfo, regionInfo);
             await InstallCountriesAndStatesAsync();
+            await InstallRegionCodeAsync();
             await InstallShippingMethodsAsync();
             await InstallDeliveryDatesAsync();
             await InstallProductAvailabilityRangesAsync();

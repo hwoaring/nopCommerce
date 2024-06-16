@@ -20,9 +20,9 @@ public partial class VendorStoreRegionalAgent : BaseEntity
     public long ProductBarCode { get; set; }
 
     /// <summary>
-    /// 地址的区划代码
+    /// 地址的区划代码ID
     /// </summary>
-    public int ChinaRegionCode { get; set; }
+    public int RegionCodeId { get; set; }
 
     /// <summary>
     /// 锁定原因

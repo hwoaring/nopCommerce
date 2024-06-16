@@ -179,8 +179,8 @@ namespace Nop.Data.Migrations.Installation
             Create.TableFor<VendorNote>();
 
             //扩展区划表相关 Directory
-            Create.TableFor<Bank>();
-            Create.TableFor<ChinaRegionCode>(); //中国区划表
+            Create.TableFor<Bank>();        //银行资源信息表
+            Create.TableFor<RegionCode>();  //区划表
 
             //扩展用户相关 Customer
             Create.TableFor<CustomerReferrer>();

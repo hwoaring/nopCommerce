@@ -238,6 +238,7 @@ public partial class NopStartup : INopStartup
 
         //新增属性
         services.AddScoped<ISharePageService, SharePageService>();
+        services.AddScoped<IRegionCodeService, RegionCodeService>();
 
 
         //attribute services

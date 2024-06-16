@@ -91,9 +91,9 @@ public partial class Address : BaseEntity
     public int AddressTypeId { get; set; }
 
     /// <summary>
-    /// 地址的区划代码
+    /// 地址的区划代码ID
     /// </summary>
-    public int ChinaRegionCode { get; set; }
+    public int RegionCodeId { get; set; }
 
     /// <summary>
     /// 地址短标签（用户自己对地址设置的标签）

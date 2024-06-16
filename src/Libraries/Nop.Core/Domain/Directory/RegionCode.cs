@@ -3,14 +3,19 @@
 namespace Nop.Core.Domain.Directory;
 
 /// <summary>
-/// 中国区划代码表
+/// 区划代码表（中国），其他国家可能有区划码
 /// </summary>
-public partial class ChinaRegionCode : BaseEntity, ILocalizedEntity
+public partial class RegionCode : BaseEntity, ILocalizedEntity
 {
+    /// <summary>
+    /// 国家ID（数据库中的ID）
+    /// </summary>
+    public int CountryId { get; set; }
+
     /// <summary>
     /// 6位区划代码（标准区划码）
     /// </summary>
-    public int Code { get; set; }
+    public string Code { get; set; }
 
     /// <summary>
     /// 名称（标准区划码对应的名称）
@@ -28,7 +33,7 @@ public partial class ChinaRegionCode : BaseEntity, ILocalizedEntity
     public string FullName { get; set; }
 
     /// <summary>
-    /// 层级（1=省/直辖市，2=市，3=县/区）
+    /// 层级（1=省/直辖市，2=市，3=县/区，4=街道）
     /// </summary>
     public int AreaLevel { get; set; }
 
@@ -36,6 +41,11 @@ public partial class ChinaRegionCode : BaseEntity, ILocalizedEntity
     /// 人口数量
     /// </summary>
     public int NumberOfPeople { get; set; }
+
+    /// <summary>
+    /// 人均消费（提现城市的消费能力）
+    /// </summary>
+    public decimal AverageConsume { get; set; }
 
     /// <summary>
     /// 排序

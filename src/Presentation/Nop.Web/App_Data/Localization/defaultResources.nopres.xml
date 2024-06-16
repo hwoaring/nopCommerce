@@ -1170,6 +1170,9 @@
   <LocaleResource Name="ActivityLog.PublicStore.ViewProduct">
     <Value>Public store. Viewed a product details page ('{0}')</Value>
   </LocaleResource>
+  <LocaleResource Name="ActivityLog.ImportRegionCodes">
+      <Value>{0} region codes were imported</Value>
+  </LocaleResource>
   <LocaleResource Name="ActivityLog.UninstallPlugin">
     <Value>Uninstalled a plugin (FriendlyName: '{0}' version: {1})</Value>
   </LocaleResource>

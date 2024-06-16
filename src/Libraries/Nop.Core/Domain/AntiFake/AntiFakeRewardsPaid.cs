@@ -39,9 +39,9 @@ public partial class AntiFakeRewardsPaid : BaseEntity, ISoftDeletedEntity
     public string TransactionId { get; set; }
 
     /// <summary>
-    /// 领取人地址的区划代码
+    /// 领取人地址的区划代码ID
     /// </summary>
-    public int ChinaRegionCode { get; set; }
+    public int RegionCodeId { get; set; }
 
     /// <summary>
     /// 领取人经度值
