@@ -309,6 +309,11 @@ public class Indexes : ForwardOnlyMigration
             .OnColumn(nameof(AclRecord.EntityName)).Ascending()
             .WithOptions().NonClustered();
 
+        Create.Index("IX_Customer_Deleted")
+            .OnTable(nameof(Customer))
+            .OnColumn(nameof(Customer.Deleted)).Ascending()
+            .WithOptions().NonClustered();
+
 
         //扩展索引
         Create.Index("IX_Customer_OpenId").OnTable(nameof(Customer))
