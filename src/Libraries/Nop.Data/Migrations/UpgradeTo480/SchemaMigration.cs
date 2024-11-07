@@ -1,9 +1,11 @@
 ﻿using FluentMigrator;
 using Nop.Core.Domain.Catalog;
+using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Topics;
 
 namespace Nop.Data.Migrations.UpgradeTo480;
 
-[NopSchemaMigration("2024-06-10 00:00:03", "SchemaMigration for 4.80.0")]
+[NopSchemaMigration("2024-06-10 00:00:04", "SchemaMigration for 4.80.0")]
 public class SchemaMigration : ForwardOnlyMigration
 {
     /// <summary>
@@ -33,6 +35,31 @@ public class SchemaMigration : ForwardOnlyMigration
                 .AsBoolean()
                 .NotNullable()
                 .WithDefaultValue(false);
+        }
+
+        //#7281
+        var customerTableName = nameof(Customer);
+        var mustChangePasswordColumnName = nameof(Customer.MustChangePassword);
+
+        if (!Schema.Table(customerTableName).Column(mustChangePasswordColumnName).Exists())
+        {
+            Alter.Table(customerTableName)
+                .AddColumn(mustChangePasswordColumnName)
+                .AsBoolean()
+                .NotNullable()
+                .WithDefaultValue(false);
+        }
+
+        //#7294
+        var topicTableName = nameof(Topic);
+        var topicSystemNameColumnName = nameof(Topic.SystemName);
+
+        if (!Schema.Table(topicTableName).Index("IX_Topic_SystemName").Exists())
+        {
+            Alter.Table(topicTableName)
+                .AlterColumn(topicSystemNameColumnName)
+                .AsString(400)
+                .Nullable();
         }
     }
 }
