@@ -2749,6 +2749,7 @@ namespace Nop.Services.Installation
             await settingService.SaveSettingAsync(new AdminAreaSettings
             {
                 DefaultGridPageSize = 15,
+                ProductsBulkEditGridPageSize = 100,
                 PopupGridPageSize = 7,
                 GridPageSizes = "7, 15, 20, 50, 100",
                 RichEditorAdditionalSettings = null,
@@ -2871,6 +2872,7 @@ namespace Nop.Services.Installation
                 ProductReviewsSortByCreatedDateAscending = false,
                 ExportImportProductAttributes = true,
                 ExportImportProductSpecificationAttributes = true,
+                ExportImportTierPrises = true,
                 ExportImportUseDropdownlistsForAssociatedEntities = true,
                 ExportImportProductsCountInOneFile = 500,
                 ExportImportSplitProductsFile = false,

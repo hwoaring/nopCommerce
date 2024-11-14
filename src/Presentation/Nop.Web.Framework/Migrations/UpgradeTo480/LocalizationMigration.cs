@@ -248,9 +248,10 @@ public class LocalizationMigration : MigrationBase
             ["Security.Permission.System.ManageScheduleTasks"] = "Admin area. Schedule Tasks. Manage",
             ["Security.Permission.System.ManageSystemLog"] = "Admin area. System Log. Manage",
 
-            //#7241
+            //#7242
             ["Admin.Catalog.Categories.Fields.RestrictFromVendors"] = "Restrict from vendors",
             ["Admin.Catalog.Categories.Fields.RestrictFromVendors.Hint"] = "Check to restrict vendors from adding products to this category. This option is useful when you have multi-vendors enabled in your store.",
+
             //#7281
             ["Account.ChangePassword.MustBeChanged"] = "Your password must be changed for security purposes.",
             ["Admin.Customers.Customers.Fields.MustChangePassword"] = "Customer must change password",
@@ -273,13 +274,25 @@ public class LocalizationMigration : MigrationBase
             //#7299
             ["Admin.Catalog.Products.Multimedia.Videos.Description"] = "How to embed a video: Find your video in your library (on any video hosting) and select it to open the video settings page. Select the privacy icon from your \"Share\" button. Click on \"Embed\" from the window that opens up. You can copy the <strong>src</strong> from the embed option and use it.",
 
-            //path base
-            ["Admin.Configuration.AppSettings.Hosting.PathBase"] = "Path base",
-            ["Admin.Configuration.AppSettings.Hosting.PathBase.Hint"] = "Ability to set a custom path base, for example domain.com/path/",
             //4306
             ["Admin.Configuration.Settings.Catalog.ShowSearchBoxCategories"] = "Show product categories for the search box",
             ["Admin.Configuration.Settings.Catalog.ShowSearchBoxCategories.Hint"] = "Check to display the drop-down list with product categories next to the search box.",
             ["Search.SearchBox.AllCategories"] = "All categories",
+
+            //#7241
+            ["Admin.Promotions.Discounts.Fields.Vendor"] = "Vendor",
+            ["Admin.Promotions.Discounts.Fields.Vendor.Hint"] = "Choose a vendor associated with this discount. The associated vendor is given the ability to manage this discount.",
+            ["Admin.Promotions.Discounts.Fields.Vendor.None"] = "No vendor",
+            ["Admin.Promotions.Discounts.List.SearchVendor"] = "Vendor",
+            ["Admin.Promotions.Discounts.List.SearchVendor.Hint"] = "Search by a specific vendor.",
+            //#2388
+            ["Admin.Configuration.Settings.Catalog.ExportImportTierPrises"] = "Export/Import products with tier prices",
+            ["Admin.Configuration.Settings.Catalog.ExportImportTierPrises.Hint"] = "Check if products should be exported/imported with tier prices.",
+
+            //#7228
+            ["Admin.Catalog.Products.BulkEdit"] = "Bulk edit products",
+            ["Admin.Catalog.Products.BulkEdit.SaveSelected"] = "Save selected",
+            ["Admin.Catalog.Products.BulkEdit.SaveAll"] = "Save all",
         }, languageId);
 
         #endregion
