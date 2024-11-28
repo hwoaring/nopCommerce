@@ -7,7 +7,7 @@ using Nop.Web.Framework.Extensions;
 
 namespace Nop.Web.Framework.Migrations.UpgradeTo480;
 
-[NopUpdateMigration("2023-11-07 00:00:00", "4.80", UpdateMigrationType.Localization)]
+[NopUpdateMigration("2024-08-01 00:00:01", "4.80", UpdateMigrationType.Localization)]
 public class LocalizationMigration : MigrationBase
 {
     /// <summary>Collect the UP migration expressions</summary>
@@ -104,6 +104,9 @@ public class LocalizationMigration : MigrationBase
             "Permission.OrderCountryReport",
             "Permission.PublicStoreAllowNavigation",
             "Permission.SalesSummaryReport",
+            "Admin.ConfigurationSteps.PaymentPayPal.SignUp.Title",
+            "Admin.ConfigurationSteps.PaymentPayPal.SignUp.Text",
+            "Admin.ConfigurationSteps.PaymentPayPal.Register.Text2"
         });
 
         #endregion
@@ -301,6 +304,20 @@ public class LocalizationMigration : MigrationBase
             ["Admin.Vendors.Fields.PmCustomerId.Choose"] = "Choose",
             ["Admin.Vendors.Fields.PmCustomerId.Remove"] = "Remove",
             ["SendPmToVendor"] = "Send private message",
+
+            //#7244
+            ["Vendors.ExistingReviews"] = "Existing reviews",
+            ["Vendors.Reviews.All"] = "View all",
+            ["Vendors.Reviews.BackTo"] = "Back to {0}",
+            ["PageTitle.VendorReviews"] = "Reviews of the vendor's products",
+            
+            ["Admin.ConfigurationSteps.PaymentMethods.Configure.Title"] = "Configure a payment method",
+    	    ["Admin.ConfigurationSteps.PaymentMethods.Configure.Text"] = "You can configure each payment method by clicking the appropriate <b>Configure</b> button.",
+
+            ["Admin.ConfigurationSteps.PaymentMethods.PayPalCommerce.Configure.Text"] = "Now we’ll configure the PayPal Commerce payment method.",
+            ["Admin.ConfigurationSteps.PaymentMethods.PayPalCommerce.Configure.Title"] = "Configure PayPal Commerce",
+            ["Admin.ConfigurationSteps.PaymentPayPal.Register.Text"] = "Click this button to register an account. You need to go through a few steps to fill in all the required data. The last step will be to verify your email address in order to activate your account.",
+            ["Admin.ConfigurationSteps.PaymentPayPal.Credentials.Text"] = "After you create and set up your application in your <b>PayPal</b> account, you need to copy the <b>Client ID</b>, <b>Secret</b> and <b>Merchant ID</b>, and paste them into these fields.",
         }, languageId);
 
         #endregion
