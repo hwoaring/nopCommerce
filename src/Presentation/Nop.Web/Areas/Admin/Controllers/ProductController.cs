@@ -44,6 +44,7 @@ public partial class ProductController : BaseAdminController
     #region Fields
 
     protected readonly AdminAreaSettings _adminAreaSettings;
+    protected readonly CustomerSettings _customerSettings;
     protected readonly IAclService _aclService;
     protected readonly IBackInStockSubscriptionService _backInStockSubscriptionService;
     protected readonly ICategoryService _categoryService;
@@ -54,7 +55,6 @@ public partial class ProductController : BaseAdminController
     protected readonly IDiscountService _discountService;
     protected readonly IDownloadService _downloadService;
     protected readonly IExportManager _exportManager;
-    protected readonly IGenericAttributeService _genericAttributeService;
     protected readonly IHttpClientFactory _httpClientFactory;
     protected readonly IImportManager _importManager;
     protected readonly ILanguageService _languageService;
@@ -91,6 +91,7 @@ public partial class ProductController : BaseAdminController
     #region Ctor
 
     public ProductController(AdminAreaSettings adminAreaSettings,
+        CustomerSettings customerSettings,
         IAclService aclService,
         IBackInStockSubscriptionService backInStockSubscriptionService,
         ICategoryService categoryService,
@@ -101,7 +102,6 @@ public partial class ProductController : BaseAdminController
         IDiscountService discountService,
         IDownloadService downloadService,
         IExportManager exportManager,
-        IGenericAttributeService genericAttributeService,
         IHttpClientFactory httpClientFactory,
         IImportManager importManager,
         ILanguageService languageService,
@@ -133,6 +133,7 @@ public partial class ProductController : BaseAdminController
         VendorSettings vendorSettings)
     {
         _adminAreaSettings = adminAreaSettings;
+        _customerSettings = customerSettings;
         _aclService = aclService;
         _backInStockSubscriptionService = backInStockSubscriptionService;
         _categoryService = categoryService;
@@ -143,7 +144,6 @@ public partial class ProductController : BaseAdminController
         _discountService = discountService;
         _downloadService = downloadService;
         _exportManager = exportManager;
-        _genericAttributeService = genericAttributeService;
         _httpClientFactory = httpClientFactory;
         _importManager = importManager;
         _languageService = languageService;
@@ -259,7 +259,7 @@ public partial class ProductController : BaseAdminController
         foreach (var pp in await _productService.GetProductPicturesByProductIdAsync(product.Id))
             await _pictureService.SetSeoFilenameAsync(pp.PictureId, await _pictureService.GetPictureSeNameAsync(product.Name));
     }
-    
+
     protected virtual async Task SaveCategoryMappingsAsync(Product product, ProductModel model)
     {
         var existingProductCategories = await _categoryService.GetProductCategoriesByProductIdAsync(product.Id, true);
@@ -836,7 +836,7 @@ public partial class ProductController : BaseAdminController
 
         var products = await _productService.GetProductsByIdsAsync(productIds);
 
-        foreach (var product in products) 
+        foreach (var product in products)
             rez[product.Id].Product = product;
 
         return rez.Values.ToList();
@@ -900,7 +900,7 @@ public partial class ProductController : BaseAdminController
         var data = await ParseBulkEditDataAsync();
 
         var productsToUpdate = data.Where(d => d.NeedToUpdate(selected)).ToList();
-        await _productService.UpdateProductsAsync(productsToUpdate.Select(d=>d.UpdateProduct(selected)).ToList());
+        await _productService.UpdateProductsAsync(productsToUpdate.Select(d => d.UpdateProduct(selected)).ToList());
 
         var productsToInsert = data.Where(d => d.NeedToCreate(selected)).ToList();
         await _productService.InsertProductsAsync(productsToInsert.Select(d => d.CreateProduct(selected)).ToList());
@@ -969,7 +969,7 @@ public partial class ProductController : BaseAdminController
     }
 
     [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
-    public virtual async Task<IActionResult> Create(bool showtour = false)
+    public virtual async Task<IActionResult> Create()
     {
         //validate maximum number of products per vendor
         var currentVendor = await _workContext.GetCurrentVendorAsync();
@@ -984,17 +984,6 @@ public partial class ProductController : BaseAdminController
 
         //prepare model
         var model = await _productModelFactory.PrepareProductModelAsync(new ProductModel(), null);
-
-        //show configuration tour
-        if (showtour)
-        {
-            var customer = await _workContext.GetCurrentCustomerAsync();
-            var hideCard = await _genericAttributeService.GetAttributeAsync<bool>(customer, NopCustomerDefaults.HideConfigurationStepsAttribute);
-            var closeCard = await _genericAttributeService.GetAttributeAsync<bool>(customer, NopCustomerDefaults.CloseConfigurationStepsAttribute);
-
-            if (!hideCard && !closeCard)
-                ViewBag.ShowTour = true;
-        }
 
         return View(model);
     }
@@ -1042,7 +1031,7 @@ public partial class ProductController : BaseAdminController
 
             //manufacturers
             await SaveManufacturerMappingsAsync(product, model);
-            
+
             //stores
             await _productService.UpdateProductStoreMappingsAsync(product, model.SelectedStoreIds);
 
@@ -1178,7 +1167,7 @@ public partial class ProductController : BaseAdminController
 
             //manufacturers
             await SaveManufacturerMappingsAsync(product, model);
-            
+
             //stores
             await _productService.UpdateProductStoreMappingsAsync(product, model.SelectedStoreIds);
 
@@ -1306,14 +1295,14 @@ public partial class ProductController : BaseAdminController
             .Where(p => currentVendor == null || p.VendorId == currentVendor.Id).ToList();
 
         await _productService.DeleteProductsAsync(products);
-        
+
         //activity log
         var activityLogFormat = await _localizationService.GetResourceAsync("ActivityLog.DeleteProduct");
-        
+
         foreach (var product in products)
             await _customerActivityService.InsertActivityAsync("DeleteProduct",
                 string.Format(activityLogFormat, product.Name), product);
-        
+
         return Json(new { Result = true });
     }
 
@@ -1371,6 +1360,18 @@ public partial class ProductController : BaseAdminController
         return Json(new { Result = message });
     }
 
+    //action displaying notification (warning) to a store owner that 'Date of Birth' is disabled
+    public virtual async Task<IActionResult> CustomersDateOfBirthDisabledWarning()
+    {
+        if (_customerSettings.DateOfBirthEnabled)
+            return Json(new { Result = string.Empty });
+
+        var warning = string.Format(await _localizationService.GetResourceAsync("Admin.Catalog.Products.Fields.AgeVerification.DateOfBirthDisabled"),
+            Url.Action("CustomerUser", "Setting"));
+
+        return Json(new { Result = warning });
+    }
+
     #endregion
 
     #region Required products
@@ -1380,7 +1381,7 @@ public partial class ProductController : BaseAdminController
     public virtual async Task<IActionResult> LoadProductFriendlyNames(string productIds)
     {
         var result = string.Empty;
-        
+
         if (string.IsNullOrWhiteSpace(productIds))
             return Json(new { Text = result });
 
@@ -1794,8 +1795,22 @@ public partial class ProductController : BaseAdminController
 
         //a vendor should have access only to his products
         var currentVendor = await _workContext.GetCurrentVendorAsync();
-        if (currentVendor != null && product.VendorId != currentVendor.Id)
-            return RedirectToAction("List");
+        if (currentVendor != null)
+        {
+            if (product.VendorId != currentVendor.Id)
+                return RedirectToAction("List");
+
+            var existingPictures = await _pictureService.GetPicturesByProductIdAsync(product.Id);
+            if (existingPictures.Count >= _vendorSettings.MaximumProductPicturesNumber)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = await _localizationService.GetResourceAsync("Admin.Catalog.Products.Multimedia.Pictures.Alert.VendorNumberPicturesLimit"),
+                });
+            }
+        }
+
         try
         {
             foreach (var file in files)
