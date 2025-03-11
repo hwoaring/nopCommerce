@@ -4266,8 +4266,20 @@
   <LocaleResource Name="Admin.Catalog.ProductTags.Fields.SearchTagName.Hint">
     <Value>Search by a tag name.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.ProductTags.Info">
+    <Value>Product tag info</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.ProductTags.Seo">
     <Value>SEO</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.ProductTags.TaggedProducts">
+    <Value>Used by products</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.ProductTags.TaggedProducts.Product">
+    <Value>Product</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.ProductTags.TaggedProducts.Published">
+    <Value>Published</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.ProductTags.Updated">
     <Value>The product tag has been updated successfully.</Value>
@@ -6057,6 +6069,12 @@
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ExportImportCategoriesUsingCategoryName.Hint">
     <Value>Check if categories should be exported/imported using name of category.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ExportImportCategoryUseLimitedToStores">
+    <Value>Export/Import categories with "limited to stores"</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ExportImportCategoryUseLimitedToStores.Hint">
+    <Value>Check if categories should be exported/imported with "limited to stores" property.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ExportImportProductAttributes">
     <Value>Export/Import products with attributes</Value>
   </LocaleResource>
@@ -7457,6 +7475,12 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.CaptchaShowOnBlogCommentPage.Hint">
     <Value>Check to show CAPTCHA on blog page when writing a comment.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.CaptchaShowOnCheckGiftCardBalance">
+    <Value>Show on check gift card balance page</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.CaptchaShowOnCheckGiftCardBalance.Hint">
+    <Value>Check to show CAPTCHA on check gift card balance page.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.CaptchaShowOnCheckoutPageForGuests">
     <Value>Show on checkout page for guests</Value>
@@ -16902,9 +16926,6 @@
   <LocaleResource Name="Checkout.Progress.Shipping">
     <Value>Shipping</Value>
   </LocaleResource>
-  <LocaleResource Name="Checkout.RedirectMessage">
-    <Value>Redirected</Value>
-  </LocaleResource>
   <LocaleResource Name="Checkout.SelectBillingAddress">
     <Value>Select billing address</Value>
   </LocaleResource>
@@ -18805,7 +18826,7 @@
     <Value>Gift card ({0})</Value>
   </LocaleResource>
   <LocaleResource Name="Pdf.Order">
-    <Value>Order</Value>
+    <Value>Order #{0}</Value>
   </LocaleResource>
   <LocaleResource Name="Pdf.OrderDate">
     <Value>Date</Value>
@@ -18848,6 +18869,9 @@
   </LocaleResource>
   <LocaleResource Name="Pdf.RewardPoints">
     <Value>{0} reward points</Value>
+  </LocaleResource>
+  <LocaleResource Name="Pdf.Shipment">
+    <Value>Shipment #{0}</Value>
   </LocaleResource>
   <LocaleResource Name="Pdf.Shipping">
     <Value>Shipping</Value>

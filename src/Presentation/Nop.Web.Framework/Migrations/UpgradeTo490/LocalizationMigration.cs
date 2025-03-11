@@ -28,6 +28,8 @@ public class LocalizationMigration : MigrationBase
             //#7569
             "Admin.Configuration.AppSettings.Common.PluginStaticFileExtensionsBlacklist",
             "Admin.Configuration.AppSettings.Common.PluginStaticFileExtensionsBlacklist.Hint",
+            //#7590
+            "Checkout.RedirectMessage"
         });
 
         #endregion
@@ -86,6 +88,10 @@ public class LocalizationMigration : MigrationBase
             ["Admin.Promotions.Campaigns.Copy"] = "Copy campaign",
             ["Admin.Promotions.Campaigns.Copied"] = "The campaign has been copied successfully",
 
+            //#7477
+            ["Pdf.Order"] = "Order #{0}",
+            ["Pdf.Shipment"] = "Shipment #{0}",
+
             //#5279
             ["Search.SearchInTags"] = "Search in product tags",
 
@@ -99,6 +105,18 @@ public class LocalizationMigration : MigrationBase
             ["Admin.Catalog.ProductTags.Fields.MetaTitle"] = "Meta title",
             ["Admin.Catalog.ProductTags.Fields.MetaTitle.Hint"] = "Override the page title. The default is the name of the product tag.",
 
+            //#7571
+            ["Admin.Configuration.Settings.GeneralCommon.CaptchaShowOnCheckGiftCardBalance"] = "Show on check gift card balance page",
+            ["Admin.Configuration.Settings.GeneralCommon.CaptchaShowOnCheckGiftCardBalance.Hint"] = "Check to show CAPTCHA on check gift card balance page.",
+
+            //#5771
+            ["Admin.Catalog.ProductTags.TaggedProducts"] = "Used by products",
+            ["Admin.Catalog.ProductTags.TaggedProducts.Product"] = "Product",
+            ["Admin.Catalog.ProductTags.TaggedProducts.Published"] = "Published",
+            
+            //#7405
+            ["Admin.Configuration.Settings.Catalog.ExportImportCategoryUseLimitedToStores"] = "Export / Import categories with \"limited to stores\"",
+            ["Admin.Configuration.Settings.Catalog.ExportImportCategoryUseLimitedToStores.Hint"] = "Check if categories should be exported / imported with \"limited to stores\" property.",
         }, languageId);
 
         #endregion

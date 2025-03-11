@@ -11,6 +11,7 @@ using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Vendors;
+using Nop.Core.Events;
 using Nop.Core.Http;
 using Nop.Core.Infrastructure;
 using Nop.Services.Catalog;
@@ -54,6 +55,7 @@ public partial class ProductController : BaseAdminController
     protected readonly ICustomerService _customerService;
     protected readonly IDiscountService _discountService;
     protected readonly IDownloadService _downloadService;
+    protected readonly IEventPublisher _eventPublisher;
     protected readonly IExportManager _exportManager;
     protected readonly IHttpClientFactory _httpClientFactory;
     protected readonly IImportManager _importManager;
@@ -101,6 +103,7 @@ public partial class ProductController : BaseAdminController
         ICustomerService customerService,
         IDiscountService discountService,
         IDownloadService downloadService,
+        IEventPublisher eventPublisher,
         IExportManager exportManager,
         IHttpClientFactory httpClientFactory,
         IImportManager importManager,
@@ -143,6 +146,7 @@ public partial class ProductController : BaseAdminController
         _customerService = customerService;
         _discountService = discountService;
         _downloadService = downloadService;
+        _eventPublisher = eventPublisher;
         _exportManager = exportManager;
         _httpClientFactory = httpClientFactory;
         _importManager = importManager;
@@ -1334,6 +1338,9 @@ public partial class ProductController : BaseAdminController
 
             var newProduct = await _copyProductService.CopyProductAsync(originalProduct, copyModel.Name, copyModel.Published, copyModel.CopyMultimedia);
 
+            //publishing post copy product event
+            await _eventPublisher.PublishAsync(new PostCopyProductEvent(originalProduct, newProduct));
+
             _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Catalog.Products.Copied"));
 
             return RedirectToAction("Edit", new { id = newProduct.Id });
@@ -2425,6 +2432,16 @@ public partial class ProductController : BaseAdminController
 
         //if we got this far, something failed, redisplay form
         return View(model);
+    }
+
+    [HttpPost]
+    [CheckPermission(StandardPermission.Catalog.PRODUCT_TAGS_VIEW)]
+    public virtual async Task<IActionResult> TaggedProducts(ProductTagProductSearchModel searchModel)
+    {
+        //prepare model
+        var model = await _productModelFactory.PrepareTaggedProductListModelAsync(searchModel);
+
+        return Json(model);
     }
 
     #endregion
