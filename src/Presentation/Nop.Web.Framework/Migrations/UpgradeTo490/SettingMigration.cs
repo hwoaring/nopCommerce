@@ -1,8 +1,12 @@
 ﻿using FluentMigrator;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
+using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Media;
+using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Security;
+using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Vendors;
 using Nop.Core.Infrastructure;
 using Nop.Data;
@@ -107,6 +111,51 @@ public class SettingMigration : MigrationBase
         {
             pdfSettings.ImageTargetSize = 200;
             settingService.SaveSetting(pdfSettings, settings => pdfSettings.ImageTargetSize);
+        }
+
+        //#820
+        var currencySettings = settingService.LoadSetting<CurrencySettings>();
+        if (!settingService.SettingExists(currencySettings, settings => settings.DisplayCurrencySymbolInCurrencySelector))
+        {
+            currencySettings.DisplayCurrencySymbolInCurrencySelector = false;
+            settingService.SaveSetting(currencySettings, settings => settings.DisplayCurrencySymbolInCurrencySelector);
+        }
+
+        //#1779
+        var customerSettings = settingService.LoadSetting<CustomerSettings>();
+        if (!settingService.SettingExists(customerSettings, settings => settings.NotifyFailedLoginAttempt))
+        {
+            customerSettings.NotifyFailedLoginAttempt = false;
+            settingService.SaveSetting(customerSettings, settings => settings.NotifyFailedLoginAttempt);
+        }
+
+        //#7630
+        var taxSettings = settingService.LoadSetting<TaxSettings>();
+
+        if (!settingService.SettingExists(taxSettings, settings => settings.HmrcApiUrl))
+        {
+            taxSettings.HmrcApiUrl = "https://api.service.hmrc.gov.uk";
+            settingService.SaveSetting(taxSettings, settings => taxSettings.HmrcApiUrl);
+        }
+
+        if (!settingService.SettingExists(taxSettings, settings => settings.HmrcClientId))
+        {
+            taxSettings.HmrcClientId = string.Empty;
+            settingService.SaveSetting(taxSettings, settings => taxSettings.HmrcClientId);
+        }
+
+        if (!settingService.SettingExists(taxSettings, settings => settings.HmrcClientSecret))
+        {
+            taxSettings.HmrcClientSecret = string.Empty;
+            settingService.SaveSetting(taxSettings, settings => taxSettings.HmrcClientSecret);
+        }
+
+        //#1266
+        var orderSettings = settingService.LoadSetting<OrderSettings>();
+        if (!settingService.SettingExists(orderSettings, settings => settings.CustomerOrdersPageSize))
+        {
+            orderSettings.CustomerOrdersPageSize = 10;
+            settingService.SaveSetting(orderSettings, settings => settings.CustomerOrdersPageSize);
         }
     }
 

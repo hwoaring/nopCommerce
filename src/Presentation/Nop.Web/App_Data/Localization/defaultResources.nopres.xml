@@ -177,6 +177,9 @@
   <LocaleResource Name="Account.CustomerOrders.OrderTotal">
     <Value>Order Total</Value>
   </LocaleResource>
+  <LocaleResource Name="Account.CustomerOrders.Period">
+    <Value>Orders from</Value>
+  </LocaleResource>
   <LocaleResource Name="Account.CustomerOrders.RecurringOrders">
     <Value>Recurring payments</Value>
   </LocaleResource>
@@ -251,6 +254,12 @@
   </LocaleResource>
   <LocaleResource Name="Account.CustomerReturnRequests.UploadedFile.Download">
     <Value>Download</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.CustomerRecurringPayments">
+    <Value>Recurring payments</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.CustomerRecurringPayments.NoPayments">
+    <Value>No payments</Value>
   </LocaleResource>
   <LocaleResource Name="Account.DownloadableProducts">
     <Value>Downloadable products</Value>
@@ -1158,8 +1167,11 @@
   <LocaleResource Name="ActivityLog.PublicStore.ContactUs">
     <Value>Used contact us form</Value>
   </LocaleResource>
-  <LocaleResource Name="ActivityLog.PublicStore.Login">
-    <Value>Login</Value>
+  <LocaleResource Name="ActivityLog.PublicStore.Login.Success">
+    <Value>Public store. Customer has logged in</Value>
+  </LocaleResource>
+  <LocaleResource Name="ActivityLog.PublicStore.Login.Fail">
+    <Value>Public store. Customer has failed to log in: {0}</Value>
   </LocaleResource>
   <LocaleResource Name="ActivityLog.PublicStore.Logout">
     <Value>Logout</Value>
@@ -1958,6 +1970,12 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Attributes.ProductAttributes.UsedByProducts.Published">
     <Value>Published</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Attributes.ProductAttributes.List.SearchProductAttributeName">
+    <Value>Product attribute name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Attributes.ProductAttributes.List.SearchProductAttributeName.Hint">
+    <Value>A product attribute name.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Attributes.SpecificationAttributes">
     <Value>Specification attributes</Value>
@@ -6912,6 +6930,12 @@
   <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.NewsletterTickedByDefault.Hint">
     <Value>A value indicating whether 'Newsletter' checkbox is ticked by default on the registration page.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.NotifyFailedLoginAttempt">
+    <Value>Notify customers about failed login attempts</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.NotifyFailedLoginAttempt.Hint">
+    <Value>Check to enable customer notifications on failed login attempts.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.NotifyNewCustomerRegistration">
     <Value>Notify about new customer registration</Value>
   </LocaleResource>
@@ -9299,6 +9323,24 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Tax.HideZeroTax.Hint">
     <Value>A value indicating whether to hide zero tax in order summary.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Tax.HmrcApiUrl">
+    <Value>HMRC API URL</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Tax.HmrcApiUrl.Hint">
+    <Value>The base HMRC access API URL.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Tax.HmrcClientId">
+    <Value>HMRC API client ID</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Tax.HmrcClientId.Hint">
+    <Value>Your HMRC API client ID is a unique identifier which created when you added your application.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Tax.HmrcClientSecret">
+    <Value>HMRC API client secret</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Tax.HmrcClientSecret.Hint">
+    <Value>Your client secret is a unique passphrase that you generate to authorise your application.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Tax.PaymentMethodAdditionalFeeIncludesTax">
     <Value>Payment method additional fee includes tax</Value>
@@ -16086,6 +16128,12 @@
   <LocaleResource Name="Admin.System.SystemInfo.CurrentUserTime.Hint">
     <Value>Current user time (based on specified datetime and timezone settings).</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.System.SystemInfo.DatabaseCollation">
+    <Value>Database collation</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.System.SystemInfo.DatabaseCollation.Hint">
+    <Value>The collation defines the rules for sorting and comparing data.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.System.SystemInfo.Headers">
     <Value>Headers</Value>
   </LocaleResource>
@@ -17229,6 +17277,9 @@
   <LocaleResource Name="Currency.Selector.Label">
     <Value>Currency selector</Value>
   </LocaleResource>
+  <LocaleResource Name="Currency.Selector.Text.Pattern">
+    <Value>{0}, {1}</Value>
+  </LocaleResource>
   <LocaleResource Name="Customer.FullNameFormat">
     <Value>{0} {1}</Value>
   </LocaleResource>
@@ -17768,6 +17819,24 @@
   </LocaleResource>
   <LocaleResource Name="Enums.Nop.Services.Plugins.LoadPluginsMode.NotInstalledOnly">
     <Value>Not installed</Value>
+  </LocaleResource>
+  <LocaleResource Name="Enums.Nop.Web.Models.Order.OrderHistoryPeriods.All">
+    <Value>all time</Value>
+  </LocaleResource>
+  <LocaleResource Name="Enums.Nop.Web.Models.Order.OrderHistoryPeriods.Day">
+    <Value>the past day</Value>
+  </LocaleResource>
+  <LocaleResource Name="Enums.Nop.Web.Models.Order.OrderHistoryPeriods.Week">
+    <Value>the past week</Value>
+  </LocaleResource>
+  <LocaleResource Name="Enums.Nop.Web.Models.Order.OrderHistoryPeriods.Month">
+    <Value>the past month</Value>
+  </LocaleResource>
+  <LocaleResource Name="Enums.Nop.Web.Models.Order.OrderHistoryPeriods.HalfYear">
+    <Value>the past six months</Value>
+  </LocaleResource>
+  <LocaleResource Name="Enums.Nop.Web.Models.Order.OrderHistoryPeriods.Year">
+    <Value>the past year</Value>
   </LocaleResource>
   <LocaleResource Name="EUCookieLaw.Description">
     <Value>On 26 May 2011, the rules about cookies on websites changed. This site uses cookies. One or more of the cookies we use is essential for parts of this website to operate and has already been set. You may delete and block all cookies from this site, but parts of the site will not work. To find out more about cookies used on this website and how to delete cookies, see our privacy policy</Value>

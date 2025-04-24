@@ -29,7 +29,11 @@ public class LocalizationMigration : MigrationBase
             "Admin.Configuration.AppSettings.Common.PluginStaticFileExtensionsBlacklist",
             "Admin.Configuration.AppSettings.Common.PluginStaticFileExtensionsBlacklist.Hint",
             //#7590
-            "Checkout.RedirectMessage"
+            "Checkout.RedirectMessage",
+            
+            //#1779
+            "ActivityLog.PublicStore.Login",
+
         });
 
         #endregion
@@ -117,6 +121,48 @@ public class LocalizationMigration : MigrationBase
             //#7405
             ["Admin.Configuration.Settings.Catalog.ExportImportCategoryUseLimitedToStores"] = "Export / Import categories with \"limited to stores\"",
             ["Admin.Configuration.Settings.Catalog.ExportImportCategoryUseLimitedToStores.Hint"] = "Check if categories should be exported / imported with \"limited to stores\" property.",
+
+            //#820
+            ["Currency.Selector.Text.Pattern"] = "{0}, {1}",
+            
+            //#5652
+            ["Admin.System.SystemInfo.DatabaseCollation"] = "Database collation",
+            ["Admin.System.SystemInfo.DatabaseCollation.Hint"] = "The collation defines the rules for sorting and comparing data.",
+
+			//#1779
+            ["ActivityLog.PublicStore.Login.Fail"] = "Public store. Customer has failed to log in: {0}",
+            ["Admin.Configuration.Settings.CustomerUser.NotifyFailedLoginAttempt"] = "Notify customers about failed login attempts",
+            ["Admin.Configuration.Settings.CustomerUser.NotifyFailedLoginAttempt.Hint"] = "Check to enable customer notifications on failed login attempts.",
+            ["ActivityLog.PublicStore.Login.Success"] = "Public store. Customer has logged in",
+
+            //2921
+            ["Admin.System.Maintenance.ShrinkDatabase"] = "Shrink database",
+            ["Admin.System.Maintenance.ShrinkDatabase.Complete"] = "Database shrinking completed",
+            ["Admin.System.Maintenance.ShrinkDatabase.Progress"] = "Processing...",
+            ["Admin.System.Maintenance.ShrinkDatabase.Text"] = "Reclaim disk space by reorganizing physical data storage",
+
+            //#7515
+            ["Admin.Catalog.Attributes.ProductAttributes.List.SearchProductAttributeName"] = "Product attribute name",
+            ["Admin.Catalog.Attributes.ProductAttributes.List.SearchProductAttributeName.Hint"] = "A product attribute name.",
+
+            //#1266
+            ["Account.CustomerOrders.Period"] = "Orders from",
+            ["Account.CustomerRecurringPayments"] = "Recurring payments",
+            ["Account.CustomerRecurringPayments.NoPayments"] = "No payments",
+            ["Enums.Nop.Web.Models.Order.OrderHistoryPeriods.All"] = "all time",
+            ["Enums.Nop.Web.Models.Order.OrderHistoryPeriods.Day"] = "the past day",
+            ["Enums.Nop.Web.Models.Order.OrderHistoryPeriods.Week"] = "the past week",
+            ["Enums.Nop.Web.Models.Order.OrderHistoryPeriods.Month"] = "the past month",
+            ["Enums.Nop.Web.Models.Order.OrderHistoryPeriods.HalfYear"] = "the past six months",
+            ["Enums.Nop.Web.Models.Order.OrderHistoryPeriods.Year"] = "the past year",
+
+            //#7630
+            ["Admin.Configuration.Settings.Tax.HmrcApiUrl"] = "HMRC API URL",
+            ["Admin.Configuration.Settings.Tax.HmrcApiUrl.Hint"] = "The base HMRC access API URL.",
+            ["Admin.Configuration.Settings.Tax.HmrcClientId"] = "HMRC API client ID",
+            ["Admin.Configuration.Settings.Tax.HmrcClientId.Hint"] = "Your HMRC API client ID is a unique identifier which created when you added your application.",
+            ["Admin.Configuration.Settings.Tax.HmrcClientSecret"] = "HMRC API client secret",
+            ["Admin.Configuration.Settings.Tax.HmrcClientSecret.Hint"] = "Your client secret is a unique passphrase that you generate to authorise your application.",
         }, languageId);
 
         #endregion

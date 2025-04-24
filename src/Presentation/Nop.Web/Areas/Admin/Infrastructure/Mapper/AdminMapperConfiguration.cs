@@ -1369,7 +1369,8 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(settings => settings.DisplayCustomerCurrencyOnOrders, options => options.Ignore())
             .ForMember(settings => settings.ReturnRequestsFileMaximumSize, options => options.Ignore())
             .ForMember(settings => settings.DisplayOrderSummary, options => options.Ignore())
-            .ForMember(settings => settings.PlaceOrderWithLock, options => options.Ignore());
+            .ForMember(settings => settings.PlaceOrderWithLock, options => options.Ignore())
+            .ForMember(settings => settings.CustomerOrdersPageSize, options => options.Ignore());
 
         CreateMap<ReturnRequestAction, ReturnRequestActionModel>();
         CreateMap<ReturnRequestActionModel, ReturnRequestAction>();
@@ -1675,7 +1676,10 @@ public partial class AdminMapperConfiguration : Profile, IOrderedMapperProfile
             .ForMember(model => model.TaxBasedOn_OverrideForStore, options => options.Ignore())
             .ForMember(model => model.TaxCategories, options => options.Ignore())
             .ForMember(model => model.TaxDisplayTypeValues, options => options.Ignore())
-            .ForMember(model => model.TaxDisplayType_OverrideForStore, options => options.Ignore());
+            .ForMember(model => model.TaxDisplayType_OverrideForStore, options => options.Ignore())
+            .ForMember(model => model.HmrcApiUrl_OverrideForStore, options => options.Ignore())
+            .ForMember(model => model.HmrcClientId_OverrideForStore, options => options.Ignore())
+            .ForMember(model => model.HmrcClientSecret_OverrideForStore, options => options.Ignore());
         CreateMap<TaxSettingsModel, TaxSettings>()
             .ForMember(settings => settings.ActiveTaxProviderSystemName, options => options.Ignore())
             .ForMember(settings => settings.LogErrors, options => options.Ignore());
