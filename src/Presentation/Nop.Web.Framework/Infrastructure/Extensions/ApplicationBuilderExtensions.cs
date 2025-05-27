@@ -17,7 +17,9 @@ using Microsoft.Net.Http.Headers;
 using Nop.Core;
 using Nop.Core.Configuration;
 using Nop.Core.Domain.Common;
+using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Localization;
+using Nop.Core.Events;
 using Nop.Core.Http;
 using Nop.Core.Infrastructure;
 using Nop.Data;
@@ -84,6 +86,14 @@ public static class ApplicationBuilderExtensions
             var taskScheduler = engine.Resolve<ITaskScheduler>();
             await taskScheduler.InitializeAsync();
             await taskScheduler.StartSchedulerAsync();
+
+            //clear payment info requests
+            var genericAttributeService = engine.Resolve<IGenericAttributeService>();
+            await genericAttributeService.DeleteAttributesAsync<Customer>(NopCustomerDefaults.ProcessPaymentRequestAttribute);
+
+            //publish AppStartedEvent
+            var eventPublisher = engine.Resolve<IEventPublisher>();
+            await eventPublisher.PublishAsync(new AppStartedEvent());
         }
     }
 
