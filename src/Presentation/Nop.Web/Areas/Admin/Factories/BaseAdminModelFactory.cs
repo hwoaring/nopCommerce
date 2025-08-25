@@ -1,4 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
+﻿using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core;
 using Nop.Core.Caching;
@@ -9,6 +9,7 @@ using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Payments;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Tax;
+using Nop.Core.Domain.Translation;
 using Nop.Services;
 using Nop.Services.Catalog;
 using Nop.Services.Customers;
@@ -25,6 +26,7 @@ using Nop.Services.Tax;
 using Nop.Services.Topics;
 using Nop.Services.Vendors;
 using Nop.Web.Areas.Admin.Infrastructure.Cache;
+using Nop.Web.Framework.Models.Translation;
 using LogLevel = Nop.Core.Domain.Logging.LogLevel;
 
 namespace Nop.Web.Areas.Admin.Factories;
@@ -49,17 +51,19 @@ public partial class BaseAdminModelFactory : IBaseAdminModelFactory
     protected readonly ILocalizationService _localizationService;
     protected readonly IManufacturerService _manufacturerService;
     protected readonly IManufacturerTemplateService _manufacturerTemplateService;
+    protected readonly INewsLetterSubscriptionTypeService _newsLetterSubscriptionTypeService;
     protected readonly IPluginService _pluginService;
     protected readonly IProductTemplateService _productTemplateService;
     protected readonly ISpecificationAttributeService _specificationAttributeService;
-    protected readonly IShippingService _shippingService;
     protected readonly IStateProvinceService _stateProvinceService;
     protected readonly IStaticCacheManager _staticCacheManager;
     protected readonly IStoreService _storeService;
     protected readonly ITaxCategoryService _taxCategoryService;
     protected readonly ITopicTemplateService _topicTemplateService;
     protected readonly IVendorService _vendorService;
+    protected readonly IWarehouseService _warehouseService;
     protected readonly IWorkContext _workContext;
+    protected readonly TranslationSettings _translationSettings;
 
     #endregion
 
@@ -78,17 +82,19 @@ public partial class BaseAdminModelFactory : IBaseAdminModelFactory
         ILocalizationService localizationService,
         IManufacturerService manufacturerService,
         IManufacturerTemplateService manufacturerTemplateService,
+        INewsLetterSubscriptionTypeService newsLetterSubscriptionTypeService,
         IPluginService pluginService,
         IProductTemplateService productTemplateService,
         ISpecificationAttributeService specificationAttributeService,
-        IShippingService shippingService,
         IStateProvinceService stateProvinceService,
         IStaticCacheManager staticCacheManager,
         IStoreService storeService,
         ITaxCategoryService taxCategoryService,
         ITopicTemplateService topicTemplateService,
         IVendorService vendorService,
-        IWorkContext workContext)
+        IWarehouseService warehouseService,
+        IWorkContext workContext,
+        TranslationSettings translationSettings)
     {
         _categoryService = categoryService;
         _categoryTemplateService = categoryTemplateService;
@@ -103,17 +109,19 @@ public partial class BaseAdminModelFactory : IBaseAdminModelFactory
         _localizationService = localizationService;
         _manufacturerService = manufacturerService;
         _manufacturerTemplateService = manufacturerTemplateService;
+        _newsLetterSubscriptionTypeService = newsLetterSubscriptionTypeService;
         _pluginService = pluginService;
         _productTemplateService = productTemplateService;
         _specificationAttributeService = specificationAttributeService;
-        _shippingService = shippingService;
         _stateProvinceService = stateProvinceService;
         _staticCacheManager = staticCacheManager;
         _storeService = storeService;
         _taxCategoryService = taxCategoryService;
         _topicTemplateService = topicTemplateService;
         _vendorService = vendorService;
+        _warehouseService = warehouseService;
         _workContext = workContext;
+        _translationSettings = translationSettings;
     }
 
     #endregion
@@ -239,6 +247,38 @@ public partial class BaseAdminModelFactory : IBaseAdminModelFactory
     #endregion
 
     #region Methods
+
+    /// <summary>
+    /// Prepare a select list from the constants defined in the passed type 
+    /// </summary>
+    /// <param name="items">Collection add items</param>
+    /// <param name="type">Type to extract constants</param>
+    /// <param name="useLocalization">Localize</param>
+    /// <param name="sortItems">Sort resulting items (<see cref="SelectListItem"/>)</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the select list
+    /// </returns>
+    public virtual async Task ConstantsToSelectListAsync(IList<SelectListItem> items, Type type, bool useLocalization = true, bool sortItems = false)
+    {
+        ArgumentNullException.ThrowIfNull(items);
+        ArgumentNullException.ThrowIfNull(type);
+
+        var result = new List<SelectListItem>();
+        var fields = type
+            .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+            .Where(f => f.IsLiteral && !f.IsInitOnly);
+
+        foreach (var prop in fields)
+        {
+            var resourceName = $"{NopLocalizationDefaults.LiteralLocaleStringResourcesPrefix}{type.FullName}.{prop.Name}";
+            var resourceValue = useLocalization ? await _localizationService.GetResourceAsync(resourceName) : CommonHelper.SplitCamelCaseWord(prop.Name);
+
+            result.Add(new SelectListItem { Value = (string)prop.GetRawConstantValue(), Text = resourceValue });
+        }
+
+        ((List<SelectListItem>)items).AddRange(sortItems ? result.OrderBy(x => x.Text) : result);
+    }
 
     /// <summary>
     /// Prepare available activity log types
@@ -442,6 +482,28 @@ public partial class BaseAdminModelFactory : IBaseAdminModelFactory
         foreach (var customerRole in availableCustomerRoles)
         {
             items.Add(new SelectListItem { Value = customerRole.Id.ToString(), Text = customerRole.Name });
+        }
+
+        //insert special item for the default value
+        await PrepareDefaultItemAsync(items, withSpecialDefaultItem, defaultItemText);
+    }
+
+    /// <summary>
+    /// Prepare available newsletter subscription types
+    /// </summary>
+    /// <param name="items">Newsletter subscription type items</param>
+    /// <param name="withSpecialDefaultItem">Whether to insert the first special item for the default value</param>
+    /// <param name="defaultItemText">Default item text; pass null to use default value of the default item text</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public virtual async Task PrepareSubscriptionTypesAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null)
+    {
+        ArgumentNullException.ThrowIfNull(items);
+
+        //prepare available newsletter subscription types
+        var availableSubscriptionTypes = await _newsLetterSubscriptionTypeService.GetAllNewsLetterSubscriptionTypesAsync();
+        foreach (var subscriptionType in availableSubscriptionTypes)
+        {
+            items.Add(new SelectListItem { Value = subscriptionType.Id.ToString(), Text = subscriptionType.Name });
         }
 
         //insert special item for the default value
@@ -880,7 +942,7 @@ public partial class BaseAdminModelFactory : IBaseAdminModelFactory
         ArgumentNullException.ThrowIfNull(items);
 
         //prepare available warehouses
-        var availableWarehouses = await _shippingService.GetAllWarehousesAsync();
+        var availableWarehouses = await _warehouseService.GetAllWarehousesAsync();
         foreach (var warehouse in availableWarehouses)
         {
             items.Add(new SelectListItem { Value = warehouse.Id.ToString(), Text = warehouse.Name });
@@ -980,6 +1042,22 @@ public partial class BaseAdminModelFactory : IBaseAdminModelFactory
 
         //insert special item for the default value
         await PrepareDefaultItemAsync(items, withSpecialDefaultItem, defaultItemText, defaultItemValue);
+    }
+
+    /// <summary>
+    /// Prepare translation supported model
+    /// </summary>
+    /// <param name="model">Translation supported model</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public virtual async Task PreparePreTranslationSupportModelAsync(ITranslationSupportedModel model)
+    {
+        if (!_translationSettings.AllowPreTranslate)
+            return;
+
+        var allLanguages = await _languageService.GetAllLanguagesAsync(showHidden: true);
+        model.PreTranslationAvailable = allLanguages.Any(l =>
+            !_translationSettings.NotTranslateLanguages.Contains(l.Id) &&
+            l.Id != _translationSettings.TranslateFromLanguageId);
     }
 
     #endregion

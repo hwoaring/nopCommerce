@@ -1,6 +1,4 @@
 ﻿using System.Threading.RateLimiting;
-using Azure.Identity;
-using Azure.Storage.Blobs;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -20,6 +18,7 @@ using Nop.Core.Http;
 using Nop.Core.Infrastructure;
 using Nop.Core.Security;
 using Nop.Data;
+using Nop.Services.ArtificialIntelligence;
 using Nop.Services.Authentication;
 using Nop.Services.Authentication.External;
 using Nop.Services.Common;
@@ -241,32 +240,11 @@ public static class ServiceCollectionExtensions
     /// <param name="services">Collection of service descriptors</param>
     public static void AddNopDataProtection(this IServiceCollection services)
     {
-        var appSettings = Singleton<AppSettings>.Instance;
-        if (appSettings.Get<AzureBlobConfig>().Enabled && appSettings.Get<AzureBlobConfig>().StoreDataProtectionKeys)
-        {
-            var blobServiceClient = new BlobServiceClient(appSettings.Get<AzureBlobConfig>().ConnectionString);
-            var blobContainerClient = blobServiceClient.GetBlobContainerClient(appSettings.Get<AzureBlobConfig>().DataProtectionKeysContainerName);
-            var blobClient = blobContainerClient.GetBlobClient(NopDataProtectionDefaults.AzureDataProtectionKeyFile);
+        var dataProtectionKeysPath = CommonHelper.DefaultFileProvider.MapPath(NopDataProtectionDefaults.DataProtectionKeysPath);
+        var dataProtectionKeysFolder = new System.IO.DirectoryInfo(dataProtectionKeysPath);
 
-            var dataProtectionBuilder = services.AddDataProtection().PersistKeysToAzureBlobStorage(blobClient);
-
-            if (!appSettings.Get<AzureBlobConfig>().DataProtectionKeysEncryptWithVault)
-                return;
-
-            var keyIdentifier = appSettings.Get<AzureBlobConfig>().DataProtectionKeysVaultId;
-            var credentialOptions = new DefaultAzureCredentialOptions();
-            var tokenCredential = new DefaultAzureCredential(credentialOptions);
-
-            dataProtectionBuilder.ProtectKeysWithAzureKeyVault(new Uri(keyIdentifier), tokenCredential);
-        }
-        else
-        {
-            var dataProtectionKeysPath = CommonHelper.DefaultFileProvider.MapPath(NopDataProtectionDefaults.DataProtectionKeysPath);
-            var dataProtectionKeysFolder = new System.IO.DirectoryInfo(dataProtectionKeysPath);
-
-            //configure the data protection system to persist keys to the specified directory
-            services.AddDataProtection().PersistKeysToFileSystem(dataProtectionKeysFolder);
-        }
+        //configure the data protection system to persist keys to the specified directory
+        services.AddDataProtection().PersistKeysToFileSystem(dataProtectionKeysFolder);
     }
 
     /// <summary>
@@ -470,5 +448,8 @@ public static class ServiceCollectionExtensions
 
         //client to request reCAPTCHA service
         services.AddHttpClient<CaptchaHttpClient>().WithProxy();
+
+        //client to request artificial intelligence service
+        services.AddHttpClient<ArtificialIntelligenceHttpClient>().WithProxy();
     }
 }

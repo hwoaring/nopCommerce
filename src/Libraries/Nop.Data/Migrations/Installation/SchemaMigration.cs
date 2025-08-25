@@ -88,6 +88,7 @@ public class SchemaMigration : ForwardOnlyMigration
         Create.TableFor<OrderNote>();
         Create.TableFor<RecurringPayment>();
         Create.TableFor<RecurringPaymentHistory>();
+        Create.TableFor<CustomWishlist>();
         Create.TableFor<ShoppingCartItem>();
         Create.TableFor<Store>();
         Create.TableFor<StoreMapping>();
@@ -146,6 +147,7 @@ public class SchemaMigration : ForwardOnlyMigration
         Create.TableFor<Campaign>();
         Create.TableFor<EmailAccount>();
         Create.TableFor<MessageTemplate>();
+        Create.TableFor<NewsLetterSubscriptionType>();
         Create.TableFor<NewsLetterSubscription>();
         Create.TableFor<QueuedEmail>();
         Create.TableFor<NewsItem>();

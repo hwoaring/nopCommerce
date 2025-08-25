@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Nop.Web.Framework.Models.Translation;
 
 namespace Nop.Web.Areas.Admin.Factories;
 
@@ -7,6 +8,19 @@ namespace Nop.Web.Areas.Admin.Factories;
 /// </summary>
 public partial interface IBaseAdminModelFactory
 {
+    /// <summary>
+    /// Prepare a select list from the constants defined in the passed type 
+    /// </summary>
+    /// <param name="items">Collection add items</param>
+    /// <param name="type">Type to extract constants</param>
+    /// <param name="useLocalization">Localize</param>
+    /// <param name="sortItems">Sort resulting items (<see cref="SelectListItem"/>)</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the select list
+    /// </returns>
+    Task ConstantsToSelectListAsync(IList<SelectListItem> items, Type type, bool useLocalization = true, bool sortItems = false);
+
     /// <summary>
     /// Prepare available activity log types
     /// </summary>
@@ -89,6 +103,15 @@ public partial interface IBaseAdminModelFactory
     /// <param name="defaultItemText">Default item text; pass null to use default value of the default item text</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     Task PrepareCustomerRolesAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null);
+
+    /// <summary>
+    /// Prepare available newsletter subscription types
+    /// </summary>
+    /// <param name="items">Newsletter subscription type items</param>
+    /// <param name="withSpecialDefaultItem">Whether to insert the first special item for the default value</param>
+    /// <param name="defaultItemText">Default item text; pass null to use default value of the default item text</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    Task PrepareSubscriptionTypesAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null);
 
     /// <summary>
     /// Prepare available email accounts
@@ -308,4 +331,11 @@ public partial interface IBaseAdminModelFactory
     /// <param name="defaultItemText">Default item text; pass null to use default value of the default item text</param>
     /// <returns>A task that represents the asynchronous operation</returns>
     Task PrepareSpecificationAttributeGroupsAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null);
+
+    /// <summary>
+    /// Prepare translation supported model
+    /// </summary>
+    /// <param name="model">Translation supported model</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    Task PreparePreTranslationSupportModelAsync(ITranslationSupportedModel model);
 }

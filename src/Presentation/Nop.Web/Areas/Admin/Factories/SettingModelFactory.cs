@@ -2,6 +2,7 @@
 using Nop.Core;
 using Nop.Core.Configuration;
 using Nop.Core.Domain;
+using Nop.Core.Domain.ArtificialIntelligence;
 using Nop.Core.Domain.Blogs;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
@@ -17,6 +18,7 @@ using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Seo;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Tax;
+using Nop.Core.Domain.Translation;
 using Nop.Core.Domain.Vendors;
 using Nop.Core.Infrastructure;
 using Nop.Data;
@@ -179,6 +181,34 @@ public partial class SettingModelFactory : ISettingModelFactory
         searchModel.SetGridPageSize();
 
         return Task.FromResult(searchModel);
+    }
+
+    /// <summary>
+    /// Prepare artificial intelligence settings model
+    /// </summary>
+    /// <param name="model">Artificial intelligence search model</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the artificial intelligence settings model
+    /// </returns>
+    protected virtual async Task<ArtificialIntelligenceSettingsModel> PrepareArtificialIntelligenceSettingsModelAsync(ArtificialIntelligenceSettingsModel model)
+    {
+        ArgumentNullException.ThrowIfNull(model);
+
+        var artificialIntelligenceSettings = await _settingService.LoadSettingAsync<ArtificialIntelligenceSettings>();
+
+        model.Enabled = artificialIntelligenceSettings.Enabled;
+        model.ChatGptApiKey = artificialIntelligenceSettings.ChatGptApiKey;
+        model.DeepSeekApiKey = artificialIntelligenceSettings.DeepSeekApiKey;
+        model.GeminiApiKey = artificialIntelligenceSettings.GeminiApiKey;
+        model.ProviderTypeId = (int)artificialIntelligenceSettings.ProviderType;
+        model.ProductDescriptionQuery = artificialIntelligenceSettings.ProductDescriptionQuery;
+
+        //prepare available translation services
+        var availableProviderType = await ArtificialIntelligenceProviderType.Gemini.ToSelectListAsync(false);
+        model.AvailableProviderType = availableProviderType.ToList();
+
+        return model;
     }
 
     /// <summary>
@@ -540,7 +570,7 @@ public partial class SettingModelFactory : ISettingModelFactory
         model.ShowOnEmailProductToFriendPage_OverrideForStore = await _settingService.SettingExistsAsync(captchaSettings, x => x.ShowOnEmailProductToFriendPage, storeId);
         model.ShowOnBlogCommentPage_OverrideForStore = await _settingService.SettingExistsAsync(captchaSettings, x => x.ShowOnBlogCommentPage, storeId);
         model.ShowOnNewsCommentPage_OverrideForStore = await _settingService.SettingExistsAsync(captchaSettings, x => x.ShowOnNewsCommentPage, storeId);
-        model.ShowOnNewsletterPage_OverrideForStore = await _settingService.SettingExistsAsync(captchaSettings, x => x.ShowOnNewsletterPage, storeId);
+        model.ShowOnNewsLetterPage_OverrideForStore = await _settingService.SettingExistsAsync(captchaSettings, x => x.ShowOnNewsletterPage, storeId);
         model.ShowOnProductReviewPage_OverrideForStore = await _settingService.SettingExistsAsync(captchaSettings, x => x.ShowOnProductReviewPage, storeId);
         model.ShowOnApplyVendorPage_OverrideForStore = await _settingService.SettingExistsAsync(captchaSettings, x => x.ShowOnApplyVendorPage, storeId);
         model.ShowOnForgotPasswordPage_OverrideForStore = await _settingService.SettingExistsAsync(captchaSettings, x => x.ShowOnForgotPasswordPage, storeId);
@@ -613,6 +643,40 @@ public partial class SettingModelFactory : ISettingModelFactory
             LoadAllLocalizedPropertiesOnStartup = localizationSettings.LoadAllLocalizedPropertiesOnStartup,
             LoadAllUrlRecordsOnStartup = localizationSettings.LoadAllUrlRecordsOnStartup
         };
+
+        return model;
+    }
+
+    /// <summary>
+    /// Prepare translation settings model
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the translation settings model
+    /// </returns>
+    protected virtual async Task<TranslationSettingsModel> PrepareTranslationSettingsModelAsync()
+    {
+        //load settings for a chosen store scope
+        var storeId = await _storeContext.GetActiveStoreScopeConfigurationAsync();
+        var translationSettings = await _settingService.LoadSettingAsync<TranslationSettings>(storeId);
+
+        //fill in model values from the entity
+        var model = new TranslationSettingsModel
+        {
+            AllowPreTranslate = translationSettings.AllowPreTranslate,
+            TranslateFromLanguageId = translationSettings.TranslateFromLanguageId,
+            NotTranslateLanguages = translationSettings.NotTranslateLanguages ?? new List<int>(),
+            GoogleApiKey = translationSettings.GoogleApiKey,
+            DeepLAuthKey = translationSettings.DeepLAuthKey,
+            TranslationServiceId = translationSettings.TranslationServiceId
+        };
+
+        //prepare available translation services
+        var availableTranslationServices = await TranslationServiceType.GoogleTranslate.ToSelectListAsync(false);
+        model.AvailableTranslationService = availableTranslationServices.ToList();
+        
+        //prepare available languages
+        await _baseAdminModelFactory.PrepareLanguagesAsync(model.AvailableLanguages, false);
 
         return model;
     }
@@ -858,7 +922,6 @@ public partial class SettingModelFactory : ISettingModelFactory
             CacheConfigModel = _appSettings.Get<CacheConfig>().ToConfigModel<CacheConfigModel>(),
             HostingConfigModel = _appSettings.Get<HostingConfig>().ToConfigModel<HostingConfigModel>(),
             DistributedCacheConfigModel = _appSettings.Get<DistributedCacheConfig>().ToConfigModel<DistributedCacheConfigModel>(),
-            AzureBlobConfigModel = _appSettings.Get<AzureBlobConfig>().ToConfigModel<AzureBlobConfigModel>(),
             InstallationConfigModel = _appSettings.Get<InstallationConfig>().ToConfigModel<InstallationConfigModel>(),
             PluginConfigModel = _appSettings.Get<PluginConfig>().ToConfigModel<PluginConfigModel>(),
             CommonConfigModel = _appSettings.Get<CommonConfig>().ToConfigModel<CommonConfigModel>(),
@@ -1309,6 +1372,8 @@ public partial class SettingModelFactory : ISettingModelFactory
         await PrepareSortOptionSearchModelAsync(model.SortOptionSearchModel);
         await _reviewTypeModelFactory.PrepareReviewTypeSearchModelAsync(model.ReviewTypeSearchModel);
 
+        await PrepareArtificialIntelligenceSettingsModelAsync(model.ArtificialIntelligenceSettingsModel);
+
         return model;
     }
 
@@ -1483,6 +1548,8 @@ public partial class SettingModelFactory : ISettingModelFactory
         model.DisplayWishlistAfterAddingProduct_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.DisplayWishlistAfterAddingProduct, storeId);
         model.MaximumShoppingCartItems_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.MaximumShoppingCartItems, storeId);
         model.MaximumWishlistItems_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.MaximumWishlistItems, storeId);
+        model.AllowMultipleWishlist_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.AllowMultipleWishlist, storeId);
+        model.MaximumNumberOfCustomWishlist_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.MaximumNumberOfCustomWishlist, storeId);
         model.AllowOutOfStockItemsToBeAddedToWishlist_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.AllowOutOfStockItemsToBeAddedToWishlist, storeId);
         model.MoveItemsFromWishlistToCart_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.MoveItemsFromWishlistToCart, storeId);
         model.CartsSharedBetweenStores_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.CartsSharedBetweenStores, storeId);
@@ -1543,7 +1610,7 @@ public partial class SettingModelFactory : ISettingModelFactory
         model.DefaultImageQuality_OverrideForStore = await _settingService.SettingExistsAsync(mediaSettings, x => x.DefaultImageQuality, storeId);
         model.ImportProductImagesUsingHash_OverrideForStore = await _settingService.SettingExistsAsync(mediaSettings, x => x.ImportProductImagesUsingHash, storeId);
         model.DefaultPictureZoomEnabled_OverrideForStore = await _settingService.SettingExistsAsync(mediaSettings, x => x.DefaultPictureZoomEnabled, storeId);
-        model.AllowSVGUploads_OverrideForStore = await _settingService.SettingExistsAsync(mediaSettings, x => x.AllowSVGUploads, storeId);
+        model.AllowSvgUploads_OverrideForStore = await _settingService.SettingExistsAsync(mediaSettings, x => x.AllowSvgUploads, storeId);
         model.ProductDefaultImageId_OverrideForStore = await _settingService.SettingExistsAsync(mediaSettings, x => x.ProductDefaultImageId, storeId);
 
         return model;
@@ -1621,7 +1688,7 @@ public partial class SettingModelFactory : ISettingModelFactory
         //fill in overridden values
         model.GdprEnabled_OverrideForStore = await _settingService.SettingExistsAsync(gdprSettings, x => x.GdprEnabled, storeId);
         model.LogPrivacyPolicyConsent_OverrideForStore = await _settingService.SettingExistsAsync(gdprSettings, x => x.LogPrivacyPolicyConsent, storeId);
-        model.LogNewsletterConsent_OverrideForStore = await _settingService.SettingExistsAsync(gdprSettings, x => x.LogNewsletterConsent, storeId);
+        model.LogNewsLetterConsent_OverrideForStore = await _settingService.SettingExistsAsync(gdprSettings, x => x.LogNewsletterConsent, storeId);
         model.LogUserProfileChanges_OverrideForStore = await _settingService.SettingExistsAsync(gdprSettings, x => x.LogUserProfileChanges, storeId);
         model.DeleteInactiveCustomersAfterMonths_OverrideForStore = await _settingService.SettingExistsAsync(gdprSettings, x => x.DeleteInactiveCustomersAfterMonths, storeId);
 
@@ -1740,6 +1807,9 @@ public partial class SettingModelFactory : ISettingModelFactory
 
         //prepare localization settings model
         model.LocalizationSettings = await PrepareLocalizationSettingsModelAsync();
+
+        //prepare translation settings model
+        model.TranslationSettings = await PrepareTranslationSettingsModelAsync();
 
         //prepare admin area settings model
         model.AdminAreaSettings = await PrepareAdminAreaSettingsModelAsync();
