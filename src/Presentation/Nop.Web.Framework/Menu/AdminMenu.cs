@@ -1070,10 +1070,13 @@ public partial class AdminMenu : IAdminMenu
 
         async Task checkPermissions(AdminMenuItem menuItem, AdminMenuItem rootItem = null)
         {
-            var permissions = (menuItem.PermissionNames.Any() ? menuItem.PermissionNames : (rootItem?.PermissionNames ?? new List<string>())).Distinct().Where(p => !string.IsNullOrEmpty(p)).ToList();
+            if (menuItem.Visible)
+            {
+                var permissions = (menuItem.PermissionNames.Any() ? menuItem.PermissionNames : (rootItem?.PermissionNames ?? new List<string>())).Distinct().Where(p => !string.IsNullOrEmpty(p)).ToList();
 
-            if (permissions.Any())
-                menuItem.Visible = menuItem.ChildNodes.Any() ? await permissions.AnyAwaitAsync(authorizePermission) : await permissions.AllAwaitAsync(authorizePermission);
+                if (permissions.Any())
+                    menuItem.Visible = menuItem.ChildNodes.Any() ? await permissions.AnyAwaitAsync(authorizePermission) : await permissions.AllAwaitAsync(authorizePermission);
+            }
 
             foreach (var childNode in menuItem.ChildNodes)
                 await checkPermissions(childNode, menuItem);
@@ -1116,7 +1119,7 @@ public partial class AdminMenu : IAdminMenu
     /// A task that represents the asynchronous operation
     /// The task result contains the root menu item
     /// </returns>
-    public async Task<AdminMenuItem> GetRootNodeAsync(bool showHidden = false)
+    public virtual async Task<AdminMenuItem> GetRootNodeAsync(bool showHidden = false)
     {
         if (_rootItem != null)
             return _rootItem;
@@ -1145,7 +1148,7 @@ public partial class AdminMenu : IAdminMenu
     /// <param name="controllerName">The name of the controller</param>
     /// <param name="actionName">The name of the action method</param>
     /// <returns>Menu item URL</returns>
-    public string GetMenuItemUrl(string controllerName, string actionName)
+    public virtual string GetMenuItemUrl(string controllerName, string actionName)
     {
         if (string.IsNullOrEmpty(controllerName) || string.IsNullOrEmpty(actionName))
             return null;

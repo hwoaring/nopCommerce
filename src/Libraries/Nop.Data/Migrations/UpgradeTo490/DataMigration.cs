@@ -1,4 +1,5 @@
 ﻿using FluentMigrator;
+using LinqToDB;
 using Nop.Core.Domain.Logging;
 using Nop.Core.Domain.Messages;
 
@@ -61,15 +62,15 @@ public class DataMigration : Migration
                 }
             );
 
-            var newsLetterSubscriptions = _dataProvider.GetTable<NewsLetterSubscription>().ToList();
-            foreach (var newsLetterSubscription in newsLetterSubscriptions)
-            {
-                newsLetterSubscription.TypeId = subscriptionType.Id;
-            }
-
-            _dataProvider.UpdateEntities(newsLetterSubscriptions);
+            _dataProvider.GetTable<NewsLetterSubscription>()
+                .Set(p => p.TypeId, subscriptionType.Id)
+                .Update();
         }
 
+        //alter columns
+        Alter.Table(nameof(NewsLetterSubscription))
+            .AlterColumn(nameof(NewsLetterSubscription.TypeId)).AsInt32().NotNullable();
+        
         if (!activityLogTypeTable.Any(alt => string.Compare(alt.SystemKeyword, "AddSubscriptionType", StringComparison.InvariantCultureIgnoreCase) == 0))
         {
             _dataProvider.InsertEntity(
@@ -221,6 +222,20 @@ public class DataMigration : Migration
                     Name = "Edit a menu item"
                 }
             );
+        }
+
+        //#7384
+        if (!_dataProvider.GetTable<MessageTemplate>().Any(st => string.Compare(st.Name, MessageTemplateSystemNames.ORDER_CANCELLED_STORE_OWNER_NOTIFICATION, StringComparison.InvariantCultureIgnoreCase) == 0))
+        {
+            var eaGeneral = _dataProvider.GetTable<EmailAccount>().FirstOrDefault() ?? throw new Exception("Default email account cannot be loaded");
+            _dataProvider.InsertEntity(new MessageTemplate
+            {
+                Name = MessageTemplateSystemNames.ORDER_CANCELLED_STORE_OWNER_NOTIFICATION,
+                Subject = "%Store.Name%. Order #%Order.OrderNumber% cancelled",
+                Body = $"<p>{Environment.NewLine}<a href=\"%Store.URL%\">%Store.Name%</a>{Environment.NewLine}<br />{Environment.NewLine}<br />{Environment.NewLine}Order #%Order.OrderNumber% has been cancelled by customer.{Environment.NewLine}<br />{Environment.NewLine}Customer: %Order.CustomerFullName%,{Environment.NewLine}<br />{Environment.NewLine}<br />{Environment.NewLine}<br />{Environment.NewLine}Order Number: %Order.OrderNumber%{Environment.NewLine}<br />{Environment.NewLine}Date Ordered: %Order.CreatedOn%{Environment.NewLine}<br />{Environment.NewLine}<br />{Environment.NewLine}%Order.Product(s)%{Environment.NewLine}</p>{Environment.NewLine}",
+                IsActive = true,
+                EmailAccountId = eaGeneral.Id
+            });
         }
     }
 

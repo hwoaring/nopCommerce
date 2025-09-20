@@ -202,7 +202,14 @@ public partial class SettingModelFactory : ISettingModelFactory
         model.DeepSeekApiKey = artificialIntelligenceSettings.DeepSeekApiKey;
         model.GeminiApiKey = artificialIntelligenceSettings.GeminiApiKey;
         model.ProviderTypeId = (int)artificialIntelligenceSettings.ProviderType;
+        model.AllowProductDescriptionGeneration = artificialIntelligenceSettings.AllowProductDescriptionGeneration;
         model.ProductDescriptionQuery = artificialIntelligenceSettings.ProductDescriptionQuery;
+        model.AllowMetaTitleGeneration = artificialIntelligenceSettings.AllowMetaTitleGeneration;
+        model.MetaTitleQuery = artificialIntelligenceSettings.MetaTitleQuery;
+        model.AllowMetaKeywordsGeneration = artificialIntelligenceSettings.AllowMetaKeywordsGeneration;
+        model.MetaKeywordsQuery = artificialIntelligenceSettings.MetaKeywordsQuery;
+        model.AllowMetaDescriptionGeneration = artificialIntelligenceSettings.AllowMetaDescriptionGeneration;
+        model.MetaDescriptionQuery = artificialIntelligenceSettings.MetaDescriptionQuery;
 
         //prepare available translation services
         var availableProviderType = await ArtificialIntelligenceProviderType.Gemini.ToSelectListAsync(false);
@@ -1413,6 +1420,7 @@ public partial class SettingModelFactory : ISettingModelFactory
             model.CustomOrderNumberMask_OverrideForStore = await _settingService.SettingExistsAsync(orderSettings, x => x.CustomOrderNumberMask, storeId);
             model.ExportWithProducts_OverrideForStore = await _settingService.SettingExistsAsync(orderSettings, x => x.ExportWithProducts, storeId);
             model.AllowAdminsToBuyCallForPriceProducts_OverrideForStore = await _settingService.SettingExistsAsync(orderSettings, x => x.AllowAdminsToBuyCallForPriceProducts, storeId);
+            model.AllowCustomersCancelOrders_OverrideForStore = await _settingService.SettingExistsAsync(orderSettings, x => x.AllowCustomersCancelOrders, storeId);
             model.ShowProductThumbnailInOrderDetailsPage_OverrideForStore = await _settingService.SettingExistsAsync(orderSettings, x => x.ShowProductThumbnailInOrderDetailsPage, storeId);
             model.DeleteGiftCardUsageHistory_OverrideForStore = await _settingService.SettingExistsAsync(orderSettings, x => x.DeleteGiftCardUsageHistory, storeId);
         }

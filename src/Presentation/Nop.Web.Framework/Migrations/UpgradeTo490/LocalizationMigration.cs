@@ -1,4 +1,5 @@
 ﻿using FluentMigrator;
+using Nop.Core.Domain.Messages;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Data.Migrations;
@@ -561,6 +562,54 @@ public class LocalizationMigration : MigrationBase
 
             //7807
             ["Forum.Post.Text"] = "Post",
+            
+            //#7732
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.ProductDescriptionQuery"] = "AI query to generate product description",
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.Info"] = "<p>Artificial intelligence functionality allows you to use third-party AI services such as <a href='https://www.deepseek.com/' target='_blank'>DeepSeek</a>, <a href='https://gemini.google.com/' target='_blank'>Gemini</a> or <a href='https://chatgpt.com/' target='_blank'>ChatGPT</a> to automatically generate content. This could be either product descriptions or meta tags for specific pages or entities.</p>",
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.MetaKeywordsQuery"] = "AI query to generate meta keywords",
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.MetaKeywordsQuery.Hint"] = "Set the query to generate meta keywords with artificial intelligence.",
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.MetaDescriptionQuery"] = "AI query to generate meta description",
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.MetaDescriptionQuery.Hint"] = "Set the query to generate meta description with artificial intelligence.",
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.MetaTitleQuery"] = "AI query to generate meta title",
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.MetaTitleQuery.Hint"] = "Set the query to generate meta title with artificial intelligence.",
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.AllowGenerateProductDescription"] = "Allow to generate product description",
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.AllowGenerateProductDescription.Hint"] = "Check to allow generation of product descriptions with artificial intelligence services.",
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.AllowGenerateMetaKeywords"] = "Allow to generate meta keywords",
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.AllowGenerateMetaKeywords.Hint"] = "Check to allow generation of meta keywords with artificial intelligence services. Please note that this functionality will not change any meta keywords that you have added, or edited, manually.",
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.AllowGenerateMetaDescription"] = "Allow to generate meta description",
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.AllowGenerateMetaDescription.Hint"] = "Check to allow generation of meta description with artificial intelligence services. Please note that this functionality will not change any meta description that you have added, or edited, manually.",
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.AllowGenerateMetaTitle"] = "Allow to generate meta title",
+            ["Admin.Configuration.Settings.Catalog.ArtificialIntelligence.AllowGenerateMetaTitle.Hint"] = "Check to allow generation of meta title with artificial intelligence services. Please note that this functionality will not change any meta title that you have added, or edited, manually.",
+            ["Admin.ArtificialIntelligence.GenerateMetaTags"] = "Generate meta tags with AI",
+            ["Admin.ArtificialIntelligence.ProductDescriptionRequired"] = "Product description (on {0} language) is required for meta tags generation with artificial intelligence services.",
+            ["Admin.ArtificialIntelligence.CategoryDescriptionRequired"] = "Category description (on {0} language) is required for meta tags generation with artificial intelligence services.",
+            ["Admin.ArtificialIntelligence.ProductNameRequired"] = "Product name (on {0} language) is required for meta tags generation with artificial intelligence services.",
+            ["Admin.ArtificialIntelligence.CategoryNameRequired"] = "Category name (on {0} language) is required for meta tags generation with artificial intelligence services.",
+            ["Admin.ArtificialIntelligence.BlogPostTitleRequired"] = "Blog post title (on {0} language) is required for meta tags generation with artificial intelligence services.",
+            ["Admin.ArtificialIntelligence.BlogPostBodyRequired"] = "Blog post body (on {0} language) is required for meta tags generation with artificial intelligence services.",
+            ["Admin.ArtificialIntelligence.ManufacturerDescriptionRequired"] = "Manufacturer description (on {0} language) is required for meta tags generation with artificial intelligence services.",
+            ["Admin.ArtificialIntelligence.ManufacturerNameRequired"] = "Manufacturer name (on {0} language) is required for meta tags generation with artificial intelligence services.",
+            ["Admin.ArtificialIntelligence.VendorDescriptionRequired"] = "Vendor description (on {0} language) is required for meta tags generation with artificial intelligence services.",
+            ["Admin.ArtificialIntelligence.VendorNameRequired"] = "Vendor name (on {0} language) is required for meta tags generation with artificial intelligence services.",
+            ["Admin.ArtificialIntelligence.NewsItemFullRequired"] = "News item full (on {0} language) is required for meta tags generation with artificial intelligence services.",
+            ["Admin.ArtificialIntelligence.NewsItemTitleRequired"] = "News item title (on {0} language) is required for meta tags generation with artificial intelligence services.",
+            ["Admin.ArtificialIntelligence.TopicTitleRequired"] = "Topic title (on {0} language) is required for meta tags generation with artificial intelligence services.",
+            ["Admin.ArtificialIntelligence.TopicBodyRequired"] = "Topic body (on {0} language) is required for meta tags generation with artificial intelligence services.",
+            ["Admin.ArtificialIntelligence.GenerateMetaTags.SaveBeforeGenerate"] = "You need to save the entity before you can generate meta tags.",
+
+            //#7643
+            ["Media.Product.VideoTitleFormat"] = "Video of {0}",
+
+            //#7384
+            ["Order.Cancel"] = "Cancel order",
+            ["Order.Cancel.Failed"] = "Failed to cancel order",
+            ["Order.Cancelled"] = "Order has been cancelled",
+            ["Admin.Configuration.Settings.Order.AllowCustomersCancelOrders"] = "Allow customers to cancel orders",
+            ["Admin.Configuration.Settings.Order.AllowCustomersCancelOrders.Hint"] = "Check to allow customers to cancel orders",
+            [$"Admin.ContentManagement.MessageTemplates.Description.{MessageTemplateSystemNames.ORDER_CANCELLED_STORE_OWNER_NOTIFICATION}"] = "This message template is used to notify a store owner that the certain order was cancelled by customer.",
+
+            ["Admin.Documentation.Reference.RFQ"] = "Learn more about <a target=\"_blank\" href=\"{0}\">requests for quote</a>",
+            ["Admin.Documentation.Reference.Menu"] = "Learn more about <a target=\"_blank\" href=\"{0}\">menus</a>",
         }, languageId);
 
         #endregion
