@@ -40,26 +40,20 @@
                 <button type="submit"
                         name="sendQuote"
                         id="send-request"
-                        formaction="@Url.Action("SendQuote")"
-                        formmethod="post"
                         class="btn btn-info">
                     <i class="far fa-share-square"></i>
                     @T("Plugins.Misc.RFQ.SendQuote")
                 </button>
-                <nop-action-confirmation asp-button-id="send-request" />
             }
             @if (Model.DisplayDeleteQuoteButton)
             {
                 <button type="submit"
                         id="delete-quote"
                         name="deleteQuote"
-                        formaction="@Url.Action("DeleteQuote")"
-                        formmethod="post"
                         class="btn btn-danger">
                     <i class="far fa-trash-alt"></i>
                     @T("Admin.Common.Delete")
                 </button>
-                <nop-action-confirmation asp-button-id="delete-quote" />
             }
             @if (Model.DisplaySaveButtons)
             {
@@ -178,3 +172,7 @@
         </div>
     </section>
 </form>
+
+<nop-action-confirmation asp-button-id="send-request" />
+<nop-action-confirmation asp-button-id="delete-quote" />
+
