@@ -34,7 +34,7 @@ using Nop.Services.Installation;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Media;
-using Nop.Services.Media.RoxyFileman;
+using Nop.Services.Media.ElFinder;
 using Nop.Services.Menus;
 using Nop.Services.Messages;
 using Nop.Services.Orders;
@@ -243,6 +243,7 @@ public partial class NopStartup : INopStartup
         services.AddScoped<INopUrlHelper, NopUrlHelper>();
         services.AddScoped<IWidgetModelFactory, WidgetModelFactory>();
         services.AddScoped<IMenuService, MenuService>();
+        services.AddScoped<ISyncCodeHelper, SyncCodeHelper>();
 
         //attribute services
         services.AddScoped(typeof(IAttributeService<,>), typeof(AttributeService<,>));
@@ -277,7 +278,7 @@ public partial class NopStartup : INopStartup
             services.AddScoped(setting, serviceProvider =>
             {
                 var storeId = DataSettingsManager.IsDatabaseInstalled()
-                    ? serviceProvider.GetRequiredService<IStoreContext>().GetCurrentStore()?.Id ?? 0
+                    ? serviceProvider.GetRequiredService<IStoreContext>().GetCurrentStoreAsync().Result?.Id ?? 0
                     : 0;
 
                 return serviceProvider.GetRequiredService<ISettingService>().LoadSettingAsync(setting, storeId).Result;
@@ -290,9 +291,8 @@ public partial class NopStartup : INopStartup
         //picture service
         services.AddScoped<IPictureService, PictureService>();
 
-        //roxy file manager
-        services.AddScoped<IRoxyFilemanService, RoxyFilemanService>();
-        services.AddScoped<IRoxyFilemanFileProvider, RoxyFilemanFileProvider>();
+        //elFinder file manager
+        services.AddSingleton<IElFinderService, ElFinderService>();
 
         //installation service
         services.AddScoped<IInstallationService, InstallationService>();
