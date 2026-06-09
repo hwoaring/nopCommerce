@@ -7,7 +7,7 @@ using Nop.Data.Extensions;
 
 namespace Nop.Data.Migrations.UpgradeTo500;
 
-[NopSchemaMigration("2026-01-13 00:00:03", "SchemaMigration for 5.00.0")]
+[NopSchemaMigration("2026-01-13 00:00:05", "SchemaMigration for 5.00.0")]
 public class SchemaMigration : ForwardOnlyMigration
 {
     /// <summary>
@@ -93,5 +93,14 @@ public class SchemaMigration : ForwardOnlyMigration
         //#1832
         this.CreateTableIfNotExists<ContactFormAttribute>();
         this.CreateTableIfNotExists<ContactFormAttributeValue>();
+
+        //#2430
+        this.AddOrAlterColumnFor<Customer>(c => c.PhoneSmsVerified)
+            .AsBoolean()
+            .NotNullable()
+            .SetExistingRowsTo(false);
+
+        //#4279
+        this.CreateTableIfNotExists<Product3dObject>();
     }
 }
