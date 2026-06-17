@@ -828,6 +828,13 @@ public partial class InstallationService
                     EmailAccountId = eaGeneral.Id
                 },
                 new() {
+                    Name = MessageTemplateSystemNames.RETURN_REQUEST_WITHDRAWAL_LINK_MESSAGE,
+                    Subject = "%Store.Name%. Confirm your withdrawal request.",
+                    Body = $"<p>We have received your withdrawal request.{Environment.NewLine}Click the <a href=\"%ReturnRequest.WithdrawalUrl%\">link</a> to confirm the request.{Environment.NewLine}</p>{Environment.NewLine}",
+                    IsActive = true,
+                    EmailAccountId = eaGeneral.Id
+                },
+                new() {
                     Name = MessageTemplateSystemNames.NEWSLETTER_SUBSCRIPTION_ACTIVATION_MESSAGE,
                     Subject = "%Store.Name%. Subscription activation message.",
                     Body = $"<p>{Environment.NewLine}<a href=\"%NewsLetterSubscription.ActivationUrl%\">Click here to confirm your subscription to our list.</a>{Environment.NewLine}</p>{Environment.NewLine}<p>{Environment.NewLine}If you received this email by mistake, simply delete it.{Environment.NewLine}</p>{Environment.NewLine}",
@@ -1013,6 +1020,13 @@ public partial class InstallationService
                     Name = MessageTemplateSystemNames.RECURRING_PAYMENT_FAILED_CUSTOMER_NOTIFICATION,
                     Subject = "%Store.Name%. Last recurring payment failed",
                     Body = $"<p>{Environment.NewLine}<a href=\"%Store.URL%\">%Store.Name%</a>{Environment.NewLine}<br />{Environment.NewLine}<br />{Environment.NewLine}Hello %Customer.FullName%,{Environment.NewLine}<br />{Environment.NewLine}It appears your credit card didn't go through for this recurring payment (<a href=\"%Order.OrderURLForCustomer%\" target=\"_blank\">%Order.OrderURLForCustomer%</a>){Environment.NewLine}<br /> %if (%RecurringPayment.RecurringPaymentType% == \"Manual\") {Environment.NewLine}You can recharge balance and manually retry payment or cancel it on the order history page. endif% %if (%RecurringPayment.RecurringPaymentType% == \"Automatic\") {Environment.NewLine}You can recharge balance and wait, we will try to make the payment again, or you can cancel it on the order history page. endif%{Environment.NewLine}</p>{Environment.NewLine}",
+                    IsActive = true,
+                    EmailAccountId = eaGeneral.Id
+                },
+                new() {
+                    Name = MessageTemplateSystemNames.NEXT_RECURRING_PAYMENT_CUSTOMER_NOTIFICATION,
+                    Subject = "%Store.Name%. Notification of upcoming payment",
+                    Body = $"<p>{Environment.NewLine}<a href=\"%Store.URL%\">%Store.Name%</a>{Environment.NewLine}<br />{Environment.NewLine}<br />{Environment.NewLine}Hello %Customer.FullName%,{Environment.NewLine}<br />{Environment.NewLine}The next payment for order <a href=\"%Order.OrderURLForCustomer%\" target=\"_blank\">%Order.OrderNumber%</a> will be debited in %RecurringPayment.NextRecurringPaymentDelay% day(s).{Environment.NewLine}<br />{Environment.NewLine}Please make sure you have sufficient funds on your card for the upcoming debit.</p>{Environment.NewLine}",
                     IsActive = true,
                     EmailAccountId = eaGeneral.Id
                 },
@@ -1842,7 +1856,6 @@ public partial class InstallationService
 
         await SaveSettingAsync(dictionary, new OrderSettings
         {
-            ReturnRequestNumberMask = "{ID}",
             IsReOrderAllowed = true,
             MinOrderSubtotalAmount = 0,
             MinOrderSubtotalAmountIncludingTax = false,
@@ -1861,10 +1874,6 @@ public partial class InstallationService
             AttachPdfInvoiceToOrderCompletedEmail = false,
             GeneratePdfInvoiceInCustomerLanguage = true,
             AttachPdfInvoiceToOrderPaidEmail = false,
-            ReturnRequestsEnabled = true,
-            ReturnRequestsAllowFiles = false,
-            ReturnRequestsFileMaximumSize = 2048,
-            NumberOfDaysReturnRequestAvailable = 365,
             MinimumOrderPlacementInterval = 1,
             ActivateGiftCardsAfterCompletingOrder = false,
             DeactivateGiftCardsAfterCancellingOrder = false,
@@ -1874,6 +1883,7 @@ public partial class InstallationService
             ExportWithProducts = true,
             AllowAdminsToBuyCallForPriceProducts = true,
             AllowCustomersCancelOrders = true,
+            NextRecurringPaymentNotificationDays = 1,
             ShowProductThumbnailInOrderDetailsPage = true,
             DisplayCustomerCurrencyOnOrders = false,
             DisplayOrderSummary = true,
@@ -1883,7 +1893,21 @@ public partial class InstallationService
             AutoCancelDelay = 48 * 60,
             AutoCancelIgnoredPaymentMethods = [],
             AutoCancelRestoreShoppingCart = false,
-            AutoCancelIgnoreBeforeUtc = DateTime.UtcNow,
+            AutoCancelIgnoreBeforeUtc = DateTime.UtcNow
+        });
+
+        await SaveSettingAsync(dictionary, new ReturnRequestSettings
+        {
+            ReturnRequestNumberMask = "{ID}",
+            ReturnRequestsEnabled = true,
+            ReturnRequestsAllowFiles = false,
+            ReturnRequestsFileMaximumSize = 2048,
+            NumberOfDaysReturnRequestAvailable = 365,
+            UseEuWithdrawalLocales = false,
+            GuestReturnRequestsAllowed = false,
+            ReturnReasonsEnabled = true,
+            ReturnActionsEnabled = true,
+            WithdrawalLinkDaysValid = 7
         });
 
         await SaveSettingAsync(dictionary, new SecuritySettings
@@ -2033,7 +2057,8 @@ public partial class InstallationService
             ShowOnProductReviewPage = false,
             ShowOnRegistrationPage = false,
             ShowOnCheckoutPageForGuests = false,
-            ShowOnCheckGiftCardBalance = true
+            ShowOnCheckGiftCardBalance = true,
+            ShowOnWithdrawalForm = false,
         });
 
         await SaveSettingAsync(dictionary, new MessagesSettings
@@ -3821,6 +3846,14 @@ public partial class InstallationService
                 RouteName = NopRouteNames.General.CUSTOMER_ORDERS,
                 Title = "Orders",
                 Published = true
+            },
+            new MenuItem
+            {
+                MenuId = footerMyAccount.Id,
+                MenuItemType = MenuItemType.StandardPage,
+                RouteName = NopRouteNames.General.WITHDRAWAL_REQUEST_FORM,
+                Title = "Withdraw contract",
+                Published = false
             },
             new MenuItem
             {
