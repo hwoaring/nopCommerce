@@ -1020,6 +1020,7 @@ public partial class SettingModelFactory : ISettingModelFactory
             model.NotifyStoreOwnerAboutVendorInformationChange_OverrideForStore = await _settingService.SettingExistsAsync(vendorSettings, x => x.NotifyStoreOwnerAboutVendorInformationChange, storeId);
             model.MaximumProductNumber_OverrideForStore = await _settingService.SettingExistsAsync(vendorSettings, x => x.MaximumProductNumber, storeId);
             model.AllowVendorsToImportProducts_OverrideForStore = await _settingService.SettingExistsAsync(vendorSettings, x => x.AllowVendorsToImportProducts, storeId);
+            model.AllowVendorsToUpload3dObjects_OverrideForStore = await _settingService.SettingExistsAsync(vendorSettings, x => x.AllowVendorsToUpload3dObjects, storeId);
         }
 
         //prepare nested search model
@@ -1639,6 +1640,8 @@ public partial class SettingModelFactory : ISettingModelFactory
         model.MiniShoppingCartProductNumber_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.MiniShoppingCartProductNumber, storeId);
         model.AllowCartItemEditing_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.AllowCartItemEditing, storeId);
         model.GroupTierPricesForDistinctShoppingCartItems_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.GroupTierPricesForDistinctShoppingCartItems, storeId);
+        model.VendorEnabled_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.VendorEnabled, storeId);
+        model.VendorRequired_OverrideForStore = await _settingService.SettingExistsAsync(shoppingCartSettings, x => x.VendorRequired, storeId);
 
         return model;
     }

@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Nop.Core;
@@ -874,7 +873,7 @@ public partial class ProductController : BaseAdminController
             {
                 setData(productId, data =>
                 {
-                    data.Price = decimal.Parse(item.Value, NumberStyles.Any, CultureInfo.InvariantCulture);
+                    data.Price = decimal.Parse(item.Value);
                 });
             }
 
@@ -882,7 +881,7 @@ public partial class ProductController : BaseAdminController
             {
                 setData(productId, data =>
                 {
-                    data.OldPrice = decimal.Parse(item.Value, NumberStyles.Any, CultureInfo.InvariantCulture);
+                    data.OldPrice = decimal.Parse(item.Value);
                 });
             }
 
@@ -4196,6 +4195,7 @@ public partial class ProductController : BaseAdminController
     [HttpPost]
     //do not validate request token (XSRF)
     [IgnoreAntiforgeryToken]
+    [CheckPermission(StandardPermission.Catalog.PRODUCTS_CREATE_EDIT_DELETE)]
     public virtual async Task<IActionResult> Upload3dObject(int productId)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(productId);
@@ -4203,15 +4203,13 @@ public partial class ProductController : BaseAdminController
         var product = await _productService.GetProductByIdAsync(productId)
             ?? throw new ArgumentException("No product found with the specified id");
 
+        var currentVendor = await _workContext.GetCurrentVendorAsync();
+        if (currentVendor != null && (!_vendorSettings.AllowVendorsToUpload3dObjects || product.VendorId != currentVendor.Id))
+            return Json(new { success = false, message = "You cannot upload files" });
+
         var httpPostedFile = await Request.GetFirstOrDefaultFileAsync();
         if (httpPostedFile == null)
-        {
-            return Json(new
-            {
-                success = false,
-                message = "No file uploaded"
-            });
-        }
+            return Json(new { success = false, message = "No file uploaded" });
 
         //remove path (passed in IE)
         var fileName = _fileProvider.GetFileName(httpPostedFile.FileName);

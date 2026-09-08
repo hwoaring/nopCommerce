@@ -46,6 +46,7 @@
     <None Remove="Content\images\vote-up.png" />
     <None Remove="Content\images\watch.png" />
     <None Remove="Content\js\marked.umd.js" />
+    <None Remove="Content\js\purify.js" />
     <None Remove="Content\js\mdeditor\icons\bold.svg" />
     <None Remove="Content\js\mdeditor\icons\code-block.svg" />
     <None Remove="Content\js\mdeditor\icons\code.svg" />
@@ -230,6 +231,9 @@
     <Content Include="Content\js\marked.umd.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\js\purify.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\js\mdeditor\icons\bold.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -376,7 +380,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Humanizer" Version="3.0.1" />
+    <PackageReference Include="Humanizer" Version="3.0.10" />
   </ItemGroup>
 
   <!-- This target execute after "Build" target -->

@@ -446,6 +446,10 @@ public class LocalizationMigration : MigrationBase
             "Payment.ExpireMonth.Required",
             "Payment.ExpireYear.Required",
             "Payment.SelectCreditCard",
+
+            //#8170
+            "Admin.ConfigurationSteps.PaymentMethods.Manual.Title",
+            "Admin.ConfigurationSteps.PaymentMethods.Manual.Text",
         });
 
         #endregion
@@ -700,6 +704,8 @@ public class LocalizationMigration : MigrationBase
             ["Admin.Catalog.Products.Multimedia.Object3d.Fields.AltAttribute"] = "Alternative text",
             ["Admin.Catalog.Products.Multimedia.Object3d.Fields.AltAttribute.Hint"] = "The \"alt\" attribute for the \"model-viewer\" HTML element.",
             ["Admin.Catalog.Products.Multimedia.Object3d.Save"] = "Save",
+            ["Admin.Configuration.Settings.Vendor.AllowVendorsToUpload3dObjects"] = "Allow vendors to upload 3D models",
+            ["Admin.Configuration.Settings.Vendor.AllowVendorsToUpload3dObjects.Hint"] = "Check to allow vendors to upload product 3D models.",
 
             ["Admin.Configuration.Settings.Media.BlockTitle.Product3dObject"] = "Product 3D models",
             ["Admin.Configuration.Settings.Media.Object3dAutoRotateEnabled"] = "Auto-rotate",
@@ -843,6 +849,17 @@ public class LocalizationMigration : MigrationBase
             ["Admin.Catalog.Products.Fields.PriceLists"] = "Price lists",
             ["Admin.Catalog.Products.Fields.PriceLists.Hint"] = "Choose price lists of this product.",
             ["Admin.Catalog.Products.Fields.PriceLists.NoPriceList"] = "No price lists available. Create at least one price list before mapping.",
+
+            //#56
+            ["Admin.Configuration.Settings.ShoppingCart.VendorEnabled"] = "Vendor filtering",
+            ["Admin.Configuration.Settings.ShoppingCart.VendorEnabled.Hint"] = "Check to allow customers to filter shopping cart items by a specific vendor in the cart. It could be useful when you have multi-vendor configured in your store.",
+            ["Admin.Configuration.Settings.ShoppingCart.VendorRequired"] = "Vendor required",
+            ["Admin.Configuration.Settings.ShoppingCart.VendorRequired.Hint"] = "Check if customers are required to choose a vendor before starting the checkout process.",
+            ["Enums.Nop.Core.Domain.Orders.ShoppingCartType.Stash"] = "Stash",
+            ["ShoppingCart.VendorList"] = "Vendor",
+            ["ShoppingCart.VendorList.All"] = "All",
+            ["ShoppingCart.SelectVendorToCheckout"] = "Please select a vendor before proceeding to checkout",
+
         });
 
         #endregion

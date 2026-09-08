@@ -1849,7 +1849,9 @@ public partial class InstallationService
             RoundPricesDuringCalculation = true,
             GroupTierPricesForDistinctShoppingCartItems = false,
             AllowCartItemEditing = true,
-            RenderAssociatedAttributeValueQuantity = true
+            RenderAssociatedAttributeValueQuantity = true,
+            VendorEnabled = false,
+            VendorRequired = false,
         });
 
         await SaveSettingAsync(dictionary, new OrderSettings
@@ -1953,7 +1955,7 @@ public partial class InstallationService
 
         await SaveSettingAsync(dictionary, new PaymentSettings
         {
-            ActivePaymentMethodSystemNames = ["Payments.CheckMoneyOrder", "Payments.Manual"],
+            ActivePaymentMethodSystemNames = ["Payments.CheckMoneyOrder"],
             AllowRePostingPayments = true,
             BypassPaymentMethodSelectionIfOnlyOne = true,
             ShowPaymentMethodDescriptions = true,
@@ -2028,7 +2030,8 @@ public partial class InstallationService
             NotifyStoreOwnerAboutVendorInformationChange = true,
             MaximumProductNumber = 3000,
             AllowVendorsToImportProducts = true,
-            MaximumProductPicturesNumber = 5
+            MaximumProductPicturesNumber = 5,
+            AllowVendorsToUpload3dObjects = false
         });
 
         var eaGeneral = await Table<EmailAccount>().FirstOrDefaultAsync() ?? throw new Exception("Default email account cannot be loaded");
